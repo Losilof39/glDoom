@@ -24,7 +24,6 @@
 #include <windows.h>
 #include <gl/gl.h>
 #include <gl/glu.h>
-#include <gl/wglext.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -98,7 +97,6 @@ void ShutdownOpenGL(void)
    {
     wglMakeCurrent(NULL, NULL);
     wglDeleteContext( hRC );
-    wglGetSwapIntervalEXT();
    }
 
 void I_ShutdownGraphics(void)
@@ -412,7 +410,6 @@ dboolean StartUpOpenGL( HWND hWnd )
        }
 
     wglMakeCurrent(hGDC, hRC);
-    wglSwapIntervalEXT(VSYNC_ON); //[AB] - 2022: Using GLEXT extensions for vertical synchronisation capability.
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );
 
