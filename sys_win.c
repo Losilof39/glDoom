@@ -281,21 +281,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     con_printf("Starting game loop...\n");
     while (!bQuit)
 	   {
-        // This part should be run in the I_GetEvent
-        // function - FIXME
-        while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-		   {
-            if (msg.message == WM_QUIT)
-			   {
-				bQuit = TRUE;
-                break;
-               }
-            if (!TranslateAccelerator(msg.hwnd, WinData.hAccel, &msg))
-			   {
-                TranslateMessage(&msg);
-                DispatchMessage(&msg);
-               }
-           }
+
+        // check for user input
+        I_GetEvent();
+
         if (GameMode == GAME_PLAY)
            MY_DoomLoop();
         else

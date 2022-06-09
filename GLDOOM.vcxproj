@@ -74,6 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Debug\</OutDir>
+    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -161,7 +163,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -332,10 +334,14 @@
     <ClCompile Include="r_sky.c" />
     <ClCompile Include="r_things.c" />
     <ClCompile Include="savepic.c" />
+    <ClCompile Include="sdl_input.c" />
+    <ClCompile Include="sdl_keyboard.c" />
+    <ClCompile Include="sdl_video.c" />
     <ClCompile Include="snd_dx.c" />
     <ClCompile Include="sounds.c" />
     <ClCompile Include="st_lib.c" />
     <ClCompile Include="st_stuff.c" />
+    <ClCompile Include="sys_sdl.c" />
     <ClCompile Include="sys_win.c" />
     <ClCompile Include="s_sound.c" />
     <ClCompile Include="tables.c" />
@@ -420,9 +426,13 @@
     <ClInclude Include="r_sky.h" />
     <ClInclude Include="r_state.h" />
     <ClInclude Include="r_things.h" />
+    <ClInclude Include="sdl_input.h" />
+    <ClInclude Include="sdl_keyboard.h" />
+    <ClInclude Include="sdl_video.h" />
     <ClInclude Include="sounds.h" />
     <ClInclude Include="st_lib.h" />
     <ClInclude Include="st_stuff.h" />
+    <ClInclude Include="sys_sdl.h" />
     <ClInclude Include="sys_win.h" />
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
