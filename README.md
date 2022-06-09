@@ -16,10 +16,11 @@ This repository contains improvements for glDoom port
 I am planning for this port, the following (in order or priority)
 
 1. Cleaning up and optimising the code to run properly on 64bit Windows (DONE)
-2. Cleaning up the OpenGL code and moving some things to shaders
-3. Making glDoom multiplatform (Linux and macOS) - with an SDL window but still using OpenGL to draw and accelerate
-4. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
-5. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+2. Cleaning up the OpenGL code and moving some things to shaders (MAYBE IN THE FUTURE)
+3. Making glDoom multiplatform (Linux and macOS) - with an SDL window but still using OpenGL to draw and accelerate (DONE)
+4. Fix wanky key bindings (why direct input, why... )
+5. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
+6. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
@@ -28,5 +29,6 @@ The answer is simple. These older source ports are special, they paved the way f
 
 ### Compiling
 Use the Visual Studio project and build for your architecture.
+Now it compiles on x64.
 
 To use it, you will need to also create the gldoom.wad file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
