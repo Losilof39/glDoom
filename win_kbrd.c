@@ -123,6 +123,7 @@ void I_CheckKeyboard()
        }
     else
        {
+        // loop through every keystate
         for (i = 1; i < 256; i++)
            {
                 if (((KeyState[i] & 0x80) == 0) && (si_Kbd[i] == WM_KEYDOWN))

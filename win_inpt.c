@@ -29,7 +29,7 @@ dboolean I_InitInputs(void)
        {
         return false;
        }
-    if ((usejoystick) && (!joystickavail))
+    /*if ((usejoystick) && (!joystickavail))
        {
         if (I_SetupJoysticks())
            {
@@ -50,7 +50,7 @@ dboolean I_InitInputs(void)
            {
             con_printf("Mouse initialization failed...\n");
            }
-       }
+       }*/
     return true;
    }
 
@@ -71,27 +71,27 @@ void I_CheckInputs(void)
             DispatchMessage(&msg);
            }
        }
-    if ((usejoystick) && (joystickavail))
+    /*if ((usejoystick) && (joystickavail))
        {
         I_CheckJoysticks();
-       }
-    if ((usemouse) && (mouseavail))
+       }*/
+    /*if ((usemouse) && (mouseavail))
        {
         I_CheckMouse();
-       }
+       }*/
     I_CheckKeyboard();
    }
 
 void I_ShutdownInputs(void)
    {
-    if ((usejoystick) && (joystickavail))
+    /*if ((usejoystick) && (joystickavail))
        {
         I_CheckJoysticks();
-       }
-    if ((usemouse) && (mouseavail))
+       }*/
+    /*if ((usemouse) && (mouseavail))
        {
         I_ReleaseMouse();
-       }
+       }*/
     I_ReleaseKeyboard();
    }
 

@@ -163,9 +163,6 @@ BOOL  notop = FALSE;
 
 extern int    keylink;
 
-BOOL CreateTempWindow();
-LRESULT CALLBACK DummyProc(HWND, UINT, WPARAM, LPARAM);
-
 LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
 char      szAppName[] = "glDoom - v0.96c";
 char      szDbgName[] = "glDoom.dbg";
@@ -198,8 +195,10 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
-
-    CreateTempWindow();
+    
+    // why would you create a "temp window" ???
+  
+    //CreateTempWindow();
     //ChangeDisplaySettings(0, 0);
 
     // We get the current video setup here.
@@ -403,60 +402,6 @@ void Cleanup()
         free(screens[i]);
     M_FreeParms();
    }
-
-
-BOOL CreateTempWindow()
-{
-    WNDCLASSEX  wndclass;
-
-    wndclass.cbSize        = sizeof (wndclass);
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wndclass.lpfnWndProc   = (WNDPROC)DummyProc;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = 0;
-    wndclass.hInstance     = WinData.hInstance;
-    wndclass.hIcon         = g_hIcon;
-    wndclass.hCursor       = LoadCursor (NULL, IDC_ARROW);
-    wndclass.hbrBackground = (void *)COLOR_GRAYTEXT;
-    wndclass.lpszMenuName  = NULL;
-    wndclass.lpszClassName = "NOCLASS";
-    wndclass.hIconSm       = 0;
-
-
-    if (!RegisterClassEx (&wndclass))
-    {
-        MessageBox(NULL, "Window class registration failed.", "FATAL ERROR", MB_OK);
-        return FALSE;
-    }
-
-    if ((WinData.hWnd = CreateWindowEx (0,
-                    "NOCLASS",               // window class name
-		            szAppName,               // window caption
-                    WS_CAPTION, // window style
-                    0, 0,           // initial x position
-                    1, 1,           // initial x size
-                    NULL,                    // parent window handle
-                    NULL,                    // window menu handle
-                    WinData.hInstance,       // program instance handle
-		            NULL))                   // creation parameters
-                    == NULL)
-    {
-        ChangeDisplaySettings(0, 0);
-        MessageBox(NULL, "Window creation failed.", "FATAL ERROR", MB_OK);
-        return FALSE;
-    }
-
-    SendMessage(WinData.hWnd, WM_SETICON, ICON_SMALL, (LPARAM)g_hIcon);
-    SendMessage(WinData.hWnd, WM_SETICON, ICON_BIG, (LPARAM)g_hIcon);
-
-    ShowWindow(WinData.hWnd, WinData.iCmdShow);
-    UpdateWindow(WinData.hWnd);
-
-    SetForegroundWindow(WinData.hWnd);
-    SetFocus(WinData.hWnd);
-
-    return TRUE;
-}
 
 
 BOOL CreateMainWindow(int width, int height, int bpp, BOOL fullscreen)

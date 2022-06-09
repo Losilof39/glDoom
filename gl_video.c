@@ -90,7 +90,6 @@ float                glLeft, glTop, glRight, glBottom, glAspect;
 // Windows stuff
 extern int           iCurrMode;
 extern DEVMODE      *pModeList;
-extern HDC           hGDC;
 extern windata_t     WinData;
 
 void ShutdownOpenGL(void)
