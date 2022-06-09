@@ -7,6 +7,7 @@
 #include <windows.h>
 #include <dinput.h>
 #include <stdio.h>
+#include <SDL.h>
 
 #include "doomtype.h"
 #include "d_main.h"
@@ -24,8 +25,9 @@
 LPDIRECTINPUT        lpDirectInput = 0;
 LPDIRECTINPUTDEVICE  lpKeyboard    = 0;
 
-unsigned char        KeyState[256];
-short                si_Kbd[256];
+unsigned char        KeyState[256]; // current keys states
+short                si_Kbd[256];   // previous keys states
+//const Uint8* keystates = SDL_GetKeyboardState(NULL);
 
 extern int           keylink;
 
@@ -107,6 +109,8 @@ void I_CheckKeyboard()
 
     RetryKeyboard:;
 
+
+
     hresult = lpKeyboard->lpVtbl->GetDeviceState(lpKeyboard, sizeof(KeyState), &KeyState);
     if ((hresult == MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_READ_FAULT)) || (hresult == MAKE_HRESULT(SEVERITY_ERROR, FACILITY_WIN32, ERROR_INVALID_ACCESS)))
        {
@@ -115,6 +119,7 @@ void I_CheckKeyboard()
             goto RetryKeyboard;
        }
     else
+
     if (hresult != S_OK)
        {
         DI_Error(hresult, "GetDeviceState (keyboard)");
@@ -123,9 +128,10 @@ void I_CheckKeyboard()
        }
     else
        {
-        // loop through every keystate
+        //loop through every keystate
         for (i = 1; i < 256; i++)
            {
+                // key released
                 if (((KeyState[i] & 0x80) == 0) && (si_Kbd[i] == WM_KEYDOWN))
                    {
                     event[i].type = ev_keyup;
@@ -134,15 +140,13 @@ void I_CheckKeyboard()
                     si_Kbd[i] = WM_KEYUP;
                    }
 
+                // key pressed
                 if ((KeyState[i] & 0x80) && (si_Kbd[i] == WM_KEYUP))
                    {
-                    if ((i != WS_TABSTOP) || ((KeyState[VK_LMENU] == WM_KEYUP) && (KeyState[VK_RMENU] == WM_KEYUP)))
-                       {
-                        event[i].type = ev_keydown;
-                        event[i].data1 = i;
-                        D_PostEvent(&event[i]);
-                        si_Kbd[i] = WM_KEYDOWN;
-                       }
+                    event[i].type = ev_keydown;
+                    event[i].data1 = i;
+                    D_PostEvent(&event[i]);
+                    si_Kbd[i] = WM_KEYDOWN;
                    }
            }
        }

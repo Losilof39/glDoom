@@ -842,24 +842,24 @@ dboolean G_Responder(event_t* ev)
                  gamekeydown[ev->data1] = false; 
              return false;   // always let key up events filter down 
 		 
-        case ev_mouse: 
-             mousebuttons[0] = ev->data1 & 1; 
-             mousebuttons[1] = ev->data1 & 2; 
-             mousebuttons[2] = ev->data1 & 4; 
-             //mousex = ev->data2*(mouseSensitivity+5)/10; 
-             //mousey = ev->data3*(mouseSensitivity+5)/10; 
-             mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
-             mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
-             return true;    // eat events 
+        //case ev_mouse: 
+        //     mousebuttons[0] = ev->data1 & 1; 
+        //     mousebuttons[1] = ev->data1 & 2; 
+        //     mousebuttons[2] = ev->data1 & 4; 
+        //     //mousex = ev->data2*(mouseSensitivity+5)/10; 
+        //     //mousey = ev->data3*(mouseSensitivity+5)/10; 
+        //     mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
+        //     mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
+        //     return true;    // eat events 
  
-        case ev_joystick: 
-             joybuttons[0] = ev->data1 & 1; 
-             joybuttons[1] = ev->data1 & 2; 
-             joybuttons[2] = ev->data1 & 4; 
-             joybuttons[3] = ev->data1 & 8; 
-             joyxmove = ev->data2; 
-             joyymove = ev->data3; 
-             return true;    // eat events 
+        //case ev_joystick: 
+        //     joybuttons[0] = ev->data1 & 1; 
+        //     joybuttons[1] = ev->data1 & 2; 
+        //     joybuttons[2] = ev->data1 & 4; 
+        //     joybuttons[3] = ev->data1 & 8; 
+        //     joyxmove = ev->data2; 
+        //     joyymove = ev->data3; 
+        //     return true;    // eat events 
  
         default: 
              break; 

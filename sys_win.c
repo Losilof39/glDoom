@@ -12,6 +12,7 @@
 #include <time.h>
 #include <GL/gl.h>     // OpenGL interface
 #include <GL/glu.h>    // OpenGL utility Library interface
+#include <SDL.h>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // DirectX Includes...
@@ -175,6 +176,9 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
    {
     MSG         msg;
     HWND        hwnd;
+
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+        printf("Failed to init SDL");
 
     if ((hwnd = FindWindow(szAppName, szAppName)) != NULL)
        {

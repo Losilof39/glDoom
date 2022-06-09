@@ -5,10 +5,11 @@
 // This module is for Win32
 
 #include <windows.h>
+#include <SDL.h>
 #include "sys_win.h"
 #include "gconsole.h"
-#include "win_joy.h"
-#include "win_mous.h"
+//#include "win_joy.h"
+//#include "win_mous.h"
 #include "win_kbrd.h"
 
 dboolean         joystickavail = false;
@@ -71,6 +72,22 @@ void I_CheckInputs(void)
             DispatchMessage(&msg);
            }
        }
+
+    /*SDL_Event ev;
+    while (SDL_PollEvent(&ev))
+    {
+        switch (ev.type)
+        {
+        case SDL_QUIT:
+        {
+            bQuit = true;
+            break;
+        }break;
+        default:
+            break;
+        }
+    }*/
+
     /*if ((usejoystick) && (joystickavail))
        {
         I_CheckJoysticks();
