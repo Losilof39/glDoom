@@ -25,9 +25,9 @@
 LPDIRECTINPUT        lpDirectInput = 0;
 LPDIRECTINPUTDEVICE  lpKeyboard    = 0;
 
+extern Uint8* keystates[256];
 unsigned char        KeyState[256]; // current keys states
 short                si_Kbd[256];   // previous keys states
-//const Uint8* keystates = SDL_GetKeyboardState(NULL);
 
 extern int           keylink;
 
@@ -37,18 +37,18 @@ void lfprintf(char *message, ... );
 
 void I_ReleaseKeyboard()
    {
-    if (lpKeyboard != 0)
+    /*if (lpKeyboard != 0)
        {
         lpKeyboard->lpVtbl->Unacquire(lpKeyboard);
         lpKeyboard->lpVtbl->Release(lpKeyboard);
         lpKeyboard = 0;
        }
-    RELEASE(lpDirectInput);
+    RELEASE(lpDirectInput);*/
    }
 
 dboolean I_SetupKeyboard()
    {
-    int     k;
+    /*int     k;
     HRESULT hresult;
 
     hresult = DirectInput8Create(WinData.hInstance, DIRECTINPUT_VERSION, &IID_IDirectInput8, &lpDirectInput, NULL );
@@ -84,11 +84,11 @@ dboolean I_SetupKeyboard()
         DI_Error( hresult, "Acquire (keyboard)");
         I_ReleaseKeyboard();
         return false;
-       }
+       }*/
 
     // Set the keyboard buffer to "all keys up"
-    for (k = 0; k < 256; k++)
-        si_Kbd[k] = WM_KEYUP;
+    for (int k = 0; k < 256; k++)
+        si_Kbd[k] = SDL_KEYUP;
 
     return true;
    }
@@ -97,8 +97,8 @@ char t_text[2048];
 
 void I_CheckKeyboard()
    {
-    HRESULT          hresult;
     static  event_t  event[256];
+    /*HRESULT          hresult;
     unsigned short   lm;
     int     i;
 
@@ -127,27 +127,47 @@ void I_CheckKeyboard()
         lm = 0;
        }
     else
-       {
+       {*/
         //loop through every keystate
-        for (i = 1; i < 256; i++)
-           {
-                // key released
-                if (((KeyState[i] & 0x80) == 0) && (si_Kbd[i] == WM_KEYDOWN))
-                   {
-                    event[i].type = ev_keyup;
-                    event[i].data1 = i;
-                    D_PostEvent(&event[i]);
-                    si_Kbd[i] = WM_KEYUP;
-                   }
+        //for (i = 1; i < 256; i++)
+        //   {
+        //        // key released
+        //        if (((KeyState[i] & 0x80) == 0) && (si_Kbd[i] == WM_KEYDOWN))
+        //           {
+        //            event[i].type = ev_keyup;
+        //            event[i].data1 = i;
+        //            D_PostEvent(&event[i]);
+        //            si_Kbd[i] = WM_KEYUP;
+        //           }
 
-                // key pressed
-                if ((KeyState[i] & 0x80) && (si_Kbd[i] == WM_KEYUP))
-                   {
-                    event[i].type = ev_keydown;
-                    event[i].data1 = i;
-                    D_PostEvent(&event[i]);
-                    si_Kbd[i] = WM_KEYDOWN;
-                   }
-           }
-       }
+        //        // key pressed
+        //        if ((KeyState[i] & 0x80) && (si_Kbd[i] == WM_KEYUP))
+        //           {
+        //            event[i].type = ev_keydown;
+        //            event[i].data1 = i;
+        //            D_PostEvent(&event[i]);
+        //            si_Kbd[i] = WM_KEYDOWN;
+        //           }
+        //   }
+
+        for (int i = 1; i < 256; i++)
+        {
+            // key released
+            if (!keystates[i] && (si_Kbd[i] == SDL_KEYDOWN))
+            {
+                event[i].type = ev_keyup;
+                event[i].data1 = i;
+                D_PostEvent(&event[i]);
+                si_Kbd[i] = SDL_KEYUP;
+            }
+
+            // key pressed
+            if (keystates[i] && (si_Kbd[i] == SDL_KEYUP))
+            {
+                event[i].type = ev_keydown;
+                event[i].data1 = i;
+                D_PostEvent(&event[i]);
+                si_Kbd[i] = SDL_KEYDOWN;
+            }
+        }
    }

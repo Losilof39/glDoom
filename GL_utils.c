@@ -3,7 +3,8 @@
    #include <io.h>
 #endif
 #include <fcntl.h>
-#include <GL/gl.h>
+//#include <GL/gl.h>
+#include <glad/glad.h>
 #include "doomdata.h"
 #include "r_defs.h"
 #include "gldefs.h"

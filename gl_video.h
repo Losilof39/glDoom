@@ -10,5 +10,5 @@
 typedef enum { gl_2d, gl_3d } glmode_t;
 dboolean StartUpOpenGL( HWND hWnd );
 void OGL_Error( int, char * );
-void GetGLInfo( HWND );
+void GetGLInfo();
 

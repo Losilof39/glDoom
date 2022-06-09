@@ -8,8 +8,9 @@
 #include <io.h>
 #include <fcntl.h>
 #include <stdarg.h>
-#include <gl/gl.h>
-#include <gl/glu.h>
+//#include <gl/gl.h>
+//#include <gl/glu.h>
+#include <glad/glad.h>
 #include "gldefs.h"
 #include "v_video.h"
 

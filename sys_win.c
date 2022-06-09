@@ -10,8 +10,9 @@
 #include <winuser.h>
 #include <zmouse.h>
 #include <time.h>
-#include <GL/gl.h>     // OpenGL interface
-#include <GL/glu.h>    // OpenGL utility Library interface
+//#include <GL/gl.h>     // OpenGL interface
+//#include <GL/glu.h>    // OpenGL utility Library interface
+#include <glad/glad.h>
 #include <SDL.h>
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -77,6 +78,7 @@ extern int       iCurrMode;
 /////////////////////////////////////////////////////////////////////////////////////
 
 windata_t WinData;
+SDL_Window* pWindow;
 
 extern devinfo_t DevInfo;
 
@@ -177,16 +179,13 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     MSG         msg;
     HWND        hwnd;
 
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
-        printf("Failed to init SDL");
-
-    if ((hwnd = FindWindow(szAppName, szAppName)) != NULL)
+    /*if ((hwnd = FindWindow(szAppName, szAppName)) != NULL)
        {
         SetForegroundWindow(hwnd);
         return 0;
-       }
+       }*/
 
-    g_hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GLDOOM));
+    //g_hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GLDOOM));
 
     ClearLog(szDbgName);
 
@@ -208,15 +207,15 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     // We get the current video setup here.
     GetVideoInfo();
 
-    DestroyWindow(WinData.hWnd);
-    WinData.hWnd = NULL;
+    /*DestroyWindow(WinData.hWnd);
+    WinData.hWnd = NULL;*/
 
     lfprintf("Current resolution: %d x %d x %d bpp\n",DevInfo.width,DevInfo.height,DevInfo.bpp);
 
     lfprintf("Resolution requested: %d x %d x %d bpp\n",video.width,video.height,video.bpp);
 
     // This builds up the list of available video modes for the OpenGL renderer
-    GetModeList(szDbgName);
+    /*GetModeList(szDbgName);
     if (video.fullscreen == TRUE)
        {
         if ((iCurrMode == -1) && ((video.width != DevInfo.width) || (video.height != DevInfo.height) || (video.bpp != DevInfo.bpp)))
@@ -225,27 +224,27 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
             Cleanup();
             return 0;
            }
-       }
+       }*/
 
-    if (video.fullscreen == TRUE)
+    /*if (video.fullscreen == TRUE)
        {
         if (SetVideoMode() == FALSE)
            {
             Cleanup();
             return 0;
            }
-       }
+       }*/
 
     // Create the main program window, start up OpenGL and create our viewport
-    if (CreateMainWindow( video.width, video.height, video.bpp, video.fullscreen) != TRUE)
-       {
+    CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen);
+       /*{
         ChangeDisplaySettings(0, 0);
         MessageBox(NULL, "Unable to create main window.\nProgram will now end.", "FATAL ERROR", MB_OK);
         Cleanup();
         return 0;
-       }
+       }*/
 
-    if (video.fullscreen == FALSE)
+    /*if (video.fullscreen == FALSE)
        {
         mPoint.x = video.width/2;
         mPoint.y = video.height/2;
@@ -257,9 +256,12 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
     else
        {
         con_printf("Display: %dx%dx%d bpp\n", video.width, video.height, video.bpp);
-       }
+       }*/
 
     bQuit = FALSE;
+
+    tvalue = 1;
+    //con_setup(hwnd, video.width, video.height);
 
     con_printf("Beginning DOOM code startup...\n");
     D_DoomMain();
@@ -270,7 +272,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
         //I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
-            MessageBox(hwnd, szBadWadMessage, "glDoom Game Data Error", MB_OK);
+            //MessageBox(hwnd, szBadWadMessage, "glDoom Game Data Error", MB_OK);
            }
         return 0;
        }
@@ -303,78 +305,78 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 BOOL ResizeMainWindow(char *mode)
    {
-    char *parm;
-    int   width, height;
-    int   t_width, t_height;
-    int   x, y, sx, sy, ex, ey;
-
-    if ((parm = strtok(mode, " ")) != NULL)
-       {
-        width = atoi(parm);
-        if ((parm = strtok(NULL, " ")) != NULL)
-           {
-            height = atoi(parm);
-            t_width = video.width;
-            t_height = video.height;
-            video.width = width;
-            video.height = height;
-            if (video.fullscreen == TRUE)
-               {
-                // can't do this right without shutting down OpenGL
-                // and restarting it.  But don't want to reload ALL
-                // the game graphics used so far.  Later on maybe...
-                return FALSE;
-//                wglMakeCurrent(NULL, NULL);
-//                ReleaseDC(WinData.hWnd, hGDC);
-                if (SetVideoMode() == FALSE)
-                   {
-                    video.width = t_width;
-                    video.height = t_height;
-                   }
-                else
-                   {
-                    x = y = 0;
-                    sx = video.width;
-                    sy = video.height;
-                    MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
-                    UpdateWindow(WinData.hWnd);
-                    SetForegroundWindow(WinData.hWnd);
-                    SetFocus(WinData.hWnd);
-                    return TRUE;
-                   }
-//                hGDC = GetDC(WinData.hWnd);
-//                would need to release rendering context here
-//                and create new one then reload all GL graphics... ugh...
-//                wglMakeCurrent(hGDC, hRC);
-               }
-            else
-               {
-                ex = GetSystemMetrics(SM_CXFIXEDFRAME)*2;
-                ey = (GetSystemMetrics(SM_CYFIXEDFRAME)*2)+GetSystemMetrics(SM_CYCAPTION);
-                // Center the window on the screen
-                x = (DevInfo.width / 2) - ((video.width+ex) / 2);
-                y = (DevInfo.height / 2) - ((video.height+ey) / 2);
-                sx = video.width+ex;
-                sy = video.height+ey;
-                /*
-                  Check to be sure the requested window size fits on the screen and
-                  adjust each dimension to fit if the requested size does not fit.
-                */
-                if ((sx <= DevInfo.width) && (sy <= DevInfo.height))
-                   {
-                    MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
-                    return TRUE;
-                   }
-                else
-                   {
-                    video.width = t_width;
-                    video.height = t_height;
-                   }
-               }
-            R_InitViewData();
-           }
-       }
-    return FALSE;
+//    char *parm;
+//    int   width, height;
+//    int   t_width, t_height;
+//    int   x, y, sx, sy, ex, ey;
+//
+//    if ((parm = strtok(mode, " ")) != NULL)
+//       {
+//        width = atoi(parm);
+//        if ((parm = strtok(NULL, " ")) != NULL)
+//           {
+//            height = atoi(parm);
+//            t_width = video.width;
+//            t_height = video.height;
+//            video.width = width;
+//            video.height = height;
+//            if (video.fullscreen == TRUE)
+//               {
+//                // can't do this right without shutting down OpenGL
+//                // and restarting it.  But don't want to reload ALL
+//                // the game graphics used so far.  Later on maybe...
+//                return FALSE;
+////                wglMakeCurrent(NULL, NULL);
+////                ReleaseDC(WinData.hWnd, hGDC);
+//                if (SetVideoMode() == FALSE)
+//                   {
+//                    video.width = t_width;
+//                    video.height = t_height;
+//                   }
+//                else
+//                   {
+//                    x = y = 0;
+//                    sx = video.width;
+//                    sy = video.height;
+//                    MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
+//                    UpdateWindow(WinData.hWnd);
+//                    SetForegroundWindow(WinData.hWnd);
+//                    SetFocus(WinData.hWnd);
+//                    return TRUE;
+//                   }
+////                hGDC = GetDC(WinData.hWnd);
+////                would need to release rendering context here
+////                and create new one then reload all GL graphics... ugh...
+////                wglMakeCurrent(hGDC, hRC);
+//               }
+//            else
+//               {
+//                ex = GetSystemMetrics(SM_CXFIXEDFRAME)*2;
+//                ey = (GetSystemMetrics(SM_CYFIXEDFRAME)*2)+GetSystemMetrics(SM_CYCAPTION);
+//                // Center the window on the screen
+//                x = (DevInfo.width / 2) - ((video.width+ex) / 2);
+//                y = (DevInfo.height / 2) - ((video.height+ey) / 2);
+//                sx = video.width+ex;
+//                sy = video.height+ey;
+//                /*
+//                  Check to be sure the requested window size fits on the screen and
+//                  adjust each dimension to fit if the requested size does not fit.
+//                */
+//                if ((sx <= DevInfo.width) && (sy <= DevInfo.height))
+//                   {
+//                    MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
+//                    return TRUE;
+//                   }
+//                else
+//                   {
+//                    video.width = t_width;
+//                    video.height = t_height;
+//                   }
+//               }
+//            R_InitViewData();
+//           }
+//       }
+//    return FALSE;
    }
 
 
@@ -387,7 +389,7 @@ void Cleanup()
     char tstr[16];
 
     // Write out the current video resolution to re-use next time
-    GetProfileString("GLDOOM", "DIRECTORY", "", DoomDir, _MAX_PATH );
+    /*GetProfileString("GLDOOM", "DIRECTORY", "", DoomDir, _MAX_PATH );
     if (strlen(DoomDir) != 0)
        {
         sprintf(tstr, "%d", video.width);
@@ -400,7 +402,7 @@ void Cleanup()
     if (video.fullscreen == FALSE)
        {
         ReleaseCapture();
-       }
+       }*/
 
     for (i = 4; i >= 0; i--)
         free(screens[i]);
@@ -410,113 +412,120 @@ void Cleanup()
 
 BOOL CreateMainWindow(int width, int height, int bpp, BOOL fullscreen)
 {
-    WNDCLASSEX  wndclass;
-    DWORD       dwStyle, dwExStyle;
-    int         x, y, sx, sy, ex, ey;
+    //WNDCLASSEX  wndclass;
+    //DWORD       dwStyle, dwExStyle;
+    //int         x, y, sx, sy, ex, ey;
 
-    wndclass.cbSize        = sizeof (wndclass);
-    wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    wndclass.lpfnWndProc   = (WNDPROC)WinData.wndproc;
-    wndclass.cbClsExtra    = 0;
-    wndclass.cbWndExtra    = 0;
-    wndclass.hInstance     = WinData.hInstance;
-    wndclass.hIcon         = g_hIcon;
-    wndclass.hCursor       = LoadCursor (NULL, IDC_ARROW);
-    wndclass.hbrBackground = (void *)COLOR_GRAYTEXT;
-    wndclass.lpszMenuName  = NULL;
-    wndclass.lpszClassName = szAppName;
-    wndclass.hIconSm       = 0;
+    //wndclass.cbSize        = sizeof (wndclass);
+    //wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
+    //wndclass.lpfnWndProc   = (WNDPROC)WinData.wndproc;
+    //wndclass.cbClsExtra    = 0;
+    //wndclass.cbWndExtra    = 0;
+    //wndclass.hInstance     = WinData.hInstance;
+    //wndclass.hIcon         = g_hIcon;
+    //wndclass.hCursor       = LoadCursor (NULL, IDC_ARROW);
+    //wndclass.hbrBackground = (void *)COLOR_GRAYTEXT;
+    //wndclass.lpszMenuName  = NULL;
+    //wndclass.lpszClassName = szAppName;
+    //wndclass.hIconSm       = 0;
 
 
-    if (!RegisterClassEx (&wndclass))
-    {
-        MessageBox(NULL, "Window class registration failed.", "FATAL ERROR", MB_OK);
-        return FALSE;
-    }
+    //if (!RegisterClassEx (&wndclass))
+    //{
+    //    MessageBox(NULL, "Window class registration failed.", "FATAL ERROR", MB_OK);
+    //    return FALSE;
+    //}
 
-    if (fullscreen)
-    {
-        if (notop)
-            dwExStyle = WS_EX_TOPMOST;
+    //if (fullscreen)
+    //{
+    //    if (notop)
+    //        dwExStyle = WS_EX_TOPMOST;
    
-        dwExStyle = 0;
-        dwStyle = WS_POPUP | WS_VISIBLE;
-        x = y = 0;
-        sx = video.width;
-        sy = video.height;
-    }
-    else
-    {
-        dwExStyle = 0;
-        //dwStyle = WS_CAPTION | WS_SYSMENU | WS_THICKFRAME;  // Use this if you want a "normal" window
-        dwStyle = WS_CAPTION;
-        ex = GetSystemMetrics(SM_CXFIXEDFRAME)*2;
-        ey = (GetSystemMetrics(SM_CYFIXEDFRAME)*2)+GetSystemMetrics(SM_CYCAPTION);
-        // Center the window on the screen
-        x = (DevInfo.width / 2) - ((video.width+ex) / 2);
-        y = (DevInfo.height / 2) - ((video.height+ey) / 2);
-        sx = video.width+ex;
-        sy = video.height+ey;
-        //   Check to be sure the requested window size fits on the screen and
-        //   adjust each dimension to fit if the requested size does not fit.
-        if (sx >= DevInfo.width)
-        {
-            x = 0;
-            sx = DevInfo.width-ex;
-        }
-        if (sy >= DevInfo.height)
-        {
-            y = 0;
-            sy = DevInfo.height-ey;
-        }
-    }
+    //    dwExStyle = 0;
+    //    dwStyle = WS_POPUP | WS_VISIBLE;
+    //    x = y = 0;
+    //    sx = video.width;
+    //    sy = video.height;
+    //}
+    //else
+    //{
+    //    dwExStyle = 0;
+    //    //dwStyle = WS_CAPTION | WS_SYSMENU | WS_THICKFRAME;  // Use this if you want a "normal" window
+    //    dwStyle = WS_CAPTION;
+    //    ex = GetSystemMetrics(SM_CXFIXEDFRAME)*2;
+    //    ey = (GetSystemMetrics(SM_CYFIXEDFRAME)*2)+GetSystemMetrics(SM_CYCAPTION);
+    //    // Center the window on the screen
+    //    x = (DevInfo.width / 2) - ((video.width+ex) / 2);
+    //    y = (DevInfo.height / 2) - ((video.height+ey) / 2);
+    //    sx = video.width+ex;
+    //    sy = video.height+ey;
+    //    //   Check to be sure the requested window size fits on the screen and
+    //    //   adjust each dimension to fit if the requested size does not fit.
+    //    if (sx >= DevInfo.width)
+    //    {
+    //        x = 0;
+    //        sx = DevInfo.width-ex;
+    //    }
+    //    if (sy >= DevInfo.height)
+    //    {
+    //        y = 0;
+    //        sy = DevInfo.height-ey;
+    //    }
+    //}
 
-    if ((WinData.hWnd = CreateWindowEx (dwExStyle,
-                    szAppName,               // window class name
-		            szAppName,               // window caption
-                    dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, // window style
-                    x,           // initial x position
-                    y,           // initial y position
-                    sx,           // initial x size
-                    sy,           // initial y size
-                    NULL,                    // parent window handle
-                    NULL,                    // window menu handle
-                    WinData.hInstance,       // program instance handle
-		            NULL))                   // creation parameters
-                    == NULL)
-    {
-        ChangeDisplaySettings(0, 0);
-        MessageBox(NULL, "Window creation failed.", "FATAL ERROR", MB_OK);
-        return FALSE;
-    }
+    //if ((WinData.hWnd = CreateWindowEx (dwExStyle,
+    //                szAppName,               // window class name
+		  //          szAppName,               // window caption
+    //                dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, // window style
+    //                x,           // initial x position
+    //                y,           // initial y position
+    //                sx,           // initial x size
+    //                sy,           // initial y size
+    //                NULL,                    // parent window handle
+    //                NULL,                    // window menu handle
+    //                WinData.hInstance,       // program instance handle
+		  //          NULL))                   // creation parameters
+    //                == NULL)
+    //{
+    //    ChangeDisplaySettings(0, 0);
+    //    MessageBox(NULL, "Window creation failed.", "FATAL ERROR", MB_OK);
+    //    return FALSE;
+    //}
 
-    SendMessage(WinData.hWnd, WM_SETICON, ICON_SMALL, (LPARAM)g_hIcon);
-    SendMessage(WinData.hWnd, WM_SETICON, ICON_BIG, (LPARAM)g_hIcon);
+    //SendMessage(WinData.hWnd, WM_SETICON, ICON_SMALL, (LPARAM)g_hIcon);
+    //SendMessage(WinData.hWnd, WM_SETICON, ICON_BIG, (LPARAM)g_hIcon);
 
-    WinData.hAccel = LoadAccelerators(WinData.hInstance,"AppAccel");
+    //WinData.hAccel = LoadAccelerators(WinData.hInstance,"AppAccel");
+
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+        printf("Failed to init SDL");
+
+    pWindow = SDL_CreateWindow("GLDOOM", 100, 100, video.width, video.height, SDL_WINDOW_OPENGL);
+    SDL_ShowWindow(pWindow);
 
     R_InitViewData();
 
     con_printf("glDoom Version %d.%d%c\n", version/100, version%100, revision);
     con_printf("Starting OpenGL...\n");
     ShowCursor(FALSE);
+
     if (StartUpOpenGL(WinData.hWnd) == FALSE)
     {
         WinData.hWnd = NULL;
         return FALSE;
     }
 
-    if ((software == TRUE) && (video.allowsoft == FALSE))
+    /*if ((software == TRUE) && (video.allowsoft == FALSE))
     {
         I_ShutdownGraphics();
         return FALSE;
-    }
+    }*/
 
-    ShowWindow(WinData.hWnd, WinData.iCmdShow);
+    /*ShowWindow(WinData.hWnd, WinData.iCmdShow);
     UpdateWindow(WinData.hWnd);
 
     SetForegroundWindow(WinData.hWnd);
-    SetFocus(WinData.hWnd);
+    SetFocus(WinData.hWnd);*/
 
     return TRUE;
 }
@@ -687,10 +696,12 @@ void glDoomExit()
         else
            G_EndDemo_II();
        }
+
+    con_shutdown();
     I_ShutdownInputs();
     StopMusic();
     I_ShutdownGraphics();
-    SendMessage(WinData.hWnd, WM_CLOSE, 0, 0);
+    //SendMessage(WinData.hWnd, WM_CLOSE, 0, 0);
    };
 
 LRESULT CALLBACK DummyProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
@@ -734,10 +745,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 }
              break;
 
-       case WM_MOUSEWHEEL:
+       /*case WM_MOUSEWHEEL:
             lfprintf("WM_MOUSEWHEEL message...\n");
             return 0;
-            break;
+            break;*/
 
        case WM_KEYDOWN:
             if ((lParam & 0x40000000) != 0)  // This "debounces" the keys so that we only process
@@ -747,7 +758,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                {
                 case VK_PAUSE:
                      event.type = ev_keydown;
-                     event.data1 = KEY_PAUSE;
+                     event.data1 = SDL_SCANCODE_PAUSE;
                      D_PostEvent(&event);
                      break;
                 case VK_SHIFT:
@@ -783,7 +794,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 if ((!first) && (!waspaused))
                    {
                     event.type = ev_keydown;
-                    event.data1 = KEY_PAUSE;
+                    event.data1 = SDL_SCANCODE_PAUSE;
                     D_PostEvent(&event);
                    }
                 first = FALSE;
@@ -798,7 +809,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                 if (!paused)
                    {
                     event.type = ev_keydown;
-                    event.data1 = KEY_PAUSE;
+                    event.data1 = SDL_SCANCODE_PAUSE;
                     D_PostEvent(&event);
                    }
                 if ( video.fullscreen )
@@ -811,7 +822,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                {
                 case VK_PAUSE:
                      event.type = ev_keyup;
-                     event.data1 = KEY_PAUSE;
+                     event.data1 = SDL_SCANCODE_PAUSE;
                      D_PostEvent(&event);
                      break;
                 case VK_SHIFT:
@@ -841,10 +852,10 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                }
             break;
 
-        case WM_DESTROY:
+        /*case WM_DESTROY:
              con_shutdown();
              PostQuitMessage(0);
-             return 0;
+             return 0;*/
        }
     return DefWindowProc(hwnd, iMsg, wParam, lParam);
    }

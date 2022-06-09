@@ -18,7 +18,8 @@ dboolean         mouseavail    = false;
 extern int       usejoystick;
 extern int       usemouse;
 
-extern HACCEL    ghAccel;
+Uint8* keystates[256] = { false };
+
 extern dboolean      bQuit;
 extern windata_t WinData;
 
@@ -57,23 +58,25 @@ dboolean I_InitInputs(void)
 
 void I_CheckInputs(void)
    {
-    MSG  msg;
+    //MSG  msg;
 
-    while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-       {
-        if (msg.message == WM_QUIT)
-	       {
- 	       bQuit = true;
-            break;
-           }
-        if (!TranslateAccelerator(msg.hwnd, WinData.hAccel, &msg))
-           {
-            TranslateMessage(&msg);
-            DispatchMessage(&msg);
-           }
-       }
+    //// it seems that through PeekMessage we get key messages for shift, escape, alt, etc..
+    //// and the rest we get through DirectInput. Why not getting every single key with DI??
+    //while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
+    //   {
+    //    if (msg.message == WM_QUIT)
+	   //    {
+ 	  //     bQuit = true;
+    //        break;
+    //       }
+    //    if (!TranslateAccelerator(msg.hwnd, WinData.hAccel, &msg))
+    //       {
+    //        TranslateMessage(&msg);
+    //        DispatchMessage(&msg);
+    //       }
+    //   }
 
-    /*SDL_Event ev;
+    SDL_Event ev;
     while (SDL_PollEvent(&ev))
     {
         switch (ev.type)
@@ -83,10 +86,22 @@ void I_CheckInputs(void)
             bQuit = true;
             break;
         }break;
+
+
+        case SDL_KEYDOWN:
+        {
+            keystates[ev.key.keysym.scancode] = 1;
+        }break;
+        
+        case SDL_KEYUP:
+        {
+            keystates[ev.key.keysym.scancode] = 0;
+        }break;
+
         default:
             break;
         }
-    }*/
+    }
 
     /*if ((usejoystick) && (joystickavail))
        {

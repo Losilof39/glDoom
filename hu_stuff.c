@@ -60,7 +60,7 @@ rcsid[] = "$Id: hu_stuff.c,v 1.4 1997/02/03 16:47:52 b1 Exp $";
 #define HU_TITLEX	0
 #define HU_TITLEY	((SCREENHEIGHT-200)+(167 - SHORT(hu_font[0]->height)))
 
-#define HU_INPUTTOGGLE	KEY_T
+#define HU_INPUTTOGGLE	SDL_SCANCODE_T
 #define HU_INPUTX	HU_MSGX
 #define HU_INPUTY	(HU_MSGY + HU_MSGHEIGHT*(SHORT(hu_font[0]->height) +1))
 #define HU_INPUTWIDTH	64
@@ -623,7 +623,7 @@ void HU_Ticker(void)
                     if (c >= 'a' && c <= 'z')
                         c = (char) shiftxform[(unsigned char) c];
                     rc = HUlib_keyInIText(&w_inputbuffer[i], c);
-                    if (rc && c == KEY_ENTER)
+                    if (rc && c == SDL_SCANCODE_RETURN)
                        {
                         if (w_inputbuffer[i].l.len && (chat_dest[i] == consoleplayer+1 || chat_dest[i] == HU_BROADCAST))
                            {
@@ -715,13 +715,13 @@ dboolean HU_Responder(event_t *ev)
     for (i=0 ; i<MAXPLAYERS ; i++)
 	numplayers += playeringame[i];
 
-    if (ev->data1 == KEY_RSHIFT)
+    if (ev->data1 == SDL_SCANCODE_RSHIFT)
        {
  	    shiftdown = ev->type == ev_keydown;
 	    return false;
        }
     else
-    if (ev->data1 == KEY_RALT || ev->data1 == KEY_LALT)
+    if (ev->data1 == SDL_SCANCODE_RALT || ev->data1 == SDL_SCANCODE_LALT)
        {
 	    altdown = ev->type == ev_keydown;
 	    return false;
@@ -784,7 +784,7 @@ dboolean HU_Responder(event_t *ev)
     else
        {
         c = ev->data1;
-        if ((c != KEY_ENTER) && (c != KEY_ESCAPE) && (c != KEY_BACKSPACE))
+        if ((c != SDL_SCANCODE_RETURN) && (c != SDL_SCANCODE_ESCAPE) && (c != SDL_SCANCODE_BACKSPACE))
            {
             if (shiftdown == true)  // English only for now (maybe)- someone else can fix it...
                 c = scan2chars[c];
@@ -801,12 +801,12 @@ dboolean HU_Responder(event_t *ev)
             macromessage = chat_macros[c];
 
             // kill last message with a '\n'
-            HU_queueChatChar(KEY_ENTER); // DEBUG!!!
+            HU_queueChatChar(SDL_SCANCODE_RETURN); // DEBUG!!!
 	    
             // send the macro message
             while (*macromessage)
                 HU_queueChatChar(*macromessage++);
-            HU_queueChatChar(KEY_ENTER);
+            HU_queueChatChar(SDL_SCANCODE_RETURN);
 	    
             // leave chat mode and notify that it was sent
             chat_on = false;
@@ -831,7 +831,7 @@ dboolean HU_Responder(event_t *ev)
                 // sprintf(buf, "KEY: %d => %d", ev->data1, c);
                 //      plr->message = buf;
                }
-            if (c == KEY_ENTER)
+            if (c == SDL_SCANCODE_RETURN)
                {
                 chat_on = false;
                 if (w_chat.l.len)
@@ -841,7 +841,7 @@ dboolean HU_Responder(event_t *ev)
                    }
                }
             else
-            if (c == KEY_ESCAPE)
+            if (c == SDL_SCANCODE_ESCAPE)
                 chat_on = false;
            }
        }

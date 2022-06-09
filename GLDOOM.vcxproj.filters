@@ -252,16 +252,7 @@
     <ClCompile Include="z_zone.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sys_sdl.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sdl_keyboard.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sdl_video.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="sdl_input.c">
+    <ClCompile Include="thirdparty\glad\src\glad.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -515,18 +506,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sys_sdl.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sdl_video.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sdl_input.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="sdl_keyboard.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

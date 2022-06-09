@@ -26,7 +26,8 @@ static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include <windows.h>
-#include <gl/gl.h>
+//#include <gl/gl.h>
+#include <glad/glad.h>
 
 //#include <unistd.h>
 #include <sys/types.h>
@@ -1554,7 +1555,7 @@ char    tempstring[80];
 
 void M_QuickSaveResponse(int ch)
 {
-    if (ch == KEY_Y)
+    if (ch == SDL_SCANCODE_Y)
     {
 	M_DoSave(quickSaveSlot);
 	S_StartSound(NULL,sfx_swtchx);
@@ -1591,7 +1592,7 @@ void M_QuickSave(void)
 //
 void M_QuickLoadResponse(int ch)
 {
-    if (ch == KEY_Y)
+    if (ch == SDL_SCANCODE_Y)
     {
 	M_LoadSelect(quickSaveSlot);
 	S_StartSound(NULL,sfx_swtchx);
@@ -2206,7 +2207,7 @@ void GL_DrawEpisode(void)
 
 void M_VerifyNightmare(int ch)
 {
-    if (ch != KEY_Y)
+    if (ch != SDL_SCANCODE_Y)
 	return;
 		
     G_DeferedInitNew(nightmare,epi+1,1);
@@ -2528,7 +2529,7 @@ void M_ChangeMessages(int choice)
 //
 void M_EndGameResponse(int ch)
 {
-    if (ch != KEY_Y)
+    if (ch != SDL_SCANCODE_Y)
 	return;
 		
     currentMenu->lastOn = itemOn;
@@ -2613,7 +2614,7 @@ char MsgText[2048];
 
 void M_QuitResponse(int ch)
 {
-    if (ch != KEY_Y)
+    if (ch != SDL_SCANCODE_Y)
        {
         return;
        }
@@ -3514,7 +3515,7 @@ int M_GetKeyString(int c,int offset)
   {
   char* s;
 
-  if (c == KEY_PAUSE)
+  if (c == SDL_SCANCODE_PAUSE)
      {
       strcpy(&menu_buffer[offset],"PAUS"); // string to display
       offset += 4;
@@ -3655,100 +3656,100 @@ int M_GetKeyString(int c,int offset)
 */
     switch(c)
       {
-    case KEY_TAB:
+    case SDL_SCANCODE_TAB:
       s = "TAB";
       break;
-    case KEY_ENTER:
+    case SDL_SCANCODE_RETURN:
       s = "ENTR"; 
       break;
-    case KEY_ESCAPE:
+    case SDL_SCANCODE_ESCAPE:
       s = "ESC";
       break;
-    case KEY_SPACE:
+    case SDL_SCANCODE_SPACE:
       s = "SPAC";
       break;
-    case KEY_BACKSPACE:
+    case SDL_SCANCODE_BACKSPACE:
       s = "BACK";
       break;
-    case KEY_RCTRL:
+    case SDL_SCANCODE_RCTRL:
       s = "CTRL";
       break;
-    case KEY_LEFTARROW:
+    case SDL_SCANCODE_LEFT:
       s = "LARR";
       break;
-    case KEY_UPARROW:
+    case SDL_SCANCODE_UP:
       s = "UARR";
       break;
-    case KEY_RIGHTARROW:
+    case SDL_SCANCODE_RIGHT:
       s = "RARR";
       break;
-    case KEY_DOWNARROW:
+    case SDL_SCANCODE_DOWN:
       s = "DARR";
       break;
-    case KEY_RSHIFT:
+    case SDL_SCANCODE_RSHIFT:
       s = "SHFT";
       break;
-    case KEY_RALT:
+    case SDL_SCANCODE_RALT:
       s = "ALT";
       break;
-    case KEY_CAPSLOCK:
+    case SDL_SCANCODE_CAPSLOCK:
       s = "CAPS";
       break;
-    case KEY_F1:
+    case SDL_SCANCODE_F1:
       s = "F1";
       break;
-    case KEY_F2:
+    case SDL_SCANCODE_F2:
       s = "F2";
       break;
-    case KEY_F3:
+    case SDL_SCANCODE_F3:
       s = "F3";
       break;
-    case KEY_F4:
+    case SDL_SCANCODE_F4:
       s = "F4";
       break;
-    case KEY_F5:
+    case SDL_SCANCODE_F5:
       s = "F5";
       break;
-    case KEY_F6:
+    case SDL_SCANCODE_F6:
       s = "F6";
       break;
-    case KEY_F7:
+    case SDL_SCANCODE_F7:
       s = "F7";
       break;
-    case KEY_F8:
+    case SDL_SCANCODE_F8:
       s = "F8";
       break;
-    case KEY_F9:
+    case SDL_SCANCODE_F9:
       s = "F9";
       break;
-    case KEY_F10:
+    case SDL_SCANCODE_F10:
       s = "F10";
       break;
-    case KEY_SCROLL:
+    case SDL_SCANCODE_SCROLLLOCK:
       s = "SCRL";
       break;
-    case KEY_HOME:
+    case SDL_SCANCODE_HOME:
       s = "HOME";
       break;
-    case KEY_PRIOR:
+    case SDL_SCANCODE_PRIOR:
       s = "PGUP";
       break;
-    case KEY_END:
+    case SDL_SCANCODE_END:
       s = "END";
       break;
-    case KEY_NEXT:
+    case SDL_SCANCODE_AUDIONEXT:
       s = "PGDN";
       break;
-    case KEY_INSERT:
+    case SDL_SCANCODE_INSERT:
       s = "INST";
       break;
-    case KEY_F11:
+    case SDL_SCANCODE_F11:
       s = "F11";
       break;
-    case KEY_F12:
+    case SDL_SCANCODE_F12:
       s = "F12";
       break;
-    case KEY_PAUSE:
+    case SDL_SCANCODE_PAUSE:
       s = "PAUS";
       break;
     default:
@@ -5201,7 +5202,7 @@ dboolean M_Responder (event_t* ev)
     if (messageToPrint)
        {
         if (messageNeedsInput == true &&
-	        !(ch == KEY_SPACE || ch == KEY_N || ch == KEY_Y || ch == KEY_ESCAPE))
+	        !(ch == SDL_SCANCODE_SPACE || ch == SDL_SCANCODE_N || ch == SDL_SCANCODE_Y || ch == SDL_SCANCODE_ESCAPE))
            {
             return false;
            }
@@ -6164,7 +6165,12 @@ dboolean M_Responder (event_t* ev)
 	}
 	return true;
 		
-      case KEY_CONSOLE:
+      case 
+      
+      
+      
+      
+      CONSOLE:
            currentMenu->lastOn = itemOn;
            M_ClearMenus ();
            return true;

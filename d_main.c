@@ -28,7 +28,8 @@
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include <windows.h>
-#include <gl/gl.h>
+//#include <gl/gl.h>
+#include <glad/glad.h>
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8

@@ -1,7 +1,8 @@
 #include <windows.h>
 #include <fcntl.h>
 #include <io.h>
-#include <gl/gl.h>
+//#include <gl/gl.h>
+#include <glad/glad.h>
 
 #include "doomtype.h"
 #include "r_defs.h"

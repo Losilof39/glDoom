@@ -72,6 +72,8 @@ rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include "doomcmd.h"
 
+#include <SDL.h>
+
 
 #define SAVEGAMESIZE	0x2c0000
 #define SAVESTRINGSIZE	24
@@ -174,8 +176,8 @@ int		key_backward;
 int     key_right;
 int		key_left;
 
-int     key_hudup = KEY_EQUALS;
-int     key_huddn = KEY_MINUS;
+int     key_hudup = SDL_SCANCODE_EQUALS;
+int     key_huddn = SDL_SCANCODE_MINUS;
 
 int		key_up;
 int		key_down; 
@@ -258,71 +260,71 @@ int     nosound;
 int     keylink;
 int     link_alt;
 
-int     key_f1  = KEY_F1;
-int     key_f2  = KEY_F2;
-int     key_f3  = KEY_F3; 
-int     key_f4  = KEY_F4;
-int     key_f5  = KEY_F5;
-int     key_f6  = KEY_F6;
-int     key_f7  = KEY_F7;
-int     key_f8  = KEY_F8;
-int     key_f9  = KEY_F9;
-int     key_f10 = KEY_F10;
-int     key_f11 = KEY_F11;
-int     key_f12 = KEY_F12;
+int     key_f1  = SDL_SCANCODE_F1;
+int     key_f2  = SDL_SCANCODE_F2;
+int     key_f3  = SDL_SCANCODE_F3; 
+int     key_f4  = SDL_SCANCODE_F4;
+int     key_f5  = SDL_SCANCODE_F5;
+int     key_f6  = SDL_SCANCODE_F6;
+int     key_f7  = SDL_SCANCODE_F7;
+int     key_f8  = SDL_SCANCODE_F8;
+int     key_f9  = SDL_SCANCODE_F9;
+int     key_f10 = SDL_SCANCODE_F10;
+int     key_f11 = SDL_SCANCODE_F11;
+int     key_f12 = SDL_SCANCODE_F12;
 
-int     key_enter = KEY_ENTER;
-int     key_backspace = KEY_BACKSPACE;
+int     key_enter = SDL_SCANCODE_RETURN;
+int     key_backspace = SDL_SCANCODE_BACKSPACE;
 int     destination_keys;
-int     key_chat = KEY_T;
-int     key_map_grid = KEY_G;
-int     key_map_gobig = KEY_0;
-int     key_map_clear = KEY_C;
-int     key_map_mark = KEY_M;
-int     key_map_right = KEY_RIGHTARROW;
-int     key_map_left = KEY_LEFTARROW;
-int     key_map_down = KEY_DOWNARROW;
-int     key_map_up = KEY_UPARROW;
-int     key_map_zoomout = KEY_MINUS;
-int     key_map_zoomin = KEY_EQUALS;
-int     key_map_follow = KEY_F;
+int     key_chat = SDL_SCANCODE_T;
+int     key_map_grid = SDL_SCANCODE_G;
+int     key_map_gobig = SDL_SCANCODE_0;
+int     key_map_clear = SDL_SCANCODE_C;
+int     key_map_mark = SDL_SCANCODE_M;
+int     key_map_right = SDL_SCANCODE_RIGHT;
+int     key_map_left = SDL_SCANCODE_LEFT;
+int     key_map_down = SDL_SCANCODE_DOWN;
+int     key_map_up = SDL_SCANCODE_UP;
+int     key_map_zoomout = SDL_SCANCODE_MINUS;
+int     key_map_zoomin = SDL_SCANCODE_EQUALS;
+int     key_map_follow = SDL_SCANCODE_F;
 int     key_weapontoggle;
-int     key_weapon9 = KEY_9;
-int     key_weapon8 = KEY_8;
-int     key_weapon7 = KEY_7;
-int     key_weapon6 = KEY_6;
-int     key_weapon5 = KEY_5;
-int     key_weapon4 = KEY_4;
-int     key_weapon3 = KEY_3;
-int     key_weapon2 = KEY_2;
-int     key_weapon1 = KEY_1;
-int     key_help        = KEY_F1;
-int     key_savegame    = KEY_F2;
-int     key_loadgame    = KEY_F3;
-int     key_soundvolume = KEY_F4;
-int     key_quicksave   = KEY_F6;
-int     key_endgame     = KEY_F7;
-int     key_messages    = KEY_F8;
-int     key_quickload   = KEY_F9;
-int     key_quit        = KEY_F10;
-int     key_gamma       = KEY_F11;
-int     key_screenshot  = KEY_F12;
-int     key_zoomout = KEY_MINUS;
-int     key_zoomin  = KEY_EQUALS;
+int     key_weapon9 = SDL_SCANCODE_9;
+int     key_weapon8 = SDL_SCANCODE_8;
+int     key_weapon7 = SDL_SCANCODE_7;
+int     key_weapon6 = SDL_SCANCODE_6;
+int     key_weapon5 = SDL_SCANCODE_5;
+int     key_weapon4 = SDL_SCANCODE_4;
+int     key_weapon3 = SDL_SCANCODE_3;
+int     key_weapon2 = SDL_SCANCODE_2;
+int     key_weapon1 = SDL_SCANCODE_1;
+int     key_help        = SDL_SCANCODE_F1;
+int     key_savegame    = SDL_SCANCODE_F2;
+int     key_loadgame    = SDL_SCANCODE_F3;
+int     key_soundvolume = SDL_SCANCODE_F4;
+int     key_quicksave   = SDL_SCANCODE_F6;
+int     key_endgame     = SDL_SCANCODE_F7;
+int     key_messages    = SDL_SCANCODE_F8;
+int     key_quickload   = SDL_SCANCODE_F9;
+int     key_quit        = SDL_SCANCODE_F10;
+int     key_gamma       = SDL_SCANCODE_F11;
+int     key_screenshot  = SDL_SCANCODE_F12;
+int     key_zoomout = SDL_SCANCODE_MINUS;
+int     key_zoomin  = SDL_SCANCODE_EQUALS;
 int     key_spy;
 int     key_hud;
-int     key_map = KEY_TAB;
-int     key_pause = KEY_PAUSE;
-int     key_escape = KEY_ESCAPE;
-int     key_menu_escape = KEY_ESCAPE;
-int     key_menu_enter = KEY_ENTER;
-int     key_menu_backspace = KEY_BACKSPACE;
-int     key_menu_right = KEY_RIGHTARROW;
-int     key_menu_left = KEY_LEFTARROW;
-int     key_menu_up = KEY_UPARROW;
-int     key_menu_down = KEY_DOWNARROW;
+int     key_map = SDL_SCANCODE_TAB;
+int     key_pause = SDL_SCANCODE_PAUSE;
+int     key_escape = SDL_SCANCODE_ESCAPE;
+int     key_menu_escape = SDL_SCANCODE_ESCAPE;
+int     key_menu_enter = SDL_SCANCODE_RETURN;
+int     key_menu_backspace = SDL_SCANCODE_BACKSPACE;
+int     key_menu_right = SDL_SCANCODE_RIGHT;
+int     key_menu_left = SDL_SCANCODE_LEFT;
+int     key_menu_up = SDL_SCANCODE_UP;
+int     key_menu_down = SDL_SCANCODE_DOWN;
 int     key_reverse;
-int     key_autorun = KEY_CAPITAL;
+int     key_autorun = SDL_SCANCODE_F2;
 
 int     defaultskill = 2;
 
@@ -760,7 +762,7 @@ void G_DoLoadLevel (void)
 dboolean G_Responder(event_t* ev) 
    { 
     // allow spy mode changes even during the demo
-    if (gamestate == GS_LEVEL && ev->type == ev_keydown && ev->data1 == KEY_F12 && (singledemo || !deathmatch))
+    if (gamestate == GS_LEVEL && ev->type == ev_keydown && ev->data1 == SDL_SCANCODE_F12 && (singledemo || !deathmatch))
        {
         // spy mode 
         do 
@@ -789,7 +791,7 @@ dboolean G_Responder(event_t* ev)
         if (ev->type == ev_keydown || (ev->type == ev_mouse && ev->data1) || (ev->type == ev_joystick && ev->data1))
            {
             // except the console key...
-            if ((ev->type != ev_keydown) || (ev->data1 != KEY_CONSOLE))
+            if ((ev->type != ev_keydown))// || (ev->data1 != KEY_CONSOLE))
                {
                 M_StartControlPanel (); 
                 return true; 
@@ -828,7 +830,7 @@ dboolean G_Responder(event_t* ev)
     switch (ev->type) 
        { 
         case ev_keydown: 
-             if (ev->data1 == KEY_PAUSE) 
+             if (ev->data1 == SDL_SCANCODE_PAUSE)   
                 { 
                  sendpause = true; 
                  return true; 
@@ -1825,7 +1827,7 @@ void G_ReadDemoTiccmd (ticcmd_t* cmd)
 
 void G_WriteDemoTiccmd (ticcmd_t* cmd) 
 { 
-    if (gamekeydown[KEY_Q])           // press q to end demo recording 
+    if (gamekeydown[SDL_SCANCODE_Q])           // press q to end demo recording 
 	G_CheckDemoStatus (); 
     *demo_p++ = cmd->forwardmove; 
     *demo_p++ = cmd->sidemove; 

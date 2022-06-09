@@ -7,7 +7,8 @@
 // the author, Bruce A. Lewis.
 //
 #include <windows.h>
-#include <gl/gl.h>
+//#include <gl/gl.h>
+#include <glad/glad.h>
 #include <ctype.h>
 ////////////////////////////////////////////////////////////////////////
 // Doom defines and external data
@@ -1479,7 +1480,7 @@ dboolean CO_Responder(event_t* ev)
     static dboolean bDisplayed = false;
     static dboolean bShiftState = false;
 
-    if ((ev->type == ev_keydown) && (ev->data1 == KEY_CONSOLE))
+    if ((ev->type == ev_keydown) && (ev->data1 == SDL_SCANCODE_F1))
        {
         if (bConsoleActive == true)
            {
@@ -1499,7 +1500,7 @@ dboolean CO_Responder(event_t* ev)
            }
        }
 
-    if ((ev->type == ev_keydown) && (ev->data1 == KEY_ESCAPE))
+    if ((ev->type == ev_keydown) && (ev->data1 == SDL_SCANCODE_ESCAPE))
        {
         if (bConsoleActive == true)
            {
@@ -1512,13 +1513,13 @@ dboolean CO_Responder(event_t* ev)
     if (bConsoleActive == false)
        return false;
 
-    if ((ev->type == ev_keydown) && ((ev->data1 == KEY_RSHIFT) || (ev->data1 == KEY_LSHIFT)))
+    if ((ev->type == ev_keydown) && ((ev->data1 == SDL_SCANCODE_RSHIFT) || (ev->data1 == SDL_SCANCODE_LSHIFT)))
        {
         bShiftState = true;
         return false;
        }
 
-    if ((ev->type == ev_keyup) && ((ev->data1 == KEY_RSHIFT) || (ev->data1 == KEY_LSHIFT)))
+    if ((ev->type == ev_keyup) && ((ev->data1 == SDL_SCANCODE_RSHIFT) || (ev->data1 == SDL_SCANCODE_LSHIFT)))
        {
         bShiftState = false;
         return false;
@@ -1534,15 +1535,15 @@ dboolean CO_Responder(event_t* ev)
             case KEY_SCRNSHOT:
                  G_ScreenShot();
                  break;
-            case KEY_BACKSPACE:
-            case KEY_LEFTARROW:
+            case SDL_SCANCODE_BACKSPACE:
+            case SDL_SCANCODE_LEFT:
                  if (iCCursor > 0)
                     {
                      iCCursor--;
                      szCommand[iCCursor] = '\0';
                     }
                  break;
-            case KEY_ENTER:
+            case SDL_SCANCODE_RETURN:
                  if (iCCursor > 0)
                     {
                      szCmd = strtok(szCommand, ";");
@@ -1561,7 +1562,7 @@ dboolean CO_Responder(event_t* ev)
                      bDisplayed = false;
                      break;
                     }
-            case KEY_TAB:
+            case SDL_SCANCODE_TAB:
                  return false;
             default:
                  if (iCCursor < CMDLENGTH)
