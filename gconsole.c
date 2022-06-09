@@ -471,7 +471,7 @@ void con_clear()
     BitBlt(ConData.hDC, 0, 0, ConData.width, ConData.height, ConData.hMemDC, 0, 0, SRCCOPY);
    }
 
-void con_setup(HWND hwnd, HINSTANCE hInstance, int width, int height)
+void con_setup(HWND hwnd, int width, int height)
    {
     HDC             hdc;
     TEXTMETRIC      tm;

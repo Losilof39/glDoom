@@ -613,7 +613,7 @@ void InitData(HINSTANCE hInstance, int iCmdShow)
     video.width         = DEF_WIDTH;
     video.height        = DEF_HEIGHT;
     video.bpp           = DEF_COLORB;
-    video.fullscreen    = TRUE;
+    video.fullscreen    = FALSE;
 	video.wide          = FALSE;
 
 	iWidth = GetSystemMetrics(SM_CXSCREEN);
@@ -764,8 +764,6 @@ extern dboolean paused;
 
 LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
    {
-    static HDC           hDC;
-    static PAINTSTRUCT   ps;
     static event_t       event;
     static unsigned char KeyPress;
     static int           scancode;
@@ -777,8 +775,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
        {
         case WM_CREATE:
              tvalue = 1;
-             con_setup(hwnd, WinData.hInstance, video.width, video.height);
-             //GetCDInfo(hwnd);
+             con_setup(hwnd, video.width, video.height);
              break;
 
         case MM_MCINOTIFY:
