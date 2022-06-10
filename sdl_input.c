@@ -85,7 +85,7 @@ void I_CheckInputs(void)
         {
         case SDL_QUIT:
         {
-            bQuit = true;
+            bQuit = false;            
             break;
         }break;
 

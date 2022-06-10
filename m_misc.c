@@ -889,11 +889,11 @@ void M_LoadDefaults (void)
     GetCfgName();
 
     i = 0;
-    /*while (wdefaultv[i].deftype != d_finished)
+    while (wdefaultv[i].deftype != d_finished)
        {
         *wdefaultv[i].location = GetPrivateProfileInt("DEFAULTS", wdefaultv[i].name, wdefaultv[i].defvalue, DoomDir);
         i++;
-       }*/
+       }
 
     i = 0;
     while (wdefaults[i].deftype != d_finished)
