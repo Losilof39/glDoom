@@ -50,7 +50,7 @@ rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";
 
 #include "gldefs.h"
 #include "gl_utils.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 
 void GL_DrawFullScreen(GLTexData *Image);
 void GL_DrawPatch(GLTexData *Tex, float x, float y);

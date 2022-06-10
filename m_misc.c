@@ -67,7 +67,7 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include "m_misc.h"
 
 #include "gldefs.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 
 #include "doomcmd.h"
 
@@ -631,8 +631,8 @@ win_defaulti_t wdefaultv[] =
     d_value, "swap_stereo",      &swap_stereo,        0,
 
     // "new" keyboard mappings
-    d_key, "key_escape",         &key_escape,         SDL_SCANCODE_ESCAPE,
-    d_key, "key_autorun",        &key_autorun,        SDL_SCANCODE_F2,
+    d_key, "key_escape",         &key_escape,        SDL_SCANCODE_ESCAPE,
+    //d_key, "key_autorun",        &key_autorun,        SDL_SCANCODE_F2,
     d_key, "key_reverse",        &key_reverse,        SDL_SCANCODE_BACKSPACE,
     d_key, "key_zoomin",         &key_zoomin,         SDL_SCANCODE_EQUALS,
     d_key, "key_zoomout",        &key_zoomout,        SDL_SCANCODE_MINUS,

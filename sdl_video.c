@@ -5,8 +5,8 @@
 #include <VersionHelpers.h>
 #include <stdio.h>
 #include "v_video.h"
-#include "win_video.h"
-#include "sys_win.h"
+#include "sdl_video.h"
+#include "sys_sdl.h"
 #include "gconsole.h"
 
 void lfprintf(char *message, ... );

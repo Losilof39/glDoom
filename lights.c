@@ -5,7 +5,7 @@
 #include <math.h>
 #include <stdio.h>
 
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "doomdata.h"
 
 //#define DegreesToRadians((d/360.0f)*M_PI*2.0f)

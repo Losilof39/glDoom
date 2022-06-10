@@ -7,7 +7,7 @@
 #include <stdlib.h>
 #include <io.h>
 #include <fcntl.h>
-#include "sys_win.h"
+#include "sys_sdl.h"
 
 #include "i_cd.h"      // My own cdaudio "library"
 #include "i_midi.h"    // My own midi "library"

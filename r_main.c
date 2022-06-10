@@ -43,7 +43,7 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "r_local.h"
 #include "r_sky.h"
 
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "gldefs.h"
 
 #include "v_video.h"

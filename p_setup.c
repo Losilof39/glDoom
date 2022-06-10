@@ -47,7 +47,7 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "s_sound.h"
 
 #include "doomstat.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "gldefs.h"
 
 #include "info.h"

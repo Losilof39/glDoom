@@ -324,7 +324,7 @@ int     key_menu_left = SDL_SCANCODE_LEFT;
 int     key_menu_up = SDL_SCANCODE_UP;
 int     key_menu_down = SDL_SCANCODE_DOWN;
 int     key_reverse;
-int     key_autorun = SDL_SCANCODE_F2;
+int     key_autorun;
 
 int     defaultskill = 2;
 
@@ -791,7 +791,7 @@ dboolean G_Responder(event_t* ev)
         if (ev->type == ev_keydown || (ev->type == ev_mouse && ev->data1) || (ev->type == ev_joystick && ev->data1))
            {
             // except the console key...
-            if ((ev->type != ev_keydown))// || (ev->data1 != KEY_CONSOLE))
+            if ((ev->type != ev_keyup))// || (ev->data1 != KEY_CONSOLE))
                {
                 M_StartControlPanel (); 
                 return true; 

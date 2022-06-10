@@ -39,7 +39,7 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include "i_video.h"
 #include "i_sound.h"
 
-#include "win_inpt.h"
+#include "sdl_inpt.h"
 
 #include "d_net.h"
 #include "g_game.h"
@@ -49,7 +49,7 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #pragma implementation "i_system.h"
 #endif
 #include "i_system.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 
 extern windata_t WinData;
 

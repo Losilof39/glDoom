@@ -6,11 +6,11 @@
 
 #include <windows.h>
 #include <SDL.h>
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "gconsole.h"
 //#include "win_joy.h"
 //#include "win_mous.h"
-#include "win_kbrd.h"
+#include "sdl_kbrd.h"
 
 dboolean         joystickavail = false;
 dboolean         mouseavail    = false;

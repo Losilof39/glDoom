@@ -219,7 +219,7 @@
     <ClCompile Include="st_stuff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="sys_win.c">
+    <ClCompile Include="sys_sdl.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="tables.c">
@@ -234,19 +234,19 @@
     <ClCompile Include="wi_stuff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="win_inpt.c">
+    <ClCompile Include="sdl_input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="win_joy.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="win_kbrd.c">
+    <ClCompile Include="sdl_kbrd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="win_mous.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="win_video.c">
+    <ClCompile Include="sdl_video.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="z_zone.c">
@@ -469,7 +469,7 @@
     <ClInclude Include="st_stuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sys_win.h">
+    <ClInclude Include="sys_sdl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="tables.h">
@@ -484,19 +484,19 @@
     <ClInclude Include="wi_stuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win_inpt.h">
+    <ClInclude Include="sdl_inpt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="win_joy.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win_kbrd.h">
+    <ClInclude Include="sdl_kbrd.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="win_mous.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win_video.h">
+    <ClInclude Include="sdl_video.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="z_zone.h">

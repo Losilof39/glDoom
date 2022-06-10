@@ -40,7 +40,7 @@ rcsid[] = "$Id: r_bsp.c,v 1.4 1997/02/03 22:45:12 b1 Exp $";
 #include "doomstat.h"
 #include "r_state.h"
 
-#include "sys_win.h"
+#include "sys_sdl.h"
 
 //#include "r_local.h"
 

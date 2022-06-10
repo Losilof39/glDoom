@@ -26,7 +26,7 @@
 // Application Includes...
 /////////////////////////////////////////////////////////////////////////////////////
 #include "resource.h"  // Required for Win32 Resources
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "gconsole.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -51,8 +51,8 @@
 
 #include "gl_video.h"
 #include "mathlib.h"
-#include "win_inpt.h"
-#include "win_video.h"
+#include "sdl_inpt.h"
+#include "sdl_video.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // OpenGL Defines and Data
@@ -127,7 +127,7 @@ int         RenderType = RENDER_GL;
 BOOL        bQuit = FALSE;
 
 void  Cleanup(void);
-void  InitData(HINSTANCE, int);
+void  InitData();
 void  ParseCommand(PSTR);
 void  EvaluateParameters(PSTR);
 BOOL  CreateMainWindow( int, int, int, BOOL);
@@ -174,7 +174,7 @@ HACCEL    ghAccel;
 HICON     g_hIcon = NULL;
 
 
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
+int main(int argc, char** szCmdLine)
    {
     MSG         msg;
     HWND        hwnd;
@@ -194,7 +194,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
     FindResponseFile();
 
-    InitData(hInstance, iCmdShow);
+    InitData();
 
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
@@ -531,7 +531,7 @@ BOOL CreateMainWindow(int width, int height, int bpp, BOOL fullscreen)
 }
 
 
-void InitData(HINSTANCE hInstance, int iCmdShow)
+void InitData()
    {
     char  DoomDir[_MAX_PATH];
 	int   iWidth, iHeight;
@@ -551,9 +551,9 @@ void InitData(HINSTANCE hInstance, int iCmdShow)
     CDData.CDCode[0] = '\0';
 
     // Capture Windows variables
-    WinData.hInstance  = hInstance;
+    /*WinData.hInstance  = hInstance;
     WinData.iCmdShow   = iCmdShow;
-    WinData.wndproc    = (FARPROC)WndProc;
+    WinData.wndproc    = (FARPROC)WndProc;*/
 
     // Set user "definable" data
     video.allowsoft     = FALSE;
@@ -563,27 +563,27 @@ void InitData(HINSTANCE hInstance, int iCmdShow)
     video.fullscreen    = FALSE;
 	video.wide          = FALSE;
 
-	iWidth = GetSystemMetrics(SM_CXSCREEN);
-	iHeight = GetSystemMetrics(SM_CYSCREEN);
+	//iWidth = GetSystemMetrics(SM_CXSCREEN);
+	//iHeight = GetSystemMetrics(SM_CYSCREEN);
 
-    // See if these need to be overridden by the defaults
-    GetProfileString("GLDOOM", "DIRECTORY", ".", DoomDir, _MAX_PATH );
-    if (strlen(DoomDir) != 0)
-       {
-        video.width  = GetProfileInt("GLDOOM", "width", DEF_WIDTH);
-        video.height = GetProfileInt("GLDOOM", "height", DEF_HEIGHT);
-       }
+ //   // See if these need to be overridden by the defaults
+ //   GetProfileString("GLDOOM", "DIRECTORY", ".", DoomDir, _MAX_PATH );
+ //   if (strlen(DoomDir) != 0)
+ //      {
+ //       video.width  = GetProfileInt("GLDOOM", "width", DEF_WIDTH);
+ //       video.height = GetProfileInt("GLDOOM", "height", DEF_HEIGHT);
+ //      }
 
-	fRatio = (float)((double)iHeight / (double)iWidth);
+	/*fRatio = (float)((double)iHeight / (double)iWidth);
 
 	if  ((0.801f >= fRatio) && (0.749 <= fRatio))
 	{
 		video.wide = FALSE;
 	}
 	else
-	{
+	{*/
 		video.wide = TRUE;
-	}
+	//}
 
     video.bpp  = DEF_COLORB;
     video.fov  = 90;

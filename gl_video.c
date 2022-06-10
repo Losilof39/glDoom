@@ -32,10 +32,10 @@
 
 #include "doomtype.h"
 #include "gconsole.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "gl_video.h"
-#include "win_inpt.h"
-#include "win_video.h"
+#include "sdl_inpt.h"
+#include "sdl_video.h"
 
 #include "doomstat.h"
 #include "i_system.h"

@@ -69,7 +69,7 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 #include "m_menu.h"
 
 #include "d_console.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 #include "gl_utils.h"
 #include "gldefs.h"
 
@@ -4195,6 +4195,7 @@ int mult_screens_index; // the index of the current screen in a set
 // Can we generate a keyboard equivalency table at runtime?
 
 setup_menu_t keys_settings1[] =  // Key Binding screen strings       
+
 {
   {"MOVEMENT"    ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y ,0                  ,0,0,0,0,0,0},
   {"FORWARD"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 1*8,&key_up            ,&mousebforward,0,0,0,0,0},
@@ -6105,113 +6106,113 @@ dboolean M_Responder (event_t* ev)
   return false;
     
     
-/*    
+    
     // Keys usable within menu
-    switch (ch)
-    {
-      case KEY_DOWNARROW:
-	do
-	{
-	    if (itemOn+1 > currentMenu->numitems-1)
-		itemOn = 0;
-	    else itemOn++;
-	    S_StartSound(NULL,sfx_pstop);
-	} while(currentMenu->menuitems[itemOn].status==-1);
-	return true;
-		
-      case KEY_UPARROW:
-	do
-	{
-	    if (!itemOn)
-		itemOn = currentMenu->numitems-1;
-	    else itemOn--;
-	    S_StartSound(NULL,sfx_pstop);
-	} while(currentMenu->menuitems[itemOn].status==-1);
-	return true;
+ //   switch (ch)
+ //   {
+ //     case SDL_SCANCODE_DOWN:
+	//do
+	//{
+	//    if (itemOn+1 > currentMenu->numitems-1)
+	//	itemOn = 0;
+	//    else itemOn++;
+	//    S_StartSound(NULL,sfx_pstop);
+	//} while(currentMenu->menuitems[itemOn].status==-1);
+	//return true;
+	//	
+ //     case SDL_SCANCODE_UP:
+	//do
+	//{
+	//    if (!itemOn)
+	//	itemOn = currentMenu->numitems-1;
+	//    else itemOn--;
+	//    S_StartSound(NULL,sfx_pstop);
+	//} while(currentMenu->menuitems[itemOn].status==-1);
+	//return true;
 
-      case KEY_LEFTARROW:
-	if (currentMenu->menuitems[itemOn].routine &&
-	    currentMenu->menuitems[itemOn].status == 2)
-	{
-	    S_StartSound(NULL,sfx_stnmov);
-	    currentMenu->menuitems[itemOn].routine(0);
-	}
-	return true;
-		
-      case KEY_RIGHTARROW:
-	if (currentMenu->menuitems[itemOn].routine &&
-	    currentMenu->menuitems[itemOn].status == 2)
-	{
-	    S_StartSound(NULL,sfx_stnmov);
-	    currentMenu->menuitems[itemOn].routine(1);
-	}
-	return true;
+ //     case SDL_SCANCODE_LEFT:
+	//if (currentMenu->menuitems[itemOn].routine &&
+	//    currentMenu->menuitems[itemOn].status == 2)
+	//{
+	//    S_StartSound(NULL,sfx_stnmov);
+	//    currentMenu->menuitems[itemOn].routine(0);
+	//}
+	//return true;
+	//	
+ //     case SDL_SCANCODE_RIGHT:
+	//if (currentMenu->menuitems[itemOn].routine &&
+	//    currentMenu->menuitems[itemOn].status == 2)
+	//{
+	//    S_StartSound(NULL,sfx_stnmov);
+	//    currentMenu->menuitems[itemOn].routine(1);
+	//}
+	//return true;
 
-      case KEY_ENTER:
-	if (currentMenu->menuitems[itemOn].routine &&
-	    currentMenu->menuitems[itemOn].status)
-	{
-	    currentMenu->lastOn = itemOn;
-	    if (currentMenu->menuitems[itemOn].status == 2)
-	    {
-		currentMenu->menuitems[itemOn].routine(1);      // right arrow
-		S_StartSound(NULL,sfx_stnmov);
-	    }
-	    else
-	    {
-		currentMenu->menuitems[itemOn].routine(itemOn);
-		S_StartSound(NULL,sfx_pistol);
-	    }
-	}
-	return true;
-		
-      case 
-      
-      
-      
-      
-      CONSOLE:
-           currentMenu->lastOn = itemOn;
-           M_ClearMenus ();
-           return true;
-		
-      case KEY_ESCAPE:
-	currentMenu->lastOn = itemOn;
-	M_ClearMenus ();
-	S_StartSound(NULL,sfx_swtchx);
-	return true;
-		
-      case KEY_BACKSPACE:
-	currentMenu->lastOn = itemOn;
-	if (currentMenu->prevMenu)
-	{
-	    currentMenu = currentMenu->prevMenu;
-	    itemOn = currentMenu->lastOn;
-	    S_StartSound(NULL,sfx_swtchn);
-	}
-	return true;
-	
-      default:
-	for (i = itemOn+1;i < currentMenu->numitems;i++)
-	    if (currentMenu->menuitems[i].alphaKey == ch)
-	    {
-		itemOn = i;
-		S_StartSound(NULL,sfx_pstop);
-		return true;
-	    }
-	for (i = 0;i <= itemOn;i++)
-	    if (currentMenu->menuitems[i].alphaKey == ch)
-	    {
-		itemOn = i;
-		S_StartSound(NULL,sfx_pstop);
-		return true;
-	    }
-	break;
-	
-    }
+ //     case SDL_SCANCODE_RETURN:
+	//if (currentMenu->menuitems[itemOn].routine &&
+	//    currentMenu->menuitems[itemOn].status)
+	//{
+	//    currentMenu->lastOn = itemOn;
+	//    if (currentMenu->menuitems[itemOn].status == 2)
+	//    {
+	//	currentMenu->menuitems[itemOn].routine(1);      // right arrow
+	//	S_StartSound(NULL,sfx_stnmov);
+	//    }
+	//    else
+	//    {
+	//	currentMenu->menuitems[itemOn].routine(itemOn);
+	//	S_StartSound(NULL,sfx_pistol);
+	//    }
+	//}
+	//return true;
+	//	
+ //     /*case 
+ //     
+ //     
+ //     
+ //     
+ //     CONSOLE:
+ //          currentMenu->lastOn = itemOn;
+ //          M_ClearMenus ();
+ //          return true;*/
+	//	
+ //     case SDL_SCANCODE_ESCAPE:
+	//currentMenu->lastOn = itemOn;
+	//M_ClearMenus ();
+	//S_StartSound(NULL,sfx_swtchx);
+	//return true;
+	//	
+ //     case SDL_SCANCODE_BACKSPACE:
+	//currentMenu->lastOn = itemOn;
+	//if (currentMenu->prevMenu)
+	//{
+	//    currentMenu = currentMenu->prevMenu;
+	//    itemOn = currentMenu->lastOn;
+	//    S_StartSound(NULL,sfx_swtchn);
+	//}
+	//return true;
+	//
+ //     default:
+	//for (i = itemOn+1;i < currentMenu->numitems;i++)
+	//    if (currentMenu->menuitems[i].alphaKey == ch)
+	//    {
+	//	itemOn = i;
+	//	S_StartSound(NULL,sfx_pstop);
+	//	return true;
+	//    }
+	//for (i = 0;i <= itemOn;i++)
+	//    if (currentMenu->menuitems[i].alphaKey == ch)
+	//    {
+	//	itemOn = i;
+	//	S_StartSound(NULL,sfx_pstop);
+	//	return true;
+	//    }
+	//break;
+	//
+ //   }
 
-    return false;
-*/
+ //   return false;
+
 }
 
 

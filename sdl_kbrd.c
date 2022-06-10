@@ -13,7 +13,7 @@
 #include "d_main.h"
 #include "d_event.h"
 #include "dxerr.h"
-#include "sys_win.h"
+#include "sys_sdl.h"
 
 #undef RELEASE
 #ifdef __cplusplus
