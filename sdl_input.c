@@ -11,6 +11,7 @@
 //#include "win_joy.h"
 //#include "win_mous.h"
 #include "sdl_kbrd.h"
+#include "d_event.h"
 
 dboolean         joystickavail = false;
 dboolean         mouseavail    = false;
@@ -22,6 +23,7 @@ Uint8* keystates[256] = { false };
 
 extern dboolean      bQuit;
 extern windata_t WinData;
+extern int keylink;
 
 void lfprintf(char *message, ... );
 
@@ -75,7 +77,7 @@ void I_CheckInputs(void)
     //        DispatchMessage(&msg);
     //       }
     //   }
-
+    event_t event;
     SDL_Event ev;
     while (SDL_PollEvent(&ev))
     {
@@ -90,11 +92,83 @@ void I_CheckInputs(void)
 
         case SDL_KEYDOWN:
         {
+            // catch first these 4 keys
+            switch (ev.key.keysym.scancode)
+            {
+            case SDL_SCANCODE_PAUSE:
+                event.type = ev_keyup;
+                event.data1 = SDL_SCANCODE_PAUSE;
+                D_PostEvent(&event);
+                break;
+            case SDL_SCANCODE_RSHIFT:
+                if (keylink == TRUE)
+                {
+                    event.type = ev_keyup;
+                    event.data1 = SDL_SCANCODE_RSHIFT;
+                    D_PostEvent(&event);
+                }
+                break;
+            case SDL_SCANCODE_RCTRL:
+                if (keylink == TRUE)
+                {
+                    event.type = ev_keyup;
+                    event.data1 = SDL_SCANCODE_RCTRL;
+                    D_PostEvent(&event);
+                }
+                break;
+            case SDL_SCANCODE_MENU:
+                if (keylink == TRUE)
+                {
+                    event.type = ev_keyup;
+                    event.data1 = SDL_SCANCODE_MENU;
+                    D_PostEvent(&event);
+                }
+                break;
+            default:
+                break;
+            }
+
+            // catch the other keys
             keystates[ev.key.keysym.scancode] = 1;
         }break;
         
         case SDL_KEYUP:
         {
+            // catch first these 4 keys
+            switch (ev.key.keysym.scancode)
+            {
+            case SDL_SCANCODE_PAUSE:
+                event.type = ev_keyup;
+                event.data1 = SDL_SCANCODE_PAUSE;
+                D_PostEvent(&event);
+                break;
+            case SDL_SCANCODE_RSHIFT:
+                if (keylink == TRUE)
+                {
+                    event.type = ev_keyup;
+                    event.data1 = SDL_SCANCODE_RSHIFT;
+                    D_PostEvent(&event);
+                }
+                break;
+            case SDL_SCANCODE_LCTRL:
+                if (keylink == TRUE)
+                {
+                    event.type = ev_keyup;
+                    event.data1 = SDL_SCANCODE_LCTRL;
+                    D_PostEvent(&event);
+                }
+                break;
+            case SDL_SCANCODE_MENU:
+                if (keylink == TRUE)
+                {
+                    event.type = ev_keyup;
+                    event.data1 = SDL_SCANCODE_MENU;
+                    D_PostEvent(&event);
+                }
+                break;
+            }
+
+            // catch the other keys
             keystates[ev.key.keysym.scancode] = 0;
         }break;
 

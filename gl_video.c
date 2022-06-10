@@ -65,6 +65,7 @@ void lfprintf(char *message, ... );
 // Game stuff
 
 extern SDL_Window* pWindow;
+SDL_GLContext glContext;
 extern video_t     video;
 
 extern int         starttime;
@@ -97,15 +98,17 @@ extern windata_t     WinData;
 
 void ShutdownOpenGL(void)
    {
-    wglMakeCurrent(NULL, NULL);
-    wglDeleteContext( hRC );
+    /*wglMakeCurrent(NULL, NULL);
+    wglDeleteContext( hRC );*/
+    SDL_GL_MakeCurrent(pWindow, NULL);
+    SDL_GL_DeleteContext(glContext);
    }
 
 void I_ShutdownGraphics(void)
    {
     ShutdownOpenGL();
-    ReleaseDC(WinData.hWnd, hGDC);
-    ResetVideoMode();
+    //ReleaseDC(WinData.hWnd, hGDC);
+    //ResetVideoMode();
    }
 
 void I_Start2DFrame()
@@ -416,7 +419,7 @@ dboolean StartUpOpenGL( HWND hWnd )
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 
-    SDL_GLContext glContext = SDL_GL_CreateContext(pWindow);
+    glContext = SDL_GL_CreateContext(pWindow);
     SDL_GL_MakeCurrent(pWindow, glContext);
 
     if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)

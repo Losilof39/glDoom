@@ -58,9 +58,9 @@
 // OpenGL Defines and Data
 /////////////////////////////////////////////////////////////////////////////////////
 
-extern HDC    hGDC;
-extern HGLRC  hRC;
-extern BOOL   software;
+//extern HDC    hGDC;
+//extern HGLRC  hRC;
+//extern BOOL   software;
 
 // Functions
 void   I_ShutdownGraphics( void );
@@ -701,13 +701,9 @@ void glDoomExit()
     I_ShutdownInputs();
     StopMusic();
     I_ShutdownGraphics();
+    SDL_DestroyWindow(pWindow);
     //SendMessage(WinData.hWnd, WM_CLOSE, 0, 0);
    };
-
-LRESULT CALLBACK DummyProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
-   {
-    return DefWindowProc(hwnd, iMsg, wParam, lParam);
-   }
 
 extern dboolean paused;
 
@@ -750,43 +746,43 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
             return 0;
             break;*/
 
-       case WM_KEYDOWN:
-            if ((lParam & 0x40000000) != 0)  // This "debounces" the keys so that we only process
-               break;                        // the message when the key is first pressed and not after.
+       //case WM_KEYDOWN:
+       //     if ((lParam & 0x40000000) != 0)  // This "debounces" the keys so that we only process
+       //        break;                        // the message when the key is first pressed and not after.
 
-            switch(wParam)
-               {
-                case VK_PAUSE:
-                     event.type = ev_keydown;
-                     event.data1 = SDL_SCANCODE_PAUSE;
-                     D_PostEvent(&event);
-                     break;
-                case VK_SHIFT:
-                     if (keylink == TRUE)
-                        {
-                         event.type = ev_keydown;
-                         event.data1 = DIK_RSHIFT;
-                         D_PostEvent(&event);
-                        }
-                     break;
-                case VK_CONTROL:
-                     if (keylink == TRUE)
-                        {
-                         event.type = ev_keydown;
-                         event.data1 = DIK_RCONTROL;
-                         D_PostEvent(&event);
-                        }
-                     break;
-                case VK_MENU:
-                     if (keylink == TRUE)
-                        {
-                         event.type = ev_keydown;
-                         event.data1 = DIK_RMENU;
-                         D_PostEvent(&event);
-                        }
-                     break;
-               }
-            break;
+       //     switch(wParam)
+       //        {
+       //         case VK_PAUSE:
+       //              event.type = ev_keydown;
+       //              event.data1 = SDL_SCANCODE_PAUSE;
+       //              D_PostEvent(&event);
+       //              break;
+       //         case VK_SHIFT:
+       //              if (keylink == TRUE)
+       //                 {
+       //                  event.type = ev_keydown;
+       //                  event.data1 = DIK_RSHIFT;
+       //                  D_PostEvent(&event);
+       //                 }
+       //              break;
+       //         case VK_CONTROL:
+       //              if (keylink == TRUE)
+       //                 {
+       //                  event.type = ev_keydown;
+       //                  event.data1 = DIK_RCONTROL;
+       //                  D_PostEvent(&event);
+       //                 }
+       //              break;
+       //         case VK_MENU:
+       //              if (keylink == TRUE)
+       //                 {
+       //                  event.type = ev_keydown;
+       //                  event.data1 = DIK_RMENU;
+       //                  D_PostEvent(&event);
+       //                 }
+       //              break;
+       //        }
+       //     break;
 
        case WM_ACTIVATE:
             if (LOWORD(wParam) != WA_INACTIVE)
@@ -817,7 +813,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                }
             break;
 
-       case WM_KEYUP:
+       /*case WM_KEYUP:
             switch(wParam)
                {
                 case VK_PAUSE:
@@ -850,7 +846,7 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
                         }
                      break;
                }
-            break;
+            break;*/
 
         /*case WM_DESTROY:
              con_shutdown();

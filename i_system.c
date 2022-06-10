@@ -148,7 +148,7 @@ void I_Quit(void)
     M_SaveDefaults();
     //I_ShutdownGraphics();
     glDoomExit();
-    //exit(0);
+    exit(0);
    }
 
 void I_WaitVBL(int count)
