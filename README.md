@@ -12,6 +12,11 @@ This repository contains improvements for glDoom port
 * Cleanups for modern types (uintptr_t, intptr_t and MSVC specific functions like (underscore)access etc..)
 * Addition of the score system code from WINDOOM
 
+## Curren Problems
+1. Key bindings do not behave as they should
+2. Lots of remaining Win32 code that need to be deleted
+3. Sounds fx like Imps' screams or shotgun do not work (for now only MIDI works)
+
 ### Future
 I am planning for this port, the following (in order or priority)
 
@@ -19,8 +24,10 @@ I am planning for this port, the following (in order or priority)
 2. Cleaning up the OpenGL code and moving some things to shaders (MAYBE IN THE FUTURE)
 3. Making glDoom multiplatform (Linux and macOS) - with an SDL window but still using OpenGL to draw and accelerate (DONE)
 4. Fix wanky key bindings (why direct input, why... )
-5. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
-6. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+5. Replace current sound/audio subsystem to SDL2
+6. Reorganized better code with the current SDL2 backend
+7. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
+8. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
