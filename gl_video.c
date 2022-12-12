@@ -91,7 +91,7 @@ extern int           iCurrMode;
 
 void ShutdownOpenGL(void)
    {
-    SDL_GL_MakeCurrent(pWindow, NULL);
+    SDL_GL_MakeCurrent(NULL, NULL);
     SDL_GL_DeleteContext(glContext);
    }
 

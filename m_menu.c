@@ -3759,6 +3759,9 @@ int M_GetKeyString(int c,int offset)
       break;
       }
 
+    SDL_Keycode keycode = SDL_GetKeyFromScancode(c);
+    s = SDL_GetKeyName(keycode);
+
     strcpy(&menu_buffer[offset],s); // string to display
     offset += strlen(s);
     }
