@@ -1,7 +1,7 @@
 // Global define needed for calling these functions
 #include <stdio.h>
-#include <windows.h>
-#include <mmsystem.h>
+//#include <windows.h>
+//#include <mmsystem.h>
 #include "doomtype.h"
 #include "i_cd.h"
 #include "gconsole.h"
@@ -11,38 +11,38 @@
 char        CDmsg[MCIMSGLEN+32];
 void lfprintf(char *message, ... );
 
-dboolean CDOpen(HWND hWnd, CD_Data_t *cdd)
+dboolean CDOpen(CD_Data_t *cdd)
    {
-    MCI_OPEN_PARMS     open;
-    MCIERROR           MCI_Error;
+    //MCI_OPEN_PARMS     open;
+    //MCIERROR           MCI_Error;
 
-    open.dwCallback       = (DWORD)hWnd;
-    open.lpstrDeviceType  = "cdaudio";
+    //open.dwCallback       = (DWORD)hWnd;
+    //open.lpstrDeviceType  = "cdaudio";
 
-    MCI_Error = mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_SHAREABLE, (DWORD)&open);
+    //MCI_Error = mciSendCommand(0, MCI_OPEN, MCI_OPEN_TYPE | MCI_OPEN_SHAREABLE, (DWORD)&open);
 
-    cdd->CDError = 0;
-    if (MCI_Error)
-       {
-        mciGetErrorString(MCI_Error, CDmsg, MCIMSGLEN);
-        strcat(CDmsg, "\n");
-        //MessageBox(hWnd, CDmsg, NULL, MB_ICONSTOP | MB_OK);
-        con_printf("Unable to open CD-ROM device...\n");
-        lfprintf(CDmsg);
-        if (MCI_Error == MCIERR_MUST_USE_SHAREABLE)
-           {
-            lfprintf("The \"shareable\" parameter was specified.\nThe program that has the CD device open will not share it.\n");
-           }
-        cdd->CDError = MCI_Error;
-        return(false);
-       }
-    cdd->CDDevice = open.wDeviceID;
-    return(true);
+    //cdd->CDError = 0;
+    //if (MCI_Error)
+    //   {
+    //    mciGetErrorString(MCI_Error, CDmsg, MCIMSGLEN);
+    //    strcat(CDmsg, "\n");
+    //    //MessageBox(hWnd, CDmsg, NULL, MB_ICONSTOP | MB_OK);
+    //    con_printf("Unable to open CD-ROM device...\n");
+    //    lfprintf(CDmsg);
+    //    if (MCI_Error == MCIERR_MUST_USE_SHAREABLE)
+    //       {
+    //        lfprintf("The \"shareable\" parameter was specified.\nThe program that has the CD device open will not share it.\n");
+    //       }
+    //    cdd->CDError = MCI_Error;
+    //    return(false);
+    //   }
+    //cdd->CDDevice = open.wDeviceID;
+    //return(true);
    }
 
-dboolean CDCheck(HWND hWnd, CD_Data_t *cdd)
+dboolean CDCheck(CD_Data_t *cdd)
    {
-    MCI_STATUS_PARMS   status;
+    /*MCI_STATUS_PARMS   status;
     MCIERROR           MCI_Error;
 
     status.dwCallback = (DWORD)hWnd;
@@ -59,12 +59,12 @@ dboolean CDCheck(HWND hWnd, CD_Data_t *cdd)
         return(false);
        }
     cdd->CDMedia = status.dwReturn;
-    return(true);
+    return(true);*/
    }
 
-dboolean CDMediaIdentity(HWND hWnd, CD_Data_t *cdd, char *szIdent)
+dboolean CDMediaIdentity(CD_Data_t *cdd, char *szIdent)
    {
-    MCI_INFO_PARMS     info;
+    /*MCI_INFO_PARMS     info;
     MCIERROR           MCI_Error;
 
     info.dwCallback       = (DWORD)hWnd;
@@ -81,13 +81,13 @@ dboolean CDMediaIdentity(HWND hWnd, CD_Data_t *cdd, char *szIdent)
         cdd->CDError = MCI_Error;
         return(false);
        }
-    return(true);
+    return(true);*/
    }
 
 
-dboolean CDTrackCount(HWND hWnd, CD_Data_t *cdd)
+dboolean CDTrackCount(CD_Data_t *cdd)
    {
-    MCI_STATUS_PARMS   status;
+    /*MCI_STATUS_PARMS   status;
     MCIERROR           MCI_Error;
 
     status.dwCallback       = (DWORD)hWnd;
@@ -105,12 +105,12 @@ dboolean CDTrackCount(HWND hWnd, CD_Data_t *cdd)
         return(false);
        }
     cdd->CDTrackCount = status.dwReturn;
-    return(true);
+    return(true);*/
    }
 
-dboolean CDTrackType(HWND hWnd, CD_Data_t *cdd)
+dboolean CDTrackType(CD_Data_t *cdd)
    {
-    MCI_STATUS_PARMS   status;
+    /*MCI_STATUS_PARMS   status;
     MCIERROR           MCI_Error;
 
     status.dwCallback  = (DWORD)hWnd;
@@ -128,12 +128,12 @@ dboolean CDTrackType(HWND hWnd, CD_Data_t *cdd)
         return(false);
        }
     cdd->CDTrackList[cdd->CDTrack] = status.dwReturn;
-    return(true);
+    return(true);*/
    }
 
-dboolean CDTrackPlay(HWND hWnd, CD_Data_t *cdd)
+dboolean CDTrackPlay(CD_Data_t *cdd)
    {
-    MCI_PLAY_PARMS     play;
+    /*MCI_PLAY_PARMS     play;
     MCI_SET_PARMS      set;
     MCIERROR           MCI_Error;
     char               tstr[16];
@@ -163,12 +163,12 @@ dboolean CDTrackPlay(HWND hWnd, CD_Data_t *cdd)
         return(false);
        }
     cdd->CDStatus = cd_play;
-    return(true);
+    return(true);*/
    }
 
-dboolean CDPause(HWND hWnd, CD_Data_t *cdd)
+dboolean CDPause(CD_Data_t *cdd)
    {
-    MCI_SET_PARMS      set;
+    /*MCI_SET_PARMS      set;
     MCI_STATUS_PARMS   status;
     MCIERROR           MCI_Error;
 
@@ -191,12 +191,12 @@ dboolean CDPause(HWND hWnd, CD_Data_t *cdd)
     cdd->CDPosition = status.dwReturn;
     cdd->CDTrack = MCI_TMSF_TRACK(cdd->CDPosition);
     mciSendCommand(cdd->CDDevice, MCI_STOP, 0, (DWORD)NULL);
-    return(true);
+    return(true);*/
    }
 
-dboolean CDResume(HWND hWnd, CD_Data_t *cdd)
+dboolean CDResume(CD_Data_t *cdd)
    {
-    MCI_SET_PARMS      set;
+    /*MCI_SET_PARMS      set;
     MCI_PLAY_PARMS     play;
     MCIERROR           MCI_Error;
 
@@ -222,17 +222,17 @@ dboolean CDResume(HWND hWnd, CD_Data_t *cdd)
         cdd->CDError = MCI_Error;
         return(false);
        }
-    return(true);
+    return(true);*/
    }
 
 void CDStop(CD_Data_t *cdd)
    {
-    mciSendCommand(cdd->CDDevice, MCI_STOP, 0, (DWORD)NULL);
-    cdd->CDStatus = cd_stop;
+    /*mciSendCommand(cdd->CDDevice, MCI_STOP, 0, (DWORD)NULL);
+    cdd->CDStatus = cd_stop;*/
    }
 
 void CDClose(CD_Data_t *cdd)
    {
-    mciSendCommand(cdd->CDDevice, MCI_CLOSE, 0, (DWORD)NULL);
+    //mciSendCommand(cdd->CDDevice, MCI_CLOSE, 0, (DWORD)NULL);
    }
 

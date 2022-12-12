@@ -25,17 +25,20 @@
 static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
-#include <windows.h>
-//#include <gl/gl.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 
-//#include <unistd.h>
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <ctype.h>
+
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
+#endif
 
 
 #include "doomdef.h"
@@ -316,10 +319,9 @@ extern int map_secret_after; //secrets do not appear til after bagged
 //extern default_t defaults[];
 extern int numdefaults;
 
-extern windata_t  WinData;
 extern video_t    video;
 
-extern int ConFont[2][96];
+//extern int ConFont[2][96];
 
 extern float SetBack;
 
@@ -346,7 +348,7 @@ text_color_t  tc[] = { 1.0f, 1.0f, 1.0f,
 
 void GL_DrawSetupText(int x, int y, char *text, int color)
    {
-    int c, ch;
+    /*int c, ch;
     float left, right, top, bottom;
 
     left = x - 160.0f;
@@ -388,7 +390,7 @@ void GL_DrawSetupText(int x, int y, char *text, int color)
            }
         left += gl_fwidth;
        }
-    glColor3f( 1.0f, 1.0f, 1.0f );
+    glColor3f( 1.0f, 1.0f, 1.0f );*/
    }
 
 //
@@ -1225,15 +1227,15 @@ void M_ReadSaveStrings(void)
 	else
 	    sprintf(name,SAVEGAMENAME"%d.dsg",i);
 
-	handle = _open (name, O_RDONLY | 0, 0666);
+	handle = open (name, O_RDONLY | 0, 0666);
 	if (handle == -1)
 	{
 	    strcpy(&savegamestrings[i][0],EMPTYSTRING);
 	    LoadGameMenu[i].status = 0;
 	    continue;
 	}
-	count = _read (handle, &savegamestrings[i], SAVESTRINGSIZE);
-	_close (handle);
+	count = read (handle, &savegamestrings[i], SAVESTRINGSIZE);
+	close (handle);
 	LoadGameMenu[i].status = 1;
     }
 }
@@ -2214,7 +2216,7 @@ void M_VerifyNightmare(int ch)
     M_ClearMenus ();
 }
 
-extern BOOL bShowTitle;
+extern dboolean bShowTitle;
 
 void M_ChooseSkill(int choice)
 {
@@ -2287,7 +2289,7 @@ void M_DrawBackground(char* patchname)
 extern DW_TexList TexList[1024];
 extern int        TexCount;
 extern int        ftranslate[1024];
-extern BOOL       TexTransparent;
+extern dboolean TexTransparent;
 
 /////////////////////////////
 //
@@ -2610,7 +2612,7 @@ int     quitsounds2[8] =
 };
 
 
-char MsgText[2048];
+static char MsgText[2048];
 
 void M_QuitResponse(int ch)
 {
@@ -3516,22 +3518,22 @@ int M_GetKeyString(int c,int offset)
   char* s;
 
   if (c == SDL_SCANCODE_PAUSE)
-     {
-      strcpy(&menu_buffer[offset],"PAUS"); // string to display
+  {
+      strcpy(&menu_buffer[offset], "PAUS"); // string to display
       offset += 4;
-     }
-  else
-  if (strlen(sckeyname[c]) > 0)
-     {
-      strcpy(&menu_buffer[offset],sckeyname[c]); // string to display
-      offset += strlen(sckeyname[c]);
-     }
-  else
-     {
-      strcpy(&menu_buffer[offset],"JUNK");
-      offset += 4;
-     }
-  return offset;
+  }
+  //else
+  //if (strlen(sckeyname[c]) > 0)
+  //   {
+  //    strcpy(&menu_buffer[offset],sckeyname[c]); // string to display
+  //    offset += strlen(sckeyname[c]);
+  //   }
+  //else
+  //   {
+  //    strcpy(&menu_buffer[offset],"JUNK");
+  //    offset += 4;
+  //   }
+  //return offset;
 
   if (c >= 33 && c <= 126)
     {
@@ -3686,7 +3688,7 @@ int M_GetKeyString(int c,int offset)
     case SDL_SCANCODE_DOWN:
       s = "DARR";
       break;
-    case SDL_SCANCODE_RSHIFT:
+    case SDL_SCANCODE_LSHIFT:
       s = "SHFT";
       break;
     case SDL_SCANCODE_RALT:
@@ -3756,6 +3758,7 @@ int M_GetKeyString(int c,int offset)
       s = "JUNK";
       break;
       }
+
     strcpy(&menu_buffer[offset],s); // string to display
     offset += strlen(s);
     }
@@ -5769,7 +5772,8 @@ dboolean M_Responder (event_t* ev)
           else if ((ch == key_menu_enter) ||
                (ch == key_menu_escape))
             {
-            (char *)ptr1->m_var1 = chat_string_buffer;
+            //(char *)ptr1->m_var1 = chat_string_buffer;
+            strncpy((char*)(*(ptr1->m_var1)), chat_string_buffer, CHAT_STRING_BFR_SIZE);
             M_SelectDone(ptr1);         // phares 4/17/98
             }
 
@@ -5877,7 +5881,8 @@ dboolean M_Responder (event_t* ev)
         // and free old string's memory.
 
         free((char *)(*(ptr1->m_var1)));
-        (char *)ptr1->m_var1 = chat_string_buffer;
+        strncpy((char*)(*(ptr1->m_var1)), chat_string_buffer, CHAT_STRING_BFR_SIZE);
+        //(char *)ptr1->m_var1 = chat_string_buffer;
         chat_index = 0; // current cursor position in chat_string_buffer
         }
 

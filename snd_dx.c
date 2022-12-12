@@ -24,7 +24,9 @@
 static const char
 rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 
-#include <windows.h>
+// if I need to take this header out I should first port all the sound
+// stuff to SDL2...
+//#include <windows.h>
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -40,7 +42,12 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 //#endif
 
 #include <fcntl.h>
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
+#endif
 //#include <unistd.h>
 //#include <sys/ioctl.h>
 
@@ -66,7 +73,7 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 ////////////////////////////////////////////////////////////////////////////
 // glDoom - DirectSound
 ////////////////////////////////////////////////////////////////////////////
-#include <dsound.h>
+//#include <dsound.h>
 
 #undef RELEASE
 #ifdef __cplusplus
@@ -79,12 +86,12 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 #define NUM_SOUND_FX 128
 #define SB_SIZE      20480
 
-LPDIRECTSOUND        lpDS;
-LPDIRECTSOUNDBUFFER  lpDSPrimary;
-LPDIRECTSOUNDBUFFER  lpDSBuffer[NUM_DSBUFFERS];
-LPDIRECTSOUNDBUFFER  lpDSCopy[NUM_DSBUFFERS];
+//LPDIRECTSOUND        lpDS;
+//LPDIRECTSOUNDBUFFER  lpDSPrimary;
+//LPDIRECTSOUNDBUFFER  lpDSBuffer[NUM_DSBUFFERS];
+//LPDIRECTSOUNDBUFFER  lpDSCopy[NUM_DSBUFFERS];
 
-extern windata_t WinData;
+//extern windata_t WinData;
 
 typedef enum { dsb_perm, dsb_temp, dsb_empty } dsb_type;
 
@@ -109,7 +116,7 @@ void lfprintf(char *message, ... );
 dboolean SetupDirectSound();
 dboolean CreateSoundBuffer(int Channel, int length, int speed, unsigned char *data);
 void I_PlaySoundEffect(int sfxid, int Channel, int volume, int pan);
-void DS_Error( HRESULT hresult, char *msg );
+//void DS_Error( HRESULT hresult, char *msg );
 
 /////////////////////////////////////////////////////////////////////////////////////
 // DIRECTSOUND - Sound effects
@@ -117,128 +124,128 @@ void DS_Error( HRESULT hresult, char *msg );
 
 dboolean SetupDirectSound()
    {
-    HRESULT        hresult;
-    int            buff;
-    DSBUFFERDESC   dsbdesc;
-    WAVEFORMATEX   wfx;
+    //HRESULT        hresult;
+    //int            buff;
+    //DSBUFFERDESC   dsbdesc;
+    //WAVEFORMATEX   wfx;
 
-    con_printf("Starting DirectSound...\n");
+    //con_printf("Starting DirectSound...\n");
 
-    // Create an instance of DirectSound
-    hresult = DirectSoundCreate(NULL, &lpDS, NULL);
-    if (hresult != DS_OK)
-       {
-        DS_Error(hresult, "DirectSoundCreate");
-        for (buff = 0; buff < NUM_SOUND_FX; buff++)
-           lpDSBuffer[buff] = 0;
-        nosound = nosound_t = true;
-        return false;
-       }
+    //// Create an instance of DirectSound
+    //hresult = DirectSoundCreate(NULL, &lpDS, NULL);
+    //if (hresult != DS_OK)
+    //   {
+    //    DS_Error(hresult, "DirectSoundCreate");
+    //    for (buff = 0; buff < NUM_SOUND_FX; buff++)
+    //       lpDSBuffer[buff] = 0;
+    //    nosound = nosound_t = true;
+    //    return false;
+    //   }
 
-    // Set the cooperative level so it doesn't get confused
-    hresult = lpDS->lpVtbl->SetCooperativeLevel(lpDS, WinData.hWnd, DSSCL_EXCLUSIVE);
-    if (hresult != DS_OK)
-       DS_Error(hresult, "DirectSound.SetCooperativeLevel");
+    //// Set the cooperative level so it doesn't get confused
+    //hresult = lpDS->lpVtbl->SetCooperativeLevel(lpDS, WinData.hWnd, DSSCL_EXCLUSIVE);
+    //if (hresult != DS_OK)
+    //   DS_Error(hresult, "DirectSound.SetCooperativeLevel");
 
-    // Set up DSBUFFERDESC structure.
-    memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));  // Zero it out.
-    dsbdesc.dwSize              = sizeof(DSBUFFERDESC);
-    dsbdesc.dwFlags             = DSBCAPS_PRIMARYBUFFER;
-    dsbdesc.dwBufferBytes       = 0;
-    dsbdesc.lpwfxFormat         = NULL;
+    //// Set up DSBUFFERDESC structure.
+    //memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));  // Zero it out.
+    //dsbdesc.dwSize              = sizeof(DSBUFFERDESC);
+    //dsbdesc.dwFlags             = DSBCAPS_PRIMARYBUFFER;
+    //dsbdesc.dwBufferBytes       = 0;
+    //dsbdesc.lpwfxFormat         = NULL;
 
-    hresult = lpDS->lpVtbl->CreateSoundBuffer(lpDS, &dsbdesc, &lpDSPrimary, NULL);
-    if (hresult != DS_OK)
-       {
-        DS_Error(hresult, "DirectSound.CreateSoundBuffer - Primary");
-       }
+    //hresult = lpDS->lpVtbl->CreateSoundBuffer(lpDS, &dsbdesc, &lpDSPrimary, NULL);
+    //if (hresult != DS_OK)
+    //   {
+    //    DS_Error(hresult, "DirectSound.CreateSoundBuffer - Primary");
+    //   }
 
-    // Set up wave format structure.
-    memset( &wfx, 0, sizeof(WAVEFORMATEX) );
-    wfx.wFormatTag         = WAVE_FORMAT_PCM;      
-    wfx.nChannels          = 2;
-    wfx.nSamplesPerSec     = 11025;
-    wfx.nAvgBytesPerSec    = 11025*2*1;
-    wfx.nBlockAlign        = 2; // ?
-    wfx.wBitsPerSample     = (WORD)8;
-    wfx.cbSize             = 0;
+    //// Set up wave format structure.
+    //memset( &wfx, 0, sizeof(WAVEFORMATEX) );
+    //wfx.wFormatTag         = WAVE_FORMAT_PCM;      
+    //wfx.nChannels          = 2;
+    //wfx.nSamplesPerSec     = 11025;
+    //wfx.nAvgBytesPerSec    = 11025*2*1;
+    //wfx.nBlockAlign        = 2; // ?
+    //wfx.wBitsPerSample     = (WORD)8;
+    //wfx.cbSize             = 0;
 
-    hresult = lpDSPrimary->lpVtbl->SetFormat(lpDSPrimary, &wfx);
-    if (hresult != DS_OK)
-       {
-        DS_Error(hresult, "DirectSound.SetFormat - Primary");
-       }
+    //hresult = lpDSPrimary->lpVtbl->SetFormat(lpDSPrimary, &wfx);
+    //if (hresult != DS_OK)
+    //   {
+    //    DS_Error(hresult, "DirectSound.SetFormat - Primary");
+    //   }
 
-    // Set the cooperative level so it doesn't get confused
-    hresult = lpDS->lpVtbl->SetCooperativeLevel(lpDS, WinData.hWnd, DSSCL_NORMAL);
-    if (hresult != DS_OK)
-       DS_Error(hresult, "DirectSound.SetCooperativeLevel");
+    //// Set the cooperative level so it doesn't get confused
+    //hresult = lpDS->lpVtbl->SetCooperativeLevel(lpDS, WinData.hWnd, DSSCL_NORMAL);
+    //if (hresult != DS_OK)
+    //   DS_Error(hresult, "DirectSound.SetCooperativeLevel");
 
-    return(true);
+    //return(true);
    }
 
 dboolean CreateSoundBuffer(int Channel, int length, int speed, unsigned char *data)
    {
-    HRESULT        hresult;
-    //int            buff;
-    DSBUFFERDESC   dsbdesc;
-    PCMWAVEFORMAT  pcmwf;
-    void          *buffer, *buff2;
-    DWORD          size1, size2;
+    //HRESULT        hresult;
+    ////int            buff;
+    //DSBUFFERDESC   dsbdesc;
+    //PCMWAVEFORMAT  pcmwf;
+    //void          *buffer, *buff2;
+    //DWORD          size1, size2;
 
-    if (Channel > NUM_SOUND_FX)
-       {
-        lfprintf("Invalid sound effect...\n");
-        return false;
-       }
+    //if (Channel > NUM_SOUND_FX)
+    //   {
+    //    lfprintf("Invalid sound effect...\n");
+    //    return false;
+    //   }
 
-    // Set up wave format structure.
-    memset( &pcmwf, 0, sizeof(PCMWAVEFORMAT) );
-    pcmwf.wf.wFormatTag         = WAVE_FORMAT_PCM;      
-    pcmwf.wf.nChannels          = 1;
-    pcmwf.wf.nSamplesPerSec     = speed;
-    pcmwf.wf.nBlockAlign        = 1; // ?
-    pcmwf.wf.nAvgBytesPerSec    = speed*1*1;
-    pcmwf.wBitsPerSample        = (WORD)8;
+    //// Set up wave format structure.
+    //memset( &pcmwf, 0, sizeof(PCMWAVEFORMAT) );
+    //pcmwf.wf.wFormatTag         = WAVE_FORMAT_PCM;      
+    //pcmwf.wf.nChannels          = 1;
+    //pcmwf.wf.nSamplesPerSec     = speed;
+    //pcmwf.wf.nBlockAlign        = 1; // ?
+    //pcmwf.wf.nAvgBytesPerSec    = speed*1*1;
+    //pcmwf.wBitsPerSample        = (WORD)8;
 
-    // Set up DSBUFFERDESC structure.
-    memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));  // Zero it out.
-    dsbdesc.dwSize              = sizeof(DSBUFFERDESC);
-    //dsbdesc.dwFlags             = DSBCAPS_CTRLDEFAULT;
-    dsbdesc.dwFlags             = DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY;
-    //dsbdesc.dwFlags             = DSBCAPS_CTRLDEFAULT|DSBCAPS_CTRLPOSITIONNOTIFY;
-    dsbdesc.dwBufferBytes       = length;
-    dsbdesc.lpwfxFormat         = (LPWAVEFORMATEX)&pcmwf;
+    //// Set up DSBUFFERDESC structure.
+    //memset(&dsbdesc, 0, sizeof(DSBUFFERDESC));  // Zero it out.
+    //dsbdesc.dwSize              = sizeof(DSBUFFERDESC);
+    ////dsbdesc.dwFlags             = DSBCAPS_CTRLDEFAULT;
+    //dsbdesc.dwFlags             = DSBCAPS_CTRLPAN | DSBCAPS_CTRLVOLUME | DSBCAPS_CTRLFREQUENCY;
+    ////dsbdesc.dwFlags             = DSBCAPS_CTRLDEFAULT|DSBCAPS_CTRLPOSITIONNOTIFY;
+    //dsbdesc.dwBufferBytes       = length;
+    //dsbdesc.lpwfxFormat         = (LPWAVEFORMATEX)&pcmwf;
 
-    if ((hresult = lpDS->lpVtbl->CreateSoundBuffer(lpDS, &dsbdesc, &lpDSBuffer[Channel], NULL)) != DS_OK)
-       {
-        DS_Error(hresult, "DirectSound.CreateSoundBuffer");
-        return false;
-       }
+    //if ((hresult = lpDS->lpVtbl->CreateSoundBuffer(lpDS, &dsbdesc, &lpDSBuffer[Channel], NULL)) != DS_OK)
+    //   {
+    //    DS_Error(hresult, "DirectSound.CreateSoundBuffer");
+    //    return false;
+    //   }
 
-    //hresult = lpDSBuffer[Channel]->lpVtbl->Lock(lpDSBuffer[Channel],0,length,&buffer,&size1,&buff2,&size2,DSBLOCK_ENTIREBUFFER );
-    hresult = lpDSBuffer[Channel]->lpVtbl->Lock(lpDSBuffer[Channel],0,length,&buffer,&size1,&buff2,&size2,0 );
-    if (hresult == DS_OK)
-       {
-        memcpy(buffer, data, length);
-        hresult = lpDSBuffer[Channel]->lpVtbl->Unlock(lpDSBuffer[Channel],buffer,length,buff2,size2);
-        if (hresult != DS_OK)
-           {
-            DS_Error(hresult, "lpDSBuffer.Unlock");
-            return false;
-           }
-       }
-    else
-       {
-        DS_Error(hresult, "lpDSBuffer.Lock");
-        return false;
-       }
-    return true;
+    ////hresult = lpDSBuffer[Channel]->lpVtbl->Lock(lpDSBuffer[Channel],0,length,&buffer,&size1,&buff2,&size2,DSBLOCK_ENTIREBUFFER );
+    //hresult = lpDSBuffer[Channel]->lpVtbl->Lock(lpDSBuffer[Channel],0,length,&buffer,&size1,&buff2,&size2,0 );
+    //if (hresult == DS_OK)
+    //   {
+    //    memcpy(buffer, data, length);
+    //    hresult = lpDSBuffer[Channel]->lpVtbl->Unlock(lpDSBuffer[Channel],buffer,length,buff2,size2);
+    //    if (hresult != DS_OK)
+    //       {
+    //        DS_Error(hresult, "lpDSBuffer.Unlock");
+    //        return false;
+    //       }
+    //   }
+    //else
+    //   {
+    //    DS_Error(hresult, "lpDSBuffer.Lock");
+    //    return false;
+    //   }
+    //return true;
    }
 
 void ShutdownDirectSound()
    {
-    int buff;
+    /*int buff;
 
     DWORD BufferStatus;
 
@@ -253,7 +260,7 @@ void ShutdownDirectSound()
            }
        }
     RELEASE(lpDSPrimary);
-    RELEASE(lpDS);
+    RELEASE(lpDS);*/
    }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -337,72 +344,72 @@ int*		channelrightvol_lookup[NUM_CHANNELS];
 //
 void *getsfx( char *sfxname, int *len, int *speed )
    {
-    unsigned char*      sfx;
-    unsigned char*      paddedsfx;
-    int                 i;
-    int                 size;
-    int                 paddedsize;
-    char                name[20];
-    int                 sfxlump;
-    short               s_speed;
+    //unsigned char*      sfx;
+    //unsigned char*      paddedsfx;
+    //int                 i;
+    //int                 size;
+    //int                 paddedsize;
+    //char                name[20];
+    //int                 sfxlump;
+    //short               s_speed;
 
    
-    sprintf(name, "ds%s", sfxname);
+    //sprintf(name, "ds%s", sfxname);
 
-    // Get the sound data from the WAD, allocate lump
-    //  in zone memory.
-    // Now, there is a severe problem with the
-    //  sound handling, in it is not (yet/anymore)
-    //  gamemode aware. That means, sounds from
-    //  DOOM II will be requested even with DOOM
-    //  shareware.
-    // The sound list is wired into sounds.c,
-    //  which sets the external variable.
-    // I do not do runtime patches to that
-    //  variable. Instead, we will use a
-    //  default sound for replacement.
+    //// Get the sound data from the WAD, allocate lump
+    ////  in zone memory.
+    //// Now, there is a severe problem with the
+    ////  sound handling, in it is not (yet/anymore)
+    ////  gamemode aware. That means, sounds from
+    ////  DOOM II will be requested even with DOOM
+    ////  shareware.
+    //// The sound list is wired into sounds.c,
+    ////  which sets the external variable.
+    //// I do not do runtime patches to that
+    ////  variable. Instead, we will use a
+    ////  default sound for replacement.
 
-    if ( W_CheckNumForName(name) == -1 )
-      sfxlump = W_GetNumForName("dspistol");
-    else
-      sfxlump = W_GetNumForName(name);
-    
-    size = W_LumpLength( sfxlump );
+    //if ( W_CheckNumForName(name) == -1 )
+    //  sfxlump = W_GetNumForName("dspistol");
+    //else
+    //  sfxlump = W_GetNumForName(name);
+    //
+    //size = W_LumpLength( sfxlump );
 
-    // Debug.
-    // fprintf( stderr, "." );
-    //fprintf( stderr, " -loading  %s (lump %d, %d bytes)\n",
-    //	     sfxname, sfxlump, size );
-    //fflush( stderr );
-    
-    sfx = (unsigned char*)W_CacheLumpNum( sfxlump, PU_STATIC );
+    //// Debug.
+    //// fprintf( stderr, "." );
+    ////fprintf( stderr, " -loading  %s (lump %d, %d bytes)\n",
+    ////	     sfxname, sfxlump, size );
+    ////fflush( stderr );
+    //
+    //sfx = (unsigned char*)W_CacheLumpNum( sfxlump, PU_STATIC );
 
-    memcpy((unsigned char *)&s_speed, sfx+2, 2);
-    *speed = s_speed;
+    //memcpy((unsigned char *)&s_speed, sfx+2, 2);
+    //*speed = s_speed;
 
-    // Pads the sound effect out to the mixing buffer size.
-    // The original realloc would interfere with zone memory.
-    paddedsize = ((size-8 + (SAMPLECOUNT-1)) / SAMPLECOUNT) * SAMPLECOUNT;
+    //// Pads the sound effect out to the mixing buffer size.
+    //// The original realloc would interfere with zone memory.
+    //paddedsize = ((size-8 + (SAMPLECOUNT-1)) / SAMPLECOUNT) * SAMPLECOUNT;
 
-    // Allocate from zone memory.
-    paddedsfx = (unsigned char*)Z_Malloc( paddedsize+8, PU_STATIC, 0 );
-    // ddt: (unsigned char *) realloc(sfx, paddedsize+8);
-    // This should interfere with zone memory handling,
-    //  which does not kick in in the soundserver.
+    //// Allocate from zone memory.
+    //paddedsfx = (unsigned char*)Z_Malloc( paddedsize+8, PU_STATIC, 0 );
+    //// ddt: (unsigned char *) realloc(sfx, paddedsize+8);
+    //// This should interfere with zone memory handling,
+    ////  which does not kick in in the soundserver.
 
-    // Now copy and pad.
-    memcpy(  paddedsfx, sfx, size );
-    for (i = size; i < paddedsize+8; i++)
-        paddedsfx[i] = 128;
+    //// Now copy and pad.
+    //memcpy(  paddedsfx, sfx, size );
+    //for (i = size; i < paddedsize+8; i++)
+    //    paddedsfx[i] = 128;
 
-    // Remove the cached lump.
-    Z_Free( sfx );
-    
-    // Preserve padded length.
-    *len = paddedsize;
+    //// Remove the cached lump.
+    //Z_Free( sfx );
+    //
+    //// Preserve padded length.
+    //*len = paddedsize;
 
-    // Return allocated padded data.
-    return (void *) (paddedsfx + 8);
+    //// Return allocated padded data.
+    //return (void *) (paddedsfx + 8);
    }
 
 
@@ -415,150 +422,150 @@ void *getsfx( char *sfxname, int *len, int *speed )
 //
 int addsfx( int sfxid, int volume, int step, int seperation, void *origin )
    {
-    static unsigned short	handlenums = 0;
+    //static unsigned short	handlenums = 0;
  
-    int		i;
-    int		rc = -1;
-    
-    int		oldest = gametic;
-    int		oldestnum = 0;
+    //int		i;
+    //int		rc = -1;
+    //
+    //int		oldest = gametic;
+    //int		oldestnum = 0;
 
-    int     iVolume, iPan;
-    DWORD   dwDSBStatus;
-    int     dsbchannel;
+    //int     iVolume, iPan;
+    //DWORD   dwDSBStatus;
+    //int     dsbchannel;
 
-    // Chainsaw troubles.
-    // Play these sound effects only one at a time.
-    if ( sfxid == sfx_sawup  || sfxid == sfx_sawidl || sfxid == sfx_sawful ||
-         sfxid == sfx_sawhit || sfxid == sfx_stnmov )
-        dsbchannel = sfxid;
-    else
-       {
-        dsbchannel = sfxid;
-        if (lpDSBuffer[0] != 0)
-            lpDSBuffer[sfxid]->lpVtbl->GetStatus(lpDSBuffer[sfxid], &dwDSBStatus);
-        else
-            dwDSBStatus = DS_OK;
-        if (dwDSBStatus == DSBSTATUS_PLAYING)
-           {
-            for (i = NUMSFX; i < NUM_DSBUFFERS; i++)
-               {
-                if ((DSBControl[i].origin == origin) && (DSBControl[i].sfxid == sfxid))
-                   {
-                    dsbchannel = i;
-                    break;
-                   }
-                if (DSBControl[i].sfxid == -1)
-                   {
-                    dsbchannel = i;
-                    DSBControl[i].origin = origin;
-                    break;
-                   }
-                if (DSBControl[i].sfxid >= 0)
-                   {
-                    lpDSBuffer[i]->lpVtbl->GetStatus(lpDSBuffer[i], &dwDSBStatus);
-                    if (dwDSBStatus != DSBSTATUS_PLAYING)
-                       {
-                        dsbchannel = i;
-                        DSBControl[i].origin = origin;
-                        break;
-                       }
-                   }
-                if (DSBControl[i].origin == origin)
-                   {
-                    dsbchannel = i;
-                    break;
-                   }
-               }
-           }
-       }
+    //// Chainsaw troubles.
+    //// Play these sound effects only one at a time.
+    //if ( sfxid == sfx_sawup  || sfxid == sfx_sawidl || sfxid == sfx_sawful ||
+    //     sfxid == sfx_sawhit || sfxid == sfx_stnmov )
+    //    dsbchannel = sfxid;
+    //else
+    //   {
+    //    dsbchannel = sfxid;
+    //    if (lpDSBuffer[0] != 0)
+    //        lpDSBuffer[sfxid]->lpVtbl->GetStatus(lpDSBuffer[sfxid], &dwDSBStatus);
+    //    else
+    //        dwDSBStatus = DS_OK;
+    //    if (dwDSBStatus == DSBSTATUS_PLAYING)
+    //       {
+    //        for (i = NUMSFX; i < NUM_DSBUFFERS; i++)
+    //           {
+    //            if ((DSBControl[i].origin == origin) && (DSBControl[i].sfxid == sfxid))
+    //               {
+    //                dsbchannel = i;
+    //                break;
+    //               }
+    //            if (DSBControl[i].sfxid == -1)
+    //               {
+    //                dsbchannel = i;
+    //                DSBControl[i].origin = origin;
+    //                break;
+    //               }
+    //            if (DSBControl[i].sfxid >= 0)
+    //               {
+    //                lpDSBuffer[i]->lpVtbl->GetStatus(lpDSBuffer[i], &dwDSBStatus);
+    //                if (dwDSBStatus != DSBSTATUS_PLAYING)
+    //                   {
+    //                    dsbchannel = i;
+    //                    DSBControl[i].origin = origin;
+    //                    break;
+    //                   }
+    //               }
+    //            if (DSBControl[i].origin == origin)
+    //               {
+    //                dsbchannel = i;
+    //                break;
+    //               }
+    //           }
+    //       }
+    //   }
 
-    iVolume = 0-(128*(15-volume));
-    if (iVolume < -10000)
-       iVolume == -10000;
-    iPan = (seperation-128)*20;
-    if (iPan < -10000)
-       iPan = -10000;
-    if (iPan > 10000)
-       iPan = 10000;
+    //iVolume = 0-(128*(15-volume));
+    //if (iVolume < -10000)
+    //   iVolume == -10000;
+    //iPan = (seperation-128)*20;
+    //if (iPan < -10000)
+    //   iPan = -10000;
+    //if (iPan > 10000)
+    //   iPan = 10000;
 
-    if (swap_stereo == true)
-       iPan *= -1;
+    //if (swap_stereo == true)
+    //   iPan *= -1;
 
-    // Preserve sound SFX id,
-    //  e.g. for avoiding duplicates of chainsaw.
-    channelids[dsbchannel] = sfxid;
+    //// Preserve sound SFX id,
+    ////  e.g. for avoiding duplicates of chainsaw.
+    //channelids[dsbchannel] = sfxid;
 
-    I_PlaySoundEffect(sfxid, dsbchannel, iVolume, iPan);
+    //I_PlaySoundEffect(sfxid, dsbchannel, iVolume, iPan);
 
-    // You tell me.
-    //return rc;
-    return dsbchannel;
+    //// You tell me.
+    ////return rc;
+    //return dsbchannel;
    }
 
 // This function call starts a sound playing in a DirectSound buffer...
 void I_PlaySoundEffect(int sfxid, int Channel, int iVolume, int iPan)
    {
-    HRESULT hresult;
-    DWORD   dwDSBStatus;
-
-    if (Channel > NUM_SOUND_FX)
-       {
-        return;
-       }
-    if (lpDSBuffer[Channel] == 0)
-       {
-        return;
-       }
-
-    if ((DSBControl[Channel].dsb_type == dsb_temp) && (DSBControl[Channel].sfxid != sfxid))
-       {
-        if (DSBControl[Channel].sfxid > 0)
-           {
-/*
-            lpDSBuffer[Channel]->lpVtbl->GetStatus(lpDSBuffer[Channel], &dwDSBStatus);
-            if (dwDSBStatus == DSBSTATUS_PLAYING)
-               {
-                hresult = lpDSBuffer[Channel]->lpVtbl->Stop(lpDSBuffer[Channel]);
-                if (hresult != DS_OK)
-                    DS_Error(hresult, "lpDSBuffer.Stop");
-               }
-*/
-            lpDSBuffer[Channel]->lpVtbl->Release(lpDSBuffer[Channel]);
-            DSBControl[Channel].sfxid = -1;
-           }
-
-        if (DSBControl[Channel].sfxid < 0)
-           {
-            // clone temp buffer here...
-            lpDS->lpVtbl->DuplicateSoundBuffer(lpDS, lpDSBuffer[sfxid], &lpDSBuffer[Channel]);
-            DSBControl[Channel].sfxid = sfxid;
-           }
-       }
-/*
-    else
-       {
-        lpDSBuffer[Channel]->lpVtbl->GetStatus(lpDSBuffer[Channel], &dwDSBStatus);
-        if (dwDSBStatus == DSBSTATUS_PLAYING)
-           {
-            hresult = lpDSBuffer[Channel]->lpVtbl->Stop(lpDSBuffer[Channel]);
-            if (hresult != DS_OK)
-                DS_Error(hresult, "lpDSBuffer.Stop");
-           }
-       }
-*/
-    hresult = lpDSBuffer[Channel]->lpVtbl->SetCurrentPosition(lpDSBuffer[Channel], 0);
-    if (hresult != DS_OK)
-        DS_Error(hresult, "lpDSBuffer.SetCurrentPosition");
-    hresult = lpDSBuffer[Channel]->lpVtbl->SetVolume(lpDSBuffer[Channel], iVolume );
-    if (hresult != DS_OK)
-        DS_Error(hresult, "lpDSBuffer.SetVolume");
-    hresult = lpDSBuffer[Channel]->lpVtbl->SetPan(lpDSBuffer[Channel], iPan);
-    if (hresult != DS_OK)
-        DS_Error(hresult, "lpDSBuffer.SetPan");
-    hresult = lpDSBuffer[Channel]->lpVtbl->Play(lpDSBuffer[Channel], 0, 0, 0);
-    if (hresult != DS_OK)
-        DS_Error(hresult, "lpDSBuffer.Play");
+//    HRESULT hresult;
+//    DWORD   dwDSBStatus;
+//
+//    if (Channel > NUM_SOUND_FX)
+//       {
+//        return;
+//       }
+//    if (lpDSBuffer[Channel] == 0)
+//       {
+//        return;
+//       }
+//
+//    if ((DSBControl[Channel].dsb_type == dsb_temp) && (DSBControl[Channel].sfxid != sfxid))
+//       {
+//        if (DSBControl[Channel].sfxid > 0)
+//           {
+///*
+//            lpDSBuffer[Channel]->lpVtbl->GetStatus(lpDSBuffer[Channel], &dwDSBStatus);
+//            if (dwDSBStatus == DSBSTATUS_PLAYING)
+//               {
+//                hresult = lpDSBuffer[Channel]->lpVtbl->Stop(lpDSBuffer[Channel]);
+//                if (hresult != DS_OK)
+//                    DS_Error(hresult, "lpDSBuffer.Stop");
+//               }
+//*/
+//            lpDSBuffer[Channel]->lpVtbl->Release(lpDSBuffer[Channel]);
+//            DSBControl[Channel].sfxid = -1;
+//           }
+//
+//        if (DSBControl[Channel].sfxid < 0)
+//           {
+//            // clone temp buffer here...
+//            lpDS->lpVtbl->DuplicateSoundBuffer(lpDS, lpDSBuffer[sfxid], &lpDSBuffer[Channel]);
+//            DSBControl[Channel].sfxid = sfxid;
+//           }
+//       }
+///*
+//    else
+//       {
+//        lpDSBuffer[Channel]->lpVtbl->GetStatus(lpDSBuffer[Channel], &dwDSBStatus);
+//        if (dwDSBStatus == DSBSTATUS_PLAYING)
+//           {
+//            hresult = lpDSBuffer[Channel]->lpVtbl->Stop(lpDSBuffer[Channel]);
+//            if (hresult != DS_OK)
+//                DS_Error(hresult, "lpDSBuffer.Stop");
+//           }
+//       }
+//*/
+//    hresult = lpDSBuffer[Channel]->lpVtbl->SetCurrentPosition(lpDSBuffer[Channel], 0);
+//    if (hresult != DS_OK)
+//        DS_Error(hresult, "lpDSBuffer.SetCurrentPosition");
+//    hresult = lpDSBuffer[Channel]->lpVtbl->SetVolume(lpDSBuffer[Channel], iVolume );
+//    if (hresult != DS_OK)
+//        DS_Error(hresult, "lpDSBuffer.SetVolume");
+//    hresult = lpDSBuffer[Channel]->lpVtbl->SetPan(lpDSBuffer[Channel], iPan);
+//    if (hresult != DS_OK)
+//        DS_Error(hresult, "lpDSBuffer.SetPan");
+//    hresult = lpDSBuffer[Channel]->lpVtbl->Play(lpDSBuffer[Channel], 0, 0, 0);
+//    if (hresult != DS_OK)
+//        DS_Error(hresult, "lpDSBuffer.Play");
    }
 
 //
@@ -608,14 +615,14 @@ void I_SetSfxVolume(int volume)
   //  the menu/config file setting
   //  to the state variable used in
   //  the mixing.
-  snd_SfxVolume = volume;
+  //snd_SfxVolume = volume;
 }
 
 // MUSIC API - dummy. Some code from DOS version.
 void I_SetMusicVolume(int volume)
 {
   // Internal state variable.
-  snd_MusicVolume = volume;
+  //snd_MusicVolume = volume;
   // Now set volume on output device.
   // Whatever( snd_MusciVolume );
 }
@@ -627,9 +634,9 @@ void I_SetMusicVolume(int volume)
 //
 int I_GetSfxLumpNum(sfxinfo_t* sfx)
 {
-    char namebuf[9];
+    /*char namebuf[9];
     sprintf(namebuf, "ds%s", sfx->name);
-    return W_GetNumForName(namebuf);
+    return W_GetNumForName(namebuf);*/
 }
 
 //
@@ -647,52 +654,52 @@ int I_GetSfxLumpNum(sfxinfo_t* sfx)
 int I_StartSound( int id, int vol, int sep, int pitch, int priority, void *origin )
    {
     // UNUSED
-    priority = 0;
+    //priority = 0;
   
-    // Debug.
-    
-    if (DSBControl[id].sfxid == -1)
-       {
-        // This sound effect is an ADDED effect
-        if (CreateSoundBuffer(id, lengths[id], speeds[id], S_sfx[id].data) == false)
-           {
-            lfprintf("Could not create sound buffer for %s - %d %d\n", S_sfx[id].name, lengths[id], speeds[id]);
-           }
-        DSBControl[id].origin = NULL;
-        DSBControl[id].sfxid = id;
-        DSBControl[id].dsb_type = dsb_perm;
-       }
-    // Returns a handle (not used).
-    id = addsfx( id, vol, steptable[pitch], sep, origin );
+    //// Debug.
+    //
+    //if (DSBControl[id].sfxid == -1)
+    //   {
+    //    // This sound effect is an ADDED effect
+    //    if (CreateSoundBuffer(id, lengths[id], speeds[id], S_sfx[id].data) == false)
+    //       {
+    //        lfprintf("Could not create sound buffer for %s - %d %d\n", S_sfx[id].name, lengths[id], speeds[id]);
+    //       }
+    //    DSBControl[id].origin = NULL;
+    //    DSBControl[id].sfxid = id;
+    //    DSBControl[id].dsb_type = dsb_perm;
+    //   }
+    //// Returns a handle (not used).
+    //id = addsfx( id, vol, steptable[pitch], sep, origin );
 
-    return id;
+    //return id;
    }
 
 
 
 void I_StopSound (int handle)
    {
-    HRESULT hresult;
-  // You need the handle returned by StartSound.
-  // Would be looping all channels,
-  //  tracking down the handle,
-  //  an setting the channel to zero.
-  
-  // UNUSED.
-//    handle = 0;
-
-    if (handle > NUM_DSBUFFERS)
-       {
-        return;
-       }
-    if (lpDSBuffer[handle] == 0)
-       {
-        return;
-       }
-
-    hresult = lpDSBuffer[handle]->lpVtbl->Stop(lpDSBuffer[handle]);
-    if (hresult != DS_OK)
-        DS_Error(hresult, "lpDSBuffer.Stop");
+//    HRESULT hresult;
+//  // You need the handle returned by StartSound.
+//  // Would be looping all channels,
+//  //  tracking down the handle,
+//  //  an setting the channel to zero.
+//  
+//  // UNUSED.
+////    handle = 0;
+//
+//    if (handle > NUM_DSBUFFERS)
+//       {
+//        return;
+//       }
+//    if (lpDSBuffer[handle] == 0)
+//       {
+//        return;
+//       }
+//
+//    hresult = lpDSBuffer[handle]->lpVtbl->Stop(lpDSBuffer[handle]);
+//    if (hresult != DS_OK)
+//        DS_Error(hresult, "lpDSBuffer.Stop");
 /*
     else
     if (DSBControl[handle].dsb_type == dsb_temp)
@@ -707,7 +714,7 @@ void I_StopSound (int handle)
 
 int I_SoundIsPlaying(int handle)
    {
-    DWORD dwStatus;
+    /*DWORD dwStatus;
     HRESULT hresult;
 
     if (lpDSBuffer[handle] == 0)
@@ -718,7 +725,7 @@ int I_SoundIsPlaying(int handle)
     hresult = lpDSBuffer[handle]->lpVtbl->GetStatus(lpDSBuffer[handle], &dwStatus);
     if (hresult != DS_OK)
         DS_Error(hresult, "lpDSBuffer.GetStatus");
-    return (dwStatus == DSBSTATUS_PLAYING);
+    return (dwStatus == DSBSTATUS_PLAYING);*/
     // Ouch.
 //    return gametic < handle;
    }
@@ -740,120 +747,120 @@ int I_SoundIsPlaying(int handle)
 // This function currently supports only 16bit.
 //
 void I_UpdateSound( void )
-   {
-#ifdef SNDINTR
-  // Debug. Count buffer misses with interrupt.
-  static int misses = 0;
-#endif
-
-  
-    // Mix current sound data.
-    // Data, from raw sound, for right and left.
-    register unsigned int	sample;
-    register int		dl;
-    register int		dr;
-  
-    // Pointers in global mixbuffer, left, right, end.
-    signed short*		leftout;
-    signed short*		rightout;
-    signed short*		leftend;
-    // Step in mixbuffer, left and right, thus two.
-    int				step;
-
-    // Mixing channel index.
-    int				chan;
-    
-    // Left and right channel
-    //  are in global mixbuffer, alternating.
-    leftout = mixbuffer;
-    rightout = mixbuffer+1;
-    step = 2;
-
-    // Determine end, for left channel only
-    //  (right channel is implicit).
-    leftend = mixbuffer + SAMPLECOUNT*step;
-
-    // Mix sounds into the mixing buffer.
-    // Loop over step*SAMPLECOUNT,
-    //  that is 512 values for two channels.
-    while (leftout != leftend)
-    {
-	// Reset left/right value. 
-	dl = 0;
-	dr = 0;
-
-	// Love thy L2 chache - made this a loop.
-	// Now more channels could be set at compile time
-	//  as well. Thus loop those  channels.
-	for ( chan = 0; chan < NUM_CHANNELS; chan++ )
-	{
-	    // Check channel, if active.
-	    if (channels[ chan ])
-	    {
-		// Get the raw data from the channel. 
-		sample = *channels[ chan ];
-		// Add left and right part
-		//  for this channel (sound)
-		//  to the current data.
-		// Adjust volume accordingly.
-		dl += channelleftvol_lookup[ chan ][sample];
-		dr += channelrightvol_lookup[ chan ][sample];
-		// Increment index ???
-		channelstepremainder[ chan ] += channelstep[ chan ];
-		// MSB is next sample???
-		channels[ chan ] += channelstepremainder[ chan ] >> 16;
-		// Limit to LSB???
-		channelstepremainder[ chan ] &= 65536-1;
-
-		// Check whether we are done.
-		if (channels[ chan ] >= channelsend[ chan ])
-		    channels[ chan ] = 0;
-	    }
-	}
-	
-	// Clamp to range. Left hardware channel.
-	// Has been char instead of short.
-	// if (dl > 127) *leftout = 127;
-	// else if (dl < -128) *leftout = -128;
-	// else *leftout = dl;
-
-	if (dl > 0x7fff)
-	    *leftout = 0x7fff;
-	else if (dl < -0x8000)
-	    *leftout = -0x8000;
-	else
-	    *leftout = dl;
-
-	// Same for right hardware channel.
-	if (dr > 0x7fff)
-	    *rightout = 0x7fff;
-	else if (dr < -0x8000)
-	    *rightout = -0x8000;
-	else
-	    *rightout = dr;
-
-	// Increment current pointers in mixbuffer.
-	leftout += step;
-	rightout += step;
-    }
-
-#ifdef SNDINTR
-    // Debug check.
-    if ( flag )
-    {
-      misses += flag;
-      flag = 0;
-    }
-    
-    if ( misses > 10 )
-    {
-      fprintf( stderr, "I_SoundUpdate: missed 10 buffer writes\n");
-      misses = 0;
-    }
-    
-    // Increment flag for update.
-    flag++;
-#endif
+{
+//#ifdef SNDINTR
+//  // Debug. Count buffer misses with interrupt.
+//  static int misses = 0;
+//#endif
+//
+//  
+//    // Mix current sound data.
+//    // Data, from raw sound, for right and left.
+//    register unsigned int	sample;
+//    register int		dl;
+//    register int		dr;
+//  
+//    // Pointers in global mixbuffer, left, right, end.
+//    signed short*		leftout;
+//    signed short*		rightout;
+//    signed short*		leftend;
+//    // Step in mixbuffer, left and right, thus two.
+//    int				step;
+//
+//    // Mixing channel index.
+//    int				chan;
+//    
+//    // Left and right channel
+//    //  are in global mixbuffer, alternating.
+//    leftout = mixbuffer;
+//    rightout = mixbuffer+1;
+//    step = 2;
+//
+//    // Determine end, for left channel only
+//    //  (right channel is implicit).
+//    leftend = mixbuffer + SAMPLECOUNT*step;
+//
+//    // Mix sounds into the mixing buffer.
+//    // Loop over step*SAMPLECOUNT,
+//    //  that is 512 values for two channels.
+//    while (leftout != leftend)
+//    {
+//	// Reset left/right value. 
+//	dl = 0;
+//	dr = 0;
+//
+//	// Love thy L2 chache - made this a loop.
+//	// Now more channels could be set at compile time
+//	//  as well. Thus loop those  channels.
+//	for ( chan = 0; chan < NUM_CHANNELS; chan++ )
+//	{
+//	    // Check channel, if active.
+//	    if (channels[ chan ])
+//	    {
+//		// Get the raw data from the channel. 
+//		sample = *channels[ chan ];
+//		// Add left and right part
+//		//  for this channel (sound)
+//		//  to the current data.
+//		// Adjust volume accordingly.
+//		dl += channelleftvol_lookup[ chan ][sample];
+//		dr += channelrightvol_lookup[ chan ][sample];
+//		// Increment index ???
+//		channelstepremainder[ chan ] += channelstep[ chan ];
+//		// MSB is next sample???
+//		channels[ chan ] += channelstepremainder[ chan ] >> 16;
+//		// Limit to LSB???
+//		channelstepremainder[ chan ] &= 65536-1;
+//
+//		// Check whether we are done.
+//		if (channels[ chan ] >= channelsend[ chan ])
+//		    channels[ chan ] = 0;
+//	    }
+//	}
+//	
+//	// Clamp to range. Left hardware channel.
+//	// Has been char instead of short.
+//	// if (dl > 127) *leftout = 127;
+//	// else if (dl < -128) *leftout = -128;
+//	// else *leftout = dl;
+//
+//	if (dl > 0x7fff)
+//	    *leftout = 0x7fff;
+//	else if (dl < -0x8000)
+//	    *leftout = -0x8000;
+//	else
+//	    *leftout = dl;
+//
+//	// Same for right hardware channel.
+//	if (dr > 0x7fff)
+//	    *rightout = 0x7fff;
+//	else if (dr < -0x8000)
+//	    *rightout = -0x8000;
+//	else
+//	    *rightout = dr;
+//
+//	// Increment current pointers in mixbuffer.
+//	leftout += step;
+//	rightout += step;
+//    }
+//
+//#ifdef SNDINTR
+//    // Debug check.
+//    if ( flag )
+//    {
+//      misses += flag;
+//      flag = 0;
+//    }
+//    
+//    if ( misses > 10 )
+//    {
+//      fprintf( stderr, "I_SoundUpdate: missed 10 buffer writes\n");
+//      misses = 0;
+//    }
+//    
+//    // Increment flag for update.
+//    flag++;
+//#endif
 }
 
 
@@ -869,7 +876,7 @@ void
 I_SubmitSound(void)
 {
   // Write it to DSP device.
-  _write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
+  //_write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
 }
 
 
@@ -885,7 +892,7 @@ I_UpdateSoundParams
   // Would be using the handle to identify
   //  on which channel the sound might be active,
   //  and resetting the channel parameters.
- int iVolume, iPan;
+ /*int iVolume, iPan;
  HRESULT hresult;
 
  if (lpDSBuffer[handle] == 0)
@@ -908,7 +915,7 @@ I_UpdateSoundParams
         DS_Error(hresult, "lpDSBuffer.SetVolume");
     hresult = lpDSBuffer[handle]->lpVtbl->SetPan(lpDSBuffer[handle], iPan);
     if (hresult != DS_OK)
-        DS_Error(hresult, "lpDSBuffer.SetPan");
+        DS_Error(hresult, "lpDSBuffer.SetPan");*/
   // UNUSED.
   //handle = vol = sep = pitch = 0;
 }
@@ -918,49 +925,49 @@ I_UpdateSoundParams
 
 void I_ShutdownSound(void)
    {    
-    ShutdownDirectSound();
-    return;
+   /* ShutdownDirectSound();
+    return;*/
    }
 
 void I_InitSound()
    { 
-    int i;
+    //int i;
 
-    if (SetupDirectSound() == false)
-       {
-        nosound = true;
-        return;
-       }
+    //if (SetupDirectSound() == false)
+    //   {
+    //    nosound = true;
+    //    return;
+    //   }
 
-    for (i = 1; i < NUMSFX; i++)
-       { 
-        // Alias? Example is the chaingun sound linked to pistol.
-        if (!S_sfx[i].link)
-           {
-            // Load data from WAD file.
-            S_sfx[i].data = getsfx( S_sfx[i].name, &lengths[i], &speeds[i] );
-           }	
-        else
-           {
-            // Previously loaded already? - substitution
-            S_sfx[i].data = S_sfx[i].link->data;
-            lengths[i] = lengths[(S_sfx[i].link - S_sfx)];
-            speeds[i] = speeds[(S_sfx[i].link - S_sfx)];
-           }
-        if (CreateSoundBuffer(i, lengths[i], speeds[i], S_sfx[i].data) == false)
-           {
-            lfprintf("Could not create sound buffer for %s - %d %d\n", S_sfx[i].name, lengths[i], speeds[i]);
-           }
-        DSBControl[i].origin = NULL;
-        DSBControl[i].sfxid = i;
-        DSBControl[i].dsb_type = dsb_perm;
-       }
-    for (; i < NUM_DSBUFFERS; i++)
-       {
-        DSBControl[i].origin = NULL;
-        DSBControl[i].sfxid = -1;
-        DSBControl[i].dsb_type = dsb_temp;
-       }
+    //for (i = 1; i < NUMSFX; i++)
+    //   { 
+    //    // Alias? Example is the chaingun sound linked to pistol.
+    //    if (!S_sfx[i].link)
+    //       {
+    //        // Load data from WAD file.
+    //        S_sfx[i].data = getsfx( S_sfx[i].name, &lengths[i], &speeds[i] );
+    //       }	
+    //    else
+    //       {
+    //        // Previously loaded already? - substitution
+    //        S_sfx[i].data = S_sfx[i].link->data;
+    //        lengths[i] = lengths[(S_sfx[i].link - S_sfx)];
+    //        speeds[i] = speeds[(S_sfx[i].link - S_sfx)];
+    //       }
+    //    if (CreateSoundBuffer(i, lengths[i], speeds[i], S_sfx[i].data) == false)
+    //       {
+    //        lfprintf("Could not create sound buffer for %s - %d %d\n", S_sfx[i].name, lengths[i], speeds[i]);
+    //       }
+    //    DSBControl[i].origin = NULL;
+    //    DSBControl[i].sfxid = i;
+    //    DSBControl[i].dsb_type = dsb_perm;
+    //   }
+    //for (; i < NUM_DSBUFFERS; i++)
+    //   {
+    //    DSBControl[i].origin = NULL;
+    //    DSBControl[i].sfxid = -1;
+    //    DSBControl[i].dsb_type = dsb_temp;
+    //   }
    }
 
 
@@ -991,26 +998,26 @@ static int	musicdies=-1;
 
 void I_PlaySong(int handle, int looping)
    {
-    PlayMidiFile("DOOMSONG.MID");
+    //PlayMidiFile("DOOMSONG.MID");
     //handle = looping = 0;
     //musicdies = gametic + TICRATE*30;
    }
 
 void I_PauseSong (int handle)
    {
-    PauseResumeMusic();
+    //PauseResumeMusic();
     //handle = 0;
    }
 
 void I_ResumeSong (int handle)
    {
-    PauseResumeMusic();
+    //PauseResumeMusic();
     //handle = 0;
    }
 
 void I_StopSong(int handle)
    {
-    StopMusic();
+    //StopMusic();
     //handle = 0;
   
     //looping = 0;
@@ -1019,23 +1026,23 @@ void I_StopSong(int handle)
 
 void I_UnRegisterSong(int handle)
   {
-   _unlink("DOOMSONG.MID");
-   musicdata = 0;
+   /*_unlink("DOOMSONG.MID");
+   musicdata = 0;*/
   }
 
 int I_RegisterSong(void* data, int buffsize)
    {
-    musicdata = (unsigned char *)data;
+    /*musicdata = (unsigned char *)data;
     MidiConvert( "DOOMSONG.MID", true, 0, 128, false, true, musicdata, buffsize );
-    return 1;
+    return 1;*/
    }
 
 // Is the song playing?
 int I_QrySongPlaying(int handle)
 {
   // UNUSED.
-  handle = 0;
-  return looping || musicdies > gametic;
+  /*handle = 0;
+  return looping || musicdies > gametic;*/
 }
 
 
@@ -1075,21 +1082,21 @@ void I_HandleSoundTimer( int ignore )
   //fprintf( stderr, "%c", '+' ); fflush( stderr );
   
   // Feed sound device if necesary.
-  if ( flag )
-  {
-    // See I_SubmitSound().
-    // Write it to DSP device.
-    _write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
+  //if ( flag )
+  //{
+  //  // See I_SubmitSound().
+  //  // Write it to DSP device.
+  //  _write(audio_fd, mixbuffer, SAMPLECOUNT*BUFMUL);
 
-    // Reset flag counter.
-    flag = 0;
-  }
-  else
-    return;
-  
-  // UNUSED, but required.
-  ignore = 0;
-  return;
+  //  // Reset flag counter.
+  //  flag = 0;
+  //}
+  //else
+  //  return;
+  //
+  //// UNUSED, but required.
+  //ignore = 0;
+  //return;
 }
 
 // Get the interrupt. Set duration in millisecs.

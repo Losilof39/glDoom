@@ -17,17 +17,17 @@ typedef struct
     DWORD    CDTrackCount;
     DWORD    CDStatus;
     DWORD    CDTrackList[32];
-    MCIERROR CDError;
+    //MCIERROR CDError;
    }CD_Data_t;
 
-dboolean  CDOpen(HWND hWnd, CD_Data_t *cdd);
-dboolean  CDCheck(HWND hWnd, CD_Data_t *cdd);
-dboolean  CDMediaIdentity(HWND hWnd, CD_Data_t *cdd, char *szIdent);
-dboolean  CDTrackCount(HWND hWnd, CD_Data_t *cdd);
-dboolean  CDTrackType(HWND hWnd, CD_Data_t *cdd);
-dboolean  CDTrackPlay(HWND hWnd, CD_Data_t *cdd);
-dboolean  CDPause(HWND hWnd, CD_Data_t *cdd);
-dboolean  CDResume(HWND hWnd, CD_Data_t *cdd);
+dboolean  CDOpen( CD_Data_t *cdd);
+dboolean  CDCheck(CD_Data_t *cdd);
+dboolean  CDMediaIdentity(CD_Data_t *cdd, char *szIdent);
+dboolean  CDTrackCount(CD_Data_t *cdd);
+dboolean  CDTrackType(CD_Data_t *cdd);
+dboolean  CDTrackPlay(CD_Data_t *cdd);
+dboolean  CDPause(    CD_Data_t *cdd);
+dboolean  CDResume(   CD_Data_t *cdd);
 void  CDStop(CD_Data_t *cdd);
 void  CDClose(CD_Data_t *cdd);
 

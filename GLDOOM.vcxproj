@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -163,12 +163,12 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/GLDOOM.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -276,7 +276,6 @@
     <ClCompile Include="doomlib.c" />
     <ClCompile Include="doomstat.c" />
     <ClCompile Include="dstrings.c" />
-    <ClCompile Include="dxerr.c" />
     <ClCompile Include="d_console.c" />
     <ClCompile Include="d_items.c" />
     <ClCompile Include="d_main.c" />

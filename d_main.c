@@ -27,9 +27,9 @@
 
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
-#include <windows.h>
+//#include <windows.h>
 //#include <gl/gl.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -44,9 +44,14 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #include <unistd.h>
 #endif
 
-#include <direct.h>
+//#include <direct.h>
 #include <malloc.h>
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
+#endif
 
 
 #include "doomdef.h"
@@ -489,58 +494,58 @@ extern  dboolean         demorecording;
 
 void D_DoomLoop (void)
    {
-    if (demorecording)
-        G_BeginRecording ();
-		
-    if (M_CheckParm ("-debugfile"))
-       {
-        char    filename[20];
-        sprintf (filename,"debug%i.txt",consoleplayer);
-	    //printf ("debug output to: %s\n",filename);
-        lfprintf("debug output to: %s\n",filename);
-        debugfile = fopen (filename,"w");
-       }
-	
-    I_InitGraphics();
-
-    while (1)
-       {
-        // frame syncronous IO operations
-        I_StartFrame();                
-	
-        // process one or more tics
-        if (singletics)
-           {
-            I_StartTic ();
-            D_ProcessEvents ();
-            G_BuildTiccmd (&netcmds[consoleplayer][maketic%BACKUPTICS]);
-            if (advancedemo)
-               D_DoAdvanceDemo();
-            M_Ticker ();
-            G_Ticker ();
-            gametic++;
-            maketic++;
-           }
-        else
-           {
-            TryRunTics (); // will run at least one tic
-           }
-		
-        S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
-
-        // Update display, next frame, with current state.
-        D_Display ();
-
-#ifndef SNDSERV
-        // Sound mixing for the buffer is snychronous.
-        //I_UpdateSound();
-#endif	
-        // Synchronous sound output is explicitly called.
-#ifndef SNDINTR
-        // Update sound output.
-        //I_SubmitSound();
-#endif
-       }
+//    if (demorecording)
+//        G_BeginRecording ();
+//		
+//    if (M_CheckParm ("-debugfile"))
+//       {
+//        char    filename[20];
+//        sprintf (filename,"debug%i.txt",consoleplayer);
+//	    //printf ("debug output to: %s\n",filename);
+//        lfprintf("debug output to: %s\n",filename);
+//        debugfile = fopen (filename,"w");
+//       }
+//	
+//    I_InitGraphics();
+//
+//    while (1)
+//       {
+//        // frame syncronous IO operations
+//        I_StartFrame();                
+//	
+//        // process one or more tics
+//        if (singletics)
+//           {
+//            I_StartTic ();
+//            D_ProcessEvents ();
+//            G_BuildTiccmd (&netcmds[consoleplayer][maketic%BACKUPTICS]);
+//            if (advancedemo)
+//               D_DoAdvanceDemo();
+//            M_Ticker ();
+//            G_Ticker ();
+//            gametic++;
+//            maketic++;
+//           }
+//        else
+//           {
+//            TryRunTics (); // will run at least one tic
+//           }
+//		
+//        S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
+//
+//        // Update display, next frame, with current state.
+//        D_Display ();
+//
+//#ifndef SNDSERV
+//        // Sound mixing for the buffer is snychronous.
+//        //I_UpdateSound();
+//#endif	
+//        // Synchronous sound output is explicitly called.
+//#ifndef SNDINTR
+//        // Update sound output.
+//        //I_SubmitSound();
+//#endif
+//       }
    }
 
 void MY_DoomSetup(void)
@@ -629,9 +634,9 @@ void D_PageTicker (void)
 void D_PageDrawer (void)
 {
     int i;
-    __int64 *d;
+    long long *d;
 
-    d = (__int64 *)screens[0];
+    d = (long long*)screens[0];
     for (i = 0; i < ((SCREENWIDTH*SCREENHEIGHT)/8); i++)
        d[i] = 0;
 
@@ -979,31 +984,31 @@ char *szGameNames[] = { "Doom 2 - French",  // Not francaise - we speak ENGLISH 
                         "Shareware Doom" };
 
 
-struct _finddata_t finddata;
+//struct _finddata_t finddata;
 long   search_handle;
 
 char *D_FindFirst( char *filespec )
    {
-    if ((search_handle = _findfirst( filespec, &finddata)) != -1)
+    /*if ((search_handle = _findfirst( filespec, &finddata)) != -1)
        {
         return finddata.name;
        }
     else
        {
         return NULL;
-       }
+       }*/
    }
 
 char *D_FindNext()
    {
-    if (_findnext(search_handle, &finddata) != -1)
+    /*if (_findnext(search_handle, &finddata) != -1)
        {
         return finddata.name;
        }
     else
        {
         return NULL;
-       }
+       }*/
    }
 
 //
@@ -1017,7 +1022,7 @@ void IdentifyVersion (void)
     char    doomwad[_MAX_PATH], *c;
     char   *doomwaddir, id[4];
     int     i;
-    struct  _stat buf;
+    //struct  _stat buf;
     FILE   *fh;
 
 #ifdef NORMALUNIX
@@ -1030,14 +1035,14 @@ void IdentifyVersion (void)
     sprintf(basedefault, "%s/.doomrc", home);
 #endif
 
-    i = M_CheckParm("-game");
-    if (i && (i < (myargc-1)))
+    //i = M_CheckParm("-game");
+    /*if (i && (i < (myargc-1)))
        {
         strcpy(gamename, myargv[i+1]);
         sprintf(doomwad, "%s.wad", noext(basename(gamename)));
-        if (_access(doomwad, R_OK))
+        if (access(doomwad, R_OK))
            {
-            _stat(gamename, &buf);
+            stat(gamename, &buf);
             if (buf.st_mode & _S_IFDIR)
                {
                 con_printf("-game points to a directory [%s]\n", gamename);
@@ -1087,7 +1092,7 @@ void IdentifyVersion (void)
            {
             con_printf("Loading game wad: %s\n", gamename);
            }
-       }
+       }*/
 
     if (strlen(gamename) > 0)
        {
@@ -1102,7 +1107,7 @@ void IdentifyVersion (void)
                     strcat(gamename, ".wad");
                    }
                 // found a matching wad name - check to see if it exists
-                if (!_access(gamename, R_OK))
+                if (!access(gamename, R_OK))
                    {
                     // found a WAD and it exists. Let's use it. 
                     con_printf("Game mode %s selected\n", szGameNames[i]);
@@ -1122,7 +1127,7 @@ void IdentifyVersion (void)
     if (strlen(gamename) > 0)
        {
         con_printf("Standard game not specified - checking.\n");
-        if (!_access(gamename, R_OK))
+        if (!access(gamename, R_OK))
            {
             con_printf("Wad file exists determining \"mode\"...\n");
             D_AddFile(gamename);
@@ -1147,8 +1152,12 @@ void IdentifyVersion (void)
 
     for (i = 0; i < gw_other; i++)
        {
+#if _WIN32
         sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
-        if ( !_access(doomwad,R_OK) )
+#else
+        sprintf(doomwad, "%s.wad", doomwaddir, szWadNames[i]);
+#endif
+        if ( !access(doomwad,R_OK) )
            {
             con_printf("Found game WAD for: %s\n", szGameNames[i]);
             strcpy(gamename, szWadNames[i]);
@@ -1357,7 +1366,7 @@ void D_DoomMain (void)
        {
         con_printf(D_CDROM);
         //mkdir("c:\\doomdata",0); // What's the ",0" for? Oh yeah, permissions...
-        _mkdir("c:\\doomdata");
+        //_mkdir("c:\\doomdata");
         strcpy (basedefault,"c:/doomdata/default.cfg");
        }	
     
@@ -1382,7 +1391,11 @@ void D_DoomMain (void)
        }
 
     // Add the glDoom PWAD that contains the new resources...
+#if _WIN32
     D_AddFile("./glDoom.wad");
+#else
+    D_AddFile("gldoom.wad");
+#endif
     
     // add any files specified on the command line with -file wadfile
     // to the wad list

@@ -42,9 +42,6 @@
     <ClCompile Include="dstrings.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dxerr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="f_finale.c">
       <Filter>Source Files</Filter>
     </ClCompile>

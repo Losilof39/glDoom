@@ -27,18 +27,20 @@
 static const char
 rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
-#include <windows.h>
-#include <SDL.h>
-//#include <gl/gl.h>
-#include <glad/glad.h>
+#include "thirdparty/SDL2/include/SDL.h"
+#include "thirdparty/glad/include/glad/glad.h"
 
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdlib.h>
-#include <io.h>
-//#include <unistd.h>
-#include <direct.h>
+
+#ifdef _WIN32
+    #include <io.h>
+#else
+    #include <inttypes.h>
+    #include <unistd.h>
+#endif
 
 #include <ctype.h>
 
@@ -179,13 +181,13 @@ int M_GetFileSize( char const*	name )
     int		handle;
     int		count;
 	
-    handle = _open ( name, O_RDWR | O_BINARY);
+    handle = open ( name, O_RDWR | O_BINARY);
 
     if (handle == -1)
         return 0;
 
-    count = _lseek(handle, 0, SEEK_END);
-    _close (handle);
+    count = lseek(handle, 0, SEEK_END);
+    close (handle);
 	
     return count;
    }
@@ -202,13 +204,13 @@ M_WriteFile
     int		handle;
     int		count;
 	
-    handle = _open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
+    handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
 
     if (handle == -1)
 	return false;
 
-    count = _write (handle, source, length);
-    _close (handle);
+    count = write (handle, source, length);
+    close (handle);
 	
     if (count < length)
 	return false;
@@ -224,15 +226,15 @@ dboolean M_AppendFile(char const *name, void *source, int length )
     int		handle;
     int		count;
 	
-    handle = _open( name, O_RDWR | O_BINARY);
+    handle = open( name, O_RDWR | O_BINARY);
 
     if (handle == -1)
         return false;
 
-    _lseek(handle, 0L, SEEK_END);
+    lseek(handle, 0L, SEEK_END);
 
-    count = _write (handle, source, length);
-    _close (handle);
+    count = write (handle, source, length);
+    close (handle);
 	
     if (count < length)
         return false;
@@ -253,15 +255,15 @@ M_ReadFile
     struct stat	fileinfo;
     byte		*buf;
 	
-    handle = _open (name, O_RDONLY | O_BINARY, 0666);
+    handle = open (name, O_RDONLY | O_BINARY, 0666);
     if (handle == -1)
 	I_Error ("Couldn't read file %s", name);
     if (fstat (handle,&fileinfo) == -1)
 	I_Error ("Couldn't read file %s", name);
     length = fileinfo.st_size;
     buf = Z_Malloc (length, PU_STATIC, NULL);
-    count = _read (handle, buf, length);
-    _close (handle);
+    count = read (handle, buf, length);
+    close (handle);
 	
     if (count < length)
 	I_Error ("Couldn't read file %s", name);
@@ -493,9 +495,9 @@ typedef enum { d_string, d_key, d_value, d_finished } deftype_t;
 typedef struct
    {
     deftype_t   deftype;
-    LPCTSTR     name;
-    LPTSTR      contents;
-    LPCTSTR     defvalue;
+    char*     name;
+    char*     contents;
+    char*     defvalue;
     int         max;
    }win_defaults_t;
 
@@ -535,18 +537,18 @@ win_defaulti_t wdefaultv[] =
     d_value, "music_volume",     &snd_MusicVolume,    8,
     d_value, "show_messages",    &showMessages,       1,
     
-    d_key,   "key_fire",         &key_fire,           SDL_SCANCODE_RCTRL,
+    d_key,   "key_fire",         &key_fire,           SDL_SCANCODE_LCTRL,
     d_key,   "key_use",          &key_use,            SDL_SCANCODE_SPACE,
     d_key,   "key_strafe",       &key_strafe,         SDL_SCANCODE_RALT,
-    d_key,   "key_speed",        &key_speed,          SDL_SCANCODE_RSHIFT,
+    d_key,   "key_speed",        &key_speed,          SDL_SCANCODE_LSHIFT,
 
     d_key,   "key_right",        &key_right,          SDL_SCANCODE_RIGHT,
     d_key,   "key_left",         &key_left,           SDL_SCANCODE_LEFT,
-    d_key,   "key_up",           &key_up,             SDL_SCANCODE_UP,
-    d_key,   "key_down",         &key_down,           SDL_SCANCODE_DOWN,
+    d_key,   "key_up",           &key_up,             SDL_SCANCODE_W,
+    d_key,   "key_down",         &key_down,           SDL_SCANCODE_S,
 
-    d_key,   "key_strafeleft",   &key_strafeleft,     SDL_SCANCODE_COMMA,
-    d_key,   "key_straferight",  &key_straferight,    SDL_SCANCODE_PERIOD,
+    d_key,   "key_strafeleft",   &key_strafeleft,     SDL_SCANCODE_A,
+    d_key,   "key_straferight",  &key_straferight,    SDL_SCANCODE_D,
 
     d_key,   "key_lookup",       &key_lookup,         SDL_SCANCODE_KP_DECIMAL,
     d_key,   "key_lookdown",     &key_lookdown,       SDL_SCANCODE_KP_3,
@@ -787,7 +789,7 @@ void M_SaveDefaults (void)
     FILE*	f;
 */
 	
-    GetCfgName();
+    /*GetCfgName();
 
     nosound_t = nosound;
 
@@ -807,7 +809,7 @@ void M_SaveDefaults (void)
             WritePrivateProfileString("DEFAULTS", wdefaults[i].name, wdefaults[i].contents, DoomDir);
            }
         i++;
-       }
+       }*/
 
     /*
     f = fopen (defaultfile, "w");
@@ -839,7 +841,7 @@ extern byte	scantokey[128];
 
 void GetCfgName()
    {
-    char *pbreak = NULL;
+    /*char *pbreak = NULL;
     int   i;
 
     if (strlen(myargv[0]) != 0)
@@ -868,42 +870,43 @@ void GetCfgName()
        }
     WriteProfileString("GLDOOM", "DIRECTORY", DoomDir );
     strcat(DoomDir, "\\GLDoom.INI");
-    i = 0;
+    i = 0;*/
    }
 
-extern windata_t  WinData;
+//extern windata_t  WinData;
 
 void M_LoadDefaults (void)
 {
     int		i;
-/*
-    int		len;
-    FILE*	f;
-    char	def[80];
-    char	strparm[100];
-    char*	newstring;
-    int		parm;
-    dboolean	isstring;
-*/    
 
-    GetCfgName();
+    //int		len;
+    //FILE*	f;
+    //char	def[80];
+    //char	strparm[100];
+    //char*	newstring;
+    //int		parm;
+    //dboolean	isstring;
+    //
 
+    //GetCfgName();
+
+    // i dunno why this works..
     i = 0;
     while (wdefaultv[i].deftype != d_finished)
        {
-        *wdefaultv[i].location = GetPrivateProfileInt("DEFAULTS", wdefaultv[i].name, wdefaultv[i].defvalue, DoomDir);
+        *wdefaultv[i].location = wdefaultv[i].defvalue;
         i++;
        }
 
-    i = 0;
-    while (wdefaults[i].deftype != d_finished)
-       {
-        GetPrivateProfileString("DEFAULTS", wdefaults[i].name, wdefaults[i].defvalue,
-                                wdefaults[i].contents, wdefaults[i].max, DoomDir);
-        i++;
-       }
-    //GetPrivateProfileString("MULTIPLAYER", "PLAYERNAME", "PLAYER", playername, 18, DoomDir);
-    i = 0;
+    //i = 0;
+    //while (wdefaults[i].deftype != d_finished)
+    //   {
+    //    GetPrivateProfileString("DEFAULTS", wdefaults[i].name, wdefaults[i].defvalue,
+    //                            wdefaults[i].contents, wdefaults[i].max, DoomDir);
+    //    i++;
+    //   }
+    ////GetPrivateProfileString("MULTIPLAYER", "PLAYERNAME", "PLAYER", playername, 18, DoomDir);
+    //i = 0;
 
     if (nosound == true)
         nosound_t = nosound;
@@ -1044,7 +1047,7 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
     short         *s;
     unsigned char  tgahead[18], *cr, *cb, c;
 
-    if ((fn = _open(filename, O_RDWR | O_BINARY | O_CREAT | O_TRUNC, 0666)) != -1)
+    if ((fn = open(filename, O_RDWR | O_BINARY | O_CREAT | O_TRUNC, 0666)) != -1)
        {
         memset(tgahead, 0, 18);
         tgahead[tga_imgtype] = 2;
@@ -1064,9 +1067,9 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
             cr += 3;
             cb += 3;
            }
-        _write(fn, tgahead, 18);
-        _write(fn, buffer, (width*height*3));
-        _close(fn);
+        write(fn, tgahead, 18);
+        write(fn, buffer, (width*height*3));
+        close(fn);
        }
    }
 
@@ -1085,7 +1088,7 @@ void M_ScreenShot(void)
 	    lbmname[5] = (i % 1000) / 100 + '0';
 	    lbmname[6] = (i % 100) / 10 + '0';
 	    lbmname[7] = i % 10 + '0';
-	    if (_access(lbmname,0) == -1)
+	    if (access(lbmname,0) == -1)
             break;	// file doesn't exist
        }
 

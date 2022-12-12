@@ -72,7 +72,7 @@ rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include "doomcmd.h"
 
-#include <SDL.h>
+#include "thirdparty/SDL2/include/SDL.h"
 
 
 #define SAVEGAMESIZE	0x2c0000
@@ -1121,7 +1121,7 @@ void G_PlayerReborn (int player)
 //
 void P_SpawnPlayer (mapthing_t* mthing); 
  
-char MsgText[2048];
+static char MsgText[2048];
 
 dboolean
 G_CheckSpot
@@ -1551,7 +1551,7 @@ void G_DoLoadGame (void)
         for (i = 0; i < VERSIONSIZE; i++) vcheck[i] = 0; //no garbage
         sprintf(vcheck, "Slot%d", 0); // pad the string
         vcheck[4] = savename[7];		// slot number
-        totalscore = GetPrivateProfileInt("SCORES", vcheck, 0, ".");
+        //totalscore = GetPrivateProfileInt("SCORES", vcheck, 0, ".");
     }
 } 
  
@@ -1631,12 +1631,12 @@ void G_DoSaveGame (void)
     if (keepscore)  //if keeping score write the score
     {
         sprintf(name, "%d", totalscore);
-        WritePrivateProfileString("SCORES", name2, name, ".");
+        //WritePrivateProfileString("SCORES", name2, name, ".");
     }
     else			//otherwise zero it out
     {
         sprintf(name, "%d", 0);
-        WritePrivateProfileString("SCORES", name2, name, ".");
+        //WritePrivateProfileString("SCORES", name2, name, ".");
     }
 } 
  

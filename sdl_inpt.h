@@ -1,7 +1,7 @@
 // d_input.h
 // This is the defines and declarations for d_input.c
 // 
-#include <windows.h>
+//#include <windows.h>
 #include "doomtype.h"
 
 typedef enum { dev_keyboard, dev_mouse, dev_joystick, dev_devices } devtype_t;

@@ -10,14 +10,14 @@ typedef struct
     DWORD    MidiPosition;
     DWORD    MidiDevice;
     DWORD    MidiStatus;
-    MCIERROR MidiError;
+    //MCIERROR MidiError;
     char     szMidiFile[128];
    }MIDI_Data_t;
 
-dboolean  MidiPlay(HWND hWnd, MIDI_Data_t *mdd);
-dboolean  MidiReplay(HWND hWnd, MIDI_Data_t *mdd);
-dboolean  MidiPause(HWND hWnd, MIDI_Data_t *mdd);
-dboolean  MidiResume(HWND hWnd, MIDI_Data_t *mdd);
+dboolean  MidiPlay(  MIDI_Data_t *mdd);
+dboolean  MidiReplay(MIDI_Data_t *mdd);
+dboolean  MidiPause( MIDI_Data_t *mdd);
+dboolean  MidiResume(MIDI_Data_t *mdd);
 void  MidiStop(MIDI_Data_t *mdd);
 
 #endif

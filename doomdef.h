@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <SDL.h>
+#include "thirdparty/SDL2/include/SDL.h"
 
 //
 // Global parameters/defines.
@@ -297,7 +297,7 @@ typedef enum
 
 //#define KEY_CONSOLE '`'
 //#define KEY_SCRNSHOT (0xB7)
-#define KEY_SCRNSHOT (0x58)
+//#define KEY_SCRNSHOT (0x58)
 
 //#define KEY_F1            0x3B
 //#define KEY_F2            0x3C

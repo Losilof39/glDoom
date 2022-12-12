@@ -25,7 +25,7 @@
 
 static const char rcsid[] = "$Id: d_net.c,v 1.3 1997/02/03 22:01:47 b1 Exp $";
 
-#include <windows.h>
+//#include <windows.h>
 
 #include "m_menu.h"
 #include "i_system.h"
@@ -446,7 +446,7 @@ void NetUpdate (void)
    }
 
 
-extern HACCEL ghAccel;
+//extern HACCEL ghAccel;
 extern dboolean bQuit;
 //
 // CheckAbort
@@ -655,7 +655,7 @@ void D_QuitNetGame (void)
                 HSendPacket (j, NCMD_EXIT);
         I_WaitVBL (1);
        }
-    WSACleanup();
+    //WSACleanup();
     netgame = false;
    }
 
