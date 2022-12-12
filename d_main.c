@@ -1019,7 +1019,8 @@ char *D_FindNext()
 //
 void IdentifyVersion (void)
    {
-    char    doomwad[_MAX_PATH], *c;
+    char*    doomwad;
+    char *c;
     char   *doomwaddir, id[4];
     int     i;
     //struct  _stat buf;
@@ -1155,7 +1156,8 @@ void IdentifyVersion (void)
 #if _WIN32
         sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
 #else
-        sprintf(doomwad, "%s.wad", doomwaddir, szWadNames[i]);
+        //sprintf(doomwad, "%s.wad", doomwaddir, szWadNames[i]);
+        doomwad = "doom.wad";
 #endif
         if ( !access(doomwad,R_OK) )
            {
@@ -1325,7 +1327,8 @@ void D_DoomMain (void)
 
     if (gamemode == undetermined)
        {
-        return;
+         con_printf("No official IWAD found!\n");
+         return;
        }
 	
     if (D_strcasecmp(noext(basename(gamename)), "tnt") == 0)

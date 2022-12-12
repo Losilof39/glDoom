@@ -84,6 +84,10 @@ typedef struct RECT {
     LONG bottom;
 } RECT;
 
+#ifndef __Win32
+#define O_BINARY 0
+#endif
+
 #define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
 static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(handle); fseek(handle, 0L, SEEK_SET); return sz; }
 
