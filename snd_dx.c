@@ -601,12 +601,14 @@ void I_SetSfxVolume(int volume)
 // MUSIC API - not so dummy.
 void I_SetMusicVolume(int volume)
 {
-  // Internal state variable.
-  //snd_MusicVolume = volume;
-  // Now set volume on output device.
-// Retrieve the raw data lump index
-//  for a given SFX name.
-//
+    // Internal state variable.
+    //snd_MusicVolume = volume;
+    // Now set volume on output device.
+  // Retrieve the raw data lump index
+  //  for a given SFX name.
+  //
+}
+
 int I_GetSfxLumpNum(sfxinfo_t* sfx)
 {
     /*char namebuf[9];
