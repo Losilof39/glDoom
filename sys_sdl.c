@@ -235,7 +235,7 @@ int main(int argc, char** szCmdLine)
         I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
-            //MessageBox(hwnd, szBadWadMessage, "glDoom Game Data Error", MB_OK);
+            con_printf(szBadWadMessage);
            }
         return 0;
        }
@@ -380,7 +380,7 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         printf("Failed to init SDL");
 
-    pWindow = SDL_CreateWindow("GLDOOM", 100, 100, video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+    pWindow = SDL_CreateWindow("GLDOOM", 500, 100, video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
 
     if (!pWindow)
     {
@@ -394,7 +394,6 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 
     con_printf("glDoom Version %d.%d%c\n", version/100, version%100, revision);
     con_printf("Starting OpenGL...\n");
-    //ShowCursor(false);
     SDL_ShowCursor(SDL_DISABLE);
 
     if (StartUpOpenGL() == false)
@@ -576,7 +575,6 @@ void glDoomExit()
     StopMusic();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
-    //SendMessage(WinData.hWnd, WM_CLOSE, 0, 0);
    };
 
 extern dboolean paused;

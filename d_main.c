@@ -1153,6 +1153,7 @@ void IdentifyVersion (void)
 
     for (i = 0; i < gw_other; i++)
        {
+         
 #if _WIN32
         //sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
 #else
