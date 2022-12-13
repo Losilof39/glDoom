@@ -108,7 +108,7 @@ typedef struct
 // For resize of screen, at start of game.
 // It will not work dynamically, see visplanes.
 //
-#define	BASE_WIDTH		320$
+#define	BASE_WIDTH		320
 
 #define _MAX_PATH 260
 

@@ -48,6 +48,7 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #include <malloc.h>
 #ifdef _WIN32
 #include <io.h>
+#include <direct.h>
 #else
 #include <inttypes.h>
 #include <unistd.h>
@@ -1143,22 +1144,22 @@ void IdentifyVersion (void)
         con_printf("No game wad specified - looking for standard WADs...\n");
        }
 
-    doomwaddir = getenv("DOOMWADDIR");
+    //doomwaddir = getenv("DOOMWADDIR");
+    
+    /*_getcwd(doomwaddir, _MAX_PATH);
+       
     if (!doomwaddir)
-       {
-        doomwaddir = getenv("DOOMDIR");
-       }
-    if (!doomwaddir)
-        doomwaddir = ".";
+        doomwaddir = ".";*/
 
     for (i = 0; i < gw_other; i++)
        {
 #if _WIN32
-        sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
+        //sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
 #else
         //sprintf(doomwad, "%s.wad", doomwaddir, szWadNames[i]);
-        doomwad = "doom.wad";
 #endif
+        doomwad = "doom.wad";
+
         if ( !access(doomwad,R_OK) )
            {
             con_printf("Found game WAD for: %s\n", szGameNames[i]);

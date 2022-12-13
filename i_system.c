@@ -41,6 +41,7 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include "d_net.h"
 #include "g_game.h"
 #include "m_music.h"
+#include "gconsole.h"
 
 #ifdef __GNUG__
 #pragma implementation "i_system.h"
@@ -203,6 +204,7 @@ void I_Error (char *error, ...)
     vsprintf (MsgText,error,argptr);
     lfprintf(MsgText);
     //fprintf (stderr, "\n");
+    con_printf(MsgText);
     lfprintf("\n");
     va_end (argptr);
 

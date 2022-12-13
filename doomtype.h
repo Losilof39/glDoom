@@ -84,7 +84,7 @@ typedef struct RECT {
     LONG bottom;
 } RECT;
 
-#ifndef __Win32
+#ifndef _WIN32
 #define O_BINARY 0
 #endif
 
