@@ -313,9 +313,6 @@
     <ClInclude Include="dstrings.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="dxerr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="f_finale.h">
       <Filter>Header Files</Filter>
     </ClInclude>
