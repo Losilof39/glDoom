@@ -27,7 +27,7 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 // if I need to take this header out I should first port all the sound
 // stuff to SDL2...
 //#include <windows.h>
-
+#include <SDL_mixer.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <stdarg.h>
@@ -76,11 +76,7 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 //#include <dsound.h>
 
 #undef RELEASE
-#ifdef __cplusplus
-#define RELEASE(x) if (x != NULL) {x->Release(); x = NULL;}
-#else
 #define RELEASE(x) if (x != NULL) {x->lpVtbl->Release(x); x = NULL;}
-#endif
 
 #define NUM_DSBUFFERS 256
 #define NUM_SOUND_FX 128
@@ -116,7 +112,6 @@ void lfprintf(char *message, ... );
 dboolean SetupDirectSound();
 dboolean CreateSoundBuffer(int Channel, int length, int speed, unsigned char *data);
 void I_PlaySoundEffect(int sfxid, int Channel, int volume, int pan);
-//void DS_Error( HRESULT hresult, char *msg );
 
 /////////////////////////////////////////////////////////////////////////////////////
 // DIRECTSOUND - Sound effects
@@ -245,22 +240,7 @@ dboolean CreateSoundBuffer(int Channel, int length, int speed, unsigned char *da
 
 void ShutdownDirectSound()
    {
-    /*int buff;
-
-    DWORD BufferStatus;
-
-    for (buff = 0; buff < NUM_SOUND_FX; buff++)
-       {
-        if (lpDSBuffer[buff] != 0)
-           {
-            BufferStatus = DSBSTATUS_PLAYING;
-            while (BufferStatus == DSBSTATUS_PLAYING)
-                lpDSBuffer[buff]->lpVtbl->GetStatus(lpDSBuffer[buff], &BufferStatus);
-            RELEASE(lpDSBuffer[buff]);
-           }
-       }
-    RELEASE(lpDSPrimary);
-    RELEASE(lpDS);*/
+    Mix_Quit();
    }
 
 ////////////////////////////////////////////////////////////////////////////
@@ -618,17 +598,12 @@ void I_SetSfxVolume(int volume)
   //snd_SfxVolume = volume;
 }
 
-// MUSIC API - dummy. Some code from DOS version.
+// MUSIC API - not so dummy.
 void I_SetMusicVolume(int volume)
 {
   // Internal state variable.
   //snd_MusicVolume = volume;
   // Now set volume on output device.
-  // Whatever( snd_MusciVolume );
-}
-
-
-//
 // Retrieve the raw data lump index
 //  for a given SFX name.
 //
@@ -653,9 +628,6 @@ int I_GetSfxLumpNum(sfxinfo_t* sfx)
 //
 int I_StartSound( int id, int vol, int sep, int pitch, int priority, void *origin )
    {
-    // UNUSED
-    //priority = 0;
-  
     //// Debug.
     //
     //if (DSBControl[id].sfxid == -1)
@@ -673,14 +645,24 @@ int I_StartSound( int id, int vol, int sep, int pitch, int priority, void *origi
     //id = addsfx( id, vol, steptable[pitch], sep, origin );
 
     //return id;
-   }
+    if (DSBControl[id].sfxid == -1)
+    {
+        if (Mix_OpenAudio(pitch, MIX_DEFAULT_FORMAT, priority, sizeof(S_sfx[id].data))) 
+
+            DSBControl[id].origin = NULL;
+            DSBControl[id].sfxid = id;
+            DSBControl[id].dsb_type = dsb_perm;
+    }
+   
+    id = addsfx(id, vol, steptable[pitch], sep, origin);
+    return id;
+  }
 
 
 
 void I_StopSound (int handle)
    {
 //    HRESULT hresult;
-//  // You need the handle returned by StartSound.
 //  // Would be looping all channels,
 //  //  tracking down the handle,
 //  //  an setting the channel to zero.
@@ -709,6 +691,12 @@ void I_StopSound (int handle)
         DSBControl[handle].sfxid = -1;
        }
 */
+    int numchan;
+    handle = Mix_Pause;
+    if(!handle)
+    {
+        Mix_SetError("Failed to pause the music. Mix Error: %s", Mix_GetError());
+    }
    }
 
 
@@ -728,10 +716,12 @@ int I_SoundIsPlaying(int handle)
     return (dwStatus == DSBSTATUS_PLAYING);*/
     // Ouch.
 //    return gametic < handle;
+    handle = Mix_Playing;
+    if(!handle)
+    {
+        Mix_SetError("Failed to continue to playing the music", Mix_GetError());
+    }
    }
-
-
-
 
 //
 // This function loops all active (internal) sound
@@ -925,8 +915,7 @@ I_UpdateSoundParams
 
 void I_ShutdownSound(void)
    {    
-   /* ShutdownDirectSound();
-    return;*/
+      
    }
 
 void I_InitSound()

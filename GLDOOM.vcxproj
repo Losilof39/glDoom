@@ -203,14 +203,14 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>C:\Users\Ad4m\Games\DEV\sdl2_32bit</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>glext.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/GLDOOM.pdb</ProgramDatabaseFile>
@@ -218,7 +218,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Users\Ad4m\Games\DEV\sdl2_32bit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -248,14 +248,14 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>C:\Users\Ad4m\Games\DEV\sdl2\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>glext.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/GLDOOM.pdb</ProgramDatabaseFile>
@@ -263,7 +263,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>C:\Users\Ad4m\Games\DEV\sdl2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -427,6 +427,98 @@
     <ClInclude Include="sys_sdl.h" />
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
+    <ClInclude Include="thirdparty\glad\include\glad\glad.h" />
+    <ClInclude Include="thirdparty\glad\include\KHR\khrplatform.h" />
+    <ClInclude Include="thirdparty\SDL2\include\begin_code.h" />
+    <ClInclude Include="thirdparty\SDL2\include\close_code.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_assert.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_atomic.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_audio.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_bits.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_blendmode.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_clipboard.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_android.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_iphoneos.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_macosx.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_minimal.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_pandora.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_psp.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_windows.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_winrt.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_config_wiz.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_copying.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_cpuinfo.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_egl.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_endian.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_error.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_events.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_filesystem.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_gamecontroller.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_gesture.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_haptic.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_hidapi.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_hints.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_image.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_joystick.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_keyboard.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_keycode.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_loadso.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_locale.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_log.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_main.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_messagebox.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_metal.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_misc.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_mixer.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_mouse.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_mutex.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_name.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_net.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengl.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengles.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengles2.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengles2_gl2.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengles2_gl2ext.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengles2_gl2platform.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengles2_khrplatform.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_opengl_glext.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_pixels.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_platform.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_power.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_quit.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_rect.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_render.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_revision.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_rwops.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_scancode.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_sensor.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_shape.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_stdinc.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_surface.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_system.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_syswm.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_assert.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_common.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_compare.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_crc32.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_font.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_fuzzer.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_harness.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_images.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_log.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_md5.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_memory.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_test_random.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_thread.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_timer.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_touch.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_types.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_version.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_video.h" />
+    <ClInclude Include="thirdparty\SDL2\include\SDL_vulkan.h" />
     <ClInclude Include="v_video.h" />
     <ClInclude Include="sdl_inpt.h" />
     <ClInclude Include="win_joy.h" />
@@ -438,20 +530,100 @@
     <ClInclude Include="z_zone.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="docs\gldoom.doc" />
     <None Include="gldfont.bin" />
     <None Include="INTERPIC.bin" />
     <None Include="Playpal.bin" />
-  </ItemGroup>
-  <ItemGroup>
-    <Text Include="controls.txt" />
-    <Text Include="doomflaw.txt" />
-    <Text Include="doomnet.txt" />
-    <Text Include="newlumps.txt" />
-    <Text Include="relnotes_94e.txt" />
-    <Text Include="TodoList.txt" />
+    <None Include="thirdparty\SDL2\include\SDL_config.h.cmake" />
+    <None Include="thirdparty\SDL2\include\SDL_config.h.in" />
+    <None Include="thirdparty\SDL2\include\SDL_config_macosx.h.orig" />
+    <None Include="thirdparty\SDL2\lib\x64\libFLAC-8.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libjpeg-9.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libmodplug-1.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libmpg123-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libogg-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libopus-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libopusfile-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libpng16-16.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libtiff-5.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libvorbis-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libvorbisfile-3.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\libwebp-7.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\SDL2.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\SDL2_image.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\SDL2_mixer.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\SDL2_net.dll" />
+    <None Include="thirdparty\SDL2\lib\x64\zlib1.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libFLAC-8.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libjpeg-9.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libmodplug-1.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libmpg123-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libogg-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libopus-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libopusfile-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libpng16-16.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libtiff-5.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libvorbis-0.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libvorbisfile-3.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\libwebp-7.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\SDL2.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\SDL2_image.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\SDL2_mixer.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\SDL2_net.dll" />
+    <None Include="thirdparty\SDL2\lib\x86\zlib1.dll" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="glDoom.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="docs\changelog.txt" />
+    <Text Include="docs\controls.txt" />
+    <Text Include="docs\doomflaw.txt" />
+    <Text Include="docs\DOOMLIC.TXT" />
+    <Text Include="docs\newlumps.txt" />
+    <Text Include="docs\readme.bal.txt" />
+    <Text Include="docs\readme.bill.txt" />
+    <Text Include="docs\readme.dos.txt" />
+    <Text Include="docs\readme.matrox.txt" />
+    <Text Include="docs\relnotes_94d.txt" />
+    <Text Include="docs\relnotes_94e.txt" />
+    <Text Include="docs\TodoList.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.FLAC.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.jpeg.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.modplug.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.mpg123.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.ogg-vorbis.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.opus.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.opusfile.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.png.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.tiff.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.webp.txt" />
+    <Text Include="thirdparty\SDL2\lib\x64\LICENSE.zlib.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.FLAC.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.jpeg.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.modplug.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.mpg123.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.ogg-vorbis.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.opus.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.opusfile.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.png.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.tiff.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.webp.txt" />
+    <Text Include="thirdparty\SDL2\lib\x86\LICENSE.zlib.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="thirdparty\SDL2\lib\x64\SDL2.lib" />
+    <Library Include="thirdparty\SDL2\lib\x64\SDL2main.lib" />
+    <Library Include="thirdparty\SDL2\lib\x64\SDL2test.lib" />
+    <Library Include="thirdparty\SDL2\lib\x64\SDL2_image.lib" />
+    <Library Include="thirdparty\SDL2\lib\x64\SDL2_mixer.lib" />
+    <Library Include="thirdparty\SDL2\lib\x64\SDL2_net.lib" />
+    <Library Include="thirdparty\SDL2\lib\x86\SDL2.lib" />
+    <Library Include="thirdparty\SDL2\lib\x86\SDL2main.lib" />
+    <Library Include="thirdparty\SDL2\lib\x86\SDL2test.lib" />
+    <Library Include="thirdparty\SDL2\lib\x86\SDL2_image.lib" />
+    <Library Include="thirdparty\SDL2\lib\x86\SDL2_mixer.lib" />
+    <Library Include="thirdparty\SDL2\lib\x86\SDL2_net.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

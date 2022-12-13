@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include "v_video.h"
 #include "sdl_video.h"
-#include "sys_sdl.h"
+#include "gl_video.h"
 #include "gconsole.h"
 
 void lfprintf(char *message, ... );
@@ -110,8 +110,15 @@ void GetModeList(char *dbgname)
 
 dboolean SetVideoMode()
    {
-    
-    //if (video.fullscreen)
+    SDL_DisplayMode mode;
+    dboolean success = true;
+
+    video.fullscreen = SDL_SetWindowDisplayMode(pWindow, &mode);
+    if (!video.fullscreen)
+    {
+        printf("Failed to load into fullscreen mode");
+        success = false;
+    }
     //   {
     //    if (/*(WinData.bChangeBPP == FALSE) && */(DevInfo.bpp != video.bpp))
     //       {
@@ -163,7 +170,7 @@ dboolean SetVideoMode()
     //                 "Using your current desktop color depth.\n");
     //       }
     //   }
-    return true;
+    return success;
    }
 
 void ResetVideoMode()
