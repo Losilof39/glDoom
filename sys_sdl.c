@@ -9,8 +9,8 @@
 
 #include <math.h>
 #include <time.h>
-#include "thirdparty/glad/include/glad/glad.h"
-#include "thirdparty/SDL2/include/SDL.h"
+#include <glad/glad.h>
+#include <SDL.h>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Application Includes...

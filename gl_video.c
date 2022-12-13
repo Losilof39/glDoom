@@ -21,8 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include "thirdparty/glad/include/glad/glad.h">
-#include "thirdparty/SDL2/include/SDL.h"
+#include <glad/glad.h>
+#include <SDL.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -61,7 +61,7 @@ void lfprintf(char *message, ... );
 
 // Game stuff
 
-extern SDL_Window* pWindow;
+SDL_Window* pWindow;
 SDL_GLContext glContext;
 extern video_t     video;
 
@@ -126,7 +126,7 @@ void I_Start3DFrame()
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-    gluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
+    //gluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
     glViewport( 0, 0, video.width, video.height);
 
     glTranslatef( 0.0f, 0.0f, 2.0f );
