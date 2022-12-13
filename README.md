@@ -11,14 +11,19 @@ This repository contains improvements for glDoom port
 * 64bit cleanups to allow it to build and run on 64bit systems
 * Cleanups for modern types (uintptr_t, intptr_t and MSVC specific functions like (underscore)access etc..)
 * Addition of the score system code from WINDOOM
+* Cleaned up all Win32 code and added a SDL2 backend
+* Ported to Linux but it's not stable
 
 ## Current Problems
-1. Sounds fx like Imps' screams or shotgun do not work (for now only MIDI works)
+1. No sound fx and music :(
+2. Mouse and joystick are not supported (for now)
+3. Settings are not saved in a separate file or read from
+4. Multiplayer doesn't work
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
 
-1. Reorganize the code better with current SDL2 backend
+1. Remove all unused code and make code more readable
 2. Replace current sound/audio subsystem with SDL2 (bye bye DirectSound)
 3. Fix palette updates when picking up items
 4. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
@@ -31,7 +36,13 @@ Plus more!
 The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom or PRBoom, it's history and legacy is an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use.
 
 ### Compiling
+
+## Windows
 Use the Visual Studio project and build for your architecture.
 Now it compiles on x64.
 
+## Linux
+Run ``` sh build.sh ``` to build.
+
 To use it, you will need to also create the gldoom.wad file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
+Also be sure that gldoom.wad and your IWAD of choice (DOOM, DOOM 2, Ultimate Doom, ...) are in the same folder as the executable!

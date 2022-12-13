@@ -21,10 +21,10 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <windows.h>
+//#include <windows.h>
 //#include <gl/gl.h>
 //#include <gl/glu.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 
 static const char rcsid[] = "$Id: am_map.c,v 1.4 1997/02/03 21:24:33 b1 Exp $";
 
@@ -1067,7 +1067,7 @@ AM_drawFline
 	   || fl->b.x < 0 || fl->b.x >= f_w
 	   || fl->b.y < 0 || fl->b.y >= f_h)
     {
-	lfprintf("fuck %d \r", fuck++);
+	//lfprintf("fuck %d \r", fuck++);
 	return;
     }
 

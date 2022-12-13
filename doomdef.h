@@ -25,7 +25,7 @@
 
 #include <stdio.h>
 #include <string.h>
-#include <SDL.h>
+#include "thirdparty/SDL2/include/SDL.h"
 
 //
 // Global parameters/defines.
@@ -109,6 +109,8 @@ typedef struct
 // It will not work dynamically, see visplanes.
 //
 #define	BASE_WIDTH		320
+
+#define _MAX_PATH 260
 
 // It is educational but futile to change this
 //  scaling e.g. to 2. Drawing of status bar,
@@ -297,7 +299,7 @@ typedef enum
 
 //#define KEY_CONSOLE '`'
 //#define KEY_SCRNSHOT (0xB7)
-#define KEY_SCRNSHOT (0x58)
+//#define KEY_SCRNSHOT (0x58)
 
 //#define KEY_F1            0x3B
 //#define KEY_F2            0x3C

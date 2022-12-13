@@ -42,9 +42,6 @@
     <ClCompile Include="dstrings.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="dxerr.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="f_finale.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -314,9 +311,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="dstrings.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="dxerr.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="f_finale.h">

@@ -1,8 +1,13 @@
-#include <windows.h>
+//#include <windows.h>
 #include <fcntl.h>
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
+#endif
 //#include <gl/gl.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 
 #include "doomtype.h"
 #include "r_defs.h"
@@ -32,19 +37,20 @@ typedef struct
 
 extern int deathmatch;
 
-unsigned char         Transparent[512*512];
-unsigned char         TexAlpha[512*512];
+static unsigned char         Transparent[512*512];
+static unsigned char         TexAlpha[512*512];
 extern int            TexWide, TexHigh;
 extern int            SBarTexture[2];
 extern GLTexData      SBarTex[2];
 extern unsigned char  TexRaw[512*512];
-GLubyte              *TexRGB, *MipMaps[16][32768];
+static GLubyte* TexRGB;
+static GLubyte *MipMaps[16][32768];
 
 MY_RGBA StatFrag[40*32], StatArms[40*32], StatBack[4][35*31], *TempTex;
 
 unsigned char patchbuff[320*200];
 unsigned char platebuff[320*200];
-unsigned char MsgText[2048];
+static unsigned char MsgText[2048];
 void lfprintf(char *message, ... );
 
 void GL_StatArmsOvl(MY_RGBA *RGBData);

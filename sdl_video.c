@@ -1,8 +1,6 @@
 // win_video.c
 // This module handles the video interface to Windows
 
-#include <windows.h>
-#include <VersionHelpers.h>
 #include <stdio.h>
 #include "v_video.h"
 #include "sdl_video.h"
@@ -12,30 +10,62 @@
 void lfprintf(char *message, ... );
 
 extern video_t      video;
-extern windata_t    WinData;
 
 int                 iModeCount = 0, iCurrMode = 0;
-BOOL               *bNoReboot = 0;
-DEVMODE            *pModeList = 0;
+dboolean               *bNoReboot = 0;
+//DEVMODE            *pModeList = 0;
 
 devinfo_t           DevInfo;
 char               *szYesNo[] = { "Yes", "No" };
 
 void GetVideoInfo()
    {
-    HDC         hdc;
+    SDL_DisplayMode         mode;
+    static int              display_in_use = 0;
+    Uint32                  f;
 
-    // Get the current display device info
-    hdc = GetDC( NULL );
-    DevInfo.bpp    = GetDeviceCaps(hdc, BITSPIXEL);
-    DevInfo.width  = GetSystemMetrics(SM_CXSCREEN);
-    DevInfo.height = GetSystemMetrics(SM_CYSCREEN);
-    ReleaseDC(NULL, hdc);
+    SDL_GetCurrentDisplayMode(display_in_use, &mode);
+    f = mode.format;
+
+    DevInfo.bpp    = SDL_BITSPERPIXEL(f);
+    DevInfo.width  = mode.w;
+    DevInfo.height = mode.h;
    }
 
 void GetModeList(char *dbgname)
    {
-    DEVMODE devmode;
+    FILE*                   fn;
+    static int              display_in_use = 0; /* Only using first display */
+    int                     i, display_mode_count;
+    SDL_DisplayMode         mode;
+    Uint32                  f;
+    
+    fn = fopen(dbgname, "a+");
+
+    display_mode_count = SDL_GetNumDisplayModes(display_in_use);
+    if (display_mode_count < 1) {
+        con_printf("SDL_GetNumDisplayModes failed: %s", SDL_GetError());
+        return 1;
+    }
+    fprintf(fn, "Mode count : %d\n", display_mode_count);
+    fprintf(fn, "General Video Mode List\n");
+    fprintf(fn, "Mode Width x Height x Color Bits - Refresh - Reboot?\n");
+
+    for (i = 0; i < display_mode_count; ++i) 
+    {
+        if (SDL_GetDisplayMode(display_in_use, i, &mode) != 0) {
+            con_printf("SDL_GetDisplayMode failed: %s", SDL_GetError());
+            return 1;
+        }
+
+        f = mode.format;
+
+        con_printf(fn, "%2d    %4d    %4d        %2d          %2d\n",
+            i, SDL_BITSPERPIXEL(f),
+            SDL_GetPixelFormatName(f),
+            mode.w, mode.h);
+    }
+    /*DEVMODE devmode;
     int     iVideoMode;
     FILE *fn;
 
@@ -75,79 +105,68 @@ void GetModeList(char *dbgname)
     if (iModeCount == 0)
        {
         con_printf("Warning: no video mode list available - unable to change resolution.\n");
-       }
+       }*/
    }
 
-BOOL SetVideoMode()
+dboolean SetVideoMode()
    {
-    int             mode;
-    DEVMODE         dm;
+    
+    //if (video.fullscreen)
+    //   {
+    //    if (/*(WinData.bChangeBPP == FALSE) && */(DevInfo.bpp != video.bpp))
+    //       {
+    //        lfprintf("This version of Windows cannot change color depth.\n"
+    //                 "Please request different video mode settings or adjust\n"
+    //                 "your desktop color depth.\n");
+    //        return FALSE;
+    //       }
+    //    for (mode = 0; mode < iModeCount; mode++)
+    //       {
+    //        if ((pModeList[mode].dmPelsWidth == video.width) &&
+    //            (pModeList[mode].dmPelsHeight == video.height) &&
+    //            (pModeList[mode].dmBitsPerPel == video.bpp))
+    //           {
+    //            //WinData.iVidMode = mode;
 
-    WinData.bChangeBPP = FALSE;
+    //            memset(&dm, 0, sizeof(dm));
+    //            dm.dmSize = sizeof(dm);
 
-    if (!IsWindows8OrGreater())
-    {
-        MessageBox(NULL, "You need at least Windows 8 to use this software", "Version Not Supported", MB_OK);
-        return FALSE;
-    }
+    //            dm.dmPelsWidth  = video.width;
+    //            dm.dmPelsHeight = video.height;
+    //            dm.dmFields     = DM_PELSWIDTH | DM_PELSHEIGHT;
 
-    if (video.fullscreen)
-       {
-        if ((WinData.bChangeBPP == FALSE) && (DevInfo.bpp != video.bpp))
-           {
-            lfprintf("This version of Windows cannot change color depth.\n"
-                     "Please request different video mode settings or adjust\n"
-                     "your desktop color depth.\n");
-            return FALSE;
-           }
-        for (mode = 0; mode < iModeCount; mode++)
-           {
-            if ((pModeList[mode].dmPelsWidth == video.width) &&
-                (pModeList[mode].dmPelsHeight == video.height) &&
-                (pModeList[mode].dmBitsPerPel == video.bpp))
-               {
-                WinData.iVidMode = mode;
+    //            if (video.bpp != DevInfo.bpp)
+    //               {
+    //                dm.dmBitsPerPel = video.bpp;
+    //                dm.dmFields |= DM_BITSPERPEL;
+    //               }
 
-                memset(&dm, 0, sizeof(dm));
-                dm.dmSize = sizeof(dm);
-
-                dm.dmPelsWidth  = video.width;
-                dm.dmPelsHeight = video.height;
-                dm.dmFields     = DM_PELSWIDTH | DM_PELSHEIGHT;
-
-                if (video.bpp != DevInfo.bpp)
-                   {
-                    dm.dmBitsPerPel = video.bpp;
-                    dm.dmFields |= DM_BITSPERPEL;
-                   }
-
-                if ( ChangeDisplaySettings( &dm, CDS_FULLSCREEN ) != DISP_CHANGE_SUCCESSFUL )
-                   {
-                    lfprintf("SetVideoMode - ChangeDisplaySettings failed.\n"
-                             "Switching to windowed mode.\n");
-                    video.fullscreen = FALSE;
-                    return TRUE;
-                   }
-                return TRUE;
-               }
-           }
-        lfprintf("Your requested video mode is unavailable.\n"
-                 "Please request different video mode settings.\n");
-        return FALSE;
-       }
-    else
-       {
-        if (DevInfo.bpp != video.bpp)
-           {
-            lfprintf("Your requested color depth and desktop do not match.\n"
-                     "Using your current desktop color depth.\n");
-           }
-       }
-    return TRUE;
+    //            if ( ChangeDisplaySettings( &dm, CDS_FULLSCREEN ) != DISP_CHANGE_SUCCESSFUL )
+    //               {
+    //                lfprintf("SetVideoMode - ChangeDisplaySettings failed.\n"
+    //                         "Switching to windowed mode.\n");
+    //                video.fullscreen = FALSE;
+    //                return TRUE;
+    //               }
+    //            return TRUE;
+    //           }
+    //       }
+    //    lfprintf("Your requested video mode is unavailable.\n"
+    //             "Please request different video mode settings.\n");
+    //    return FALSE;
+    //   }
+    //else
+    //   {
+    //    if (DevInfo.bpp != video.bpp)
+    //       {
+    //        lfprintf("Your requested color depth and desktop do not match.\n"
+    //                 "Using your current desktop color depth.\n");
+    //       }
+    //   }
+    return true;
    }
 
 void ResetVideoMode()
    {
-    ChangeDisplaySettings(NULL, 0);
    }
 

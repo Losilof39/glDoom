@@ -39,7 +39,12 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #else
    #include <stdio.h>
    #include <stdlib.h>
-   #include <io.h>
+    #ifdef _WIN32
+    #include <io.h>
+    #else
+    #include <inttypes.h>
+    #include <unistd.h>
+    #endif
    #include <malloc.h>
    #include <string.h>
    #include <sys/types.h>
@@ -70,7 +75,11 @@ int			numlumps;
 
 void**			lumpcache;
 
+#if _WIN32
+#define strcmpi	_strcmpi
+#else
 #define strcmpi	strcasecmp
+#endif
 
 #ifndef _WIN32
 static void strupr(char* s)
@@ -130,7 +139,6 @@ ExtractFileBase
 int	    reloadlump;
 char*	reloadname;
 
-
 void W_AddFile (char *filename)
 {
     wadinfo_t		header;
@@ -153,7 +161,7 @@ void W_AddFile (char *filename)
         reloadlump = numlumps;
     }
 		
-    if ( (handle = _open (filename,O_RDONLY | O_BINARY)) == -1)
+    if ( (handle = open (filename,O_RDONLY | O_BINARY)) == -1)
        {
 	        con_printf(" couldn't open %s\n",filename);
 	        return;
@@ -162,19 +170,19 @@ void W_AddFile (char *filename)
     con_printf(" adding %s\n", filename);
     startlump = numlumps;
 	
-    if (_strcmpi(filename + strlen(filename) -3 ,"wad"))
+    if (strcmpi(filename + strlen(filename) -3 ,"wad"))
     {
 	    // single lump file
 	    fileinfo = &singleinfo;
 	    singleinfo.filepos = 0;
-	    singleinfo.size = LONG(_filelength(handle));
+	    singleinfo.size = LONG(filelength_(handle));
 	    ExtractFileBase (filename, singleinfo.name);
 	    numlumps++;
     }
     else 
     {
 	    // WAD file
-	    _read (handle, &header, sizeof(header));
+	    read (handle, &header, sizeof(header));
 	if (strncmp(header.identification,"IWAD",4))
 	{
 	    // Homebrew levels?
@@ -190,8 +198,8 @@ void W_AddFile (char *filename)
 	    header.infotableofs = LONG(header.infotableofs);
 	    length = header.numlumps*sizeof(filelump_t);
 	    fileinfo = alloca (length);
-	    _lseek (handle, header.infotableofs, SEEK_SET);
-	    _read (handle, fileinfo, length);
+	    lseek (handle, header.infotableofs, SEEK_SET);
+	    read (handle, fileinfo, length);
 	    numlumps += header.numlumps;
     }
     
@@ -213,7 +221,7 @@ void W_AddFile (char *filename)
 	    strncpy(lump_p->name, fileinfo->name, 8);
     }
     if (reloadname)
-	    _close (handle);
+	    close (handle);
 }
 
 //
@@ -234,16 +242,16 @@ void W_Reload(void)
     if (!reloadname)
 	    return;
 		
-    if ((handle = _open(reloadname,O_RDONLY | O_BINARY)) == -1)
+    if ((handle = open(reloadname,O_RDONLY | O_BINARY)) == -1)
 	    I_Error ("W_Reload: couldn't open %s",reloadname);
 
-    _read(handle, &header, sizeof(header));
+    read(handle, &header, sizeof(header));
     lumpcount = LONG(header.numlumps);
     header.infotableofs = LONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
     fileinfo = alloca(length);
-    _lseek(handle, header.infotableofs, SEEK_SET);
-    _read(handle, fileinfo, length);
+    lseek(handle, header.infotableofs, SEEK_SET);
+    read(handle, fileinfo, length);
     
     // Fill in lumpinfo
     lump_p = &lumpinfo[reloadlump];
@@ -258,7 +266,7 @@ void W_Reload(void)
 	    lump_p->position = LONG(fileinfo->filepos);
 	    lump_p->size = LONG(fileinfo->size);
     }
-    _close (handle);
+    close (handle);
 }
 
 //
@@ -417,21 +425,21 @@ W_ReadLump
     if (l->handle == -1)
     {
 	// reloadable file, so use open / read / close
-	if ( (handle = _open (reloadname,O_RDONLY | O_BINARY)) == -1)
+	if ( (handle = open (reloadname,O_RDONLY | O_BINARY)) == -1)
 	    I_Error ("W_ReadLump: couldn't open %s",reloadname);
     }
     else
 	handle = l->handle;
 		
-    _lseek (handle, l->position, SEEK_SET);
-    c = _read (handle, dest, l->size);
+    lseek (handle, l->position, SEEK_SET);
+    c = read (handle, dest, l->size);
 
     if (c < l->size)
 	    I_Error ("W_ReadLump: only read %i of %i on lump %i",
 		 c,l->size,lump);	
 
     if (l->handle == -1)
-	_close (handle);
+	close (handle);
 		
     // ??? I_EndRead ();
 }

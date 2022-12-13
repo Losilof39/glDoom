@@ -1,6 +1,0 @@
-Changelog for glDoom - Beginning 3 April, 2010
-======================================================
-Converted project to work with Visual Studio 2008
-Brought code up to date to work with DirectInput8 DX9
-Added code to allow for wide screen monitors. 4/3/2010
-Fixed the "-nosound" flag to turn off the sound

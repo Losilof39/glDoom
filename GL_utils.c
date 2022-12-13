@@ -1,10 +1,15 @@
-#ifdef _WINDOWS
-   #include <windows.h>
-   #include <io.h>
+//#ifdef _WINDOWS
+   //#include <windows.h>
+#ifdef _WIN32
+#include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
 #endif
+//#endif
 #include <fcntl.h>
 //#include <GL/gl.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 #include "doomdata.h"
 #include "r_defs.h"
 #include "gldefs.h"

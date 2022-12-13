@@ -25,11 +25,12 @@
 static const char
 rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
-#include <windows.h>
+//#include <windows.h>
 //#include <gl/gl.h>
 //#include <gl/glu.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 #include <math.h>
+#include <stdlib.h>
 
 #include "z_zone.h"
 
@@ -49,6 +50,7 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "doomstat.h"
 #include "sys_sdl.h"
 #include "gldefs.h"
+#include <memory.h>
 
 #include "info.h"
 
@@ -731,7 +733,7 @@ int                sorted_flats_count = 0;
 
 
 DW_Vertex3Dv      *Normal = 0;
-DW_TexList         TexList[1024];
+extern DW_TexList         TexList[1024];
 int                TexCount;
 
 DW_Polygon        **side_polygons      = NULL;
@@ -2109,6 +2111,7 @@ void Poly_Move(polygon_t* pfrom, polygon_t* pto)
     ZeroMemory(pfrom, sizeof(polygon_t));
 }
 
+#define min(a,b) (((a) < (b)) ? (a) : (b))
 
 void Poly_AppendFromPoly(
     polygon_t* pfrom, int range_start, int range_size, polygon_t* pto)

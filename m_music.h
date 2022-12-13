@@ -1,6 +1,6 @@
-#include <windows.h>
+//#include <windows.h>
 
-void GetCDInfo(HWND hWnd);
+void GetCDInfo();
 void PlayCDMusic(void);
 void PlayCDTrack(int track);
 void PlayMidiFile(char *song);

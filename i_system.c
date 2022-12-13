@@ -30,9 +30,6 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 
 #include <stdarg.h>
 #include <time.h>
-//#include <unistd.h>
-#include <windows.h>
-#include <mmsystem.h>
 
 #include "doomdef.h"
 #include "m_misc.h"
@@ -44,6 +41,7 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include "d_net.h"
 #include "g_game.h"
 #include "m_music.h"
+#include "gconsole.h"
 
 #ifdef __GNUG__
 #pragma implementation "i_system.h"
@@ -51,7 +49,6 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #include "i_system.h"
 #include "sys_sdl.h"
 
-extern windata_t WinData;
 
 int	mb_used = 6;
 
@@ -97,15 +94,15 @@ int  I_GetTime (void)
 //    struct timeval	tp;
 //    struct timezone	tzp;
     int			newtics;
-    DWORD       currtime;
+    unsigned long       currtime;
     //static int		basetime=0;
-    static DWORD    basetime = 0;
+    static unsigned long    basetime = 0;
   
 //    gettimeofday(&tp, &tzp);
 //    if (!basetime)
 //	basetime = tp.tv_sec;
 //    newtics = (tp.tv_sec-basetime)*TICRATE + tp.tv_usec*TICRATE/1000000;
-    currtime = timeGetTime();
+    currtime = SDL_GetTicks64();
     if (!basetime)
        basetime = currtime;
     newtics = ((currtime-basetime)/(1000/TICRATE));
@@ -121,7 +118,7 @@ void I_Init (void)
 {
 // FIXME
     I_InitSound();
-    GetCDInfo(WinData.hWnd);
+    GetCDInfo();
     I_InitInputs();
     //  I_InitGraphics();
 }
@@ -146,7 +143,7 @@ void I_Quit(void)
     I_ShutdownSound();
     I_ShutdownMusic();
     M_SaveDefaults();
-    //I_ShutdownGraphics();
+    I_ShutdownGraphics();
     glDoomExit();
     exit(0);
    }
@@ -207,6 +204,7 @@ void I_Error (char *error, ...)
     vsprintf (MsgText,error,argptr);
     lfprintf(MsgText);
     //fprintf (stderr, "\n");
+    con_printf(MsgText);
     lfprintf("\n");
     va_end (argptr);
 
@@ -220,7 +218,7 @@ void I_Error (char *error, ...)
 
     I_Quit();
 
-    //I_ShutdownGraphics();
+    I_ShutdownGraphics();
     
     GameMode = GAME_QUIT;
     //exit(-1);

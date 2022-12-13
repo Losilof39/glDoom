@@ -4,12 +4,9 @@
 // keyboard, mouse and joystick inputs.
 // This module is for Win32
 
-#include <windows.h>
-#include <SDL.h>
+#include "thirdparty/SDL2/include/SDL.h"
 #include "sys_sdl.h"
 #include "gconsole.h"
-//#include "win_joy.h"
-//#include "win_mous.h"
 #include "sdl_kbrd.h"
 #include "d_event.h"
 
@@ -22,7 +19,6 @@ extern int       usemouse;
 Uint8* keystates[256] = { false };
 
 extern dboolean      bQuit;
-extern windata_t WinData;
 extern int keylink;
 
 void lfprintf(char *message, ... );
@@ -60,23 +56,6 @@ dboolean I_InitInputs(void)
 
 void I_CheckInputs(void)
    {
-    //MSG  msg;
-
-    //// it seems that through PeekMessage we get key messages for shift, escape, alt, etc..
-    //// and the rest we get through DirectInput. Why not getting every single key with DI??
-    //while (PeekMessage(&msg, NULL, 0, 0, PM_REMOVE))
-    //   {
-    //    if (msg.message == WM_QUIT)
-	   //    {
- 	  //     bQuit = true;
-    //        break;
-    //       }
-    //    if (!TranslateAccelerator(msg.hwnd, WinData.hAccel, &msg))
-    //       {
-    //        TranslateMessage(&msg);
-    //        DispatchMessage(&msg);
-    //       }
-    //   }
     event_t event;
     SDL_Event ev;
     while (SDL_PollEvent(&ev))
@@ -101,7 +80,7 @@ void I_CheckInputs(void)
                 D_PostEvent(&event);
                 break;
             case SDL_SCANCODE_RSHIFT:
-                if (keylink == TRUE)
+                if (keylink == true)
                 {
                     event.type = ev_keyup;
                     event.data1 = SDL_SCANCODE_RSHIFT;
@@ -109,7 +88,7 @@ void I_CheckInputs(void)
                 }
                 break;
             case SDL_SCANCODE_RCTRL:
-                if (keylink == TRUE)
+                if (keylink == true)
                 {
                     event.type = ev_keyup;
                     event.data1 = SDL_SCANCODE_RCTRL;
@@ -117,7 +96,7 @@ void I_CheckInputs(void)
                 }
                 break;
             case SDL_SCANCODE_MENU:
-                if (keylink == TRUE)
+                if (keylink == true)
                 {
                     event.type = ev_keyup;
                     event.data1 = SDL_SCANCODE_MENU;
@@ -143,7 +122,7 @@ void I_CheckInputs(void)
                 D_PostEvent(&event);
                 break;
             case SDL_SCANCODE_RSHIFT:
-                if (keylink == TRUE)
+                if (keylink == true)
                 {
                     event.type = ev_keyup;
                     event.data1 = SDL_SCANCODE_RSHIFT;
@@ -151,7 +130,7 @@ void I_CheckInputs(void)
                 }
                 break;
             case SDL_SCANCODE_LCTRL:
-                if (keylink == TRUE)
+                if (keylink == true)
                 {
                     event.type = ev_keyup;
                     event.data1 = SDL_SCANCODE_LCTRL;
@@ -159,7 +138,7 @@ void I_CheckInputs(void)
                 }
                 break;
             case SDL_SCANCODE_MENU:
-                if (keylink == TRUE)
+                if (keylink == true)
                 {
                     event.type = ev_keyup;
                     event.data1 = SDL_SCANCODE_MENU;
@@ -190,14 +169,6 @@ void I_CheckInputs(void)
 
 void I_ShutdownInputs(void)
    {
-    /*if ((usejoystick) && (joystickavail))
-       {
-        I_CheckJoysticks();
-       }*/
-    /*if ((usemouse) && (mouseavail))
-       {
-        I_ReleaseMouse();
-       }*/
     I_ReleaseKeyboard();
    }
 

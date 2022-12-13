@@ -18,7 +18,7 @@
 extern dboolean bConsoleActive;
 
 void CO_Ticker(void);
-BOOL CO_Responder(event_t* ev);
+dboolean CO_Responder(event_t* ev);
 void CO_Drawer(void);
 void CO_Init(void);
 void CO_AddConsoleMessage(char *s);
