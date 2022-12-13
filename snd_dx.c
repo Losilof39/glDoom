@@ -645,7 +645,6 @@ int I_StartSound( int id, int vol, int sep, int pitch, int priority, void *origi
     //id = addsfx( id, vol, steptable[pitch], sep, origin );
 
     //return id;
-/*
     if (DSBControl[id].sfxid == -1)
     {
         if (Mix_OpenAudio(pitch, MIX_DEFAULT_FORMAT, priority, sizeof(S_sfx[id].data))) 
@@ -657,7 +656,6 @@ int I_StartSound( int id, int vol, int sep, int pitch, int priority, void *origi
    
     id = addsfx(id, vol, steptable[pitch], sep, origin);
     return id;
-  */
   }
 
 
