@@ -22,7 +22,7 @@
 //-----------------------------------------------------------------------------
 
 #include <glad/glad.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -61,7 +61,7 @@ void lfprintf(char *message, ... );
 
 // Game stuff
 
-SDL_Window* pWindow;
+extern SDL_Window* pWindow;
 SDL_GLContext glContext;
 extern video_t     video;
 
