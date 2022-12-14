@@ -97,6 +97,7 @@ extern byte *screens[5];
 extern GameMode_t gamemode;
 
 char         szMsgText[2048];
+char         window_title[50];
 
 extern devinfo_t DevInfo;
 
@@ -379,8 +380,10 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         printf("Failed to init SDL");
+ 
+    sprintf(&window_title, "GLDoom %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 
-    pWindow = SDL_CreateWindow("GLDOOM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+    pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
                                video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
 
     if (!pWindow)
