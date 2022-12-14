@@ -1,31 +1,36 @@
 /////////////////////////////////////////////////////////////////////////////////////
 // Windows Includes...
 /////////////////////////////////////////////////////////////////////////////////////
-#include <windows.h>
-#include <mmsystem.h>
 #include <stdio.h>
 #include <stdlib.h>
+
+#ifdef _WIN32
 #include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
+#endif
+
 #include <fcntl.h>
 #include "sys_sdl.h"
 
 #include "i_cd.h"      // My own cdaudio "library"
 #include "i_midi.h"    // My own midi "library"
 
-extern windata_t WinData;
+//extern windata_t WinData;
 void lfprintf(char *message, ... );
 
 CD_Data_t   CDData;
 MIDI_Data_t MidiData;
 
-void GetCDInfo(HWND hWnd)
+void GetCDInfo()
    {
-    int  i;
+    /*int  i;
     char cdName[32];
 
     if (CDData.CDDevice == 0)
        {
-        if (CDOpen(hWnd, &CDData))
+        if (CDOpen(&CDData))
            {
             lfprintf("CDDevice ID = %X\n", CDData.CDDevice);
            }
@@ -41,7 +46,7 @@ void GetCDInfo(HWND hWnd)
             return;
            }
        }
-    CDCheck(hWnd, &CDData);
+    CDCheck(&CDData);
     if (CDData.CDMedia == false)
        {
         lfprintf("CD Player is empty...\n");
@@ -54,18 +59,18 @@ void GetCDInfo(HWND hWnd)
     else
        {
         lfprintf("CD Player has a CD in it...\n");
-        CDMediaIdentity(hWnd, &CDData, cdName);
+        CDMediaIdentity(&CDData, cdName);
         cdName[16] = '\0';
         lfprintf("CD Hex ID = %s\n", cdName);
         if (strcmp(CDData.CDCode, cdName) != 0)
            {
             strcpy(CDData.CDCode, cdName);
             CDData.CDStatus = cd_stop;
-            CDTrackCount(hWnd, &CDData);
+            CDTrackCount(&CDData);
             lfprintf("Number of Tracks = %d\n", CDData.CDTrackCount);
             for (CDData.CDTrack = 0; CDData.CDTrack < CDData.CDTrackCount; CDData.CDTrack++)
                {
-                CDTrackType(hWnd, &CDData);
+                CDTrackType(&CDData);
                 if (CDData.CDTrackList[CDData.CDTrack] == MCI_CDA_TRACK_AUDIO)
                    lfprintf("Track %d : Audio\n", CDData.CDTrack, CDData.CDTrackList[CDData.CDTrack]);
                 else
@@ -82,22 +87,22 @@ void GetCDInfo(HWND hWnd)
                 CDData.CDStatus = cd_empty;
                }
            }
-       }
+       }*/
    }
 
 void PlayCDMusic()
    {
-    if ((CDData.CDStatus != cd_play) && (CDData.CDStatus != cd_pause))
+    /*if ((CDData.CDStatus != cd_play) && (CDData.CDStatus != cd_pause))
        {
         if ((CDData.CDStatus == cd_empty) || (CDData.CDStatus == cd_unavail))
            {
-            GetCDInfo(WinData.hWnd);
+            GetCDInfo();
            }
         else
            {
-            CDCheck(WinData.hWnd, &CDData);
+            CDCheck(&CDData);
             if (CDData.CDMedia == false)
-                GetCDInfo(WinData.hWnd);
+                GetCDInfo();
            }
         if ((CDData.CDStatus != cd_empty) && (CDData.CDStatus != cd_unavail))
            {
@@ -107,70 +112,70 @@ void PlayCDMusic()
                    {
                     MidiStop(&MidiData);
                    }
-                CDTrackPlay(WinData.hWnd, &CDData);
+                CDTrackPlay(&CDData);
                 CDData.CDStatus = cd_play;
                }
            }
-       }
+       }*/
    }
 
 void PlayCDTrack(int track)
    {
-    if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
+    /*if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
        {
         if ((track < 0) || (track > CDData.CDTrackCount))
            return;
         if (CDData.CDTrackList[track] == MCI_CDA_TRACK_AUDIO)
            {
             CDData.CDTrack = track;
-            CDTrackPlay(WinData.hWnd, &CDData);
+            CDTrackPlay(&CDData);
            }
-       }
+       }*/
    }
 
 void PlayMidiFile(char *song)
    {
-    strcpy(MidiData.szMidiFile, song);
-    MidiPlay(WinData.hWnd, &MidiData);
+    /*strcpy(MidiData.szMidiFile, song);
+    MidiPlay(&MidiData);*/
    }
 
 void PlayMidiMusic()
    {
-    if ((CDData.CDStatus != cd_stop) && (CDData.CDStatus != cd_empty))
+    /*if ((CDData.CDStatus != cd_stop) && (CDData.CDStatus != cd_empty))
        {
         CDStop(&CDData);
         CDData.CDStatus = cd_stop;
        }
     if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
        {
-        MidiPlay(WinData.hWnd, &MidiData);
-       }
+        MidiPlay(&MidiData);
+       }*/
    }
 
 
 void PauseResumeMusic()
    {
-    switch(MidiData.MidiStatus)
+    /*switch(MidiData.MidiStatus)
        {
         case midi_play:
-             MidiPause(WinData.hWnd, &MidiData);
+             MidiPause(&MidiData);
              break;
         case midi_pause:
-             MidiResume(WinData.hWnd, &MidiData);
+             MidiResume(&MidiData);
              break;
        }
     if ((CDData.CDStatus == cd_play) || (CDData.CDStatus == cd_pause))
        {
         if ((CDData.CDStatus == cd_empty) || (CDData.CDStatus == cd_unavail))
            {
-            GetCDInfo(WinData.hWnd);
+            GetCDInfo();
            }
         else
            {
-            CDCheck(WinData.hWnd, &CDData);
+            CDCheck(&CDData);
             if (CDData.CDMedia == false)
                {
-                GetCDInfo(WinData.hWnd);
+                GetCDInfo();
                 CDData.CDTrack = CDData.CDTrackCount;
                }
            }
@@ -178,30 +183,30 @@ void PauseResumeMusic()
     switch(CDData.CDStatus)
        {
         case cd_play:
-             CDPause(WinData.hWnd, &CDData);
+             CDPause(&CDData);
              CDData.CDStatus = cd_pause;
              break;
         case cd_pause:
-             CDResume(WinData.hWnd, &CDData);
+             CDResume(&CDData);
              CDData.CDStatus = cd_play;
              break;
-       }
+       }*/
    }
 
 void PlayNextSong()
    {
-    if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
+    /*if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
        {
         if ((CDData.CDStatus == cd_empty) || (CDData.CDStatus == cd_unavail))
            {
-            GetCDInfo(WinData.hWnd);
+            GetCDInfo();
            }
         else
            {
-            CDCheck(WinData.hWnd, &CDData);
+            CDCheck(&CDData);
             if (CDData.CDMedia == false)
                {
-                GetCDInfo(WinData.hWnd);
+                GetCDInfo();
                 CDData.CDTrack = CDData.CDTrackCount;
                }
            }
@@ -218,26 +223,26 @@ void PlayNextSong()
                 if (CDData.CDTrack >= CDData.CDTrackCount)
                     CDData.CDTrack = 0;
                }
-            CDTrackPlay(WinData.hWnd, &CDData);
+            CDTrackPlay(&CDData);
             CDData.CDStatus = cd_play;
            }
-       }
+       }*/
    }
 
 void PlayPrevSong()
    {
-    if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
+    /*if ((MidiData.MidiStatus != midi_play) && (MidiData.MidiStatus != midi_pause))
        {
         if ((CDData.CDStatus == cd_empty) || (CDData.CDStatus == cd_unavail))
            {
-            GetCDInfo(WinData.hWnd);
+            GetCDInfo();
            }
         else
            {
-            CDCheck(WinData.hWnd, &CDData);
+            CDCheck(&CDData);
             if (CDData.CDMedia == false)
                {
-                GetCDInfo(WinData.hWnd);
+                GetCDInfo();
                 CDData.CDTrack = CDData.CDTrackCount;
                }
            }
@@ -254,15 +259,15 @@ void PlayPrevSong()
                 if (CDData.CDTrack < 0 )
                     CDData.CDTrack = CDData.CDTrackCount;
                }
-            CDTrackPlay(WinData.hWnd, &CDData);
+            CDTrackPlay(&CDData);
             CDData.CDStatus = cd_play;
            }
-       }
+       }*/
    }
 
 void StopMusic()
    {
-    if ((CDData.CDStatus != cd_stop) && (CDData.CDStatus != cd_empty) && (CDData.CDStatus != cd_unavail))
+    /*if ((CDData.CDStatus != cd_stop) && (CDData.CDStatus != cd_empty) && (CDData.CDStatus != cd_unavail))
        {
         CDStop(&CDData);
         CDClose(&CDData);
@@ -270,6 +275,6 @@ void StopMusic()
     if ((MidiData.MidiStatus != midi_stop) && (MidiData.MidiStatus != midi_nofile))
        {
         MidiStop(&MidiData);
-       }
+       }*/
    }
 

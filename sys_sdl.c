@@ -1,26 +1,16 @@
 /////////////////////////////////////////////////////////////////////////////////////
-// Windows Includes...
+// Windows and Linux Includes...
 /////////////////////////////////////////////////////////////////////////////////////
-#include <windows.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <io.h>
-#include <fcntl.h>
+#ifdef _WIN32
+#include <direct.h>
+#endif
+
 #include <math.h>
-#include <winuser.h>
-#include <zmouse.h>
 #include <time.h>
-//#include <GL/gl.h>     // OpenGL interface
-//#include <GL/glu.h>    // OpenGL utility Library interface
 #include <glad/glad.h>
 #include <SDL.h>
-
-/////////////////////////////////////////////////////////////////////////////////////
-// DirectX Includes...
-/////////////////////////////////////////////////////////////////////////////////////
-#include <direct.h>
-#include <dinput.h>
-#include <dsound.h>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Application Includes...
@@ -43,7 +33,6 @@
 #include "i_cd.h"
 #include "i_midi.h"
 #include "st_lib.h"
-#include "dxerr.h"
 #include "v_video.h"
 #include "z_zone.h"
 #include "gldefs.h"
@@ -57,10 +46,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 // OpenGL Defines and Data
 /////////////////////////////////////////////////////////////////////////////////////
-
-//extern HDC    hGDC;
-//extern HGLRC  hRC;
-//extern BOOL   software;
 
 // Functions
 void   I_ShutdownGraphics( void );
@@ -77,7 +62,6 @@ extern int       iCurrMode;
 // Application Defines and Data
 /////////////////////////////////////////////////////////////////////////////////////
 
-windata_t WinData;
 SDL_Window* pWindow;
 
 extern devinfo_t DevInfo;
@@ -124,13 +108,13 @@ char        szMidiFile[] = "doomsong.mid";
 
 int         MusicType = MUSIC_MIDI;
 int         RenderType = RENDER_GL;
-BOOL        bQuit = FALSE;
+dboolean        bQuit = false;
 
 void  Cleanup(void);
 void  InitData();
-void  ParseCommand(PSTR);
-void  EvaluateParameters(PSTR);
-BOOL  CreateMainWindow( int, int, int, BOOL);
+void  ParseCommand(char*);
+void  EvaluateParameters(char*);
+dboolean  CreateMainWindow( int, int, int, dboolean);
 
 void ClearLog(char *szFileName);
 void lfprintf(char *message, ... );
@@ -155,10 +139,8 @@ unsigned char szBadWadMessage[] = { "glDoom is unable to determine the game type
                                     "   system directory." };
 void TestAlt(void);
 
-POINT mPoint;
-
 int   tvalue = 0;
-BOOL  notop = FALSE;
+dboolean  notop = false;
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Windows Defines and Data
@@ -166,27 +148,12 @@ BOOL  notop = FALSE;
 
 extern int    keylink;
 
-LRESULT CALLBACK WndProc(HWND, UINT, WPARAM, LPARAM);
-char      szAppName[] = "glDoom - v0.96c";
 char      szDbgName[] = "glDoom.dbg";
-char      szCfgName[] = "glDoom.cfg";
-HACCEL    ghAccel;
-HICON     g_hIcon = NULL;
+//char      szCfgName[] = "glDoom.cfg";
 
 
 int main(int argc, char** szCmdLine)
    {
-    MSG         msg;
-    HWND        hwnd;
-
-    /*if ((hwnd = FindWindow(szAppName, szAppName)) != NULL)
-       {
-        SetForegroundWindow(hwnd);
-        return 0;
-       }*/
-
-    //g_hIcon = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_GLDOOM));
-
     ClearLog(szDbgName);
 
     // parse up the command line...
@@ -199,21 +166,17 @@ int main(int argc, char** szCmdLine)
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
     
-    // why would you create a "temp window" ???
-  
-    //CreateTempWindow();
     //ChangeDisplaySettings(0, 0);
 
     // We get the current video setup here.
-    GetVideoInfo();
-
-    /*DestroyWindow(WinData.hWnd);
-    WinData.hWnd = NULL;*/
+    //GetVideoInfo();
 
     lfprintf("Current resolution: %d x %d x %d bpp\n",DevInfo.width,DevInfo.height,DevInfo.bpp);
 
     lfprintf("Resolution requested: %d x %d x %d bpp\n",video.width,video.height,video.bpp);
-
+    
+    //GetModeList(szDbgName);
+    
     // This builds up the list of available video modes for the OpenGL renderer
     /*GetModeList(szDbgName);
     if (video.fullscreen == TRUE)
@@ -258,7 +221,7 @@ int main(int argc, char** szCmdLine)
         con_printf("Display: %dx%dx%d bpp\n", video.width, video.height, video.bpp);
        }*/
 
-    bQuit = FALSE;
+    bQuit = false;
 
     tvalue = 1;
     //con_setup(hwnd, video.width, video.height);
@@ -269,15 +232,15 @@ int main(int argc, char** szCmdLine)
        {
         I_Quit();
         //StopMusic();
-        //I_ShutdownGraphics();
+        I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
-            //MessageBox(hwnd, szBadWadMessage, "glDoom Game Data Error", MB_OK);
+            con_printf(szBadWadMessage);
            }
         return 0;
        }
 
-    con_printf("Command line: %s\n", szCmdLine);
+    con_printf("Command line: %s\n", *szCmdLine);
     con_printf("Beginning DOOM data setup...\n");
     MY_DoomSetup();
 
@@ -300,10 +263,11 @@ int main(int argc, char** szCmdLine)
            GameMode = GAME_PLAY;
        }
     Cleanup();
-    return msg.wParam;
+
+    return 0;
    }
 
-BOOL ResizeMainWindow(char *mode)
+dboolean ResizeMainWindow(char *mode)
    {
 //    char *parm;
 //    int   width, height;
@@ -398,11 +362,12 @@ void Cleanup()
         WriteProfileString("GLDOOM", "height", tstr);
        }
 
-    ShowCursor(TRUE);
     if (video.fullscreen == FALSE)
        {
         ReleaseCapture();
        }*/
+
+    SDL_ShowCursor(SDL_ENABLE);
 
     for (i = 4; i >= 0; i--)
         free(screens[i]);
@@ -410,124 +375,33 @@ void Cleanup()
    }
 
 
-BOOL CreateMainWindow(int width, int height, int bpp, BOOL fullscreen)
+dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 {
-    //WNDCLASSEX  wndclass;
-    //DWORD       dwStyle, dwExStyle;
-    //int         x, y, sx, sy, ex, ey;
-
-    //wndclass.cbSize        = sizeof (wndclass);
-    //wndclass.style         = CS_HREDRAW | CS_VREDRAW | CS_OWNDC;
-    //wndclass.lpfnWndProc   = (WNDPROC)WinData.wndproc;
-    //wndclass.cbClsExtra    = 0;
-    //wndclass.cbWndExtra    = 0;
-    //wndclass.hInstance     = WinData.hInstance;
-    //wndclass.hIcon         = g_hIcon;
-    //wndclass.hCursor       = LoadCursor (NULL, IDC_ARROW);
-    //wndclass.hbrBackground = (void *)COLOR_GRAYTEXT;
-    //wndclass.lpszMenuName  = NULL;
-    //wndclass.lpszClassName = szAppName;
-    //wndclass.hIconSm       = 0;
-
-
-    //if (!RegisterClassEx (&wndclass))
-    //{
-    //    MessageBox(NULL, "Window class registration failed.", "FATAL ERROR", MB_OK);
-    //    return FALSE;
-    //}
-
-    //if (fullscreen)
-    //{
-    //    if (notop)
-    //        dwExStyle = WS_EX_TOPMOST;
-   
-    //    dwExStyle = 0;
-    //    dwStyle = WS_POPUP | WS_VISIBLE;
-    //    x = y = 0;
-    //    sx = video.width;
-    //    sy = video.height;
-    //}
-    //else
-    //{
-    //    dwExStyle = 0;
-    //    //dwStyle = WS_CAPTION | WS_SYSMENU | WS_THICKFRAME;  // Use this if you want a "normal" window
-    //    dwStyle = WS_CAPTION;
-    //    ex = GetSystemMetrics(SM_CXFIXEDFRAME)*2;
-    //    ey = (GetSystemMetrics(SM_CYFIXEDFRAME)*2)+GetSystemMetrics(SM_CYCAPTION);
-    //    // Center the window on the screen
-    //    x = (DevInfo.width / 2) - ((video.width+ex) / 2);
-    //    y = (DevInfo.height / 2) - ((video.height+ey) / 2);
-    //    sx = video.width+ex;
-    //    sy = video.height+ey;
-    //    //   Check to be sure the requested window size fits on the screen and
-    //    //   adjust each dimension to fit if the requested size does not fit.
-    //    if (sx >= DevInfo.width)
-    //    {
-    //        x = 0;
-    //        sx = DevInfo.width-ex;
-    //    }
-    //    if (sy >= DevInfo.height)
-    //    {
-    //        y = 0;
-    //        sy = DevInfo.height-ey;
-    //    }
-    //}
-
-    //if ((WinData.hWnd = CreateWindowEx (dwExStyle,
-    //                szAppName,               // window class name
-		  //          szAppName,               // window caption
-    //                dwStyle | WS_CLIPCHILDREN | WS_CLIPSIBLINGS, // window style
-    //                x,           // initial x position
-    //                y,           // initial y position
-    //                sx,           // initial x size
-    //                sy,           // initial y size
-    //                NULL,                    // parent window handle
-    //                NULL,                    // window menu handle
-    //                WinData.hInstance,       // program instance handle
-		  //          NULL))                   // creation parameters
-    //                == NULL)
-    //{
-    //    ChangeDisplaySettings(0, 0);
-    //    MessageBox(NULL, "Window creation failed.", "FATAL ERROR", MB_OK);
-    //    return FALSE;
-    //}
-
-    //SendMessage(WinData.hWnd, WM_SETICON, ICON_SMALL, (LPARAM)g_hIcon);
-    //SendMessage(WinData.hWnd, WM_SETICON, ICON_BIG, (LPARAM)g_hIcon);
-
-    //WinData.hAccel = LoadAccelerators(WinData.hInstance,"AppAccel");
-
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         printf("Failed to init SDL");
 
-    pWindow = SDL_CreateWindow("GLDOOM", 100, 100, video.width, video.height, SDL_WINDOW_OPENGL);
+    pWindow = SDL_CreateWindow("GLDOOM", 500, 100, video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+
+    if (!pWindow)
+    {
+        con_printf("Failed to create a SDL window!");
+        I_Quit();
+    }
+
     SDL_ShowWindow(pWindow);
 
     R_InitViewData();
 
     con_printf("glDoom Version %d.%d%c\n", version/100, version%100, revision);
     con_printf("Starting OpenGL...\n");
-    ShowCursor(FALSE);
+    SDL_ShowCursor(SDL_DISABLE);
 
-    if (StartUpOpenGL(WinData.hWnd) == FALSE)
-    {
-        WinData.hWnd = NULL;
-        return FALSE;
+    if (StartUpOpenGL() == false)
+    {        
+        return false;
     }
 
-    /*if ((software == TRUE) && (video.allowsoft == FALSE))
-    {
-        I_ShutdownGraphics();
-        return FALSE;
-    }*/
-
-    /*ShowWindow(WinData.hWnd, WinData.iCmdShow);
-    UpdateWindow(WinData.hWnd);
-
-    SetForegroundWindow(WinData.hWnd);
-    SetFocus(WinData.hWnd);*/
-
-    return TRUE;
+    return true;
 }
 
 
@@ -546,25 +420,17 @@ void InitData()
 
     // Setup CD sub-system
     CDData.CDStatus = cd_empty;
-    CDData.CDMedia = FALSE;
+    CDData.CDMedia = false;
     CDData.CDPosition = 0;
     CDData.CDCode[0] = '\0';
 
-    // Capture Windows variables
-    /*WinData.hInstance  = hInstance;
-    WinData.iCmdShow   = iCmdShow;
-    WinData.wndproc    = (FARPROC)WndProc;*/
-
     // Set user "definable" data
-    video.allowsoft     = FALSE;
+    video.allowsoft     = false;
     video.width         = DEF_WIDTH;
     video.height        = DEF_HEIGHT;
     video.bpp           = DEF_COLORB;
-    video.fullscreen    = FALSE;
-	video.wide          = FALSE;
-
-	//iWidth = GetSystemMetrics(SM_CXSCREEN);
-	//iHeight = GetSystemMetrics(SM_CYSCREEN);
+    video.fullscreen    = false;
+	video.wide          = false;
 
  //   // See if these need to be overridden by the defaults
  //   GetProfileString("GLDOOM", "DIRECTORY", ".", DoomDir, _MAX_PATH );
@@ -582,7 +448,7 @@ void InitData()
 	}
 	else
 	{*/
-		video.wide = TRUE;
+		video.wide = true;
 	//}
 
     video.bpp  = DEF_COLORB;
@@ -592,13 +458,20 @@ void InitData()
 
 
 // could just do myargc = __argc and myargv = __argv
-void ParseCommand(PSTR szCmdLine)
+void ParseCommand(char* szCmdLine)
    {
     char* s;
+    char cwd[_MAX_PATH];
+
+#ifdef _WIN32
+    _getcwd(cwd, _MAX_PATH);
+#else
+    getcwd(cwd, _MAX_PATH);
+#endif
 
     M_InitParms();
     
-    M_AddParm(__argv[0]);
+    M_AddParm(cwd);
 
     s = strtok(szCmdLine, " ");
     while (s != NULL)
@@ -608,7 +481,7 @@ void ParseCommand(PSTR szCmdLine)
        }
    }
 
-void EvaluateParameters(PSTR szCmdLine)
+void EvaluateParameters(char* szCmdLine)
    {
     int  p;
 
@@ -620,13 +493,13 @@ void EvaluateParameters(PSTR szCmdLine)
     p = M_CheckParm("-notop");
     if (p != 0)
        {
-        notop = TRUE;
+        notop = true;
        }
 
     p = M_CheckParm("-window");
     if (p != 0)
        {
-        video.fullscreen = FALSE;
+        video.fullscreen = false;
        }
 
     p = M_CheckParm("-width");
@@ -654,17 +527,17 @@ void EvaluateParameters(PSTR szCmdLine)
     p = M_CheckParm("-allowsoft");
     if (p != 0)
        {
-        video.allowsoft = TRUE;
+        video.allowsoft = true;
        }
 
     p = M_CheckParm("-wide");
     if (p != 0)
        {
-        video.wide = TRUE;
+        video.wide = true;
        }
 
 	// 04/03/2010 - BAL Need to be able to support wide monitors
-	if (TRUE != video.wide)
+	if (true != video.wide)
 	{
 	    if ((int)(video.width * 3) != (int)(video.height * 4))
 		{
@@ -702,159 +575,9 @@ void glDoomExit()
     StopMusic();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
-    //SendMessage(WinData.hWnd, WM_CLOSE, 0, 0);
    };
 
 extern dboolean paused;
-
-LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
-   {
-    static event_t       event;
-    static unsigned char KeyPress;
-    static int           scancode;
-    static int           lastmousex = 0, lastmousey = 0;
-    static BOOL          first = TRUE;
-    static BOOL          waspaused = FALSE;
-
-    switch(iMsg)
-       {
-        case WM_CREATE:
-             tvalue = 1;
-             con_setup(hwnd, video.width, video.height);
-             break;
-
-        case MM_MCINOTIFY:
-             if (wParam == MCI_NOTIFY_SUCCESSFUL)
-                {
-                 if (MidiData.MidiStatus == midi_play)
-                    MidiReplay(hwnd, &MidiData);
-                 if (CDData.CDStatus == cd_play)
-                    CDTrackPlay(hwnd, &CDData);
-                }
-             if (wParam == MCI_NOTIFY_FAILURE)
-                {
-                 if (CDData.CDStatus == cd_play)
-                    {
-                     MidiPlay(hwnd, &MidiData);
-                     CDData.CDStatus == cd_stop;
-                    }
-                }
-             break;
-
-       /*case WM_MOUSEWHEEL:
-            lfprintf("WM_MOUSEWHEEL message...\n");
-            return 0;
-            break;*/
-
-       //case WM_KEYDOWN:
-       //     if ((lParam & 0x40000000) != 0)  // This "debounces" the keys so that we only process
-       //        break;                        // the message when the key is first pressed and not after.
-
-       //     switch(wParam)
-       //        {
-       //         case VK_PAUSE:
-       //              event.type = ev_keydown;
-       //              event.data1 = SDL_SCANCODE_PAUSE;
-       //              D_PostEvent(&event);
-       //              break;
-       //         case VK_SHIFT:
-       //              if (keylink == TRUE)
-       //                 {
-       //                  event.type = ev_keydown;
-       //                  event.data1 = DIK_RSHIFT;
-       //                  D_PostEvent(&event);
-       //                 }
-       //              break;
-       //         case VK_CONTROL:
-       //              if (keylink == TRUE)
-       //                 {
-       //                  event.type = ev_keydown;
-       //                  event.data1 = DIK_RCONTROL;
-       //                  D_PostEvent(&event);
-       //                 }
-       //              break;
-       //         case VK_MENU:
-       //              if (keylink == TRUE)
-       //                 {
-       //                  event.type = ev_keydown;
-       //                  event.data1 = DIK_RMENU;
-       //                  D_PostEvent(&event);
-       //                 }
-       //              break;
-       //        }
-       //     break;
-
-       case WM_ACTIVATE:
-            if (LOWORD(wParam) != WA_INACTIVE)
-               {
-                if ((!first) && (!waspaused))
-                   {
-                    event.type = ev_keydown;
-                    event.data1 = SDL_SCANCODE_PAUSE;
-                    D_PostEvent(&event);
-                   }
-                first = FALSE;
-                SetForegroundWindow( WinData.hWnd );
-                SetFocus( WinData.hWnd );
-                ShowWindow( WinData.hWnd, SW_RESTORE );
-                UpdateWindow( WinData.hWnd );
-               }
-            else
-               {
-                waspaused = paused;
-                if (!paused)
-                   {
-                    event.type = ev_keydown;
-                    event.data1 = SDL_SCANCODE_PAUSE;
-                    D_PostEvent(&event);
-                   }
-                if ( video.fullscreen )
-                    ShowWindow( WinData.hWnd, SW_MINIMIZE );
-               }
-            break;
-
-       /*case WM_KEYUP:
-            switch(wParam)
-               {
-                case VK_PAUSE:
-                     event.type = ev_keyup;
-                     event.data1 = SDL_SCANCODE_PAUSE;
-                     D_PostEvent(&event);
-                     break;
-                case VK_SHIFT:
-                     if (keylink == TRUE)
-                        {
-                         event.type = ev_keyup;
-                         event.data1 = DIK_RSHIFT;
-                         D_PostEvent(&event);
-                        }
-                     break;
-                case VK_CONTROL:
-                     if (keylink == TRUE)
-                        {
-                         event.type = ev_keyup;
-                         event.data1 = DIK_RCONTROL;
-                         D_PostEvent(&event);
-                        }
-                     break;
-                case VK_MENU:
-                     if (keylink == TRUE)
-                        {
-                         event.type = ev_keyup;
-                         event.data1 = DIK_RMENU;
-                         D_PostEvent(&event);
-                        }
-                     break;
-               }
-            break;*/
-
-        /*case WM_DESTROY:
-             con_shutdown();
-             PostQuitMessage(0);
-             return 0;*/
-       }
-    return DefWindowProc(hwnd, iMsg, wParam, lParam);
-   }
 
 void ClearLog(char *szFileName)
    {
@@ -878,7 +601,7 @@ void lfprintf(char *message, ... )
 
 char cmsg[4096];
 
-void dprintf(char *message, ... )
+void _dprintf(char *message, ... )
    {
     va_list	argptr;
 

@@ -6,9 +6,7 @@
 // of any kind without express written consent from
 // the author, Bruce A. Lewis.
 //
-#include <windows.h>
-//#include <gl/gl.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 #include <ctype.h>
 ////////////////////////////////////////////////////////////////////////
 // Doom defines and external data
@@ -52,6 +50,12 @@ extern cheatseq_t	cheat_mypos;
 
 
 void M_WriteText(int x, int y, char *string);
+
+#if _WIN32
+#define strnicmp strnicmp
+#else
+#define strnicmp strncasecmp
+#endif
 
 ////////////////////////////////////////////////////////////////////////
 // Doom98 code
@@ -1532,9 +1536,9 @@ dboolean CO_Responder(event_t* ev)
        {
         switch(ev->data1)
            {
-            case KEY_SCRNSHOT:
+            /*case KEY_SCRNSHOT:
                  G_ScreenShot();
-                 break;
+                 break;*/
             case SDL_SCANCODE_BACKSPACE:
             case SDL_SCANCODE_LEFT:
                  if (iCCursor > 0)

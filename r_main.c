@@ -26,10 +26,7 @@
 
 static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
-#include <windows.h>
-//#include <gl/gl.h>
-//#include <gl/glu.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 
 #include <stdlib.h>
 #include <math.h>
@@ -1149,7 +1146,7 @@ void DrawAmmoBox(void)
     glPushMatrix();
 
     glTranslatef( 1056.0f, -16.0f, 3232.0f );
-    now = (double)(timeGetTime() % 5000)*RFactor;
+    now = (double)(SDL_GetTicks64() % 5000)*RFactor;
     rotation = now;
     glRotatef(rotation, 0.0f, 1.0f, 0.0f );
 
@@ -1216,7 +1213,6 @@ void DrawAmmoBox(void)
     glPopMatrix();
    }
 
-extern windata_t WinData;
 extern int       gl_poffsetf, gl_poffsetu;
 
 void             GL_DrawPlayerSprites(void);
@@ -1577,6 +1573,8 @@ dboolean R_ClipVertsToFrustum(DW_Polygon *TempPoly)
     return true;
    }
 
+// recalculates wall ceiling height, floor height
+// and UV coords for moving walls
 void R_BuildRenderQueue()
 {
     int           i, texnumb, wall;
@@ -1599,6 +1597,9 @@ void R_BuildRenderQueue()
         {
             // Check left and right sides for inside the frustum
             //inside = (DrawSide[TempPoly->SideDef] == ds_draw);
+
+            // this functions will alaways return true.. 
+            //(this could be used to cull all non-visible walls) 
             inside = R_ClipVertsToFrustum(TempPoly);
 
             if (inside && DrawSide[TempPoly->SideDef] == ds_draw)
@@ -1688,7 +1689,6 @@ void R_BuildRenderQueue()
         }
     }
  }
-
 
 void GL_RenderPlayerView(player_t* player)
    {

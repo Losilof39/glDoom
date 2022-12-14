@@ -365,7 +365,7 @@ void R_RenderSegLoop (void)
 
 extern dboolean *DrawFlat;
 extern dboolean *DrawSide;
-char   *MsgText[2048];
+static char   *MsgText[2048];
 
 //
 // R_StoreWallRange

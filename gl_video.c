@@ -21,11 +21,8 @@
 //
 //-----------------------------------------------------------------------------
 
-#include <windows.h>
-//#include <gl/gl.h>
-//#include <gl/glu.h>
 #include <glad/glad.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 
 #include <stdlib.h>
 #include <math.h>
@@ -73,9 +70,6 @@ extern int         starttime;
 extern int         vsync;
 
 // OpenGL renderer stuff
-
-HGLRC                hRC = 0;                 // A global rendering context
-HDC                  hGDC = 0;                // A global device context
 char                *GL_Vendor;               // The company responsible for this GL implementation
 char                *GL_Renderer;             // The name of the type of renderer
 char                *GL_Version;              // The version and/or release number
@@ -93,22 +87,17 @@ float                glLeft, glTop, glRight, glBottom, glAspect;
 
 // Windows stuff
 extern int           iCurrMode;
-extern DEVMODE      *pModeList;
-extern windata_t     WinData;
+//extern DEVMODE      *pModeList;
 
 void ShutdownOpenGL(void)
    {
-    /*wglMakeCurrent(NULL, NULL);
-    wglDeleteContext( hRC );*/
-    SDL_GL_MakeCurrent(pWindow, NULL);
+    SDL_GL_MakeCurrent(NULL, NULL);
     SDL_GL_DeleteContext(glContext);
    }
 
 void I_ShutdownGraphics(void)
    {
     ShutdownOpenGL();
-    //ReleaseDC(WinData.hWnd, hGDC);
-    //ResetVideoMode();
    }
 
 void I_Start2DFrame()
@@ -207,27 +196,22 @@ void I_Finish3D()
 //
 void I_FinishUpdate(void)
    {
-    static DWORD lasttime = 0;
-    DWORD        now, ms;
-    float        fps;
-    char         fps_str[16];
-
-    if (devparm)  // Draw the frame rate on the screen
-       {          // which will slow it down...
-        now = timeGetTime();
-        ms = now - lasttime;
-        if ((ms > 0) && (ms < 1000))
-           {
-            fps = 1000.0f/(float)ms;
-            sprintf(fps_str, "%.1f FPS", fps);
-            GL_WriteText(260, 155, fps_str);
-           }
-        lasttime = now;
-       }
+    //if (devparm)  // Draw the frame rate on the screen
+    //   {          // which will slow it down...
+    //    now = timeGetTime();
+    //    ms = now - lasttime;
+    //    if ((ms > 0) && (ms < 1000))
+    //       {
+    //        fps = 1000.0f/(float)ms;
+    //        sprintf(fps_str, "%.1f FPS", fps);
+    //        GL_WriteText(260, 155, fps_str);
+    //       }
+    //    lasttime = now;
+    //   }
 
     if (glmode == gl_3d)
        {
-        //I_Finish3D();
+        I_Finish3D();
         //glPopMatrix();
        }
     else
@@ -239,7 +223,6 @@ void I_FinishUpdate(void)
        }
 
     // Swap the rendering buffers...
-    //SwapBuffers(hGDC);
     SDL_GL_SwapWindow(pWindow);
    }
 
@@ -305,130 +288,28 @@ void OGL_Error( int GL_Code, char *msg )
    }
 
 //  StartUpOpenGL sets the pixel format and a rendering context then returns true/false
-dboolean StartUpOpenGL( HWND hWnd )
+dboolean StartUpOpenGL()
    {
-    //int      nMyPixelFormatID;
-    //static PIXELFORMATDESCRIPTOR pfd = {
-    //    sizeof (PIXELFORMATDESCRIPTOR), // struct size 
-    //    1,                              // Version number
-    //    PFD_DRAW_TO_WINDOW |    // Flags, draw to a window,
-    //    PFD_SUPPORT_OPENGL |    // use OpenGL
-    //    PFD_DOUBLEBUFFER,       // want double buffering
-    //    PFD_TYPE_RGBA,          // RGBA pixel values
-    //    32,                     // 32-bit color (or max video mode allows)
-    //    0, 0, 0, 0, 0, 0,       // RGB bits & shift sizes. Don't care about them
-    //    0,                      // No alpha buffer info
-    //    0,                      // shift bit ignored
-    //    0,                      // no accumulation buffer
-    //    0, 0, 0, 0,             // accum bits ignored
-    //    32,                     // 32-bit depth buffer if we can get it...
-    //    0,                      // No stencil buffer
-    //    0,                      // No auxiliary buffers
-    //    PFD_MAIN_PLANE,         // main layer
-    //    0,                      // Reserved (must be 0)
-    //    0, 0, 0                 // No layer, visible or damage masks
-    //   };
-
-    //lfprintf("Attempting to ChoosePixelFormat...\n");
-    //hGDC = GetDC( hWnd );
-    //nMyPixelFormatID = ChoosePixelFormat( hGDC, &pfd );
-    //if (nMyPixelFormatID == 0)
-    //   {
-    //    ReleaseDC( hWnd, hGDC );
-    //    OGL_Error( 1, "ChoosePixelFormat");
-    //    return false;
-    //   }
-
-    //if (SetPixelFormat( hGDC, nMyPixelFormatID, &pfd ) == true)
-    //   {
-    //    DescribePixelFormat(hGDC, nMyPixelFormatID, sizeof(PIXELFORMATDESCRIPTOR), &pfd); 
-    //    lfprintf("Pixel Format    : %d\n", nMyPixelFormatID);
-    //    lfprintf("Version         : %X\n", pfd.nVersion);
-    //    if (pfd.dwFlags & PFD_DRAW_TO_WINDOW)
-    //       lfprintf("Flags           : PFD_DRAW_TO_WINDOW\n");
-    //    if (pfd.dwFlags & PFD_DRAW_TO_BITMAP)
-    //       lfprintf("Flags           : PFD_DRAW_TO_BITMAP\n");
-    //    if (pfd.dwFlags & PFD_SUPPORT_GDI)
-    //       lfprintf("Flags           : PFD_SUPPORT_GDI\n");
-    //    if (pfd.dwFlags & PFD_SUPPORT_OPENGL)
-    //       lfprintf("Flags           : PFD_SUPPORT_OPENGL\n");
-    //    if (pfd.dwFlags & PFD_GENERIC_ACCELERATED)
-    //       lfprintf("Flags           : PFD_GENERIC_ACCELERATED\n");
-    //    if (pfd.dwFlags & PFD_GENERIC_FORMAT)
-    //       lfprintf("Flags           : PFD_GENERIC_FORMAT\n");
-    //    if (pfd.dwFlags & PFD_NEED_PALETTE)
-    //       lfprintf("Flags           : PFD_NEED_PALETTE\n");
-    //    if (pfd.dwFlags & PFD_NEED_SYSTEM_PALETTE)
-    //       lfprintf("Flags           : PFD_NEED_SYSTEM_PALETTE\n");
-    //    if (pfd.dwFlags & PFD_DOUBLEBUFFER)
-    //       lfprintf("Flags           : PFD_DOUBLEBUFFER\n");
-    //    if (pfd.dwFlags & PFD_STEREO)
-    //       lfprintf("Flags           : PFD_STEREO\n");
-    //    if (pfd.dwFlags & PFD_SWAP_LAYER_BUFFERS)
-    //       lfprintf("Flags           : PFD_SWAP_LAYER_BUFFERS\n");
-
-    //    lfprintf("ColorBits       : %d\n", pfd.cColorBits);
-    //    lfprintf("RedBits         : %d\n", pfd.cRedBits);
-    //    lfprintf("RedShift        : %d\n", pfd.cRedShift);
-    //    lfprintf("GreenBits       : %d\n", pfd.cGreenBits);
-    //    lfprintf("GreenShift      : %d\n", pfd.cGreenShift);
-    //    lfprintf("BlueBits        : %d\n", pfd.cBlueBits);
-    //    lfprintf("BlueShift       : %d\n", pfd.cBlueShift);
-    //    lfprintf("AlphaBits       : %d\n", pfd.cAlphaBits);
-    //    lfprintf("AlphaShift      : %d\n", pfd.cAlphaShift);
-    //    lfprintf("AccumBits       : %d\n", pfd.cAccumBits);
-    //    lfprintf("AccumRedBits    : %d\n", pfd.cAccumRedBits);
-    //    lfprintf("AccumGreenBits  : %d\n", pfd.cAccumGreenBits);
-    //    lfprintf("AccumBlueBits   : %d\n", pfd.cAccumBlueBits);
-    //    lfprintf("AccumAlphaBits  : %d\n", pfd.cAccumAlphaBits);
-    //    lfprintf("DepthBits       : %d\n", pfd.cDepthBits);
-    //    lfprintf("StencilBits     : %d\n", pfd.cStencilBits);
-    //    lfprintf("AuxBuffers      : %d\n", pfd.cAuxBuffers);
-    //    lfprintf("LayerType       : %d\n", pfd.iLayerType);
-    //   }
-    //else
-    //   {
-    //    ReleaseDC( hWnd, hGDC );
-    //    OGL_Error( 1, "SetPixelFormat");
-    //    return false;
-    //   }
-
-    //if ((!(pfd.dwFlags & PFD_GENERIC_ACCELERATED)) &&
-    //     ((pfd.dwFlags & PFD_GENERIC_FORMAT) > 0))
-    //   {
-    //    con_printf("\nno OpenGL acceleration found...\n");
-
-    //    if (video.allowsoft == false)
-    //       {
-    //        ChangeDisplaySettings(0, 0);
-    //        MessageBox(NULL, "OpenGL Driver is not accelerated\n", "FATAL ERROR", MB_OK);
-    //        return false;
-    //       }
-
-    //   }
-
-    /*hRC = wglCreateContext( hGDC );
-    if (hRC == (HGLRC)NULL)
-       {
-        ReleaseDC( hWnd, hGDC );
-        OGL_Error( 1, "wglCreateContext");
-        return false;
-       }*/
-
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
 
     glContext = SDL_GL_CreateContext(pWindow);
+
+    if (!glContext)
+    {
+        con_printf("Failed to create an OpenGL context!\n");
+        I_Quit();
+    }
+
     SDL_GL_MakeCurrent(pWindow, glContext);
 
     if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
     {
-        printf("[ERROR]: Failed to load OpenGL library");
-        exit(-1);
+        con_printf("Failed to load OpenGL library!\n");
+        I_Quit();
     }
 
-    //wglMakeCurrent(hGDC, hRC);
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );
 
@@ -436,7 +317,7 @@ dboolean StartUpOpenGL( HWND hWnd )
 
     con_SetupOpenGL();
 
-    //GetGLInfo();
+    GetGLInfo();
 
     return true;
 }
@@ -462,13 +343,13 @@ void GetGLInfo()
     strcpy(GL_Renderer, szt);
     con_printf("OpenGL Renderer : %s\n", GL_Renderer);
 
-    if ((D_strcasecmp(GL_Vendor, "Microsoft Corporation") == 0) &&
-        (D_strcasecmp(GL_Renderer, "GDI Generic") == 0))
-       {
-        // oh CRAP, it's the dreaded Microsoft Software OpenGL Renderer...
-        con_printf("SOFTWARE OpenGL Renderer!!!\n");
-        software = true;
-       }
+    //if ((D_strcasecmp(GL_Vendor, "Microsoft Corporation") == 0) &&
+    //    (D_strcasecmp(GL_Renderer, "GDI Generic") == 0))
+    //   {
+    //    // oh CRAP, it's the dreaded Microsoft Software OpenGL Renderer...
+    //    con_printf("SOFTWARE OpenGL Renderer!!!\n");
+    //    software = true;
+    //   }
 
     szt = glGetString(GL_VERSION);
     GL_Version = (char *)malloc(strlen(szt)+1);

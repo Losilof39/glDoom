@@ -22,10 +22,10 @@
 //-----------------------------------------------------------------------------
 
 
-#include <windows.h>
+//#include <windows.h>
 //#include <gl/gl.h>
 //#include <gl/glu.h>
-#include <glad/glad.h>
+#include "thirdparty/glad/include/glad/glad.h"
 
 static const char
 rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";

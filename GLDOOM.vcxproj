@@ -40,7 +40,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
-    <PlatformToolset>v142</PlatformToolset>
+    <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
@@ -163,12 +163,12 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <ProgramDatabaseFile>.\Debug/GLDOOM.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -203,14 +203,14 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>C:\Users\Ad4m\Games\DEV\sdl2_32bit</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>glext.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/GLDOOM.pdb</ProgramDatabaseFile>
@@ -218,7 +218,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>C:\Users\Ad4m\Games\DEV\sdl2_32bit;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -248,14 +248,14 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>C:\Users\Ad4m\Games\DEV\sdl2\glew-2.1.0\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>glext.lib;opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/GLDOOM.pdb</ProgramDatabaseFile>
@@ -263,7 +263,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>C:\Users\Ad4m\Games\DEV\sdl2;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -276,7 +276,6 @@
     <ClCompile Include="doomlib.c" />
     <ClCompile Include="doomstat.c" />
     <ClCompile Include="dstrings.c" />
-    <ClCompile Include="dxerr.c" />
     <ClCompile Include="d_console.c" />
     <ClCompile Include="d_items.c" />
     <ClCompile Include="d_main.c" />
@@ -364,7 +363,6 @@
     <ClInclude Include="doomstat.h" />
     <ClInclude Include="doomtype.h" />
     <ClInclude Include="dstrings.h" />
-    <ClInclude Include="dxerr.h" />
     <ClInclude Include="d_console.h" />
     <ClInclude Include="d_englsh.h" />
     <ClInclude Include="d_event.h" />
@@ -429,6 +427,10 @@
     <ClInclude Include="sys_sdl.h" />
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
+    <ClInclude Include="thirdparty\glad\include\glad\glad.h" />
+    <ClInclude Include="thirdparty\glad\include\KHR\khrplatform.h" />
+    <ClInclude Include="thirdparty\SDL2\include\begin_code.h" />
+    <ClInclude Include="thirdparty\SDL2\include\close_code.h" />
     <ClInclude Include="v_video.h" />
     <ClInclude Include="sdl_inpt.h" />
     <ClInclude Include="win_joy.h" />
@@ -440,20 +442,27 @@
     <ClInclude Include="z_zone.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="docs\gldoom.doc" />
     <None Include="gldfont.bin" />
     <None Include="INTERPIC.bin" />
     <None Include="Playpal.bin" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="controls.txt" />
-    <Text Include="doomflaw.txt" />
-    <Text Include="doomnet.txt" />
-    <Text Include="newlumps.txt" />
-    <Text Include="relnotes_94e.txt" />
-    <Text Include="TodoList.txt" />
+    <Image Include="glDoom.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="glDoom.ico" />
+    <Text Include="docs\changelog.txt" />
+    <Text Include="docs\controls.txt" />
+    <Text Include="docs\doomflaw.txt" />
+    <Text Include="docs\DOOMLIC.TXT" />
+    <Text Include="docs\newlumps.txt" />
+    <Text Include="docs\readme.bal.txt" />
+    <Text Include="docs\readme.bill.txt" />
+    <Text Include="docs\readme.dos.txt" />
+    <Text Include="docs\readme.matrox.txt" />
+    <Text Include="docs\relnotes_94d.txt" />
+    <Text Include="docs\relnotes_94e.txt" />
+    <Text Include="docs\TodoList.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

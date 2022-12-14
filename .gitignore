@@ -7,3 +7,4 @@
 *.suo
 *.dbg
 .vs/
+*.dll
