@@ -100,7 +100,7 @@ char         szMsgText[2048];
 
 extern devinfo_t DevInfo;
 
-extern       CD_Data_t   CDData;
+//extern       CD_Data_t   CDData;
 extern       MIDI_Data_t MidiData;
 extern       video_t     video;
 
@@ -380,7 +380,8 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         printf("Failed to init SDL");
 
-    pWindow = SDL_CreateWindow("GLDOOM", 500, 100, video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+    pWindow = SDL_CreateWindow("GLDOOM", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
 
     if (!pWindow)
     {
@@ -419,10 +420,10 @@ void InitData()
     video.farclip = 5000.0f;
 
     // Setup CD sub-system
-    CDData.CDStatus = cd_empty;
-    CDData.CDMedia = false;
-    CDData.CDPosition = 0;
-    CDData.CDCode[0] = '\0';
+    //CDData.CDStatus = cd_empty;
+    //CDData.CDMedia = false;
+    //CDData.CDPosition = 0;
+    //CDData.CDCode[0] = '\0';
 
     // Set user "definable" data
     video.allowsoft     = false;
@@ -572,7 +573,7 @@ void glDoomExit()
 
     con_shutdown();
     I_ShutdownInputs();
-    StopMusic();
+    //StopMusic();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
    };
