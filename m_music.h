@@ -1,5 +1,5 @@
 //#include <windows.h>
-
+/*
 void GetCDInfo();
 void PlayCDMusic(void);
 void PlayCDTrack(int track);
@@ -9,4 +9,4 @@ void PauseResumeMusic(void);
 void PlayNextSong(void);
 void PlayPrevSong(void);
 void StopMusic(void);
-
+*/

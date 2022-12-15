@@ -1764,6 +1764,7 @@ void GL_RenderPlayerView(player_t* player)
         TempPoly = sorted_walls[wall];
         while (TempPoly != NULL)
         {
+            // test if wall is in visibility list
             if (DrawSide[TempPoly->SideDef] == ds_draw)
             {
                 if (TempPoly->Position)

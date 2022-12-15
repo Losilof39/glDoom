@@ -716,7 +716,7 @@ S_ChangeMusic
 	return;
 
     // shutdown old music
-    S_StopMusic();
+    //S_StopMusic();
 
     // get lumpnum if neccessary
     if (!music->lumpnum)

@@ -1,4 +1,4 @@
-#include <windows.h>
+/*#include <windows.h>
 
 // My music handling functions
 void GetCDInfo(HWND);
@@ -7,4 +7,4 @@ void PlayMidiMusic(void);
 void PauseResumeMusic(void);
 void PlayNextSong(void);
 void StopMusic(void);
-
+*/
