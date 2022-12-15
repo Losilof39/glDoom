@@ -51,8 +51,12 @@ extern cheatseq_t	cheat_mypos;
 
 void M_WriteText(int x, int y, char *string);
 
-#if _WIN32
+#ifdef _WIN32
+#ifdef OLD_WIN32
 #define strnicmp strnicmp
+#else
+#define strnicmp _strnicmp
+#endif
 #else
 #define strnicmp strncasecmp
 #endif

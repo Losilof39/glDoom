@@ -239,21 +239,21 @@ int GL_LoadSkyTop( char *filename )
     BITMAPINFOHEADER bmi;
     RGBQUAD         *bmpPalette;
 
-    fn = open(filename, O_RDONLY | O_BINARY );
+    fn = Open(filename, O_RDONLY | O_BINARY );
 
-    read(fn, &bmfh, sizeof(BITMAPFILEHEADER));
-    read(fn, &bmi, sizeof(BITMAPINFOHEADER));
+    Read(fn, &bmfh, sizeof(BITMAPFILEHEADER));
+    Read(fn, &bmi, sizeof(BITMAPINFOHEADER));
 
     TexWide = bmi.biWidth;
     TexHigh = bmi.biHeight;
 
     bmpPalette = (RGBQUAD *)malloc(sizeof(RGBQUAD)*256);
-    read(fn, bmpPalette, (sizeof(RGBQUAD)*256));
+    Read(fn, bmpPalette, (sizeof(RGBQUAD)*256));
 
     texels = (unsigned char *)malloc(TexWide*TexHigh);
-    lseek(fn, bmfh.bfOffBits, SEEK_SET);
-    read(fn, texels, (TexWide*TexHigh));
-    close(fn);
+    LSeek(fn, bmfh.bfOffBits, SEEK_SET);
+    Read(fn, texels, (TexWide*TexHigh));
+    Close(fn);
 
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
     for (s = 0, d = 0; s < (TexWide*TexHigh); s++)

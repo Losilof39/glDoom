@@ -1109,7 +1109,7 @@ void IdentifyVersion (void)
                     strcat(gamename, ".wad");
                    }
                 // found a matching wad name - check to see if it exists
-                if (!access(gamename, R_OK))
+                if (!Access(gamename, R_OK))
                    {
                     // found a WAD and it exists. Let's use it. 
                     con_printf("Game mode %s selected\n", szGameNames[i]);
@@ -1129,7 +1129,7 @@ void IdentifyVersion (void)
     if (strlen(gamename) > 0)
        {
         con_printf("Standard game not specified - checking.\n");
-        if (!access(gamename, R_OK))
+        if (!Access(gamename, R_OK))
            {
             con_printf("Wad file exists determining \"mode\"...\n");
             D_AddFile(gamename);
@@ -1161,7 +1161,7 @@ void IdentifyVersion (void)
 #endif
         doomwad = "doom.wad";
 
-        if ( !access(doomwad,R_OK) )
+        if ( !Access(doomwad,R_OK) )
            {
             con_printf("Found game WAD for: %s\n", szGameNames[i]);
             strcpy(gamename, szWadNames[i]);
