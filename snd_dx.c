@@ -83,6 +83,9 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 #define NUM_SOUND_FX 128
 #define SB_SIZE      20480
 
+// record all sfx that are playing or not
+DSBuffer[NUM_DSBUFFERS];
+
 //LPDIRECTSOUND        lpDS;
 //LPDIRECTSOUNDBUFFER  lpDSPrimary;
 //LPDIRECTSOUNDBUFFER  lpDSBuffer[NUM_DSBUFFERS];
@@ -675,6 +678,8 @@ int I_StartSound( int id, int vol, int sep, int pitch, int priority, void *origi
     // Returns a handle (not used).
 
     id = addsfx(id, vol, steptable[pitch], sep);
+    Mix_Resume(-1);
+    DSBuffer[id] = 1;
 
     // fprintf( stderr, "/handle is %d\n", id );
 
@@ -714,12 +719,18 @@ void I_StopSound (int handle)
         DSBControl[handle].sfxid = -1;
        }
 */
-    int numchan;
+    if (DSBuffer[handle] == 0)
+        return;
+
+    Mix_Pause(-1);
+
+    DSBuffer[handle] = 0;
+    /*int numchan;
     handle = Mix_Pause;
     if(!handle)
     {
         Mix_SetError("Failed to pause the music. Mix Error: %s", Mix_GetError());
-    }
+    }*/
 
     //handle = 0;
    }
@@ -742,11 +753,16 @@ int I_SoundIsPlaying(int handle)
     // Ouch.
     //return gametic < handle;
 
-    handle = Mix_Playing;
-    if(!handle)
+    if (DSBuffer[handle] == 0)
+        return -1;
+
+    Mix_Playing(-1);
+    /*if(!handle)
     {
         SDL_SetError("Failed to continue to playing the music", SDL_GetError());
-    }
+    }*/
+
+    return 1;
    }
 
 //
@@ -935,7 +951,7 @@ void I_InitSound()
 
     int i;
 
-    Mix_VolumeMusic(MIX_MAX_VOLUME);
+    Mix_VolumeMusic(snd_MusicVolume);
     Mix_SetSoundFonts("soundfont.sf2");
 
     // Initialize external data (all sounds) at start, keep static.
