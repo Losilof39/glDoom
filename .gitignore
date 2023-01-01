@@ -1,5 +1,7 @@
 [Dd]ebug/
 [Rr]elease/
+*.sf2
+*.MID
 *.user
 *.ncb
 *.wad
@@ -8,5 +10,3 @@
 *.dbg
 .vs/
 *.dll
-*.sf2
-*.MID
