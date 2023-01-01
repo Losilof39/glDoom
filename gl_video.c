@@ -61,7 +61,7 @@ void lfprintf(char *message, ... );
 
 // Game stuff
 
-SDL_Window* pWindow;
+extern SDL_Window* pWindow;
 SDL_GLContext glContext;
 extern video_t     video;
 
@@ -126,7 +126,7 @@ void I_Start3DFrame()
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-    //gluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
+    gluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
     glViewport( 0, 0, video.width, video.height);
 
     glTranslatef( 0.0f, 0.0f, 2.0f );

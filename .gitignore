@@ -7,3 +7,6 @@
 *.suo
 *.dbg
 .vs/
+*.dll
+*.sf2
+*.MID

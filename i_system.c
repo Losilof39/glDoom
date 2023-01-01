@@ -118,7 +118,7 @@ void I_Init (void)
 {
 // FIXME
     I_InitSound();
-    GetCDInfo();
+    //GetCDInfo();
     I_InitInputs();
     //  I_InitGraphics();
 }

@@ -542,25 +542,25 @@ P_CrossSpecialLine
 	// All from here to RETRIGGERS.
       case 2:  // 0000 0010
 	// Open Door
-	EV_DoDoor(line,open);
+	EV_DoDoor(line, dr_open);
 	line->special = 0;
 	break;
 
       case 3:  // 0000 0011
 	// Close Door
-	EV_DoDoor(line,close);
+	EV_DoDoor(line, dr_close);
 	line->special = 0;
 	break;
 
       case 4:  // 0000 0100
 	// Raise Door
-	EV_DoDoor(line,normal);
+	EV_DoDoor(line, dr_normal);
 	line->special = 0;
 	break;
 	
       case 5:  // 0000 0101
 	// Raise Floor
-	EV_DoFloor(line,raiseFloor);
+	EV_DoFloor(line, raiseFloor);
 	line->special = 0;
 	break;
 	
@@ -596,7 +596,7 @@ P_CrossSpecialLine
 	
       case 16:
 	// Close Door 30
-	EV_DoDoor(line,close30ThenOpen);
+	EV_DoDoor(line, dr_close30ThenOpen);
 	line->special = 0;
 	break;
 	
@@ -723,13 +723,13 @@ P_CrossSpecialLine
 	
       case 108:
 	// Blazing Door Raise (faster than TURBO!)
-	EV_DoDoor (line,blazeRaise);
+	EV_DoDoor (line, dr_blazeRaise);
 	line->special = 0;
 	break;
 	
       case 109:
 	// Blazing Door Open (faster than TURBO!)
-	EV_DoDoor (line,blazeOpen);
+	EV_DoDoor (line, dr_blazeOpen);
 	line->special = 0;
 	break;
 	
@@ -741,7 +741,7 @@ P_CrossSpecialLine
 	
       case 110:
 	// Blazing Door Close (faster than TURBO!)
-	EV_DoDoor (line,blazeClose);
+	EV_DoDoor (line, dr_blazeClose);
 	line->special = 0;
 	break;
 
@@ -801,12 +801,12 @@ P_CrossSpecialLine
 	
       case 75:
 	// Close Door
-	EV_DoDoor(line,close);
+	EV_DoDoor(line, dr_close);
 	break;
 	
       case 76:
 	// Close Door 30
-	EV_DoDoor(line,close30ThenOpen);
+	EV_DoDoor(line, dr_close30ThenOpen);
 	break;
 	
       case 77:
@@ -846,7 +846,7 @@ P_CrossSpecialLine
 
       case 86:
 	// Open Door
-	EV_DoDoor(line,open);
+	EV_DoDoor(line, dr_open);
 	break;
 	
       case 87:
@@ -866,7 +866,7 @@ P_CrossSpecialLine
 	
       case 90:
 	// Raise Door
-	EV_DoDoor(line,normal);
+	EV_DoDoor(line, dr_normal);
 	break;
 	
       case 91:
@@ -913,17 +913,17 @@ P_CrossSpecialLine
 
       case 105:
 	// Blazing Door Raise (faster than TURBO!)
-	EV_DoDoor (line,blazeRaise);
+	EV_DoDoor (line, dr_blazeRaise);
 	break;
 	
       case 106:
 	// Blazing Door Open (faster than TURBO!)
-	EV_DoDoor (line,blazeOpen);
+	EV_DoDoor (line, dr_blazeOpen);
 	break;
 
       case 107:
 	// Blazing Door Close (faster than TURBO!)
-	EV_DoDoor (line,blazeClose);
+	EV_DoDoor (line, dr_blazeClose);
 	break;
 
       case 120:
@@ -987,7 +987,7 @@ P_ShootSpecialLine
 	
       case 46:
 	// OPEN DOOR
-	EV_DoDoor(line,open);
+	EV_DoDoor(line, dr_open);
 	P_ChangeSwitchTexture(line,1);
 	break;
 	

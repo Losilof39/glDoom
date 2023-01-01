@@ -1,3 +1,4 @@
+#if 0
 // Global define needed for calling these functions
 #include <stdio.h>
 //#include <windows.h>
@@ -227,8 +228,8 @@ dboolean CDResume(CD_Data_t *cdd)
 
 void CDStop(CD_Data_t *cdd)
    {
-    /*mciSendCommand(cdd->CDDevice, MCI_STOP, 0, (DWORD)NULL);
-    cdd->CDStatus = cd_stop;*/
+    //mciSendCommand(cdd->CDDevice, MCI_STOP, 0, (DWORD)NULL);
+    //cdd->CDStatus = cd_stop;
    }
 
 void CDClose(CD_Data_t *cdd)
@@ -236,3 +237,4 @@ void CDClose(CD_Data_t *cdd)
     //mciSendCommand(cdd->CDDevice, MCI_CLOSE, 0, (DWORD)NULL);
    }
 
+#endif

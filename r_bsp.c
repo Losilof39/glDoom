@@ -394,7 +394,8 @@ void R_AddLine (seg_t*	line)
         DrawSide[side] = ds_draw;
     }
 
-
+    // remnants of the old software renderer..
+    /*
     // Single sided line?
     if (!backsector)
        {
@@ -429,7 +430,7 @@ void R_AddLine (seg_t*	line)
 		
     clipsolid:
         R_ClipSolidWallSegment (x1, x2-1);
-        return;
+        return;*/
    }
 
 

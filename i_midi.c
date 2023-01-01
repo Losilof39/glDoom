@@ -208,7 +208,7 @@ long long	SwapLONG(long long);
 
 #endif
 
-void Close(void);
+void Close_Midi(void);
 
 unsigned char  musname[10] = "DOOMSONG";
 unsigned char *musdata;
@@ -260,7 +260,7 @@ void TWriteByte( char MIDItrack, unsigned char byte, struct Track track[] )
    }
 
 
-void Close()
+void Close_Midi()
    {
 //	lfprintf("Closing files...\n");
     /*if (file_mid != -1)

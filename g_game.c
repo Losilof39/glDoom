@@ -2009,7 +2009,7 @@ dboolean G_DeferedPlayDemo_II (char* name)
    { 
     static char demofilename[128];
     sprintf(demofilename, "%s.dem", name);
-    if (access(demofilename, 0) != 0)
+    if (Access(demofilename, 0) != 0)
         return false;
     lfprintf("-playdemo2: %s\n", demofilename);
     defdemoname = demofilename;
@@ -2207,7 +2207,7 @@ dboolean G_TimeDemo_II (char* name)
 { 	 
     static char demofilename[128];
     sprintf(demofilename, "%s.dem", name);
-    if (access(demofilename, 0) != 0)
+    if (Access(demofilename, 0) != 0)
         return false;
     nodrawers = M_CheckParm ("-nodraw"); 
     noblit = M_CheckParm ("-noblit"); 

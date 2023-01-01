@@ -181,13 +181,13 @@ int M_GetFileSize( char const*	name )
     int		handle;
     int		count;
 	
-    handle = open ( name, O_RDWR | O_BINARY);
+    handle = Open ( name, O_RDWR | O_BINARY);
 
     if (handle == -1)
         return 0;
 
-    count = lseek(handle, 0, SEEK_END);
-    close (handle);
+    count = LSeek(handle, 0, SEEK_END);
+    Close (handle);
 	
     return count;
    }
@@ -204,13 +204,13 @@ M_WriteFile
     int		handle;
     int		count;
 	
-    handle = open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
+    handle = Open ( name, O_WRONLY | O_CREAT | O_TRUNC | O_BINARY, 0666);
 
     if (handle == -1)
 	return false;
 
-    count = write (handle, source, length);
-    close (handle);
+    count = Write (handle, source, length);
+    Close (handle);
 	
     if (count < length)
 	return false;
@@ -226,15 +226,15 @@ dboolean M_AppendFile(char const *name, void *source, int length )
     int		handle;
     int		count;
 	
-    handle = open( name, O_RDWR | O_BINARY);
+    handle = Open( name, O_RDWR | O_BINARY);
 
     if (handle == -1)
         return false;
 
-    lseek(handle, 0L, SEEK_END);
+    LSeek(handle, 0L, SEEK_END);
 
-    count = write (handle, source, length);
-    close (handle);
+    count = Write (handle, source, length);
+    Close (handle);
 	
     if (count < length)
         return false;
@@ -255,15 +255,15 @@ M_ReadFile
     struct stat	fileinfo;
     byte		*buf;
 	
-    handle = open (name, O_RDONLY | O_BINARY, 0666);
+    handle = Open (name, O_RDONLY | O_BINARY, 0666);
     if (handle == -1)
 	I_Error ("Couldn't read file %s", name);
     if (fstat (handle,&fileinfo) == -1)
 	I_Error ("Couldn't read file %s", name);
     length = fileinfo.st_size;
     buf = Z_Malloc (length, PU_STATIC, NULL);
-    count = read (handle, buf, length);
-    close (handle);
+    count = Read (handle, buf, length);
+    Close (handle);
 	
     if (count < length)
 	I_Error ("Couldn't read file %s", name);
@@ -1047,7 +1047,7 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
     short         *s;
     unsigned char  tgahead[18], *cr, *cb, c;
 
-    if ((fn = open(filename, O_RDWR | O_BINARY | O_CREAT | O_TRUNC, 0666)) != -1)
+    if ((fn = Open(filename, O_RDWR | O_BINARY | O_CREAT | O_TRUNC, 0666)) != -1)
        {
         memset(tgahead, 0, 18);
         tgahead[tga_imgtype] = 2;
@@ -1067,9 +1067,9 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
             cr += 3;
             cb += 3;
            }
-        write(fn, tgahead, 18);
-        write(fn, buffer, (width*height*3));
-        close(fn);
+        Write(fn, tgahead, 18);
+        Write(fn, buffer, (width*height*3));
+        Close(fn);
        }
    }
 
@@ -1088,7 +1088,7 @@ void M_ScreenShot(void)
 	    lbmname[5] = (i % 1000) / 100 + '0';
 	    lbmname[6] = (i % 100) / 10 + '0';
 	    lbmname[7] = i % 10 + '0';
-	    if (access(lbmname,0) == -1)
+	    if (Access(lbmname,0) == -1)
             break;	// file doesn't exist
        }
 

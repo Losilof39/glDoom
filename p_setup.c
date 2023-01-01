@@ -726,6 +726,7 @@ float InnerProduct(float *f, float *m, float *e);
 
 RECT              *SectorBBox = 0;
 
+// keeps track which walls (side) or flats are visible
 drawside_t        *DrawSide           = NULL;
 dboolean          *DrawFlat           = NULL;
 sector_plane_t   **sorted_flats       = NULL;
@@ -736,6 +737,7 @@ DW_Vertex3Dv      *Normal = 0;
 extern DW_TexList         TexList[1024];
 int                TexCount;
 
+// global list of sides, from which sorted_walls/flats are populated
 DW_Polygon        **side_polygons      = NULL;
 DW_Polygon        **sorted_walls       = NULL;
 int                 sorted_walls_count = 0;
