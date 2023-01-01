@@ -102,7 +102,7 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 #define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
 #define Access(filename, accessmode) _access(filename, accessmode)
 #else
-#define Open(filename, openflag, ...) open(filename, openflag, __VA_ARGS__)
+#define Open(filename, openflag, ...) open(filename, openflag)
 #define Close(filehandle) close(filehandle)
 #define Read(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
 #define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
