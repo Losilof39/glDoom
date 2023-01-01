@@ -24,7 +24,9 @@
 #define __DOOMTYPE__
 
 #include <stdio.h>
+#ifdef _WIN32
 #include <io.h>
+#endif
 #include <fcntl.h>
 
 // Fixed to use builtin bool type with C++.

@@ -755,14 +755,13 @@ int I_SoundIsPlaying(int handle)
 
     if (DSBuffer[handle] == 0)
         return -1;
-
-    Mix_Playing(-1);
+    
     /*if(!handle)
     {
         SDL_SetError("Failed to continue to playing the music", SDL_GetError());
     }*/
 
-    return 1;
+    return Mix_Playing(-1);
    }
 
 //
@@ -951,7 +950,7 @@ void I_InitSound()
 
     int i;
 
-    Mix_VolumeMusic(snd_MusicVolume);
+    Mix_VolumeMusic(MIX_MAX_VOLUME);
     Mix_SetSoundFonts("soundfont.sf2");
 
     // Initialize external data (all sounds) at start, keep static.
