@@ -936,7 +936,7 @@ void I_InitSound()
     int i;
 
     Mix_VolumeMusic(MIX_MAX_VOLUME);
-    Mix_SetSoundFonts("SC-55.sf2");
+    Mix_SetSoundFonts("soundfont.sf2");
 
     // Initialize external data (all sounds) at start, keep static.
     fprintf(stderr, "I_InitSound: ");
