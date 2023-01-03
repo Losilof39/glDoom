@@ -72,9 +72,6 @@
     <ClCompile Include="i_cd.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="i_midi.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="i_net.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -103,9 +100,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="m_misc.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="m_music.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="m_random.c">
@@ -344,12 +338,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="hu_stuff.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="i_cd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="i_midi.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="i_net.h">

@@ -1,3 +1,4 @@
+#if 0
 // Global define needed for calling these functions
 //#include <windows.h>
 #include <stdio.h>
@@ -967,3 +968,4 @@ MMRESULT midiOutClose( HMIDIOUT hMidiOut );
 
 */
  
+#endif

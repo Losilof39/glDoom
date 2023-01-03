@@ -291,7 +291,6 @@
     <ClCompile Include="hu_stuff.c" />
     <ClCompile Include="info.c" />
     <ClCompile Include="i_cd.c" />
-    <ClCompile Include="i_midi.c" />
     <ClCompile Include="i_net.c" />
     <ClCompile Include="i_system.c" />
     <ClCompile Include="lights.c" />
@@ -303,7 +302,6 @@
     <ClCompile Include="m_fixed.c" />
     <ClCompile Include="m_menu.c" />
     <ClCompile Include="m_misc.c" />
-    <ClCompile Include="m_music.c" />
     <ClCompile Include="m_random.c" />
     <ClCompile Include="m_swap.c" />
     <ClCompile Include="p_ceilng.c" />
@@ -385,8 +383,6 @@
     <ClInclude Include="hu_lib.h" />
     <ClInclude Include="hu_stuff.h" />
     <ClInclude Include="info.h" />
-    <ClInclude Include="i_cd.h" />
-    <ClInclude Include="i_midi.h" />
     <ClInclude Include="i_net.h" />
     <ClInclude Include="i_sound.h" />
     <ClInclude Include="i_system.h" />

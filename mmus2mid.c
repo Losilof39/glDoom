@@ -772,13 +772,10 @@ void mus2mid(unsigned char* data)
     memcpy(&MUSh, data, sizeof(MUSheader));
     //fread(&MUSh,sizeof(MUSheader),1,musst);
     mus = malloc(MUSh.ScoreLength+MUSh.ScoreStart);
+
     if (mus)
-    {
-      //fseek(musst,0,SEEK_SET);
-      //fread(mus,MUSh.ScoreLength+MUSh.ScoreStart,1,musst);
       memcpy(mus, data, MUSh.ScoreLength + MUSh.ScoreStart);
-      //fclose(musst);
-    }
+
     err = mmus2mid(mus,&mididata,89,1);
     if (err)
     {
