@@ -15,20 +15,19 @@ This repository contains improvements for glDoom port
 * Ported to Linux but it's not stable
 
 ## Current Problems
-1. No sound fx and music :(
-2. Mouse and joystick are not supported (for now)
-3. Settings are not saved in a separate file or read from
-4. Multiplayer doesn't work
+* Mouse and joystick are not supported (for now)
+* Multiplayer doesn't work
+* Crash when 2nd demo starts playing
+* Sound FX stutters
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
 
 1. Remove all unused code and make code more readable
-2. Replace current sound/audio subsystem with SDL2 (bye bye DirectSound)
-3. Fix palette updates when picking up items
-4. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
-5. Cleaning up the OpenGL code and moving some things to shaders (MAYBE IN THE FUTURE)
-6. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL (MAYBE IN THE FUTURE)
+2. Fix palette updates when picking up items
+3. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
+4. Write new OpenGL renderer that will use modern features from 4.5 and replace the Legacy one
+5. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
