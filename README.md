@@ -13,9 +13,11 @@ This repository contains improvements for glDoom port
 * Addition of the score system code from WINDOOM
 * Cleaned up all Win32 code and added a SDL2 backend
 * Ported to Linux but it's not stable
+* Now supporting mouse (still a bit janky)
 
 ## Current Problems
-* Mouse and joystick are not supported (for now)
+* Joystick is not supported (for now)
+* No vertical mouse look movement
 * Multiplayer doesn't work
 * Crash when 2nd demo starts playing
 * Sound FX stutters
@@ -32,7 +34,7 @@ I am planning for this port, the following (in order of priority)
 Plus more!
 
 ### Why
-The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom or PRBoom, it's history and legacy is an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use.
+The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom or PRBoom, it's history and legacy is an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39) is a great way to learn how a large project like Doom is organized, coded and I'm honored to maintain this great work of art alive and bring new feature ( in the future ;) ).
 
 ## Compiling
 
