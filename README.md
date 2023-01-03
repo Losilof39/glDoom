@@ -18,7 +18,6 @@ This repository contains improvements for glDoom port
 ## Current Problems
 * Joystick is not supported (for now)
 * No vertical mouse look movement
-* 
 * Multiplayer doesn't work
 * Crash when 2nd demo starts playing
 * Sound FX stutters
