@@ -204,7 +204,7 @@
     <ClCompile Include="savepic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="snd_dx.c">
+    <ClCompile Include="i_sound.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sounds.c">
@@ -250,6 +250,9 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="thirdparty\glad\src\glad.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="mmus2mid.c">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -502,6 +505,21 @@
     <ClInclude Include="resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="mmus2mid.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\glad\include\glad\glad.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\glad\include\KHR\khrplatform.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\SDL2\include\begin_code.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\SDL2\include\close_code.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="gldfont.bin">
@@ -513,14 +531,21 @@
     <None Include="Playpal.bin">
       <Filter>Resource Files</Filter>
     </None>
+    <None Include="docs\gldoom.doc" />
   </ItemGroup>
   <ItemGroup>
-    <Text Include="controls.txt" />
-    <Text Include="doomflaw.txt" />
-    <Text Include="doomnet.txt" />
-    <Text Include="newlumps.txt" />
-    <Text Include="relnotes_94e.txt" />
-    <Text Include="TodoList.txt" />
+    <Text Include="docs\changelog.txt" />
+    <Text Include="docs\controls.txt" />
+    <Text Include="docs\doomflaw.txt" />
+    <Text Include="docs\DOOMLIC.TXT" />
+    <Text Include="docs\newlumps.txt" />
+    <Text Include="docs\readme.bal.txt" />
+    <Text Include="docs\readme.bill.txt" />
+    <Text Include="docs\readme.dos.txt" />
+    <Text Include="docs\readme.matrox.txt" />
+    <Text Include="docs\relnotes_94d.txt" />
+    <Text Include="docs\relnotes_94e.txt" />
+    <Text Include="docs\TodoList.txt" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="glDoom.ico">

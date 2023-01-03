@@ -560,7 +560,7 @@ win_defaulti_t wdefaultv[] =
     d_value, "autorun",          &autorun,            0,
     d_value, "nosound",          &nosound_t,          0,
     d_value, "mvert",            &mvert,              1,
-    d_value, "mlook",            &mlook,              0,
+    d_value, "mlook",            &mlook,              1,
     d_value, "keylink",          &keylink,            1,
     d_value, "gl_fog",           &gl_fog,             1,
     d_value, "gl_poffsetf",      &gl_poffsetf,        255,

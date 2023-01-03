@@ -334,7 +334,7 @@
     <ClCompile Include="r_sky.c" />
     <ClCompile Include="r_things.c" />
     <ClCompile Include="savepic.c" />
-    <ClCompile Include="snd_dx.c" />
+    <ClCompile Include="i_sound.c" />
     <ClCompile Include="sounds.c" />
     <ClCompile Include="st_lib.c" />
     <ClCompile Include="st_stuff.c" />
