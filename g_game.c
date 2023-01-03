@@ -367,7 +367,7 @@ dboolean		mousearray[4];
 dboolean*	mousebuttons = &mousearray[1];		// allow [-1]
 
 // mouse values are used once 
-int             mousex;
+int     mousex;
 int		mousey;         
 
 int             dclicktime;
@@ -431,7 +431,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
 	
     cmd->consistancy = consistancy[consoleplayer][maketic%BACKUPTICS]; 
  
-    strafe = gamekeydown[key_strafe] || mousebuttons[mousebstrafe] || joybuttons[joybstrafe]; 
+    strafe = gamekeydown[key_strafe]; //|| mousebuttons[mousebstrafe] || joybuttons[joybstrafe]; 
     if ((joybspeed == 31) || (autorun == true))
        speed = 1;
     else
@@ -604,11 +604,11 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     */
 
     // mouse
-    if (mousebuttons[mousebforward]) 
-        forward += forwardmove[speed];
+    /*if (mousebuttons[mousebforward]) 
+        forward += forwardmove[speed];*/
     
     // forward double click
-    if (mousebuttons[mousebforward] != dclickstate && dclicktime > 1 ) 
+    /*if (mousebuttons[mousebforward] != dclickstate && dclicktime > 1 ) 
        { 
         dclickstate = mousebuttons[mousebforward]; 
         if (dclickstate) 
@@ -629,10 +629,10 @@ void G_BuildTiccmd (ticcmd_t* cmd)
             dclicks = 0; 
             dclickstate = 0; 
            } 
-       }
+       }*/
     
     // strafe double click
-    bstrafe = mousebuttons[mousebstrafe] || joybuttons[joybstrafe]; 
+    /*bstrafe = mousebuttons[mousebstrafe] || joybuttons[joybstrafe]; 
     if (bstrafe != dclickstate2 && dclicktime2 > 1 ) 
        { 
         dclickstate2 = bstrafe; 
@@ -654,12 +654,12 @@ void G_BuildTiccmd (ticcmd_t* cmd)
             dclicks2 = 0; 
             dclickstate2 = 0; 
            } 
-       } 
+       } */
  
-    forward += mousey; 
-    if (strafe) 
+    //forward += mousey; 
+    /*if (strafe) 
         side += mousex*2; 
-    else 
+    else */
         cmd->angleturn -= mousex*0x8; 
 
     mousex = mousey = 0;
@@ -844,15 +844,15 @@ dboolean G_Responder(event_t* ev)
                  gamekeydown[ev->data1] = false; 
              return false;   // always let key up events filter down 
 		 
-        //case ev_mouse: 
-        //     mousebuttons[0] = ev->data1 & 1; 
-        //     mousebuttons[1] = ev->data1 & 2; 
-        //     mousebuttons[2] = ev->data1 & 4; 
-        //     //mousex = ev->data2*(mouseSensitivity+5)/10; 
-        //     //mousey = ev->data3*(mouseSensitivity+5)/10; 
-        //     mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
-        //     mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
-        //     return true;    // eat events 
+        case ev_mouse: 
+             mousebuttons[0] = ev->data1; 
+             mousebuttons[1] = 0; 
+             mousebuttons[2] = 0; 
+             //mousex = ev->data2*(mouseSensitivity+5)/10; 
+             //mousey = ev->data3*(mouseSensitivity+5)/10; 
+             mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
+             mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
+             return true;    // eat events 
  
         //case ev_joystick: 
         //     joybuttons[0] = ev->data1 & 1; 

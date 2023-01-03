@@ -386,6 +386,9 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
                                video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
 
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
+
     if (!pWindow)
     {
         con_printf("Failed to create a SDL window!");

@@ -9,12 +9,15 @@
 #include "gconsole.h"
 #include "sdl_kbrd.h"
 #include "d_event.h"
+#include "v_video.h"
 
 dboolean         joystickavail = false;
 dboolean         mouseavail    = false;
 
 extern int       usejoystick;
 extern int       usemouse;
+extern SDL_Window* pWindow;
+extern video_t   video;
 
 Uint8* keystates[256] = { false };
 
@@ -39,18 +42,11 @@ dboolean I_InitInputs(void)
            {
             con_printf("Joystick not detected...\n");
            }
-       }
+       }*/
     if ((usemouse) && (!mouseavail))
        {
-        if (I_SetupMouse())
-           {
-            mouseavail = true;
-           }
-        else
-           {
-            con_printf("Mouse initialization failed...\n");
-           }
-       }*/
+         mouseavail = true;
+       }
     return true;
    }
 
@@ -58,6 +54,10 @@ void I_CheckInputs(void)
    {
     event_t event;
     SDL_Event ev;
+
+    SDL_MouseMotionEvent mouse_motion = { 0 };
+    SDL_MouseButtonEvent mouse_button = { 0 };
+
     while (SDL_PollEvent(&ev))
     {
         switch (ev.type)
@@ -151,19 +151,56 @@ void I_CheckInputs(void)
             keystates[ev.key.keysym.scancode] = 0;
         }break;
 
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+        case SDL_MOUSEMOTION:
+        {
+
+            if (!(mouse_motion.x - ev.motion.x) && !(mouse_motion.y - ev.motion.y))
+                break;
+
+            event.type = ev_mouse;
+            mouse_motion.x = ev.motion.xrel;
+            mouse_motion.y = ev.motion.yrel;
+
+            if (ev.type == SDL_MOUSEBUTTONDOWN)
+            {
+                switch (ev.button.button)
+                {
+                    case SDL_BUTTON_LEFT:
+                    {
+                        event.data1 = 1;
+                    }break;
+                }
+            }
+            else if (ev.type == SDL_MOUSEBUTTONUP)
+            {
+                event.data1 = 0;
+            }
+
+            event.data2 = mouse_motion.x;
+            event.data3 = mouse_motion.y;
+
+            D_PostEvent(&event);
+
+        }break;
+
         default:
             break;
         }
+
+
     }
 
     /*if ((usejoystick) && (joystickavail))
        {
         I_CheckJoysticks();
        }*/
-    /*if ((usemouse) && (mouseavail))
+    if ((usemouse) && (mouseavail))
        {
         I_CheckMouse();
-       }*/
+       }
+
     I_CheckKeyboard();
    }
 
