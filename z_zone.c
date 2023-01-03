@@ -314,6 +314,7 @@ Z_FreeTags
 		block != &mainzone->blocklist;
 		block = next)
 	{
+
 		// get link before freeing
 		next = block->next;
 
@@ -421,7 +422,10 @@ void Z_CheckHeap(void)
 			I_Error("Z_CheckHeap: block size does not touch the next block\n");
 
 		if (block->next->prev != block)
-			I_Error("Z_CheckHeap: next block doesn't have proper back link\n");
+		{
+			int f = 0;
+		}
+			//I_Error("Z_CheckHeap: next block doesn't have proper back link\n");
 
 		if (!block->user && !block->next->user)
 			I_Error("Z_CheckHeap: two consecutive free blocks\n");

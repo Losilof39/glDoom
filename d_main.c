@@ -160,7 +160,7 @@ extern      int nosound, nosound_t;
 
 char		wadfile[1024];		// primary wad file
 char		mapdir[1024];           // directory of development maps
-char		basedefault[1024];      // default file
+char	*basedefault = "default.cfg";      // default file
 
 
 void D_CheckNetGame (void);
@@ -1370,10 +1370,10 @@ void D_DoomMain (void)
     
     if (M_CheckParm("-cdrom"))
        {
-        con_printf(D_CDROM);
-        //mkdir("c:\\doomdata",0); // What's the ",0" for? Oh yeah, permissions...
-        //_mkdir("c:\\doomdata");
-        strcpy (basedefault,"c:/doomdata/default.cfg");
+        //con_printf(D_CDROM);
+        ////mkdir("c:\\doomdata",0); // What's the ",0" for? Oh yeah, permissions...
+        ////_mkdir("c:\\doomdata");
+        //strcpy (basedefault,"default.cfg");
        }	
     
     // turbo option

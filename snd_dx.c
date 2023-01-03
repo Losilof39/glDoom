@@ -83,9 +83,6 @@ rcsid[] = "$Id: i_unix.c,v 1.5 1997/02/03 22:45:10 b1 Exp $";
 #define NUM_SOUND_FX 128
 #define SB_SIZE      20480
 
-// record all sfx that are playing or not
-DSBuffer[NUM_DSBUFFERS];
-
 //LPDIRECTSOUND        lpDS;
 //LPDIRECTSOUNDBUFFER  lpDSPrimary;
 //LPDIRECTSOUNDBUFFER  lpDSBuffer[NUM_DSBUFFERS];
@@ -276,6 +273,10 @@ int         speeds[NUMSFX];
 
 // The actual output device.
 int	audio_fd;
+
+// record all sfx that are playing or not
+DSBuffer[NUM_CHANNELS];
+int active_channel_count = 0;
 
 // The global mixing buffer.
 // Basically, samples from all active internal channels
@@ -952,6 +953,7 @@ void I_InitSound()
 
     Mix_VolumeMusic(MIX_MAX_VOLUME);
     Mix_SetSoundFonts("soundfont.sf2");
+    Mix_AllocateChannels(NUM_CHANNELS);
 
     // Initialize external data (all sounds) at start, keep static.
     fprintf(stderr, "I_InitSound: ");

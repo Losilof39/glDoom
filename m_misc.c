@@ -772,8 +772,8 @@ default_t	defaults[] =
 };
 */
 
-int	numdefaults;
-char*	defaultfile;
+int	numdefaults = 134;
+const char* defaultfile = "default.cfg";
 
 char DoomDir[128], szValue[32];
 void GetCfgName(void);
@@ -784,53 +784,29 @@ void GetCfgName(void);
 void M_SaveDefaults (void)
    {
     int		i;
-/*
     int		v;
-    FILE*	f;
-*/
-	
-    /*GetCfgName();
+    FILE* f;
 
-    nosound_t = nosound;
-
-    i = 0;
-    while (wdefaultv[i].deftype != d_finished)
-       {
-        sprintf(szValue, "%d", *wdefaultv[i].location);
-        WritePrivateProfileString("DEFAULTS", wdefaultv[i].name, szValue, DoomDir);
-        i++;
-       }
-
-    i = 0;
-    while (wdefaults[i].deftype != d_finished)
-       {
-        if (wdefaults[i].deftype == d_string)
-           {
-            WritePrivateProfileString("DEFAULTS", wdefaults[i].name, wdefaults[i].contents, DoomDir);
-           }
-        i++;
-       }*/
-
-    /*
-    f = fopen (defaultfile, "w");
+    f = fopen(defaultfile, "w");
     if (!f)
-	return; // can't write the file, but don't complain
-		
-    for (i=0 ; i<numdefaults ; i++)
+        return; // can't write the file, but don't complain
+
+    while(1)
     {
-	if (defaults[i].defaultvalue > -0xfff
-	    && defaults[i].defaultvalue < 0xfff)
-	{
-	    v = *defaults[i].location;
-	    fprintf (f,"%s\t\t%i\n",defaults[i].name,v);
-	} else {
-	    fprintf (f,"%s\t\t\"%s\"\n",defaults[i].name,
-		     * (char **) (defaults[i].location));
-	}
+        if (wdefaultv[i].deftype == d_finished)
+            break;
+
+        if (wdefaultv[i].defvalue > -0xfff
+            && wdefaultv[i].defvalue < 0xfff)
+        {
+            v = *wdefaultv[i].location;
+            fprintf(f, "%s\t\t%i\n", wdefaultv[i].name, v);
+        }
+
+        i++;
     }
-	
-    fclose (f);
-*/
+
+    fclose(f);
    }
 
 
@@ -877,40 +853,87 @@ void GetCfgName()
 
 void M_LoadDefaults (void)
 {
-    int		i;
+    //int		i;
 
-    //int		len;
-    //FILE*	f;
-    //char	def[80];
-    //char	strparm[100];
-    //char*	newstring;
-    //int		parm;
-    //dboolean	isstring;
-    //
-
-    //GetCfgName();
-
-    // i dunno why this works..
-    i = 0;
-    while (wdefaultv[i].deftype != d_finished)
-       {
-        *wdefaultv[i].location = wdefaultv[i].defvalue;
-        i++;
-       }
-
+    ////// i dunno why this works..
     //i = 0;
-    //while (wdefaults[i].deftype != d_finished)
+    //while (wdefaultv[i].deftype != d_finished)
     //   {
-    //    GetPrivateProfileString("DEFAULTS", wdefaults[i].name, wdefaults[i].defvalue,
-    //                            wdefaults[i].contents, wdefaults[i].max, DoomDir);
+    //    *wdefaultv[i].location = wdefaultv[i].defvalue;
     //    i++;
     //   }
-    ////GetPrivateProfileString("MULTIPLAYER", "PLAYERNAME", "PLAYER", playername, 18, DoomDir);
-    //i = 0;
 
-    if (nosound == true)
-        nosound_t = nosound;
-   }
+    int		i;
+    int		len;
+    FILE* f;
+    char	def[80];
+    char	strparm[100];
+    char* newstring;
+    int		parm;
+    dboolean	isstring;
+
+    // set everything to base values
+    numdefaults = sizeof(wdefaultv) / sizeof(wdefaultv[0]);
+    for (i = 0; i < numdefaults; i++)
+    {
+        if (wdefaultv[i].deftype == d_finished)
+            break;
+
+        *wdefaultv[i].location = wdefaultv[i].defvalue;
+    }
+
+    // check for a custom default file
+    i = M_CheckParm("-config");
+    if (i && i < myargc - 1)
+    {
+        defaultfile = myargv[i + 1];
+        printf("	default file: %s\n", defaultfile);
+    }
+    else
+        defaultfile = basedefault;
+
+    // read the file in, overriding any set defaults
+    f = fopen(defaultfile, "r");
+    if (f)
+    {
+        while (!feof(f))
+        {
+            isstring = false;
+            if (fscanf(f, "%79s %[^\n]\n", def, strparm) == 2)
+            {
+                if (strparm[0] == '"')
+                {
+                    // get a string default
+                    isstring = true;
+                    len = strlen(strparm);
+                    newstring = (char*)malloc(len);
+                    strparm[len - 1] = 0;
+                    strcpy(newstring, strparm + 1);
+                }
+                else if (strparm[0] == '0' && strparm[1] == 'x')
+                    sscanf(strparm + 2, "%x", &parm);
+                else
+                    sscanf(strparm, "%i", &parm);
+                for (i = 0; i < numdefaults; i++) {
+                    if (wdefaultv[i].deftype == d_finished)
+                        break;
+
+                    if (!strcmp(def, wdefaultv[i].name))
+                    {
+                        if (!isstring)
+                            *wdefaultv[i].location = parm;
+                        else
+                            *wdefaultv[i].location =
+                            (int)newstring;
+                        break;
+                    }
+                }
+            }
+        }
+
+        fclose(f);
+    }
+ }
 
 /*
 snd_musicdevice		3
