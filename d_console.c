@@ -51,8 +51,12 @@ extern cheatseq_t	cheat_mypos;
 
 void M_WriteText(int x, int y, char *string);
 
-#if _WIN32
+#ifdef _WIN32
+#ifdef OLD_WIN32
 #define strnicmp strnicmp
+#else
+#define strnicmp _strnicmp
+#endif
 #else
 #define strnicmp strncasecmp
 #endif
@@ -1025,7 +1029,7 @@ dboolean GiveItems(char *cmd)
 dboolean MidiCommand(char *cmd)
    {
     if ((D_strcasecmp(cmd, "pause") == 0) || (D_strcasecmp(cmd, "resume") == 0))
-        PauseResumeMusic();
+        //PauseResumeMusic();
     return false;
    }
 
@@ -1060,7 +1064,7 @@ dboolean ShowPosition(char *cmd)
     return false;
    }
 
-
+/*
 con_command_t cd_commands[] = { "on",     0, PlayCDMusic,       "starts cd playback",
                                 "play",   0, PlayCDMusic,       "starts cd playback",
                                 "pause",  0, PauseResumeMusic,  "pauses/resumes music playback",
@@ -1072,10 +1076,11 @@ con_command_t cd_commands[] = { "on",     0, PlayCDMusic,       "starts cd playb
                                 "prev",   0, PlayPrevSong,      "plays previous cut on CD",
                                 "-",      0, PlayPrevSong,      "plays previous cut on CD",
                                 0, 0, 0, 0 };
+*/
 
 dboolean CDCommand(char *cmd)
    {
-    int i;
+    /*int i;
 
     // Control the CD Player...
     for (i = 0; cd_commands[i].keyword != 0; i++)
@@ -1098,7 +1103,7 @@ dboolean CDCommand(char *cmd)
        }
     if (isdigits(cmd) && (strlen(cmd) < 3))
         PlayCDTrack(atoi(cmd));
-    return false;
+    return false;*/
    }
 
 char *NewMapSyntax[] = { "Syntax: MAP EXMY (X = episode & Y = mission)",

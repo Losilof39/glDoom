@@ -1,4 +1,4 @@
-#ifndef CDDEF
+/*#ifndef CDDEF
    #define CDDEF 1
 
 #include "doomtype.h"
@@ -33,3 +33,4 @@ void  CDClose(CD_Data_t *cdd);
 
 #endif
 
+*/

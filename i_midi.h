@@ -1,3 +1,4 @@
+#if 0
 #ifndef MIDIDEF
    #define MIDIDEF 1
 
@@ -74,3 +75,4 @@ int qmus2mid( const char *mid, int nodisplay, unsigned short division, int Buffe
 #endif
 
 
+#endif

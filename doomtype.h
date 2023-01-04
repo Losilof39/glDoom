@@ -20,22 +20,24 @@
 //    
 //-----------------------------------------------------------------------------
 
-//#ifdef WIN32
-//#include <windows.h>
-//#endif
-
-#include <stdio.h>
-
 #ifndef __DOOMTYPE__
 #define __DOOMTYPE__
 
-#ifndef __BYTEBOOL__
-#define __BYTEBOOL__
+#include <stdio.h>
+#ifdef _WIN32
+#include <io.h>
+#endif
+#include <fcntl.h>
+
 // Fixed to use builtin bool type with C++.
 #ifdef __cplusplus
 typedef bool dboolean;
 #else
-typedef enum { false, true } dboolean;
+typedef enum 
+{ 
+    false, 
+    true 
+} dboolean;
 #endif
 typedef unsigned char byte;
 
@@ -45,7 +47,6 @@ typedef unsigned char byte;
       typedef long long    DLONG;
       typedef unsigned short WORD;
       typedef unsigned char BYTE;
-#endif
 
 // win32 structs manually defined to be more portable
 typedef struct BITMAPFILEHEADER {
@@ -89,7 +90,25 @@ typedef struct RECT {
 #endif
 
 #define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
+
+
 static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(handle); fseek(handle, 0L, SEEK_SET); return sz; }
+
+#if defined(_WIN32)
+#define Open(filename, openflag, ...) _open(filename, openflag, __VA_ARGS__)
+#define Close(filehandle) _close(filehandle)
+#define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
+#define LSeek(filehandle, offset, origin) _lseek(filehandle, offset, origin)
+#define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
+#define Access(filename, accessmode) _access(filename, accessmode)
+#else
+#define Open(filename, openflag, ...) open(filename, openflag)
+#define Close(filehandle) close(filehandle)
+#define Read(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
+#define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
+#define Write(filehandle, buf, maxcharcount) write(filehandle, buf, maxcharcount)
+#define Access(filename, accessmode) access(filename, accessmode)
+#endif
 
 //#define strcasecmp strcmp
 //#define strncasecmp strncmp

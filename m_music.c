@@ -1,3 +1,4 @@
+#if 0
 /////////////////////////////////////////////////////////////////////////////////////
 // Windows Includes...
 /////////////////////////////////////////////////////////////////////////////////////
@@ -14,14 +15,15 @@
 #include <fcntl.h>
 #include "sys_sdl.h"
 
-#include "i_cd.h"      // My own cdaudio "library"
+//#include "i_cd.h"      // My own cdaudio "library"
 #include "i_midi.h"    // My own midi "library"
 
 //extern windata_t WinData;
 void lfprintf(char *message, ... );
 
-CD_Data_t   CDData;
-MIDI_Data_t MidiData;
+//CD_Data_t   CDData;
+//MIDI_Data_t MidiData;
+
 
 void GetCDInfo()
    {
@@ -278,3 +280,4 @@ void StopMusic()
        }*/
    }
 
+#endif

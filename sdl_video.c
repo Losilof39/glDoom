@@ -49,7 +49,7 @@ void GetModeList(char *dbgname)
     }
     fprintf(fn, "Mode count : %d\n", display_mode_count);
     fprintf(fn, "General Video Mode List\n");
-    fprintf(fn, "Mode Width x Height x Color Bits - Refresh - Reboot?\n");
+    fprintf(fn, "Mode Width x Height x Color Bits - Refresh\n");
 
     for (i = 0; i < display_mode_count; ++i) 
     {
@@ -60,10 +60,15 @@ void GetModeList(char *dbgname)
 
         f = mode.format;
 
-        con_printf(fn, "%2d    %4d    %4d        %2d          %2d\n",
-            i, SDL_BITSPERPIXEL(f),
-            SDL_GetPixelFormatName(f),
-            mode.w, mode.h);
+        con_printf("%d - %d x %d\tBpp: %d - %d Hz\n",
+            i, mode.w, mode.h,
+            SDL_BITSPERPIXEL(f),
+            mode.refresh_rate );
+
+        fprintf(fn, "%d - %d x %d\tBpp: %d - %d Hz\n",
+            i, mode.w, mode.h,
+            SDL_BITSPERPIXEL(f),
+            mode.refresh_rate);
     }
     /*DEVMODE devmode;
     int     iVideoMode;

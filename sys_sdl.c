@@ -97,11 +97,10 @@ extern byte *screens[5];
 extern GameMode_t gamemode;
 
 char         szMsgText[2048];
+char         window_title[50];
 
 extern devinfo_t DevInfo;
 
-extern       CD_Data_t   CDData;
-extern       MIDI_Data_t MidiData;
 extern       video_t     video;
 
 char        szMidiFile[] = "doomsong.mid";
@@ -112,7 +111,7 @@ dboolean        bQuit = false;
 
 void  Cleanup(void);
 void  InitData();
-void  ParseCommand(char*);
+void  ParseCommand(int,char**);
 void  EvaluateParameters(char*);
 dboolean  CreateMainWindow( int, int, int, dboolean);
 
@@ -157,7 +156,7 @@ int main(int argc, char** szCmdLine)
     ClearLog(szDbgName);
 
     // parse up the command line...
-    ParseCommand(szCmdLine);
+    ParseCommand(argc, szCmdLine);
 
     FindResponseFile();
 
@@ -170,12 +169,7 @@ int main(int argc, char** szCmdLine)
 
     // We get the current video setup here.
     //GetVideoInfo();
-
-    lfprintf("Current resolution: %d x %d x %d bpp\n",DevInfo.width,DevInfo.height,DevInfo.bpp);
-
-    lfprintf("Resolution requested: %d x %d x %d bpp\n",video.width,video.height,video.bpp);
-    
-    //GetModeList(szDbgName);
+   
     
     // This builds up the list of available video modes for the OpenGL renderer
     /*GetModeList(szDbgName);
@@ -200,6 +194,13 @@ int main(int argc, char** szCmdLine)
 
     // Create the main program window, start up OpenGL and create our viewport
     CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen);
+
+    GetVideoInfo();
+    GetModeList(szDbgName);
+
+    /*lfprintf("Current resolution: %d x %d x %d bpp\n", DevInfo.width, DevInfo.height, DevInfo.bpp);
+    lfprintf("Resolution requested: %d x %d x %d bpp\n", video.width, video.height, video.bpp);*/
+
        /*{
         ChangeDisplaySettings(0, 0);
         MessageBox(NULL, "Unable to create main window.\nProgram will now end.", "FATAL ERROR", MB_OK);
@@ -207,19 +208,14 @@ int main(int argc, char** szCmdLine)
         return 0;
        }*/
 
-    /*if (video.fullscreen == FALSE)
+    if (video.fullscreen == false)
        {
-        mPoint.x = video.width/2;
-        mPoint.y = video.height/2;
-        ClientToScreen( WinData.hWnd, &mPoint);
-        SetCursorPos(mPoint.x, mPoint.y);
-        SetCapture(WinData.hWnd);
         con_printf("Display: %dx%d\n", video.width, video.height);
        }
     else
        {
         con_printf("Display: %dx%dx%d bpp\n", video.width, video.height, video.bpp);
-       }*/
+       }
 
     bQuit = false;
 
@@ -377,10 +373,18 @@ void Cleanup()
 
 dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 {
-    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
         printf("Failed to init SDL");
+ 
+    sprintf(&window_title, "GLDoom %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 
-    pWindow = SDL_CreateWindow("GLDOOM", 500, 100, video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+    pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
+                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+
+    SDL_SetRelativeMouseMode(SDL_TRUE);
+    SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
+
+    SDL_SetWindowFullscreen(pWindow, fullscreen);
 
     if (!pWindow)
     {
@@ -418,12 +422,6 @@ void InitData()
     video.nearclip = 1.5f;
     video.farclip = 5000.0f;
 
-    // Setup CD sub-system
-    CDData.CDStatus = cd_empty;
-    CDData.CDMedia = false;
-    CDData.CDPosition = 0;
-    CDData.CDCode[0] = '\0';
-
     // Set user "definable" data
     video.allowsoft     = false;
     video.width         = DEF_WIDTH;
@@ -458,9 +456,9 @@ void InitData()
 
 
 // could just do myargc = __argc and myargv = __argv
-void ParseCommand(char* szCmdLine)
+void ParseCommand(int argc, char** szCmdLine)
    {
-    char* s;
+    int i = 1;
     char cwd[_MAX_PATH];
 
 #ifdef _WIN32
@@ -473,11 +471,10 @@ void ParseCommand(char* szCmdLine)
     
     M_AddParm(cwd);
 
-    s = strtok(szCmdLine, " ");
-    while (s != NULL)
+    while (i <= argc)
        {
-        M_AddParm(s);
-        s = strtok(NULL, " ");
+        M_AddParm(*szCmdLine++);
+        i++;
        }
    }
 
@@ -501,6 +498,12 @@ void EvaluateParameters(char* szCmdLine)
        {
         video.fullscreen = false;
        }
+
+    p = M_CheckParm("-fullscreen");
+    if (p)
+    {
+        video.fullscreen = true;
+    }
 
     p = M_CheckParm("-width");
     if (p && p < myargc-1)
@@ -572,7 +575,7 @@ void glDoomExit()
 
     con_shutdown();
     I_ShutdownInputs();
-    StopMusic();
+    //StopMusic();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
    };

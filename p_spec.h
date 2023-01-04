@@ -333,14 +333,14 @@ void    P_ActivateInStasis(int tag);
 //
 typedef enum
 {
-    normal,
-    close30ThenOpen,
-    close,
-    open,
-    raiseIn5Mins,
-    blazeRaise,
-    blazeOpen,
-    blazeClose
+    dr_normal,
+    dr_close30ThenOpen,
+    dr_close,
+    dr_open,
+    dr_raiseIn5Mins,
+    dr_blazeRaise,
+    dr_blazeOpen,
+    dr_blazeClose
 
 } vldoor_e;
 

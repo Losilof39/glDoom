@@ -11,6 +11,22 @@
 #include <fcntl.h>
 #include <malloc.h>
 
+#if defined(_WIN32)
+#define Open(filename, openflag, ...) _open(filename, openflag, __VA_ARGS__)
+#define Close(filehandle) _close(filehandle)
+#define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
+#define LSeek(filehandle, offset, origin) _lseek(filehandle, offset, origin)
+#define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
+#define Access(filename, accessmode) _access(filename, accessmode)
+#else
+#define Open(filename, openflag, ...) open(filename, openflag, __VA_ARGS__)
+#define Close(filehandle) close(filehandle)
+#define Read(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
+#define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
+#define Write(filehandle, buf, maxcharcount) write(filehandle, buf, maxcharcount)
+#define Access(filename, accessmode) access(filename, accessmode)
+#endif
+
 int           columns;
 unsigned char *image;
 
@@ -87,15 +103,15 @@ void SavePic(int x, int y, unsigned char *texels, char *filename)
     vo = ho = 0;
 
     // open the file to save the "lump" in
-    fn = open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
-    write(fn, &w, sizeof(short));
-    write(fn, &h, sizeof(short));
-    write(fn, &vo, sizeof(short));
-    write(fn, &ho, sizeof(short));
-    write(fn, columns, sizeof(int)*x);
-    write(fn, image, ((p-image)+1));
+    fn = Open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
+    Write(fn, &w, sizeof(short));
+    Write(fn, &h, sizeof(short));
+    Write(fn, &vo, sizeof(short));
+    Write(fn, &ho, sizeof(short));
+    Write(fn, columns, sizeof(int)*x);
+    Write(fn, image, ((p-image)+1));
     // close the output file
-    close(fn);
+    Close(fn);
 
     // free the output image
     free(image);

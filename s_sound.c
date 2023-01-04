@@ -579,6 +579,7 @@ void S_UpdateSounds(void* listener_p)
 	}
 	nextcleanup = gametic + 15;
     }*/
+    I_UpdateSound();
     
     for (cnum=0 ; cnum<numChannels ; cnum++)
     {
