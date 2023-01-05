@@ -12,24 +12,24 @@ This repository contains improvements for glDoom port
 * Cleanups for modern types (uintptr_t, intptr_t and MSVC specific functions like (underscore)access etc..)
 * Addition of the score system code from WINDOOM
 * Cleaned up all Win32 code and added a SDL2 backend
-* Ported to Linux but it's not stable
+* Ported to Linux but it's not stable yet
 * Now supporting mouse (still a bit janky)
+* Audio is rewritten using SDL2 and taken from chocolate doom
 
 ## Current Problems
 * Joystick is not supported (for now)
 * No vertical mouse look movement
 * Multiplayer doesn't work
-* Crash when 2nd demo starts playing
-* Sound FX stutters
+* Menu setup doesn't display correctly the keybindings (font problem)
+* Can't play any custom WAD
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
 
 1. Remove all unused code and make code more readable
-2. Fix palette updates when picking up items
-3. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
-4. Write new OpenGL renderer that will use modern features from 4.5 and replace the Legacy one
-5. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+2. Allowing the user to select the resolution and fullscreen/window within glDoom's menu
+3. Write new OpenGL renderer that will use modern features from 4.5 and replace the Legacy one
+4. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
