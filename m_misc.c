@@ -853,16 +853,6 @@ void GetCfgName()
 
 void M_LoadDefaults (void)
 {
-    //int		i;
-
-    ////// i dunno why this works..
-    //i = 0;
-    //while (wdefaultv[i].deftype != d_finished)
-    //   {
-    //    *wdefaultv[i].location = wdefaultv[i].defvalue;
-    //    i++;
-    //   }
-
     int		i;
     int		len;
     FILE* f;

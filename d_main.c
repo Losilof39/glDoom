@@ -52,6 +52,7 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #else
 #include <inttypes.h>
 #include <unistd.h>
+#include <dirent.h>
 #endif
 
 
@@ -1021,7 +1022,8 @@ char *D_FindNext()
 //
 void IdentifyVersion (void)
    {
-    char*    doomwad;
+    char*    doomwad[16];
+    char* candidate;
     char *c;
     char   *doomwaddir, id[4];
     int     i;
@@ -1038,7 +1040,7 @@ void IdentifyVersion (void)
     sprintf(basedefault, "%s/.doomrc", home);
 #endif
 
-    i = M_CheckParm("-game");
+    //i = M_CheckParm("-game");
     /*if (i && (i < (myargc-1)))
        {
         strcpy(gamename, myargv[i+1]);
@@ -1095,7 +1097,7 @@ void IdentifyVersion (void)
            {
             con_printf("Loading game wad: %s\n", gamename);
            }
-       }*/
+       }
 
     if (strlen(gamename) > 0)
        {
@@ -1143,7 +1145,7 @@ void IdentifyVersion (void)
     else
        {
         con_printf("No game wad specified - looking for standard WADs...\n");
-       }
+       }*/
 
     //doomwaddir = getenv("DOOMWADDIR");
     
@@ -1154,15 +1156,34 @@ void IdentifyVersion (void)
 
     for (i = 0; i < gw_other; i++)
        {
-         
-#if _WIN32
-        //sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
-#else
-        //sprintf(doomwad, "%s.wad", doomwaddir, szWadNames[i]);
-#endif
-        doomwad = "doom.wad";
 
-        if ( !Access(doomwad,R_OK) )
+#if _WIN32
+        sprintf(doomwad, "%s.wad", szWadNames[i]);
+#else
+        DIR* cwd = opendir(".");
+        if (dir == NULL)
+            I_Error("IdentifyVersion: Failed to open current directoy");
+
+        struct dirent* cur_file;
+        cur_file = readdir(cwd);
+
+        while (cur_file)
+        {
+            if (cur_file->d_type == DT_REG)
+            {
+                candidate = cur_file->d_name;
+                if (!strncmp(candidate, szWadNames[i], strlen(candidate)))
+                {
+                    strcpy(doomwad, candidate);
+                }
+            }
+            cur_file = readdir(cwd);
+        }
+
+        closedir(cwd);
+#endif
+
+        if ( !Access(doomwad, R_OK))
            {
             con_printf("Found game WAD for: %s\n", szGameNames[i]);
             strcpy(gamename, szWadNames[i]);
