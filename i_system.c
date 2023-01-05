@@ -117,7 +117,7 @@ int  I_GetTime (void)
 void I_Init (void)
 {
 // FIXME
-    I_InitSound();
+    I_InitSound(1);
     //GetCDInfo();
     I_InitInputs();
     //  I_InitGraphics();

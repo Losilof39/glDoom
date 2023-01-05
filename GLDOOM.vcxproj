@@ -333,6 +333,7 @@
     <ClCompile Include="r_things.c" />
     <ClCompile Include="savepic.c" />
     <ClCompile Include="i_sound.c" />
+    <ClCompile Include="i_sdlsound.c" />
     <ClCompile Include="sounds.c" />
     <ClCompile Include="st_lib.c" />
     <ClCompile Include="st_stuff.c" />

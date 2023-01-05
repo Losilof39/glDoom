@@ -110,6 +110,8 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 #define Access(filename, accessmode) access(filename, accessmode)
 #endif
 
+#define arrlen(array) (sizeof(array) / sizeof(*array))
+
 //#define strcasecmp strcmp
 //#define strncasecmp strncmp
 

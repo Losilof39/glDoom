@@ -629,7 +629,7 @@ win_defaulti_t wdefaultv[] =
     //d_value, "usegamma",             &usegamma,             0,    // 0 - 4
 
     // These values are not useful for DirectSound
-    d_value, "snd_channels",     &numChannels,        16,
+    //d_value, "snd_channels",     &numChannels,        16,
     d_value, "swap_stereo",      &swap_stereo,        0,
 
     // "new" keyboard mappings
