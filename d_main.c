@@ -1176,7 +1176,8 @@ void IdentifyVersion (void)
                 sprintf(tempbuf, "%s.wad", szWadNames[i]);
                 if (!D_strncasecmp(candidate, tempbuf, strlen(candidate)))
                 {
-                    strcpy(doomwad, candidate);
+                    doomwad = candidate;
+                    break;
                 }
             }
             cur_file = readdir(cwd);
@@ -1341,7 +1342,8 @@ void FindResponseFile(void)
 void D_DoomMain (void)
    {
     int             p;
-    char                    file[256];
+    char            file[256];
+    char*           candidate;
     byte           *demover;
 
     //FindResponseFile();
@@ -1423,7 +1425,29 @@ void D_DoomMain (void)
 #if _WIN32
     D_AddFile("./glDoom.wad");
 #else
-    D_AddFile("gldoom.wad");
+    DIR* cwd = opendir(".");
+        if (cwd == NULL)
+            I_Error("D_DoomMain(): failed to open current directoy");
+
+        struct dirent* cur_file;
+        cur_file = readdir(cwd);
+
+        while (cur_file)
+        {
+            if (cur_file->d_type == DT_REG)
+            {
+                candidate = cur_file->d_name;
+                
+                if (!D_strncasecmp(candidate, "gldoom.wad", strlen("gldoom.wad")))
+                {
+                    D_AddFile(candidate);
+                    break;
+                }
+            }
+            cur_file = readdir(cwd);
+        }
+
+        closedir(cwd);
 #endif
     
     // add any files specified on the command line with -file wadfile

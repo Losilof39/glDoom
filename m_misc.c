@@ -853,8 +853,8 @@ void GetCfgName()
 
 void M_LoadDefaults (void)
 {
-    int		i;
-    int		len;
+    int		i = 0;
+    int		len = 0;
     FILE* f;
     char	def[80];
     char	strparm[100];
@@ -895,10 +895,10 @@ void M_LoadDefaults (void)
                 {
                     // get a string default
                     isstring = true;
-                    len = strlen(strparm);
-                    newstring = (char*)malloc(len);
-                    strparm[len - 1] = 0;
-                    strcpy(newstring, strparm + 1);
+                    //len = strlen(strparm);
+                    //newstring = (char*)malloc(len);
+                    //strparm[len - 1] = 0;
+                    newstring = strparm;
                 }
                 else if (strparm[0] == '0' && strparm[1] == 'x')
                     sscanf(strparm + 2, "%x", &parm);
