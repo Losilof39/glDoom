@@ -150,17 +150,7 @@ void I_Quit(void)
 
 void I_WaitVBL(int count)
 {
-/* FIXME
-#ifdef SGI
-    sginap(1);                                           
-#else
-#ifdef SUN
-    sleep(0);
-#else
-    usleep (count * (1000000/70) );                                
-#endif
-#endif
-*/
+    SDL_Delay(count * 10 );                                
 }
 
 void I_BeginRead(void)
