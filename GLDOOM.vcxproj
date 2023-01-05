@@ -292,6 +292,7 @@
     <ClCompile Include="info.c" />
     <ClCompile Include="i_cd.c" />
     <ClCompile Include="i_net.c" />
+    <ClCompile Include="i_sdlmusic.c" />
     <ClCompile Include="i_system.c" />
     <ClCompile Include="lights.c" />
     <ClCompile Include="mathlib.c" />

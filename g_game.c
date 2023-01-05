@@ -522,7 +522,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     // buttons
     cmd->chatchar = HU_dequeueChatChar(); 
  
-    if (gamekeydown[key_fire] || mousebuttons[mousebfire] || joybuttons[joybfire]) 
+    if (gamekeydown[key_fire] || mousebuttons[SDL_BUTTON_LEFT] || joybuttons[joybfire])
        {
         cmd->buttons |= BT_ATTACK;
        }
@@ -845,11 +845,8 @@ dboolean G_Responder(event_t* ev)
              return false;   // always let key up events filter down 
 		 
         case ev_mouse: 
-             mousebuttons[0] = ev->data1; 
-             mousebuttons[1] = 0; 
-             mousebuttons[2] = 0; 
-             //mousex = ev->data2*(mouseSensitivity+5)/10; 
-             //mousey = ev->data3*(mouseSensitivity+5)/10; 
+             mousebuttons[0] = (ev->data1 == 3) ? 1: 0;
+             mousebuttons[1] = (ev->data1 == 1) ? 1 : 0;
              mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
              mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
              return true;    // eat events 

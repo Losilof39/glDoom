@@ -28,10 +28,8 @@ void lfprintf(char *message, ... );
 
 dboolean I_InitInputs(void)
    {
-    if (!I_SetupKeyboard())
-       {
-        return false;
-       }
+    I_SetupKeyboard();
+
     /*if ((usejoystick) && (!joystickavail))
        {
         if (I_SetupJoysticks())
@@ -151,39 +149,50 @@ void I_CheckInputs(void)
             keystates[ev.key.keysym.scancode] = 0;
         }break;
 
-        case SDL_MOUSEBUTTONDOWN:
-        case SDL_MOUSEBUTTONUP:
-        case SDL_MOUSEMOTION:
-        {
+        if ((usemouse) && (mouseavail)) {
 
-            if (!(mouse_motion.x - ev.motion.x) && !(mouse_motion.y - ev.motion.y))
-                break;
-
-            event.type = ev_mouse;
-            mouse_motion.x = ev.motion.xrel;
-            mouse_motion.y = ev.motion.yrel;
-
-            if (ev.type == SDL_MOUSEBUTTONDOWN)
+            case SDL_MOUSEMOTION:
             {
-                switch (ev.button.button)
-                {
-                    case SDL_BUTTON_LEFT:
-                    {
-                        event.data1 = 1;
-                    }break;
-                }
-            }
-            else if (ev.type == SDL_MOUSEBUTTONUP)
+
+                event.type = ev_mouse;
+                mouse_motion.x = ev.motion.xrel;
+                mouse_motion.y = ev.motion.yrel;
+
+                event.data2 = mouse_motion.x;
+                event.data3 = mouse_motion.y;
+
+                D_PostEvent(&event);
+
+            }break;
+
+            case SDL_MOUSEBUTTONDOWN:
             {
+                event.type = ev_mouse;
+                mouse_motion.x = ev.motion.xrel;
+                mouse_motion.y = ev.motion.yrel;
+
+                event.data1 = ev.button.button;
+
+                event.data2 = mouse_motion.x;
+                event.data3 = mouse_motion.y;
+
+                D_PostEvent(&event);
+            }break;
+
+            case SDL_MOUSEBUTTONUP:
+            {
+                event.type = ev_mouse;
+                mouse_motion.x = ev.motion.xrel;
+                mouse_motion.y = ev.motion.yrel;
+
                 event.data1 = 0;
-            }
 
-            event.data2 = mouse_motion.x;
-            event.data3 = mouse_motion.y;
+                event.data2 = mouse_motion.x;
+                event.data3 = mouse_motion.y;
 
-            D_PostEvent(&event);
-
-        }break;
+                D_PostEvent(&event);
+            }break;
+        }
 
         default:
             break;
@@ -196,17 +205,8 @@ void I_CheckInputs(void)
        {
         I_CheckJoysticks();
        }*/
-    if ((usemouse) && (mouseavail))
-       {
-        I_CheckMouse();
-       }
 
     I_CheckKeyboard();
-   }
-
-void I_ShutdownInputs(void)
-   {
-    I_ReleaseKeyboard();
    }
 
 

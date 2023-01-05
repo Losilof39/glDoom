@@ -1038,7 +1038,7 @@ void IdentifyVersion (void)
     sprintf(basedefault, "%s/.doomrc", home);
 #endif
 
-    //i = M_CheckParm("-game");
+    i = M_CheckParm("-game");
     /*if (i && (i < (myargc-1)))
        {
         strcpy(gamename, myargv[i+1]);
@@ -1802,7 +1802,7 @@ void D_DoomMain (void)
     //printf ("S_Init: Setting up sound.\n");
     con_printf("S_Init: Setting up sound.\n");
     //S_Init (snd_SfxVolume*8, snd_MusicVolume*8 );
-    S_Init(snd_SfxVolume, snd_MusicVolume );
+    S_Init(snd_SfxVolume, snd_MusicVolume);
 
     con_printf("HU_Init: Setting up heads up display.\n");
     HU_Init();

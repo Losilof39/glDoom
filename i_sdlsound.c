@@ -871,8 +871,8 @@ static void I_SDL_UpdateSoundParams(int handle, int vol, int sep)
         return;
     }
 
-    left = ((254 - sep) * vol) / 127;
-    right = ((sep)*vol) / 127;
+    left = ((254 - sep) * vol*8) / 127;
+    right = ((sep)*vol*8) / 127;
 
     if (left < 0) left = 0;
     else if (left > 255) left = 255;

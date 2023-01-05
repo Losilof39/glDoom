@@ -252,6 +252,9 @@
     <ClCompile Include="i_sdlsound.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="i_sdlmusic.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GLdoom.rc">

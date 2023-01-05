@@ -32,13 +32,11 @@ void I_ReleaseKeyboard()
    {
    }
 
-dboolean I_SetupKeyboard()
+void I_SetupKeyboard()
 {
     // Set the keyboard buffer to "all keys up"
     for (int k = 0; k < 256; k++)
         si_Kbd[k] = SDL_KEYUP;
-
-    return true;
 }
 
 char t_text[2048];

@@ -574,8 +574,6 @@ void glDoomExit()
        }
 
     con_shutdown();
-    I_ShutdownInputs();
-    //StopMusic();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
    };

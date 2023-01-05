@@ -55,6 +55,7 @@ int snd_sfxdevice = SNDDEVICE_SB;
 // Low-level sound and music modules we are using
 static sound_module_t* sound_module;
 static music_module_t* music_module;
+extern music_module_t music_sdl_module;
 
 // If true, the music pack module was successfully initialized.
 static dboolean music_packs_active = false;
@@ -79,6 +80,14 @@ static sound_module_t* sound_modules[] =
 {
     &sound_sdl_module,
 
+};
+
+// Compiled-in music modules:
+
+static music_module_t* music_modules[] =
+{
+    &music_sdl_module,
+    NULL,
 };
 
 // Check if a sound device is in the given list of devices
@@ -132,29 +141,29 @@ static void InitSfxModule(dboolean use_sfx_prefix)
 
 static void InitMusicModule(void)
 {
-    //int i;
+    int i;
 
-    //music_module = NULL;
+    music_module = NULL;
 
-    //for (i = 0; music_modules[i] != NULL; ++i)
-    //{
-    //    // Is the music device in the list of devices supported
-    //    // by this module?
+    for (i = 0; music_modules[i] != NULL; ++i)
+    {
+        // Is the music device in the list of devices supported
+        // by this module?
 
-    //    if (SndDeviceInList(snd_musicdevice,
-    //        music_modules[i]->sound_devices,
-    //        music_modules[i]->num_sound_devices))
-    //    {
+        /*if (SndDeviceInList(snd_musicdevice,
+            music_modules[i]->sound_devices,
+            music_modules[i]->num_sound_devices))
+        {*/
 
-    //        // Initialize the module
+            // Initialize the module
 
-    //        if (music_modules[i]->Init())
-    //        {
-    //            music_module = music_modules[i];
-    //            return;
-    //        }
-    //    }
-    //}
+            if (music_modules[i]->Init())
+            {
+                music_module = music_modules[i];
+                return;
+            }
+        //}
+    }
 }
 
 //
