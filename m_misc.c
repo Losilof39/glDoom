@@ -783,7 +783,7 @@ void GetCfgName(void);
 //
 void M_SaveDefaults (void)
    {
-    int		i;
+    int		i = 0;
     int		v;
     FILE* f;
 
