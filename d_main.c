@@ -1022,7 +1022,8 @@ char *D_FindNext()
 //
 void IdentifyVersion (void)
    {
-    char*    doomwad[16];
+    char*    doomwad;
+    char tempbuf[16];
     char* candidate;
     char *c;
     char   *doomwaddir, id[4];
@@ -1161,7 +1162,7 @@ void IdentifyVersion (void)
         sprintf(doomwad, "%s.wad", szWadNames[i]);
 #else
         DIR* cwd = opendir(".");
-        if (dir == NULL)
+        if (cwd == NULL)
             I_Error("IdentifyVersion: Failed to open current directoy");
 
         struct dirent* cur_file;
@@ -1172,7 +1173,8 @@ void IdentifyVersion (void)
             if (cur_file->d_type == DT_REG)
             {
                 candidate = cur_file->d_name;
-                if (!strncmp(candidate, szWadNames[i], strlen(candidate)))
+                sprintf(tempbuf, "%s.wad", szWadNames[i]);
+                if (!D_strncasecmp(candidate, tempbuf, strlen(candidate)))
                 {
                     strcpy(doomwad, candidate);
                 }

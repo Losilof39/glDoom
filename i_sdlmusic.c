@@ -22,8 +22,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#include <SDL.h>
-#include <SDL_mixer.h>
+#include "thirdparty/SDL2/include/SDL.h"
+#include "thirdparty/SDL2/include/SDL_mixer.h"
 
 #include "doomtype.h"
 #include "mmus2mid.h"

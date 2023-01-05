@@ -28,7 +28,7 @@
 #pragma interface
 #endif
 
-
+#include "p_mobj.h"
 
 //
 // Initializes sound stuff, including volume
@@ -71,7 +71,7 @@ S_StartSoundAtVolume
 
 
 // Stop sound for thing at <origin>
-void S_StopSound(void* origin);
+void S_StopSound(mobj_t* origin);
 
 
 // Start music using <music_id> from sounds.h
@@ -95,7 +95,7 @@ void S_ResumeSound(void);
 //
 // Updates music & sounds
 //
-void S_UpdateSounds(void* listener);
+void S_UpdateSounds(mobj_t* listener);
 
 void S_SetMusicVolume(int volume);
 void S_SetSfxVolume(int volume);
