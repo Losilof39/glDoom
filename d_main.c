@@ -1159,7 +1159,7 @@ void IdentifyVersion (void)
        {
 
 #if _WIN32
-        sprintf(doomwad, "%s.wad", szWadNames[i]);
+        sprintf(tempbuf, "%s.wad", szWadNames[i]);
 #else
         DIR* cwd = opendir(".");
         if (cwd == NULL)
@@ -1186,13 +1186,13 @@ void IdentifyVersion (void)
         closedir(cwd);
 #endif
 
-        if ( !Access(doomwad, R_OK))
+        if ( !Access(tempbuf, R_OK))
            {
             con_printf("Found game WAD for: %s\n", szGameNames[i]);
             strcpy(gamename, szWadNames[i]);
             gamemode = iGameModes[i];
             language = iLanguages[i];
-            D_AddFile(doomwad);
+            D_AddFile(tempbuf);
             return;
            }
        }
