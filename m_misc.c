@@ -533,8 +533,8 @@ win_defaulti_t wdefaultv[] =
     d_value, "mouse_horizontal", &mouseHorizontal,    10,
     d_value, "mouse_vertical",   &mouseVertical,      10,
     d_value, "mouse_sensitivity",&mouseSensitivity,   5,
-    d_value, "sfx_volume",       &snd_SfxVolume,      8,
-    d_value, "music_volume",     &snd_MusicVolume,    8,
+    d_value, "sfx_volume",       &snd_SfxVolume,      15,
+    d_value, "music_volume",     &snd_MusicVolume,    15,
     d_value, "show_messages",    &showMessages,       1,
     
     d_key,   "key_fire",         &key_fire,           SDL_SCANCODE_LCTRL,
