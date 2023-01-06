@@ -121,8 +121,6 @@ void lfprintf(char *message, ... );
 int   glDoomAC;
 char *glDoomAV[256];
 
-void  CheckInputs(void);
-
 void  D_DoomMain(void);
 void  MY_DoomSetup(void);
 void  MY_DoomLoop(void);
@@ -138,7 +136,6 @@ unsigned char szBadWadMessage[] = { "glDoom is unable to determine the game type
                                     "   system directory." };
 void TestAlt(void);
 
-int   tvalue = 0;
 dboolean  notop = false;
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +145,6 @@ dboolean  notop = false;
 extern int    keylink;
 
 char      szDbgName[] = "glDoom.dbg";
-//char      szCfgName[] = "glDoom.cfg";
 
 
 int main(int argc, char** szCmdLine)
@@ -164,13 +160,7 @@ int main(int argc, char** szCmdLine)
 
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
-    
-    //ChangeDisplaySettings(0, 0);
-
-    // We get the current video setup here.
-    //GetVideoInfo();
    
-    
     // This builds up the list of available video modes for the OpenGL renderer
     /*GetModeList(szDbgName);
     if (video.fullscreen == TRUE)
@@ -193,20 +183,14 @@ int main(int argc, char** szCmdLine)
        }*/
 
     // Create the main program window, start up OpenGL and create our viewport
-    CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen);
+    if (!CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen))
+        I_Error("int main(): Unable to create main SDL2 window!");
 
     GetVideoInfo();
     GetModeList(szDbgName);
 
     /*lfprintf("Current resolution: %d x %d x %d bpp\n", DevInfo.width, DevInfo.height, DevInfo.bpp);
     lfprintf("Resolution requested: %d x %d x %d bpp\n", video.width, video.height, video.bpp);*/
-
-       /*{
-        ChangeDisplaySettings(0, 0);
-        MessageBox(NULL, "Unable to create main window.\nProgram will now end.", "FATAL ERROR", MB_OK);
-        Cleanup();
-        return 0;
-       }*/
 
     if (video.fullscreen == false)
        {
@@ -219,7 +203,6 @@ int main(int argc, char** szCmdLine)
 
     bQuit = false;
 
-    tvalue = 1;
     //con_setup(hwnd, video.width, video.height);
 
     con_printf("Beginning DOOM code startup...\n");
@@ -227,7 +210,6 @@ int main(int argc, char** szCmdLine)
     if ((gamemode == netabort) || (gamemode == undetermined))
        {
         I_Quit();
-        //StopMusic();
         I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
@@ -300,16 +282,13 @@ dboolean ResizeMainWindow(char *mode)
                     x = y = 0;
                     sx = video.width;
                     sy = video.height;
-                    /*MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
-                    UpdateWindow(WinData.hWnd);
-                    SetForegroundWindow(WinData.hWnd);
-                    SetFocus(WinData.hWnd);*/
+                    SDL_SetWindowSize(pWindow, sx, sy);
+                    SDL_SetWindowPosition(pWindow, x, y);
+                    R_InitViewData();
                     return true;
                    }
-//                hGDC = GetDC(WinData.hWnd);
 //                would need to release rendering context here
 //                and create new one then reload all GL graphics... ugh...
-//                wglMakeCurrent(hGDC, hRC);
                }
             else
                {
