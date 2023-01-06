@@ -11,21 +11,7 @@
 #include <fcntl.h>
 #include <malloc.h>
 
-#if defined(_WIN32)
-#define Open(filename, openflag, ...) _open(filename, openflag, __VA_ARGS__)
-#define Close(filehandle) _close(filehandle)
-#define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
-#define LSeek(filehandle, offset, origin) _lseek(filehandle, offset, origin)
-#define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
-#define Access(filename, accessmode) _access(filename, accessmode)
-#else
-#define Open(filename, openflag, ...) open(filename, openflag, __VA_ARGS__)
-#define Close(filehandle) close(filehandle)
-#define Read(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
-#define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
-#define Write(filehandle, buf, maxcharcount) write(filehandle, buf, maxcharcount)
-#define Access(filename, accessmode) access(filename, accessmode)
-#endif
+#include "doomtype.h"
 
 int           columns;
 unsigned char *image;

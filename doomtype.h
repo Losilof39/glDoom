@@ -112,6 +112,8 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
+#define con_printf(...) printf(__VA_ARGS__)
+
 //#define strcasecmp strcmp
 //#define strncasecmp strncmp
 

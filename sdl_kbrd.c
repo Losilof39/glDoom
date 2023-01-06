@@ -12,19 +12,11 @@
 #include "d_event.h"
 #include "sys_sdl.h"
 
-#undef RELEASE
-#ifdef __cplusplus
-#define RELEASE(x) if (x != NULL) {x->Release(); x = NULL;}
-#else
-#define RELEASE(x) if (x != NULL) {x->lpVtbl->Release(x); x = NULL;}
-#endif
-
 extern Uint8* keystates[256];
 unsigned char        KeyState[256]; // current keys states
 short                si_Kbd[256];   // previous keys states
 
 extern int           keylink;
-
 
 void lfprintf(char *message, ... );
 
@@ -38,8 +30,6 @@ void I_SetupKeyboard()
     for (int k = 0; k < 256; k++)
         si_Kbd[k] = SDL_KEYUP;
 }
-
-char t_text[2048];
 
 void I_CheckKeyboard()
 {

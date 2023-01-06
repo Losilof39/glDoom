@@ -1,11 +1,10 @@
-// win_video.c
+//sdl_video.c
 // This module handles the video interface to Windows
 
 #include <stdio.h>
 #include "v_video.h"
 #include "sdl_video.h"
 #include "gl_video.h"
-#include "gconsole.h"
 
 void lfprintf(char *message, ... );
 
@@ -13,7 +12,6 @@ extern video_t      video;
 
 int                 iModeCount = 0, iCurrMode = 0;
 dboolean               *bNoReboot = 0;
-//DEVMODE            *pModeList = 0;
 
 devinfo_t           DevInfo;
 char               *szYesNo[] = { "Yes", "No" };
@@ -69,47 +67,6 @@ void GetModeList(char *dbgname)
             SDL_BITSPERPIXEL(f),
             mode.refresh_rate);
     }
-    /*DEVMODE devmode;
-    int     iVideoMode;
-    FILE *fn;
-
-    fn = fopen(dbgname, "a+");
-
-    iCurrMode = -1;
-    iModeCount = 0;
-    while(EnumDisplaySettings(NULL, iModeCount, &devmode))
-       iModeCount++;
-
-    pModeList = (DEVMODE *)malloc(iModeCount*sizeof(DEVMODE));
-    bNoReboot = (BOOL *)malloc(iModeCount*sizeof(BOOL));
-
-    fprintf(fn, "Mode count : %d\n", iModeCount);
-    fprintf(fn, "General Video Mode List\n");
-    fprintf(fn, "Mode Width x Height x Color Bits - Refresh - Reboot?\n");
-    for (iVideoMode = 0; iVideoMode < iModeCount; iVideoMode++)
-       {
-        EnumDisplaySettings(NULL, iVideoMode, &pModeList[iVideoMode]);
-        if (ChangeDisplaySettings(&pModeList[iVideoMode], CDS_TEST) == DISP_CHANGE_SUCCESSFUL)
-            bNoReboot[iVideoMode] = TRUE;
-        else
-            bNoReboot[iVideoMode] = FALSE;
-        fprintf(fn, "%2d    %4d    %4d        %2d          %2d       %s\n",
-                iVideoMode,
-                pModeList[iVideoMode].dmPelsWidth,
-                pModeList[iVideoMode].dmPelsHeight,
-                pModeList[iVideoMode].dmBitsPerPel,
-                pModeList[iVideoMode].dmDisplayFrequency,
-                szYesNo[bNoReboot[iVideoMode]]);
-        if ((pModeList[iVideoMode].dmPelsWidth == video.width) &&
-            (pModeList[iVideoMode].dmPelsHeight == video.height) &&
-            (pModeList[iVideoMode].dmBitsPerPel == video.bpp))
-            iCurrMode = iVideoMode;
-       }
-    fclose(fn);
-    if (iModeCount == 0)
-       {
-        con_printf("Warning: no video mode list available - unable to change resolution.\n");
-       }*/
    }
 
 dboolean SetVideoMode()
@@ -175,9 +132,5 @@ dboolean SetVideoMode()
     //       }
     //   }
     return success;
-   }
-
-void ResetVideoMode()
-   {
    }
 

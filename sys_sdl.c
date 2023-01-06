@@ -17,7 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 #include "resource.h"  // Required for Win32 Resources
 #include "sys_sdl.h"
-#include "gconsole.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // "GLDoom" Includes...
@@ -29,7 +28,6 @@
 #include "g_game.h"
 #include "m_argv.h"
 #include "i_system.h"
-#include "m_music.h"
 #include "i_cd.h"
 #include "i_midi.h"
 #include "st_lib.h"
@@ -134,7 +132,6 @@ unsigned char szBadWadMessage[] = { "glDoom is unable to determine the game type
                                     "3. That you have not moved the game without changing\n"
                                     "   its location in the gldoom.ini file in your windows\n"
                                     "   system directory." };
-void TestAlt(void);
 
 dboolean  notop = false;
 
@@ -160,27 +157,7 @@ int main(int argc, char** szCmdLine)
 
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
-   
-    // This builds up the list of available video modes for the OpenGL renderer
-    /*GetModeList(szDbgName);
-    if (video.fullscreen == TRUE)
-       {
-        if ((iCurrMode == -1) && ((video.width != DevInfo.width) || (video.height != DevInfo.height) || (video.bpp != DevInfo.bpp)))
-           {
-            MessageBox(hwnd, "The video resolution you have requested is not available.", "Bad Video Mode", MB_OK);
-            Cleanup();
-            return 0;
-           }
-       }*/
-
-    /*if (video.fullscreen == TRUE)
-       {
-        if (SetVideoMode() == FALSE)
-           {
-            Cleanup();
-            return 0;
-           }
-       }*/
+  
 
     // Create the main program window, start up OpenGL and create our viewport
     if (!CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen))
@@ -202,8 +179,6 @@ int main(int argc, char** szCmdLine)
        }
 
     bQuit = false;
-
-    //con_setup(hwnd, video.width, video.height);
 
     con_printf("Beginning DOOM code startup...\n");
     D_DoomMain();
@@ -269,8 +244,6 @@ dboolean ResizeMainWindow(char *mode)
                 // and restarting it.  But don't want to reload ALL
                 // the game graphics used so far.  Later on maybe...
                 return false;
-//                wglMakeCurrent(NULL, NULL);
-//                ReleaseDC(WinData.hWnd, hGDC);
 
                 if (SetVideoMode() == false)
                    {
@@ -519,7 +492,6 @@ void glDoomExit()
            G_EndDemo_II();
        }
 
-    con_shutdown();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
    };

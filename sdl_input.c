@@ -1,4 +1,4 @@
-// win_inpt.c
+// sdl_inpt.c
 // 
 // This module starts up and handles all
 // keyboard, mouse and joystick inputs.
@@ -6,7 +6,6 @@
 
 #include "thirdparty/SDL2/include/SDL.h"
 #include "sys_sdl.h"
-#include "gconsole.h"
 #include "sdl_kbrd.h"
 #include "d_event.h"
 #include "v_video.h"
@@ -14,7 +13,6 @@
 dboolean         joystickavail = false;
 dboolean         mouseavail    = false;
 
-extern int       usejoystick;
 extern int       usemouse;
 extern SDL_Window* pWindow;
 extern video_t   video;
@@ -30,17 +28,6 @@ dboolean I_InitInputs(void)
    {
     I_SetupKeyboard();
 
-    /*if ((usejoystick) && (!joystickavail))
-       {
-        if (I_SetupJoysticks())
-           {
-            joystickavail = true;
-           }
-        else
-           {
-            con_printf("Joystick not detected...\n");
-           }
-       }*/
     if ((usemouse) && (!mouseavail))
        {
          mouseavail = true;
@@ -62,7 +49,7 @@ void I_CheckInputs(void)
         {
         case SDL_QUIT:
         {
-            bQuit = false;            
+            bQuit = false;
             break;
         }break;
 
@@ -108,7 +95,7 @@ void I_CheckInputs(void)
             // catch the other keys
             keystates[ev.key.keysym.scancode] = 1;
         }break;
-        
+
         case SDL_KEYUP:
         {
             // catch first these 4 keys
@@ -151,47 +138,47 @@ void I_CheckInputs(void)
 
         if ((usemouse) && (mouseavail)) {
 
-            case SDL_MOUSEMOTION:
-            {
+        case SDL_MOUSEMOTION:
+        {
 
-                event.type = ev_mouse;
-                mouse_motion.x = ev.motion.xrel;
-                mouse_motion.y = ev.motion.yrel;
+            event.type = ev_mouse;
+            mouse_motion.x = ev.motion.xrel;
+            mouse_motion.y = ev.motion.yrel;
 
-                event.data2 = mouse_motion.x;
-                event.data3 = mouse_motion.y;
+            event.data2 = mouse_motion.x;
+            event.data3 = mouse_motion.y;
 
-                D_PostEvent(&event);
+            D_PostEvent(&event);
 
-            }break;
+        }break;
 
-            case SDL_MOUSEBUTTONDOWN:
-            {
-                event.type = ev_mouse;
-                mouse_motion.x = ev.motion.xrel;
-                mouse_motion.y = ev.motion.yrel;
+        case SDL_MOUSEBUTTONDOWN:
+        {
+            event.type = ev_mouse;
+            mouse_motion.x = ev.motion.xrel;
+            mouse_motion.y = ev.motion.yrel;
 
-                event.data1 = ev.button.button;
+            event.data1 = ev.button.button;
 
-                event.data2 = mouse_motion.x;
-                event.data3 = mouse_motion.y;
+            event.data2 = mouse_motion.x;
+            event.data3 = mouse_motion.y;
 
-                D_PostEvent(&event);
-            }break;
+            D_PostEvent(&event);
+        }break;
 
-            case SDL_MOUSEBUTTONUP:
-            {
-                event.type = ev_mouse;
-                mouse_motion.x = ev.motion.xrel;
-                mouse_motion.y = ev.motion.yrel;
+        case SDL_MOUSEBUTTONUP:
+        {
+            event.type = ev_mouse;
+            mouse_motion.x = ev.motion.xrel;
+            mouse_motion.y = ev.motion.yrel;
 
-                event.data1 = 0;
+            event.data1 = 0;
 
-                event.data2 = mouse_motion.x;
-                event.data3 = mouse_motion.y;
+            event.data2 = mouse_motion.x;
+            event.data3 = mouse_motion.y;
 
-                D_PostEvent(&event);
-            }break;
+            D_PostEvent(&event);
+        }break;
         }
 
         default:
@@ -200,11 +187,6 @@ void I_CheckInputs(void)
 
 
     }
-
-    /*if ((usejoystick) && (joystickavail))
-       {
-        I_CheckJoysticks();
-       }*/
 
     I_CheckKeyboard();
    }

@@ -51,9 +51,6 @@
     <ClCompile Include="g_game.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gconsole.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="GL_utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -79,9 +76,6 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="info.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="lights.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="m_argv.c">
@@ -228,13 +222,7 @@
     <ClCompile Include="sdl_input.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="win_joy.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="sdl_kbrd.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="win_mous.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="sdl_video.c">
@@ -325,9 +313,6 @@
     <ClInclude Include="g_game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gconsole.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="gl_utils.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -377,9 +362,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="m_misc.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="m_music.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="m_random.h">
@@ -478,13 +460,7 @@
     <ClInclude Include="sdl_inpt.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="win_joy.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="sdl_kbrd.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="win_mous.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sdl_video.h">

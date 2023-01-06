@@ -1,4 +1,3 @@
-//#include <windows.h>
 #include <fcntl.h>
 #ifdef _WIN32
 #include <io.h>
@@ -6,7 +5,6 @@
 #include <inttypes.h>
 #include <unistd.h>
 #endif
-//#include <gl/gl.h>
 #include "thirdparty/glad/include/glad/glad.h"
 
 #include "doomtype.h"

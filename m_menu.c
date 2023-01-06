@@ -257,12 +257,7 @@ extern int destination_keys[MAXPLAYERS];
 extern int mousebfire;                                   
 extern int mousebstrafe;                               
 extern int mousebforward;
-extern int mousebbackward;
-
-extern int joybfire;
-extern int joybstrafe;                               
-extern int joybuse;                                   
-extern int joybspeed;                
+extern int mousebbackward;              
                      
 extern int default_weapon_recoil;   // weapon recoil        
 extern int weapon_recoil;           // weapon recoil           
@@ -3978,13 +3973,13 @@ setup_menu_t keys_settings1[] =  // Key Binding screen strings
   {"BACKWARD"    ,S_KEY       ,m_scrn,KB_X,KB_Y+ 2*8,&key_down          ,0,0,0,0,0,0},
   {"TURN LEFT"   ,S_KEY       ,m_scrn,KB_X,KB_Y+ 3*8,&key_left          ,0,0,0,0,0,0},
   {"TURN RIGHT"  ,S_KEY       ,m_scrn,KB_X,KB_Y+ 4*8,&key_right         ,0,0,0,0,0,0},
-  {"RUN"         ,S_KEY       ,m_scrn,KB_X,KB_Y+ 5*8,&key_speed         ,0,&joybspeed,0,0,0,0},
+  {"RUN"         ,S_KEY       ,m_scrn,KB_X,KB_Y+ 5*8,&key_speed         ,0,0,0,0,0,0},
   {"STRAFE LEFT" ,S_KEY       ,m_scrn,KB_X,KB_Y+ 6*8,&key_strafeleft    ,0,0,0,0,0,0},
   {"STRAFE RIGHT",S_KEY       ,m_scrn,KB_X,KB_Y+ 7*8,&key_straferight   ,0,0,0,0,0,0},
-  {"STRAFE"      ,S_KEY       ,m_scrn,KB_X,KB_Y+ 8*8,&key_strafe        ,&mousebstrafe,&joybstrafe,0,0,0,0},
+  {"STRAFE"      ,S_KEY       ,m_scrn,KB_X,KB_Y+ 8*8,&key_strafe        ,&mousebstrafe,0,0,0,0,0},
   {"AUTORUN"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 9*8,&key_autorun       ,0,0,0,0,0,0},
   {"180 TURN"    ,S_KEY       ,m_scrn,KB_X,KB_Y+10*8,&key_reverse       ,0,0,0,0,0,0},
-  {"USE"         ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_use           ,&mousebforward,&joybuse,0,0,0,0},
+  {"USE"         ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_use           ,&mousebforward,0,0,0,0,0},
 
   {"MENUS"       ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y+12*8,0              ,0,0,0,0,0,0},
   {"NEXT ITEM"   ,S_KEY       ,m_menu,KB_X,KB_Y+13*8,&key_menu_down     ,0,0,0,0,0,0},
@@ -4068,7 +4063,7 @@ setup_menu_t keys_settings3[] =  // Key Binding screen strings
   {"CHAINSAW",S_KEY       ,m_scrn,KB_X,KB_Y+ 8*8,&key_weapon8     ,0,0,0,0,0,0},
   {"SSG"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 9*8,&key_weapon9     ,0,0,0,0,0,0},
   {"BEST"    ,S_KEY       ,m_scrn,KB_X,KB_Y+10*8,&key_weapontoggle,0,0,0,0,0,0},
-  {"FIRE"    ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_fire        ,&mousebfire,&joybfire,0,0,0,0},
+  {"FIRE"    ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_fire        ,&mousebfire,0,0,0,0,0},
 
   {"<- PREV",(S_SKIP|S_PREV),m_null,KB_PREV,KB_Y+20*8,0,0,0,(int *)keys_settings2,0,0,0},
   {"NEXT ->",(S_SKIP|S_NEXT),m_null,KB_NEXT,KB_Y+20*8,0,0,0,(int *)keys_settings4,0,0,0},

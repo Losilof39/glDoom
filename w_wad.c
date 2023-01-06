@@ -62,7 +62,6 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #endif
 #include "w_wad.h"
 
-#include "gconsole.h"
 #include "doomlib.h"
 
 //
