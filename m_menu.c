@@ -3516,6 +3516,7 @@ char *sckeyname[]={ "NULL", // no key
 int M_GetKeyString(int c,int offset)
   {
   char* s;
+  SDL_Keycode keycode;
 
   if (c == SDL_SCANCODE_PAUSE)
   {
@@ -3525,7 +3526,7 @@ int M_GetKeyString(int c,int offset)
   else
     {
 
-    SDL_Keycode keycode = SDL_GetKeyFromScancode(c);
+    keycode = SDL_GetKeyFromScancode(c);
     s = SDL_GetKeyName(keycode);
 
     if (s == "")
