@@ -58,9 +58,6 @@ static sound_module_t* sound_module;
 static music_module_t* music_module;
 extern music_module_t music_sdl_module;
 
-// If true, the music pack module was successfully initialized.
-static dboolean music_packs_active = false;
-
 // This is either equal to music_module or &music_pack_module,
 // depending on whether the current track is substituted.
 static music_module_t* active_music_module;
@@ -80,15 +77,13 @@ static int snd_mport = 0;
 static sound_module_t* sound_modules[] =
 {
     &sound_sdl_module,
-
 };
 
 // Compiled-in music modules:
 
 static music_module_t* music_modules[] =
 {
-    &music_sdl_module,
-    NULL,
+    &music_sdl_module
 };
 
 // Check if a sound device is in the given list of devices
@@ -146,24 +141,12 @@ static void InitMusicModule(void)
 
     music_module = NULL;
 
-    for (i = 0; music_modules[i] != NULL; ++i)
+    // Initialize the module
+    
+    if (music_modules[0]->Init())
     {
-        // Is the music device in the list of devices supported
-        // by this module?
-
-        /*if (SndDeviceInList(snd_musicdevice,
-            music_modules[i]->sound_devices,
-            music_modules[i]->num_sound_devices))
-        {*/
-
-            // Initialize the module
-
-            if (music_modules[i]->Init())
-            {
-                music_module = music_modules[i];
-                return;
-            }
-        //}
+        music_module = music_modules[0];
+        return;
     }
 }
 
@@ -175,7 +158,7 @@ static void InitMusicModule(void)
 
 void I_InitSound(dboolean use_sfx_prefix)
 {
-    dboolean nosound, nosfx, nomusic, nomusicpacks;
+    dboolean nosound, nosfx, nomusic;
 
     //!
     // @vanilla
@@ -201,19 +184,11 @@ void I_InitSound(dboolean use_sfx_prefix)
 
     nomusic = M_CheckParm("-nomusic") > 0;
 
-    //!
-    //
-    // Disable substitution music packs.
-    //
-
 
     // Initialize the sound and music subsystems.
 
     if (!nosound)
     {
-        // This is kind of a hack. If native MIDI is enabled, set up
-        // the TIMIDITY_CFG environment variable here before SDL_mixer
-        // is opened.
 
         if (!nosfx)
         {
