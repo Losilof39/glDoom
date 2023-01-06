@@ -373,13 +373,13 @@ void Cleanup()
 
 dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
         printf("Failed to init SDL");
  
     sprintf(&window_title, "GLDoom %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 
     pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
@@ -428,27 +428,7 @@ void InitData()
     video.height        = DEF_HEIGHT;
     video.bpp           = DEF_COLORB;
     video.fullscreen    = false;
-	video.wide          = false;
-
- //   // See if these need to be overridden by the defaults
- //   GetProfileString("GLDOOM", "DIRECTORY", ".", DoomDir, _MAX_PATH );
- //   if (strlen(DoomDir) != 0)
- //      {
- //       video.width  = GetProfileInt("GLDOOM", "width", DEF_WIDTH);
- //       video.height = GetProfileInt("GLDOOM", "height", DEF_HEIGHT);
- //      }
-
-	/*fRatio = (float)((double)iHeight / (double)iWidth);
-
-	if  ((0.801f >= fRatio) && (0.749 <= fRatio))
-	{
-		video.wide = FALSE;
-	}
-	else
-	{*/
-		video.wide = true;
-	//}
-
+	video.wide = true;
     video.bpp  = DEF_COLORB;
     video.fov  = 90;
     video.fovy = ml_MakeFovY(video.fov, (float)video.width / (float)video.height);
