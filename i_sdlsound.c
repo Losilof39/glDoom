@@ -16,7 +16,7 @@
 // DESCRIPTION:
 //	System interface for sound.
 //
-
+// Source code taken from Chocolate Doom github repo: https://github.com/chocolate-doom/chocolate-doom
 
 #include <stdio.h>
 #include <stdlib.h>
