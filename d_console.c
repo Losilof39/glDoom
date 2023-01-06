@@ -1489,7 +1489,7 @@ dboolean CO_Responder(event_t* ev)
     static dboolean bDisplayed = false;
     static dboolean bShiftState = false;
 
-    if ((ev->type == ev_keydown) && (ev->data1 == SDL_SCANCODE_F1))
+    if ((ev->type == ev_keydown) && (ev->data1 == SDL_SCANCODE_GRAVE))
        {
         if (bConsoleActive == true)
            {

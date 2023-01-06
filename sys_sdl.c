@@ -284,7 +284,7 @@ dboolean ResizeMainWindow(char *mode)
                     sy = video.height;
                     SDL_SetWindowSize(pWindow, sx, sy);
                     SDL_SetWindowPosition(pWindow, x, y);
-                    R_InitViewData();
+                    //R_InitViewData();
                     return true;
                    }
 //                would need to release rendering context here
@@ -306,7 +306,7 @@ dboolean ResizeMainWindow(char *mode)
                    {
                     SDL_SetWindowSize(pWindow, sx, sy);
                     SDL_SetWindowPosition(pWindow, x, y);
-                    R_InitViewData();
+                    //R_InitViewData();
                     return true;
                    }
                 else
