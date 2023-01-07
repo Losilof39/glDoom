@@ -28,8 +28,6 @@
 #include "g_game.h"
 #include "m_argv.h"
 #include "i_system.h"
-#include "i_cd.h"
-#include "i_midi.h"
 #include "st_lib.h"
 #include "v_video.h"
 #include "z_zone.h"
