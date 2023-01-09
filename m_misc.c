@@ -277,7 +277,7 @@ M_ReadFile
 // DEFAULTS
 //
 int		usemouse;
-int		usejoystick;
+//int		usejoystick;
 
 char  playername[18];
 char  playerskin[18];
@@ -330,48 +330,6 @@ extern int  vsync;
 
 extern char gamename[128];
 extern int  hudmode;
-
-extern int	joybfire;
-extern int	joybstrafe;
-extern int	joybuse;
-extern int	joybspeed;
-
-extern int  joydead;
-
-extern int  joyb[32];
-
-extern int  joyb1;
-extern int  joyb2;
-extern int  joyb3;
-extern int  joyb4;
-extern int  joyb5;
-extern int  joyb6;
-extern int  joyb7;
-extern int  joyb8;
-extern int  joyb9;
-extern int  joyb10;
-extern int  joyb11;
-extern int  joyb12;
-extern int  joyb13;
-extern int  joyb14;
-extern int  joyb15;
-extern int  joyb16;
-extern int  joyb17;
-extern int  joyb18;
-extern int  joyb19;
-extern int  joyb20;
-extern int  joyb21;
-extern int  joyb22;
-extern int  joyb23;
-extern int  joyb24;
-extern int  joyb25;
-extern int  joyb26;
-extern int  joyb27;
-extern int  joyb28;
-extern int  joyb29;
-extern int  joyb30;
-extern int  joyb31;
-extern int  joyb32;
 
 extern int	viewwidth;
 extern int	viewheight;
@@ -533,8 +491,8 @@ win_defaulti_t wdefaultv[] =
     d_value, "mouse_horizontal", &mouseHorizontal,    10,
     d_value, "mouse_vertical",   &mouseVertical,      10,
     d_value, "mouse_sensitivity",&mouseSensitivity,   5,
-    d_value, "sfx_volume",       &snd_SfxVolume,      8,
-    d_value, "music_volume",     &snd_MusicVolume,    8,
+    d_value, "sfx_volume",       &snd_SfxVolume,      15,
+    d_value, "music_volume",     &snd_MusicVolume,    15,
     d_value, "show_messages",    &showMessages,       1,
     
     d_key,   "key_fire",         &key_fire,           SDL_SCANCODE_LCTRL,
@@ -581,55 +539,6 @@ win_defaulti_t wdefaultv[] =
     d_key,   "mouseb1",          &mouseb1,            CMD_NULL,
     d_key,   "mouseb2",          &mouseb2,            CMD_NULL,
     d_key,   "mouseb3",          &mouseb3,            CMD_NULL,
-
-    // Joystick control/setup
-    d_value, "use_joystick",     &usejoystick,        0,  // defaults to false
-    d_value, "joyb_fire",        &joybfire,           0,
-    d_value, "joyb_strafe",      &joybstrafe,         1,
-    d_value, "joyb_use",         &joybuse,            2,
-    d_value, "joyb_speed",       &joybspeed,          3,
-    d_value, "joydead",          &joydead,            5000,            
-
-    d_key, "joyb1",              &joyb1,              SDL_SCANCODE_RCTRL,
-    d_key, "joyb2",              &joyb2,              SDL_SCANCODE_RALT,
-    d_key, "joyb3",              &joyb3,              SDL_SCANCODE_SPACE,
-    d_key, "joyb4",              &joyb4,              SDL_SCANCODE_RSHIFT,
-    d_key, "joyb5",              &joyb5,              CMD_NULL,
-    d_key, "joyb6",              &joyb6,              CMD_NULL,
-    d_key, "joyb7",              &joyb7,              CMD_NULL,
-    d_key, "joyb8",              &joyb8,              CMD_NULL,
-    d_key, "joyb9",              &joyb9,              CMD_NULL,
-    d_key, "joyb10",             &joyb10,             CMD_NULL,
-    d_key, "joyb11",             &joyb11,             CMD_NULL,
-    d_key, "joyb12",             &joyb12,             CMD_NULL,
-    d_key, "joyb13",             &joyb13,             CMD_NULL,
-    d_key, "joyb14",             &joyb14,             CMD_NULL,
-    d_key, "joyb15",             &joyb15,             CMD_NULL,
-    d_key, "joyb16",             &joyb16,             CMD_NULL,
-    d_key, "joyb17",             &joyb17,             CMD_NULL,
-    d_key, "joyb18",             &joyb18,             CMD_NULL,
-    d_key, "joyb19",             &joyb19,             CMD_NULL,
-    d_key, "joyb20",             &joyb20,             CMD_NULL,
-    d_key, "joyb21",             &joyb21,             CMD_NULL,
-    d_key, "joyb22",             &joyb22,             CMD_NULL,
-    d_key, "joyb23",             &joyb23,             CMD_NULL,
-    d_key, "joyb24",             &joyb24,             CMD_NULL,
-    d_key, "joyb25",             &joyb25,             CMD_NULL,
-    d_key, "joyb26",             &joyb26,             CMD_NULL,
-    d_key, "joyb27",             &joyb27,             CMD_NULL,
-    d_key, "joyb28",             &joyb28,             CMD_NULL,
-    d_key, "joyb29",             &joyb29,             CMD_NULL,
-    d_key, "joyb30",             &joyb30,             CMD_NULL,
-    d_key, "joyb31",             &joyb31,             CMD_NULL,
-    d_key, "joyb32",             &joyb32,             CMD_NULL,
-
-    // These values are not useful for OpenGL rendering
-    //d_value, "screenblocks",         &screenblocks,         11,   // 0 - 11 (11 is fullscreen)
-    //d_value, "detaillevel",          &detaillevel,          0,    // 0 - 1
-    //d_value, "usegamma",             &usegamma,             0,    // 0 - 4
-
-    // These values are not useful for DirectSound
-    d_value, "snd_channels",     &numChannels,        16,
     d_value, "swap_stereo",      &swap_stereo,        0,
 
     // "new" keyboard mappings
@@ -698,80 +607,6 @@ win_defaulti_t wdefaultv[] =
     d_finished, 0, 0, 0
    };
 
-/*
-default_t	defaults[] =
-{
-    {"mouse_sensitivity",&mouseSensitivity, 5},
-    {"sfx_volume",&snd_SfxVolume, 8},
-    {"music_volume",&snd_MusicVolume, 8},
-    {"show_messages",&showMessages, 1},
-    
-
-//#ifdef NORMALUNIX
-    {"key_right",&key_right, KEY_RIGHTARROW},
-    {"key_left",&key_left, KEY_LEFTARROW},
-    {"key_up",&key_up, KEY_UPARROW},
-    {"key_down",&key_down, KEY_DOWNARROW},
-    {"key_strafeleft",&key_strafeleft, ','},
-    {"key_straferight",&key_straferight, '.'},
-
-    {"key_fire",&key_fire, KEY_RCTRL},
-    {"key_use",&key_use, ' '},
-    {"key_strafe",&key_strafe, KEY_RALT},
-    {"key_speed",&key_speed, KEY_RSHIFT},
-
-#ifndef WIN32
-// UNIX hack, to be removed. 
-#ifdef SNDSERV
-    {"sndserver", (int *) &sndserver_filename, (int) "sndserver"},
-    {"mb_used", &mb_used, 2},
-#endif
-#endif
-    
-//#endif
-
-#ifdef LINUX
-    {"mousedev", (int*)&mousedev, (int)"/dev/ttyS0"},
-    {"mousetype", (int*)&mousetype, (int)"microsoft"},
-#endif
-
-    {"use_mouse",&usemouse, 1},
-    {"mouseb_fire",&mousebfire,0},
-    {"mouseb_strafe",&mousebstrafe,1},
-    {"mouseb_forward",&mousebforward,2},
-
-    {"gl_fog",&gl_fog,1},
-    {"gl_alphatest",&gl_alphatest,0},
-    {"gamename", (int *)gamename, (int) ""},
-    {"hudmode",&hudmode,1},
-
-    {"use_joystick",&usejoystick, 0},
-    {"joyb_fire",&joybfire,0},
-    {"joyb_strafe",&joybstrafe,1},
-    {"joyb_use",&joybuse,3},
-    {"joyb_speed",&joybspeed,2},
-
-    {"screenblocks",&screenblocks, 9},
-    {"detaillevel",&detailLevel, 0},
-
-    {"snd_channels",&numChannels, 3},
-
-    {"usegamma",&usegamma, 0},
-
-    {"chatmacro0", (int *) &chat_macros[0], (int) HUSTR_CHATMACRO0 },
-    {"chatmacro1", (int *) &chat_macros[1], (int) HUSTR_CHATMACRO1 },
-    {"chatmacro2", (int *) &chat_macros[2], (int) HUSTR_CHATMACRO2 },
-    {"chatmacro3", (int *) &chat_macros[3], (int) HUSTR_CHATMACRO3 },
-    {"chatmacro4", (int *) &chat_macros[4], (int) HUSTR_CHATMACRO4 },
-    {"chatmacro5", (int *) &chat_macros[5], (int) HUSTR_CHATMACRO5 },
-    {"chatmacro6", (int *) &chat_macros[6], (int) HUSTR_CHATMACRO6 },
-    {"chatmacro7", (int *) &chat_macros[7], (int) HUSTR_CHATMACRO7 },
-    {"chatmacro8", (int *) &chat_macros[8], (int) HUSTR_CHATMACRO8 },
-    {"chatmacro9", (int *) &chat_macros[9], (int) HUSTR_CHATMACRO9 }
-
-};
-*/
-
 int	numdefaults = 134;
 const char* defaultfile = "default.cfg";
 
@@ -783,7 +618,7 @@ void GetCfgName(void);
 //
 void M_SaveDefaults (void)
    {
-    int		i;
+    int		i = 0;
     int		v;
     FILE* f;
 
@@ -853,18 +688,8 @@ void GetCfgName()
 
 void M_LoadDefaults (void)
 {
-    //int		i;
-
-    ////// i dunno why this works..
-    //i = 0;
-    //while (wdefaultv[i].deftype != d_finished)
-    //   {
-    //    *wdefaultv[i].location = wdefaultv[i].defvalue;
-    //    i++;
-    //   }
-
-    int		i;
-    int		len;
+    int		i = 0;
+    int		len = 0;
     FILE* f;
     char	def[80];
     char	strparm[100];
@@ -905,10 +730,10 @@ void M_LoadDefaults (void)
                 {
                     // get a string default
                     isstring = true;
-                    len = strlen(strparm);
-                    newstring = (char*)malloc(len);
-                    strparm[len - 1] = 0;
-                    strcpy(newstring, strparm + 1);
+                    //len = strlen(strparm);
+                    //newstring = (char*)malloc(len);
+                    //strparm[len - 1] = 0;
+                    newstring = strparm;
                 }
                 else if (strparm[0] == '0' && strparm[1] == 'x')
                     sscanf(strparm + 2, "%x", &parm);

@@ -257,12 +257,7 @@ extern int destination_keys[MAXPLAYERS];
 extern int mousebfire;                                   
 extern int mousebstrafe;                               
 extern int mousebforward;
-extern int mousebbackward;
-
-extern int joybfire;
-extern int joybstrafe;                               
-extern int joybuse;                                   
-extern int joybspeed;                
+extern int mousebbackward;              
                      
 extern int default_weapon_recoil;   // weapon recoil        
 extern int weapon_recoil;           // weapon recoil           
@@ -3516,251 +3511,21 @@ char *sckeyname[]={ "NULL", // no key
 int M_GetKeyString(int c,int offset)
   {
   char* s;
+  SDL_Keycode keycode;
 
   if (c == SDL_SCANCODE_PAUSE)
   {
       strcpy(&menu_buffer[offset], "PAUS"); // string to display
       offset += 4;
   }
-  //else
-  //if (strlen(sckeyname[c]) > 0)
-  //   {
-  //    strcpy(&menu_buffer[offset],sckeyname[c]); // string to display
-  //    offset += strlen(sckeyname[c]);
-  //   }
-  //else
-  //   {
-  //    strcpy(&menu_buffer[offset],"JUNK");
-  //    offset += 4;
-  //   }
-  //return offset;
-
-  if (c >= 33 && c <= 126)
-    {
-
-    // The '=', ',', and '.' keys originally meant the shifted
-    // versions of those keys, but w/o having to shift them in
-    // the game. Any actions that are mapped to these keys will
-    // still mean their shifted versions. Could be changed later
-    // if someone can come up with a better way to deal with them.
-
-    if (c == '=')      // probably means the '+' key?
-      c = '+';
-    else if (c == ',') // probably means the '<' key?
-      c = '<';
-    else if (c == '.') // probably means the '>' key?
-      c = '>';
-    menu_buffer[offset++] = c; // Just insert the ascii key
-    menu_buffer[offset] = 0;
-    }
   else
     {
 
-    // Retrieve 4-letter (max) string representing the key
-/*
-    case KEYD_TAB:
-      s = "TAB";
-      break;
-    case KEYD_ENTER:
-      s = "ENTR"; 
-      break;
-    case KEYD_ESCAPE:
-      s = "ESC";
-      break;
-    case KEYD_SPACEBAR:
-      s = "SPAC";
-      break;
-    case KEYD_BACKSPACE:
-      s = "BACK";
-      break;
-    case KEYD_RCTRL:
-      s = "CTRL";
-      break;
-    case KEYD_LEFTARROW:
-      s = "LARR";
-      break;
-    case KEYD_UPARROW:
-      s = "UARR";
-      break;
-    case KEYD_RIGHTARROW:
-      s = "RARR";
-      break;
-    case KEYD_DOWNARROW:
-      s = "DARR";
-      break;
-    case KEYD_RSHIFT:
-      s = "SHFT";
-      break;
-    case KEYD_RALT:
-      s = "ALT";
-      break;
-    case KEYD_CAPSLOCK:
-      s = "CAPS";
-      break;
-    case KEYD_F1:
-      s = "F1";
-      break;
-    case KEYD_F2:
-      s = "F2";
-      break;
-    case KEYD_F3:
-      s = "F3";
-      break;
-    case KEYD_F4:
-      s = "F4";
-      break;
-    case KEYD_F5:
-      s = "F5";
-      break;
-    case KEYD_F6:
-      s = "F6";
-      break;
-    case KEYD_F7:
-      s = "F7";
-      break;
-    case KEYD_F8:
-      s = "F8";
-      break;
-    case KEYD_F9:
-      s = "F9";
-      break;
-    case KEYD_F10:
-      s = "F10";
-      break;
-    case KEYD_SCROLLLOCK:
-      s = "SCRL";
-      break;
-    case KEYD_HOME:
-      s = "HOME";
-      break;
-    case KEYD_PAGEUP:
-      s = "PGUP";
-      break;
-    case KEYD_END:
-      s = "END";
-      break;
-    case KEYD_PAGEDOWN:
-      s = "PGDN";
-      break;
-    case KEYD_INSERT:
-      s = "INST";
-      break;
-    case KEYD_F11:
-      s = "F11";
-      break;
-    case KEYD_F12:
-      s = "F12";
-      break;
-    case KEYD_PAUSE:
-      s = "PAUS";
-      break;
-
-*/
-    switch(c)
-      {
-    case SDL_SCANCODE_TAB:
-      s = "TAB";
-      break;
-    case SDL_SCANCODE_RETURN:
-      s = "ENTR"; 
-      break;
-    case SDL_SCANCODE_ESCAPE:
-      s = "ESC";
-      break;
-    case SDL_SCANCODE_SPACE:
-      s = "SPAC";
-      break;
-    case SDL_SCANCODE_BACKSPACE:
-      s = "BACK";
-      break;
-    case SDL_SCANCODE_RCTRL:
-      s = "CTRL";
-      break;
-    case SDL_SCANCODE_LEFT:
-      s = "LARR";
-      break;
-    case SDL_SCANCODE_UP:
-      s = "UARR";
-      break;
-    case SDL_SCANCODE_RIGHT:
-      s = "RARR";
-      break;
-    case SDL_SCANCODE_DOWN:
-      s = "DARR";
-      break;
-    case SDL_SCANCODE_LSHIFT:
-      s = "SHFT";
-      break;
-    case SDL_SCANCODE_RALT:
-      s = "ALT";
-      break;
-    case SDL_SCANCODE_CAPSLOCK:
-      s = "CAPS";
-      break;
-    case SDL_SCANCODE_F1:
-      s = "F1";
-      break;
-    case SDL_SCANCODE_F2:
-      s = "F2";
-      break;
-    case SDL_SCANCODE_F3:
-      s = "F3";
-      break;
-    case SDL_SCANCODE_F4:
-      s = "F4";
-      break;
-    case SDL_SCANCODE_F5:
-      s = "F5";
-      break;
-    case SDL_SCANCODE_F6:
-      s = "F6";
-      break;
-    case SDL_SCANCODE_F7:
-      s = "F7";
-      break;
-    case SDL_SCANCODE_F8:
-      s = "F8";
-      break;
-    case SDL_SCANCODE_F9:
-      s = "F9";
-      break;
-    case SDL_SCANCODE_F10:
-      s = "F10";
-      break;
-    case SDL_SCANCODE_SCROLLLOCK:
-      s = "SCRL";
-      break;
-    case SDL_SCANCODE_HOME:
-      s = "HOME";
-      break;
-    case SDL_SCANCODE_PRIOR:
-      s = "PGUP";
-      break;
-    case SDL_SCANCODE_END:
-      s = "END";
-      break;
-    case SDL_SCANCODE_AUDIONEXT:
-      s = "PGDN";
-      break;
-    case SDL_SCANCODE_INSERT:
-      s = "INST";
-      break;
-    case SDL_SCANCODE_F11:
-      s = "F11";
-      break;
-    case SDL_SCANCODE_F12:
-      s = "F12";
-      break;
-    case SDL_SCANCODE_PAUSE:
-      s = "PAUS";
-      break;
-    default:
-      s = "JUNK";
-      break;
-      }
-
-    SDL_Keycode keycode = SDL_GetKeyFromScancode(c);
+    keycode = SDL_GetKeyFromScancode(c);
     s = SDL_GetKeyName(keycode);
+
+    if (s == "")
+        s = "JUNK";
 
     strcpy(&menu_buffer[offset],s); // string to display
     offset += strlen(s);
@@ -4208,13 +3973,13 @@ setup_menu_t keys_settings1[] =  // Key Binding screen strings
   {"BACKWARD"    ,S_KEY       ,m_scrn,KB_X,KB_Y+ 2*8,&key_down          ,0,0,0,0,0,0},
   {"TURN LEFT"   ,S_KEY       ,m_scrn,KB_X,KB_Y+ 3*8,&key_left          ,0,0,0,0,0,0},
   {"TURN RIGHT"  ,S_KEY       ,m_scrn,KB_X,KB_Y+ 4*8,&key_right         ,0,0,0,0,0,0},
-  {"RUN"         ,S_KEY       ,m_scrn,KB_X,KB_Y+ 5*8,&key_speed         ,0,&joybspeed,0,0,0,0},
+  {"RUN"         ,S_KEY       ,m_scrn,KB_X,KB_Y+ 5*8,&key_speed         ,0,0,0,0,0,0},
   {"STRAFE LEFT" ,S_KEY       ,m_scrn,KB_X,KB_Y+ 6*8,&key_strafeleft    ,0,0,0,0,0,0},
   {"STRAFE RIGHT",S_KEY       ,m_scrn,KB_X,KB_Y+ 7*8,&key_straferight   ,0,0,0,0,0,0},
-  {"STRAFE"      ,S_KEY       ,m_scrn,KB_X,KB_Y+ 8*8,&key_strafe        ,&mousebstrafe,&joybstrafe,0,0,0,0},
+  {"STRAFE"      ,S_KEY       ,m_scrn,KB_X,KB_Y+ 8*8,&key_strafe        ,&mousebstrafe,0,0,0,0,0},
   {"AUTORUN"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 9*8,&key_autorun       ,0,0,0,0,0,0},
   {"180 TURN"    ,S_KEY       ,m_scrn,KB_X,KB_Y+10*8,&key_reverse       ,0,0,0,0,0,0},
-  {"USE"         ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_use           ,&mousebforward,&joybuse,0,0,0,0},
+  {"USE"         ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_use           ,&mousebforward,0,0,0,0,0},
 
   {"MENUS"       ,(S_SKIP|S_TITLE),m_null,KB_X,KB_Y+12*8,0              ,0,0,0,0,0,0},
   {"NEXT ITEM"   ,S_KEY       ,m_menu,KB_X,KB_Y+13*8,&key_menu_down     ,0,0,0,0,0,0},
@@ -4298,7 +4063,7 @@ setup_menu_t keys_settings3[] =  // Key Binding screen strings
   {"CHAINSAW",S_KEY       ,m_scrn,KB_X,KB_Y+ 8*8,&key_weapon8     ,0,0,0,0,0,0},
   {"SSG"     ,S_KEY       ,m_scrn,KB_X,KB_Y+ 9*8,&key_weapon9     ,0,0,0,0,0,0},
   {"BEST"    ,S_KEY       ,m_scrn,KB_X,KB_Y+10*8,&key_weapontoggle,0,0,0,0,0,0},
-  {"FIRE"    ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_fire        ,&mousebfire,&joybfire,0,0,0,0},
+  {"FIRE"    ,S_KEY       ,m_scrn,KB_X,KB_Y+11*8,&key_fire        ,&mousebfire,0,0,0,0,0},
 
   {"<- PREV",(S_SKIP|S_PREV),m_null,KB_PREV,KB_Y+20*8,0,0,0,(int *)keys_settings2,0,0,0},
   {"NEXT ->",(S_SKIP|S_NEXT),m_null,KB_NEXT,KB_Y+20*8,0,0,0,(int *)keys_settings4,0,0,0},

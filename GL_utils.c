@@ -1,5 +1,3 @@
-//#ifdef _WINDOWS
-   //#include <windows.h>
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -8,7 +6,6 @@
 #endif
 //#endif
 #include <fcntl.h>
-//#include <GL/gl.h>
 #include "thirdparty/glad/include/glad/glad.h"
 #include "doomdata.h"
 #include "r_defs.h"

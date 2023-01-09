@@ -155,8 +155,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>
-      </AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -179,6 +178,9 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <OutputFile>.\Debug/GLDOOM.bsc</OutputFile>
     </Bscmake>
+    <Manifest>
+      <EnableDpiAwareness>true</EnableDpiAwareness>
+    </Manifest>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <Midl>
@@ -282,7 +284,6 @@
     <ClCompile Include="d_net.c" />
     <ClCompile Include="f_finale.c" />
     <ClCompile Include="f_wipe.c" />
-    <ClCompile Include="gconsole.c" />
     <ClCompile Include="glsbar.c" />
     <ClCompile Include="GL_utils.c" />
     <ClCompile Include="gl_video.c" />
@@ -292,8 +293,8 @@
     <ClCompile Include="info.c" />
     <ClCompile Include="i_cd.c" />
     <ClCompile Include="i_net.c" />
+    <ClCompile Include="i_sdlmusic.c" />
     <ClCompile Include="i_system.c" />
-    <ClCompile Include="lights.c" />
     <ClCompile Include="mathlib.c" />
     <ClCompile Include="mmus2mid.c" />
     <ClCompile Include="m_argv.c" />
@@ -333,6 +334,7 @@
     <ClCompile Include="r_things.c" />
     <ClCompile Include="savepic.c" />
     <ClCompile Include="i_sound.c" />
+    <ClCompile Include="i_sdlsound.c" />
     <ClCompile Include="sounds.c" />
     <ClCompile Include="st_lib.c" />
     <ClCompile Include="st_stuff.c" />
@@ -342,9 +344,7 @@
     <ClCompile Include="thirdparty\glad\src\glad.c" />
     <ClCompile Include="v_video.c" />
     <ClCompile Include="sdl_input.c" />
-    <ClCompile Include="win_joy.c" />
     <ClCompile Include="sdl_kbrd.c" />
-    <ClCompile Include="win_mous.c" />
     <ClCompile Include="sdl_video.c" />
     <ClCompile Include="wi_stuff.c" />
     <ClCompile Include="w_wad.c" />
@@ -374,7 +374,6 @@
     <ClInclude Include="d_ticcmd.h" />
     <ClInclude Include="f_finale.h" />
     <ClInclude Include="f_wipe.h" />
-    <ClInclude Include="gconsole.h" />
     <ClInclude Include="gldefs.h" />
     <ClInclude Include="glsbar.h" />
     <ClInclude Include="gl_utils.h" />
@@ -396,7 +395,6 @@
     <ClInclude Include="m_fixed.h" />
     <ClInclude Include="m_menu.h" />
     <ClInclude Include="m_misc.h" />
-    <ClInclude Include="m_music.h" />
     <ClInclude Include="m_random.h" />
     <ClInclude Include="m_swap.h" />
     <ClInclude Include="p_inter.h" />
@@ -431,9 +429,7 @@
     <ClInclude Include="thirdparty\SDL2\include\close_code.h" />
     <ClInclude Include="v_video.h" />
     <ClInclude Include="sdl_inpt.h" />
-    <ClInclude Include="win_joy.h" />
     <ClInclude Include="sdl_kbrd.h" />
-    <ClInclude Include="win_mous.h" />
     <ClInclude Include="sdl_video.h" />
     <ClInclude Include="wi_stuff.h" />
     <ClInclude Include="w_wad.h" />

@@ -68,8 +68,6 @@ rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include "g_game.h"
 
-#include "gconsole.h"
-
 #include "doomcmd.h"
 
 #include "thirdparty/SDL2/include/SDL.h"
@@ -208,48 +206,6 @@ int     gl_premalpha;
 int     gl_widetex;
 
 int     music;
-
-int     joybfire; 
-int     joybstrafe; 
-int     joybuse; 
-int     joybspeed; 
-
-int     joydead = 5000;
-
-int     joyb[32];
- 
-int     joyb1;
-int     joyb2;
-int     joyb3;
-int     joyb4;
-int     joyb5;
-int     joyb6;
-int     joyb7;
-int     joyb8;
-int     joyb9;
-int     joyb10;
-int     joyb11;
-int     joyb12;
-int     joyb13;
-int     joyb14;
-int     joyb15;
-int     joyb16;
-int     joyb17;
-int     joyb18;
-int     joyb19;
-int     joyb20;
-int     joyb21;
-int     joyb22;
-int     joyb23;
-int     joyb24;
-int     joyb25;
-int     joyb26;
-int     joyb27;
-int     joyb28;
-int     joyb29;
-int     joyb30;
-int     joyb31;
-int     joyb32;
 
 int     autorun;
 int     swap_stereo;
@@ -432,10 +388,10 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     cmd->consistancy = consistancy[consoleplayer][maketic%BACKUPTICS]; 
  
     strafe = gamekeydown[key_strafe]; //|| mousebuttons[mousebstrafe] || joybuttons[joybstrafe]; 
-    if ((joybspeed == 31) || (autorun == true))
+    if (autorun == true)
        speed = 1;
     else
-       speed = gamekeydown[key_speed] || joybuttons[joybspeed];
+       speed = gamekeydown[key_speed];
     
  
     forward = side = 0;
@@ -522,12 +478,12 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     // buttons
     cmd->chatchar = HU_dequeueChatChar(); 
  
-    if (gamekeydown[key_fire] || mousebuttons[mousebfire] || joybuttons[joybfire]) 
+    if (gamekeydown[key_fire] || mousebuttons[SDL_BUTTON_LEFT])
        {
         cmd->buttons |= BT_ATTACK;
        }
  
-    if (gamekeydown[key_use] || joybuttons[joybuse] ) 
+    if (gamekeydown[key_use]) 
        { 
         cmd->buttons |= BT_USE;
         // clear double clicks if hit use button 
@@ -845,11 +801,8 @@ dboolean G_Responder(event_t* ev)
              return false;   // always let key up events filter down 
 		 
         case ev_mouse: 
-             mousebuttons[0] = ev->data1; 
-             mousebuttons[1] = 0; 
-             mousebuttons[2] = 0; 
-             //mousex = ev->data2*(mouseSensitivity+5)/10; 
-             //mousey = ev->data3*(mouseSensitivity+5)/10; 
+             mousebuttons[0] = (ev->data1 == 3) ? 1: 0;
+             mousebuttons[1] = (ev->data1 == 1) ? 1 : 0;
              mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
              mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
              return true;    // eat events 

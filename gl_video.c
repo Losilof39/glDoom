@@ -28,7 +28,6 @@
 #include <math.h>
 
 #include "doomtype.h"
-#include "gconsole.h"
 #include "sys_sdl.h"
 #include "gl_video.h"
 #include "sdl_inpt.h"
@@ -314,8 +313,6 @@ dboolean StartUpOpenGL()
     glDisable( GL_DEPTH_TEST );
 
     glmode = gl_2d;
-
-    con_SetupOpenGL();
 
     GetGLInfo();
 

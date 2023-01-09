@@ -17,7 +17,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 #include "resource.h"  // Required for Win32 Resources
 #include "sys_sdl.h"
-#include "gconsole.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
 // "GLDoom" Includes...
@@ -29,9 +28,6 @@
 #include "g_game.h"
 #include "m_argv.h"
 #include "i_system.h"
-#include "m_music.h"
-#include "i_cd.h"
-#include "i_midi.h"
 #include "st_lib.h"
 #include "v_video.h"
 #include "z_zone.h"
@@ -121,8 +117,6 @@ void lfprintf(char *message, ... );
 int   glDoomAC;
 char *glDoomAV[256];
 
-void  CheckInputs(void);
-
 void  D_DoomMain(void);
 void  MY_DoomSetup(void);
 void  MY_DoomLoop(void);
@@ -136,9 +130,7 @@ unsigned char szBadWadMessage[] = { "glDoom is unable to determine the game type
                                     "3. That you have not moved the game without changing\n"
                                     "   its location in the gldoom.ini file in your windows\n"
                                     "   system directory." };
-void TestAlt(void);
 
-int   tvalue = 0;
 dboolean  notop = false;
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -148,7 +140,6 @@ dboolean  notop = false;
 extern int    keylink;
 
 char      szDbgName[] = "glDoom.dbg";
-//char      szCfgName[] = "glDoom.cfg";
 
 
 int main(int argc, char** szCmdLine)
@@ -164,49 +155,17 @@ int main(int argc, char** szCmdLine)
 
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
-    
-    //ChangeDisplaySettings(0, 0);
-
-    // We get the current video setup here.
-    //GetVideoInfo();
-   
-    
-    // This builds up the list of available video modes for the OpenGL renderer
-    /*GetModeList(szDbgName);
-    if (video.fullscreen == TRUE)
-       {
-        if ((iCurrMode == -1) && ((video.width != DevInfo.width) || (video.height != DevInfo.height) || (video.bpp != DevInfo.bpp)))
-           {
-            MessageBox(hwnd, "The video resolution you have requested is not available.", "Bad Video Mode", MB_OK);
-            Cleanup();
-            return 0;
-           }
-       }*/
-
-    /*if (video.fullscreen == TRUE)
-       {
-        if (SetVideoMode() == FALSE)
-           {
-            Cleanup();
-            return 0;
-           }
-       }*/
+  
 
     // Create the main program window, start up OpenGL and create our viewport
-    CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen);
+    if (!CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen))
+        I_Error("int main(): Unable to create main SDL2 window!");
 
     GetVideoInfo();
     GetModeList(szDbgName);
 
     /*lfprintf("Current resolution: %d x %d x %d bpp\n", DevInfo.width, DevInfo.height, DevInfo.bpp);
     lfprintf("Resolution requested: %d x %d x %d bpp\n", video.width, video.height, video.bpp);*/
-
-       /*{
-        ChangeDisplaySettings(0, 0);
-        MessageBox(NULL, "Unable to create main window.\nProgram will now end.", "FATAL ERROR", MB_OK);
-        Cleanup();
-        return 0;
-       }*/
 
     if (video.fullscreen == false)
        {
@@ -219,15 +178,11 @@ int main(int argc, char** szCmdLine)
 
     bQuit = false;
 
-    tvalue = 1;
-    //con_setup(hwnd, video.width, video.height);
-
     con_printf("Beginning DOOM code startup...\n");
     D_DoomMain();
     if ((gamemode == netabort) || (gamemode == undetermined))
        {
         I_Quit();
-        //StopMusic();
         I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
@@ -265,78 +220,76 @@ int main(int argc, char** szCmdLine)
 
 dboolean ResizeMainWindow(char *mode)
    {
-//    char *parm;
-//    int   width, height;
-//    int   t_width, t_height;
-//    int   x, y, sx, sy, ex, ey;
-//
-//    if ((parm = strtok(mode, " ")) != NULL)
-//       {
-//        width = atoi(parm);
-//        if ((parm = strtok(NULL, " ")) != NULL)
-//           {
-//            height = atoi(parm);
-//            t_width = video.width;
-//            t_height = video.height;
-//            video.width = width;
-//            video.height = height;
-//            if (video.fullscreen == TRUE)
-//               {
-//                // can't do this right without shutting down OpenGL
-//                // and restarting it.  But don't want to reload ALL
-//                // the game graphics used so far.  Later on maybe...
-//                return FALSE;
-////                wglMakeCurrent(NULL, NULL);
-////                ReleaseDC(WinData.hWnd, hGDC);
-//                if (SetVideoMode() == FALSE)
-//                   {
-//                    video.width = t_width;
-//                    video.height = t_height;
-//                   }
-//                else
-//                   {
-//                    x = y = 0;
-//                    sx = video.width;
-//                    sy = video.height;
-//                    MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
-//                    UpdateWindow(WinData.hWnd);
-//                    SetForegroundWindow(WinData.hWnd);
-//                    SetFocus(WinData.hWnd);
-//                    return TRUE;
-//                   }
-////                hGDC = GetDC(WinData.hWnd);
-////                would need to release rendering context here
-////                and create new one then reload all GL graphics... ugh...
-////                wglMakeCurrent(hGDC, hRC);
-//               }
-//            else
-//               {
-//                ex = GetSystemMetrics(SM_CXFIXEDFRAME)*2;
-//                ey = (GetSystemMetrics(SM_CYFIXEDFRAME)*2)+GetSystemMetrics(SM_CYCAPTION);
-//                // Center the window on the screen
-//                x = (DevInfo.width / 2) - ((video.width+ex) / 2);
-//                y = (DevInfo.height / 2) - ((video.height+ey) / 2);
-//                sx = video.width+ex;
-//                sy = video.height+ey;
-//                /*
-//                  Check to be sure the requested window size fits on the screen and
-//                  adjust each dimension to fit if the requested size does not fit.
-//                */
-//                if ((sx <= DevInfo.width) && (sy <= DevInfo.height))
-//                   {
-//                    MoveWindow(WinData.hWnd, x, y, sx, sy, TRUE);
-//                    return TRUE;
-//                   }
-//                else
-//                   {
-//                    video.width = t_width;
-//                    video.height = t_height;
-//                   }
-//               }
-//            R_InitViewData();
-//           }
-//       }
-//    return FALSE;
+    char *parm;
+    int   width, height;
+    int   t_width, t_height;
+    int   x, y, sx, sy, ex, ey;
+
+    if ((parm = strtok(mode, " ")) != NULL)
+       {
+        width = atoi(parm);
+        if ((parm = strtok(NULL, " ")) != NULL)
+           {
+            height = atoi(parm);
+            t_width = video.width;
+            t_height = video.height;
+            video.width = width;
+            video.height = height;
+
+            if (video.fullscreen == true)
+               {
+                // can't do this right without shutting down OpenGL
+                // and restarting it.  But don't want to reload ALL
+                // the game graphics used so far.  Later on maybe...
+                return false;
+
+                if (SetVideoMode() == false)
+                   {
+                    video.width = t_width;
+                    video.height = t_height;
+                   }
+                else
+                   {
+                    x = y = 0;
+                    sx = video.width;
+                    sy = video.height;
+                    SDL_SetWindowSize(pWindow, sx, sy);
+                    SDL_SetWindowPosition(pWindow, x, y);
+                    //R_InitViewData();
+                    return true;
+                   }
+//                would need to release rendering context here
+//                and create new one then reload all GL graphics... ugh...
+               }
+            else
+               {
+                
+                // Center the window on the screen
+                x = SDL_WINDOWPOS_CENTERED;
+                y = SDL_WINDOWPOS_CENTERED;
+                sx = video.width;
+                sy = video.height;
+                /*
+                  Check to be sure the requested window size fits on the screen and
+                  adjust each dimension to fit if the requested size does not fit.
+                */
+                if ((sx <= DevInfo.width) && (sy <= DevInfo.height))
+                   {
+                    SDL_SetWindowSize(pWindow, sx, sy);
+                    SDL_SetWindowPosition(pWindow, x, y);
+                    //R_InitViewData();
+                    return true;
+                   }
+                else
+                   {
+                    video.width = t_width;
+                    video.height = t_height;
+                   }
+               }
+            R_InitViewData();
+           }
+       }
+    return false;
    }
 
 
@@ -348,21 +301,6 @@ void Cleanup()
     char DoomDir[_MAX_PATH];
     char tstr[16];
 
-    // Write out the current video resolution to re-use next time
-    /*GetProfileString("GLDOOM", "DIRECTORY", "", DoomDir, _MAX_PATH );
-    if (strlen(DoomDir) != 0)
-       {
-        sprintf(tstr, "%d", video.width);
-        WriteProfileString("GLDOOM", "width", tstr);
-        sprintf(tstr, "%d", video.height);
-        WriteProfileString("GLDOOM", "height", tstr);
-       }
-
-    if (video.fullscreen == FALSE)
-       {
-        ReleaseCapture();
-       }*/
-
     SDL_ShowCursor(SDL_ENABLE);
 
     for (i = 4; i >= 0; i--)
@@ -373,13 +311,13 @@ void Cleanup()
 
 dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 {
-    if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_AUDIO) < 0)
-        printf("Failed to init SDL");
+    if (SDL_Init(SDL_INIT_VIDEO) < 0)
+        I_Error("Failed to init SDL");
  
     sprintf(&window_title, "GLDoom %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 
     pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED);
+                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
@@ -388,8 +326,7 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 
     if (!pWindow)
     {
-        con_printf("Failed to create a SDL window!");
-        I_Quit();
+        I_Error("Failed to create a SDL window!");
     }
 
     SDL_ShowWindow(pWindow);
@@ -428,27 +365,7 @@ void InitData()
     video.height        = DEF_HEIGHT;
     video.bpp           = DEF_COLORB;
     video.fullscreen    = false;
-	video.wide          = false;
-
- //   // See if these need to be overridden by the defaults
- //   GetProfileString("GLDOOM", "DIRECTORY", ".", DoomDir, _MAX_PATH );
- //   if (strlen(DoomDir) != 0)
- //      {
- //       video.width  = GetProfileInt("GLDOOM", "width", DEF_WIDTH);
- //       video.height = GetProfileInt("GLDOOM", "height", DEF_HEIGHT);
- //      }
-
-	/*fRatio = (float)((double)iHeight / (double)iWidth);
-
-	if  ((0.801f >= fRatio) && (0.749 <= fRatio))
-	{
-		video.wide = FALSE;
-	}
-	else
-	{*/
-		video.wide = true;
-	//}
-
+	video.wide = true;
     video.bpp  = DEF_COLORB;
     video.fov  = 90;
     video.fovy = ml_MakeFovY(video.fov, (float)video.width / (float)video.height);
@@ -573,9 +490,6 @@ void glDoomExit()
            G_EndDemo_II();
        }
 
-    con_shutdown();
-    I_ShutdownInputs();
-    //StopMusic();
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
    };

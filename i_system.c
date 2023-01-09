@@ -40,8 +40,6 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 
 #include "d_net.h"
 #include "g_game.h"
-#include "m_music.h"
-#include "gconsole.h"
 
 #ifdef __GNUG__
 #pragma implementation "i_system.h"
@@ -117,7 +115,7 @@ int  I_GetTime (void)
 void I_Init (void)
 {
 // FIXME
-    I_InitSound();
+    I_InitSound(1);
     //GetCDInfo();
     I_InitInputs();
     //  I_InitGraphics();
@@ -150,17 +148,7 @@ void I_Quit(void)
 
 void I_WaitVBL(int count)
 {
-/* FIXME
-#ifdef SGI
-    sginap(1);                                           
-#else
-#ifdef SUN
-    sleep(0);
-#else
-    usleep (count * (1000000/70) );                                
-#endif
-#endif
-*/
+    SDL_Delay(count * 10 );                                
 }
 
 void I_BeginRead(void)

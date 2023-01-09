@@ -65,7 +65,6 @@ void M_WriteText(int x, int y, char *string);
 // Doom98 code
 ////////////////////////////////////////////////////////////////////////
 
-#include "m_music.h"
 #include "gl_utils.h"
 
 void WriteDebug(char*);
@@ -177,19 +176,6 @@ extern int  gl_widetex;
 extern char gamename[128];
 extern int  hudmode;
 
-extern int  usejoystick;
-extern int	joybfire;
-extern int	joybstrafe;
-extern int	joybuse;
-extern int	joybspeed;
-
-extern int  joydead;
-
-extern int  joyb1;
-extern int  joyb2;
-extern int  joyb3;
-extern int  joyb4;
-
 extern int          autorun;
 extern int          swap_stereo;
 extern int          nosound;
@@ -250,10 +236,6 @@ KeyDef_t cvars[] = { &key_right, "KEY_RIGHT", cv_scan, 0,
                      &key_use, "KEY_USE", cv_scan, 0,
                      &key_strafe, "KEY_STRAFE", cv_scan, 0,
                      &key_speed, "KEY_SPEED", cv_scan, 0,
-                     &joyb1, "JOYB1", cv_scan, 0,
-                     &joyb2, "JOYB2", cv_scan, 0,
-                     &joyb3, "JOYB3", cv_scan, 0,
-                     &joyb4, "JOYB4", cv_scan, 0,
                      &mouseb1, "MOUSEB1", cv_scan, 0,
                      &mouseb2, "MOUSEB2", cv_scan, 0,
                      &mouseb3, "MOUSEB3", cv_scan, 0,
@@ -266,11 +248,6 @@ KeyDef_t cvars[] = { &key_right, "KEY_RIGHT", cv_scan, 0,
                      &mousebfire, "MOUSEBFIRE", cv_value, 2,
                      &mousebstrafe, "MOUSEBSTRAFE", cv_value, 2,
                      &mousebforward, "MOUSEBFORWARD", cv_value, 2,
-                     &usejoystick, "USEJOYSTICK", cv_value, 1,  // true/false
-                     &joybfire, "JOYBFIRE", cv_value, 3,
-                     &joybstrafe, "JOYBSTRAFE", cv_value, 3,
-                     &joybuse, "JOYBUSE", cv_value, 3,
-                     &joybspeed, "JOYBSPEED", cv_value, 3,
                      &mvert, "MVERT", cv_value, 1,              // true/false
                      &mouse_factor, "MOUSE_FACTOR", cv_value, 4, // multiplier for mouse
                      &mlook, "MLOOK", cv_value, 1,              // true/false
@@ -284,7 +261,6 @@ KeyDef_t cvars[] = { &key_right, "KEY_RIGHT", cv_scan, 0,
                      &gl_widetex, "GL_WIDETEX", cv_value, 1,    // true/false
                      &nosound, "NOSOUND", cv_value, 1,          // true/false
                      &hudmode, "HUDMODE", cv_value, 3,
-                     &joydead, "JOYDEAD", cv_value, 5000,
                      &gamename, "GAME", cv_string, 128,// true/false
                      NULL,       "", cv_value, 0 };
 
@@ -1489,7 +1465,7 @@ dboolean CO_Responder(event_t* ev)
     static dboolean bDisplayed = false;
     static dboolean bShiftState = false;
 
-    if ((ev->type == ev_keydown) && (ev->data1 == SDL_SCANCODE_F1))
+    if ((ev->type == ev_keydown) && (ev->data1 == SDL_SCANCODE_GRAVE))
        {
         if (bConsoleActive == true)
            {

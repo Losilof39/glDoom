@@ -52,6 +52,7 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #else
 #include <inttypes.h>
 #include <unistd.h>
+#include <dirent.h>
 #endif
 
 
@@ -93,7 +94,6 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include "d_console.h"
 #include "gldefs.h"
-#include "gconsole.h"
 #include "gl_video.h"
 #include "doomlib.h"
 
@@ -604,7 +604,7 @@ void MY_DoomLoop (void)
     // Synchronous sound output is explicitly called.
 #ifndef SNDINTR
     // Update sound output.
-    I_SubmitSound();
+    //I_SubmitSound();
 #endif
    }
 
@@ -1022,6 +1022,8 @@ char *D_FindNext()
 void IdentifyVersion (void)
    {
     char*    doomwad;
+    char tempbuf[16];
+    char* candidate;
     char *c;
     char   *doomwaddir, id[4];
     int     i;
@@ -1095,7 +1097,7 @@ void IdentifyVersion (void)
            {
             con_printf("Loading game wad: %s\n", gamename);
            }
-       }*/
+       }
 
     if (strlen(gamename) > 0)
        {
@@ -1143,7 +1145,7 @@ void IdentifyVersion (void)
     else
        {
         con_printf("No game wad specified - looking for standard WADs...\n");
-       }
+       }*/
 
     //doomwaddir = getenv("DOOMWADDIR");
     
@@ -1154,21 +1156,42 @@ void IdentifyVersion (void)
 
     for (i = 0; i < gw_other; i++)
        {
-         
-#if _WIN32
-        //sprintf(doomwad, "%s/%s.wad", doomwaddir, szWadNames[i]);
-#else
-        //sprintf(doomwad, "%s.wad", doomwaddir, szWadNames[i]);
-#endif
-        doomwad = "doom.wad";
 
-        if ( !Access(doomwad,R_OK) )
+#if _WIN32
+        sprintf(tempbuf, "%s.wad", szWadNames[i]);
+#else
+        DIR* cwd = opendir(".");
+        if (cwd == NULL)
+            I_Error("IdentifyVersion: Failed to open current directoy");
+
+        struct dirent* cur_file;
+        cur_file = readdir(cwd);
+
+        while (cur_file)
+        {
+            if (cur_file->d_type == DT_REG)
+            {
+                candidate = cur_file->d_name;
+                sprintf(tempbuf, "%s.wad", szWadNames[i]);
+                if (!D_strncasecmp(candidate, tempbuf, strlen(candidate)))
+                {
+                    doomwad = candidate;
+                    break;
+                }
+            }
+            cur_file = readdir(cwd);
+        }
+
+        closedir(cwd);
+#endif
+
+        if ( !Access(tempbuf, R_OK))
            {
             con_printf("Found game WAD for: %s\n", szGameNames[i]);
             strcpy(gamename, szWadNames[i]);
             gamemode = iGameModes[i];
             language = iLanguages[i];
-            D_AddFile(doomwad);
+            D_AddFile(tempbuf);
             return;
            }
        }
@@ -1318,7 +1341,8 @@ void FindResponseFile(void)
 void D_DoomMain (void)
    {
     int             p;
-    char                    file[256];
+    char            file[256];
+    char*           candidate;
     byte           *demover;
 
     //FindResponseFile();
@@ -1400,7 +1424,29 @@ void D_DoomMain (void)
 #if _WIN32
     D_AddFile("./glDoom.wad");
 #else
-    D_AddFile("gldoom.wad");
+    DIR* cwd = opendir(".");
+        if (cwd == NULL)
+            I_Error("D_DoomMain(): failed to open current directoy");
+
+        struct dirent* cur_file;
+        cur_file = readdir(cwd);
+
+        while (cur_file)
+        {
+            if (cur_file->d_type == DT_REG)
+            {
+                candidate = cur_file->d_name;
+                
+                if (!D_strncasecmp(candidate, "gldoom.wad", strlen("gldoom.wad")))
+                {
+                    D_AddFile(candidate);
+                    break;
+                }
+            }
+            cur_file = readdir(cwd);
+        }
+
+        closedir(cwd);
 #endif
     
     // add any files specified on the command line with -file wadfile
@@ -1802,7 +1848,7 @@ void D_DoomMain (void)
     //printf ("S_Init: Setting up sound.\n");
     con_printf("S_Init: Setting up sound.\n");
     //S_Init (snd_SfxVolume*8, snd_MusicVolume*8 );
-    S_Init(snd_SfxVolume, snd_MusicVolume );
+    S_Init(snd_SfxVolume, snd_MusicVolume);
 
     con_printf("HU_Init: Setting up heads up display.\n");
     HU_Init();

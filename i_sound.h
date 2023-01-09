@@ -1,123 +1,245 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
-// $Id:$
+// Copyright(C) 1993-1996 Id Software, Inc.
+// Copyright(C) 2005-2014 Simon Howard
 //
-// Copyright (C) 1993-1996 by id Software, Inc.
+// This program is free software; you can redistribute it and/or
+// modify it under the terms of the GNU General Public License
+// as published by the Free Software Foundation; either version 2
+// of the License, or (at your option) any later version.
 //
-// This source is available for distribution and/or modification
-// only under the terms of the DOOM Source Code License as
-// published by id Software. All rights reserved.
-//
-// The source is distributed in the hope that it will be useful,
+// This program is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
-// FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License
-// for more details.
-//
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
 //
 // DESCRIPTION:
-//	System interface, sound.
+//	The not so system specific sound interface.
 //
-//-----------------------------------------------------------------------------
+
 
 #ifndef __I_SOUND__
 #define __I_SOUND__
 
-#include "doomdef.h"
+#include "doomtype.h"
 
-// UNIX hack, to be removed.
-#ifdef SNDSERV
-#include <stdio.h>
-extern FILE* sndserver;
-extern char* sndserver_filename;
-#endif
+// so that the individual game logic and sound driver code agree
+#define NORM_PITCH 127
 
-#include "doomstat.h"
-#include "sounds.h"
+//
+// SoundFX struct.
+//
+typedef struct sfxinfo_struct	sfxinfo_t;
 
+struct sfxinfo_struct
+{
+    // tag name, used for hexen.
+    const char* tagname;
 
+    // lump name.  If we are running with use_sfx_prefix=true, a
+    // 'DS' (or 'DP' for PC speaker sounds) is prepended to this.
 
-// Init at program start...
-void I_InitSound();
+    char name[9];
 
-// ... update sound buffer and audio device at runtime...
-void I_UpdateSound(void);
-void I_SubmitSound(void);
+    // Sfx priority
+    int priority;
 
-// ... shut down and relase at program termination.
+    // referenced sound if a link
+    sfxinfo_t* link;
+
+    // pitch if a link (Doom), whether to pitch-shift (Hexen)
+    int pitch;
+
+    // volume if a link
+    int volume;
+
+    // this is checked every second to see if sound
+    // can be thrown out (if 0, then decrement, if -1,
+    // then throw out, if > 0, then it is in use)
+    int usefulness;
+
+    // lump number of sfx
+    int lumpnum;
+
+    // Maximum number of channels that the sound can be played on 
+    // (Heretic)
+    int numchannels;
+
+    // data used by the low level code
+    void* driver_data;
+};
+
+//
+// MusicInfo struct.
+//
+typedef struct
+{
+    // up to 6-character name
+    const char* name;
+
+    // lump number of music
+    int lumpnum;
+
+    // music data
+    void* data;
+
+    // music handle once registered
+    void* handle;
+
+}musicinfo_t;
+
+typedef enum
+{
+    SNDDEVICE_NONE = 0,
+    SNDDEVICE_PCSPEAKER = 1,
+    SNDDEVICE_ADLIB = 2,
+    SNDDEVICE_SB = 3,
+    SNDDEVICE_PAS = 4,
+    SNDDEVICE_GUS = 5,
+    SNDDEVICE_WAVEBLASTER = 6,
+    SNDDEVICE_SOUNDCANVAS = 7,
+    SNDDEVICE_GENMIDI = 8,
+    SNDDEVICE_AWE32 = 9,
+    SNDDEVICE_CD = 10,
+} snddevice_t;
+
+// Interface for sound modules
+
+typedef struct
+{
+    // List of sound devices that this sound module is used for.
+
+    snddevice_t* sound_devices;
+    int num_sound_devices;
+
+    // Initialise sound module
+    // Returns true if successfully initialised
+
+    dboolean(*Init)(dboolean use_sfx_prefix);
+
+    // Shutdown sound module
+
+    void (*Shutdown)(void);
+
+    // Returns the lump index of the given sound.
+
+    int (*GetSfxLumpNum)(sfxinfo_t* sfxinfo);
+
+    // Called periodically to update the subsystem.
+
+    void (*Update)(void);
+
+    // Update the sound settings on the given channel.
+
+    void (*UpdateSoundParams)(int channel, int vol, int sep);
+
+    // Start a sound on a given channel.  Returns the channel id
+    // or -1 on failure.
+
+    int (*StartSound)(sfxinfo_t* sfxinfo, int channel, int vol, int sep, int pitch);
+
+    // Stop the sound playing on the given channel.
+
+    void (*StopSound)(int channel);
+
+    // Query if a sound is playing on the given channel
+
+    dboolean(*SoundIsPlaying)(int channel);
+
+    // Called on startup to precache sound effects (if necessary)
+
+    void (*CacheSounds)(sfxinfo_t* sounds, int num_sounds);
+
+} sound_module_t;
+
+void I_InitSound(dboolean use_sfx_prefix);
 void I_ShutdownSound(void);
+int I_GetSfxLumpNum(sfxinfo_t* sfxinfo);
+void I_UpdateSound(void);
+void I_UpdateSoundParams(int channel, int vol, int sep);
+int I_StartSound(sfxinfo_t* sfxinfo, int channel, int vol, int sep, int pitch);
+void I_StopSound(int channel);
+dboolean I_SoundIsPlaying(int channel);
+void I_PrecacheSounds(sfxinfo_t* sounds, int num_sounds);
 
+// Interface for music modules
 
-//
-//  SFX I/O
-//
+typedef struct
+{
+    // List of sound devices that this music module is used for.
 
-// Initialize channels?
-void I_SetChannels();
+    snddevice_t* sound_devices;
+    int num_sound_devices;
 
-// Get raw data lump index for sound descriptor.
-int I_GetSfxLumpNum (sfxinfo_t* sfxinfo );
+    // Initialise the music subsystem
 
+    dboolean(*Init)(void);
 
-// Starts a sound in a particular sound channel.
-int
-I_StartSound
-( int		id,
-  int		vol,
-  int		sep,
-  int		pitch,
-  int		priority,
-  void     *origin );
+    // Shutdown the music subsystem
 
+    void (*Shutdown)(void);
 
-// Stops a sound channel.
-void I_StopSound(int handle);
+    // Set music volume - range 0-127
 
-// Called by S_*() functions
-//  to see if a channel is still playing.
-// Returns 0 if no longer playing, 1 if playing.
-int I_SoundIsPlaying(int handle);
+    void (*SetMusicVolume)(int volume);
 
-// Updates the volume, separation,
-//  and pitch of a sound channel.
-void
-I_UpdateSoundParams
-( int		handle,
-  int		vol,
-  int		sep,
-  int		pitch );
+    // Pause music
 
+    void (*PauseMusic)(void);
 
-//
-//  MUSIC I/O
-//
+    // Un-pause music
+
+    void (*ResumeMusic)(void);
+
+    // Register a song handle from data
+    // Returns a handle that can be used to play the song
+
+    void* (*RegisterSong)(void* data, int len);
+
+    // Un-register (free) song data
+
+    void (*UnRegisterSong)(void* handle);
+
+    // Play the song
+
+    void (*PlaySong)(void* handle, dboolean looping);
+
+    // Stop playing the current song.
+
+    void (*StopSong)(void);
+
+    // Query if music is playing.
+
+    dboolean(*MusicIsPlaying)(void);
+
+    // Invoked periodically to poll.
+
+    void (*Poll)(void);
+} music_module_t;
+
 void I_InitMusic(void);
 void I_ShutdownMusic(void);
-// Volume.
 void I_SetMusicVolume(int volume);
-// PAUSE game handling.
-void I_PauseSong(int handle);
-void I_ResumeSong(int handle);
-// Registers a song handle to song data.
-int I_RegisterSong(void *data, int buffersize);
-// Called by anything that wishes to start music.
-//  plays a song, and when the song is done,
-//  starts playing it again in an endless loop.
-// Horrible thing to do, considering.
-void
-I_PlaySong
-( int		handle,
-  int		looping );
-// Stops a song over 3 seconds.
-void I_StopSong(int handle);
-// See above (register), then think backwards
-void I_UnRegisterSong(int handle);
+void I_PauseSong(void);
+void I_ResumeSong(void);
+void* I_RegisterSong(void* data, int len);
+void I_UnRegisterSong(void* handle);
+void I_PlaySong(void* handle, dboolean looping);
+void I_StopSong(void);
+dboolean I_MusicIsPlaying(void);
 
+extern int snd_sfxdevice;
+extern int snd_musicdevice;
+extern int snd_samplerate;
+extern int snd_cachesize;
+extern int snd_maxslicetime_ms;
+extern char* snd_musiccmd;
+extern int snd_pitchshift;
+extern char* snd_dmxoption;
+extern int use_libsamplerate;
+extern float libsamplerate_scale;
 
+// Sound modules
+extern sound_module_t sound_sdl_module;
 
 #endif
-//-----------------------------------------------------------------------------
-//
-// $Log:$
-//
-//-----------------------------------------------------------------------------
+
