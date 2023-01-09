@@ -838,13 +838,13 @@ static dboolean I_SDL_InitSound(dboolean _use_sfx_prefix)
     {
         channels_playing[i] = NULL;
     }
-
+/*
     if (SDL_Init(SDL_INIT_AUDIO) < 0)
     {
         fprintf(stderr, "Unable to set up sound.\n");
         return false;
     }
-
+*/
     if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(), NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
     {
         fprintf(stderr, "Error initialising SDL_mixer: %s\n", Mix_GetError());
@@ -857,7 +857,7 @@ static dboolean I_SDL_InitSound(dboolean _use_sfx_prefix)
 
     Mix_AllocateChannels(NUM_CHANNELS);
 
-    SDL_PauseAudio(0);
+    //SDL_PauseAudio(0);
 
     sound_initialized = true;
 
