@@ -9,6 +9,7 @@
 #include "sdl_kbrd.h"
 #include "d_event.h"
 #include "v_video.h"
+#include "i_system.h"
 
 dboolean         joystickavail = false;
 dboolean         mouseavail    = false;
@@ -34,6 +35,22 @@ dboolean I_InitInputs(void)
        }
     return true;
    }
+
+/* cph - pulled out common button code logic */
+//e6y static 
+static int I_SDLtoDoomMouseState(Uint32 buttonstate)
+{
+    return 0
+        | (buttonstate & SDL_BUTTON(1) ? 1 : 0)
+        | (buttonstate & SDL_BUTTON(2) ? 2 : 0)
+        | (buttonstate & SDL_BUTTON(3) ? 4 : 0)
+        | (buttonstate & SDL_BUTTON(6) ? 8 : 0)
+        | (buttonstate & SDL_BUTTON(7) ? 16 : 0)
+        | (buttonstate & SDL_BUTTON(4) ? 32 : 0)
+        | (buttonstate & SDL_BUTTON(5) ? 64 : 0)
+        | (buttonstate & SDL_BUTTON(8) ? 128 : 0)
+        ;
+}
 
 void I_CheckInputs(void)
    {
@@ -138,48 +155,30 @@ void I_CheckInputs(void)
 
         if ((usemouse) && (mouseavail)) {
 
+        case SDL_MOUSEBUTTONDOWN:
+        case SDL_MOUSEBUTTONUP:
+            event.type = ev_mouse;
+            event.data1 = I_SDLtoDoomMouseState(SDL_GetMouseState(NULL, NULL));
+            event.data2 = event.data3 = 0;
+            D_PostEvent(&event);
+            break;
+        }
+
         case SDL_MOUSEMOTION:
         {
+            if (ev.motion.xrel != 0 || ev.motion.yrel != 0)
+            {
+                event.type = ev_mousemotion;
+                mouse_motion.x = ev.motion.xrel;
+                mouse_motion.y = ev.motion.yrel;
 
-            event.type = ev_mouse;
-            mouse_motion.x = ev.motion.xrel;
-            mouse_motion.y = ev.motion.yrel;
+                event.data2 = mouse_motion.x;
+                event.data3 = mouse_motion.y;
 
-            event.data2 = mouse_motion.x;
-            event.data3 = mouse_motion.y;
-
-            D_PostEvent(&event);
+                D_PostEvent(&event);
+            }
 
         }break;
-
-        case SDL_MOUSEBUTTONDOWN:
-        {
-            event.type = ev_mouse;
-            mouse_motion.x = ev.motion.xrel;
-            mouse_motion.y = ev.motion.yrel;
-
-            event.data1 = ev.button.button;
-
-            event.data2 = mouse_motion.x;
-            event.data3 = mouse_motion.y;
-
-            D_PostEvent(&event);
-        }break;
-
-        case SDL_MOUSEBUTTONUP:
-        {
-            event.type = ev_mouse;
-            mouse_motion.x = ev.motion.xrel;
-            mouse_motion.y = ev.motion.yrel;
-
-            event.data1 = 0;
-
-            event.data2 = mouse_motion.x;
-            event.data3 = mouse_motion.y;
-
-            D_PostEvent(&event);
-        }break;
-        }
 
         default:
             break;
@@ -191,9 +190,54 @@ void I_CheckInputs(void)
     I_CheckKeyboard();
    }
 
+static void SmoothMouse(int* x, int* y)
+{
+    static int x_remainder_old = 0;
+    static int y_remainder_old = 0;
+
+    int x_remainder, y_remainder;
+    fixed_t correction_factor;
+
+    const fixed_t fractic = I_TickElapsedTime();
+
+    *x += x_remainder_old;
+    *y += y_remainder_old;
+
+    correction_factor = FixedDiv(fractic, FRACUNIT + fractic);
+
+    x_remainder = FixedMul(*x, correction_factor);
+    *x -= x_remainder;
+    x_remainder_old = x_remainder;
+
+    y_remainder = FixedMul(*y, correction_factor);
+    *y -= y_remainder;
+    y_remainder_old = y_remainder;
+}
+
+static void I_ReadMouse()
+{
+    int x, y;
+
+    SDL_GetRelativeMouseState(&x, &y);
+    SmoothMouse(&x, &y);
+
+    if (x != 0 || y != 0)
+    {
+        event_t event;
+        event.type = ev_mousemotion;
+        event.data1 = 0;
+        event.data2 = x << 4;
+        event.data3 = -y << 4;
+
+        D_PostEvent(&event);
+    }
+}
+
 
 void I_GetEvent(void)
    {
     I_CheckInputs();
+
+    I_ReadMouse();
    }
 

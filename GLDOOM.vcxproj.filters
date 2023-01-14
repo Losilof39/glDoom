@@ -66,9 +66,6 @@
     <ClCompile Include="hu_stuff.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="i_cd.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="i_net.c">
       <Filter>Source Files</Filter>
     </ClCompile>

@@ -344,6 +344,7 @@ char		savedescription[32];
  
  
 #define	BODYQUESIZE	32
+#define MAX_MOUSEB 8
 
 mobj_t*		bodyque[BODYQUESIZE]; 
 int		bodyqueslot; 
@@ -362,6 +363,17 @@ int G_CmdChecksum (ticcmd_t* cmd)
 		 
     return sum; 
 } 
+
+static void SetMouseButtons(unsigned int buttons_mask)
+{
+    int i;
+
+    for (i = 0; i < MAX_MOUSEB; ++i)
+    {
+        unsigned int button_on = (buttons_mask & (1 << i)) != 0;
+        mousebuttons[i] = button_on;
+    }
+}
  
 
 extern float fXAngle;
@@ -478,7 +490,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     // buttons
     cmd->chatchar = HU_dequeueChatChar(); 
  
-    if (gamekeydown[key_fire] || mousebuttons[SDL_BUTTON_LEFT])
+    if (gamekeydown[key_fire] || mousebuttons[mousebfire])
        {
         cmd->buttons |= BT_ATTACK;
        }
@@ -616,7 +628,7 @@ void G_BuildTiccmd (ticcmd_t* cmd)
     /*if (strafe) 
         side += mousex*2; 
     else */
-        cmd->angleturn -= mousex*0x8; 
+        cmd->angleturn -= mousex; 
 
     mousex = mousey = 0;
 	 
@@ -800,11 +812,13 @@ dboolean G_Responder(event_t* ev)
                  gamekeydown[ev->data1] = false; 
              return false;   // always let key up events filter down 
 		 
-        case ev_mouse: 
-             mousebuttons[0] = (ev->data1 == 3) ? 1: 0;
-             mousebuttons[1] = (ev->data1 == 1) ? 1 : 0;
-             mousex = ev->data2*(mouseHorizontal*0.1*mouse_factor);
-             mousey = ev->data3*(mouseVertical*0.1*mouse_factor);
+        case ev_mouse:
+            SetMouseButtons(ev->data1);
+            return true;
+
+        case ev_mousemotion: 
+             mousex = ev->data2*(mouseHorizontal) / 10;
+             mousey = ev->data3*(mouseVertical) / 10;
              return true;    // eat events 
  
         //case ev_joystick: 

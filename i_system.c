@@ -80,7 +80,10 @@ byte* I_ZoneBase (int*	size)
     return (byte *) malloc (*size);
 }
 
-
+int I_TickElapsedTime(void)
+{
+    return (int64_t)I_GetTime() * TICRATE % 1000 * FRACUNIT / 1000;
+}
 
 //
 // I_GetTime

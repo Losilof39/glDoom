@@ -187,8 +187,18 @@ int             eventtail;
 //
 void D_PostEvent (event_t* ev)
    {
-    events[eventhead] = *ev;
-    eventhead = (++eventhead)&(MAXEVENTS-1);
+    /*events[eventhead] = *ev;
+    eventhead = (++eventhead)&(MAXEVENTS-1);*/
+
+    M_Responder(ev) ||
+        (gamestate == GS_LEVEL && (
+            HU_Responder(ev) ||
+            ST_Responder(ev) ||
+            AM_Responder(ev)
+            )
+            ) ||
+        G_Responder(ev);
+
    }
 
 
@@ -199,24 +209,24 @@ void D_PostEvent (event_t* ev)
 
 void D_ProcessEvents (void)
    {
-    event_t*	ev;
-    // IF STORE DEMO, DO NOT ACCEPT INPUT
-    if (( gamemode == commercial ) && (W_CheckNumForName("map01")<0))
-        return;
+    //event_t*	ev;
+    //// IF STORE DEMO, DO NOT ACCEPT INPUT
+    //if (( gamemode == commercial ) && (W_CheckNumForName("map01")<0))
+    //    return;
 	
-    for (; eventtail != eventhead; eventtail = (++eventtail)&(MAXEVENTS-1))
-       {
-        ev = &events[eventtail];
-        if (CO_Responder(ev))
-           {
-            continue;               // console ate the event
-           }
-        if (M_Responder(ev))
-           {
-            continue;               // menu ate the event
-           }
-        G_Responder(ev);
-       }
+    //for (; eventtail != eventhead; eventtail = (++eventtail)&(MAXEVENTS-1))
+    //   {
+    //    ev = &events[eventtail];
+    //    if (CO_Responder(ev))
+    //       {
+    //        continue;               // console ate the event
+    //       }
+    //    if (M_Responder(ev))
+    //       {
+    //        continue;               // menu ate the event
+    //       }
+    //    G_Responder(ev);
+    //   }
    }
 
 
@@ -575,7 +585,7 @@ void MY_DoomLoop (void)
     if (singletics)
        {
         I_StartTic();
-        D_ProcessEvents();
+        //D_ProcessEvents();
         G_BuildTiccmd (&netcmds[consoleplayer][maketic%BACKUPTICS]);
         if (advancedemo)
            {
