@@ -132,6 +132,7 @@ unsigned char szBadWadMessage[] = { "glDoom is unable to determine the game type
                                     "   system directory." };
 
 dboolean  notop = false;
+dboolean wasWiped = false;
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Windows Defines and Data

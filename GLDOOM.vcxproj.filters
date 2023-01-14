@@ -240,6 +240,9 @@
     <ClCompile Include="i_sdlmusic.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="gl_wipe.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="GLdoom.rc">

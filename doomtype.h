@@ -29,6 +29,10 @@
 #endif
 #include <fcntl.h>
 
+#ifndef MAX
+#define MAX(a,b) ((a)>(b)?(a):(b))
+#endif
+
 // Fixed to use builtin bool type with C++.
 #ifdef __cplusplus
 typedef bool dboolean;

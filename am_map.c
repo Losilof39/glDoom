@@ -1610,6 +1610,8 @@ void GL_AM_Drawer (void)
         return;
 
     //AM_clearFB(BACKGROUND);
+    glClear(GL_COLOR_BUFFER_BIT);
+
     if (grid)
         GL_AM_drawGrid(GRIDCOLORS);
     GL_AM_drawWalls();

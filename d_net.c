@@ -79,14 +79,11 @@ int		ticdup;
 int		maxsend;	// BACKUPTICS/(2*ticdup)-1
 
 
-void D_ProcessEvents (void); 
 void G_BuildTiccmd (ticcmd_t *cmd); 
 void D_DoAdvanceDemo (void);
  
 dboolean		reboundpacket;
 doomdata_t	reboundstore;
-
-void  HandleKeyboard(void);
 
 //
 //
@@ -396,7 +393,6 @@ void NetUpdate (void)
     for (i = 0; i < newtics; i++)
        {
         I_StartTic();
-        D_ProcessEvents();
         if (maketic - gameticdiv >= BACKUPTICS/2-1)
 	        break;          // can't hold any more
 	

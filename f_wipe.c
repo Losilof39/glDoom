@@ -1,302 +1,183 @@
-// Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
-//
-// $Id:$
-//
-// Copyright (C) 1993-1996 by id Software, Inc.
-//
-// This source is available for distribution and/or modification
-// only under the terms of the DOOM Source Code License as
-// published by id Software. All rights reserved.
-//
-// The source is distributed in the hope that it will be useful,
-// but WITHOUT ANY WARRANTY; without even the implied warranty of
-// FITNESS FOR A PARTICULAR PURPOSE. See the DOOM Source Code License
-// for more details.
-//
-// $Log:$
-//
-// DESCRIPTION:
-//	Mission begin melt/wipe screen special effect.
-//
-//-----------------------------------------------------------------------------
-
-
-static const char rcsid[] = "$Id: f_wipe.c,v 1.2 1997/02/03 22:45:09 b1 Exp $";
-
-
+/* Emacs style mode select   -*- C++ -*-
+ *-----------------------------------------------------------------------------
+ *
+ *
+ *  PrBoom: a Doom port merged with LxDoom and LSDLDoom
+ *  based on BOOM, a modified and improved DOOM engine
+ *  Copyright (C) 1999 by
+ *  id Software, Chi Hoang, Lee Killough, Jim Flynn, Rand Phares, Ty Halderman
+ *  Copyright (C) 1999-2000 by
+ *  Jess Haas, Nicolas Kalkhof, Colin Phipps, Florian Schulze
+ *  Copyright 2005, 2006 by
+ *  Florian Schulze, Colin Phipps, Neil Stevens, Andrey Budko
+ *
+ *  This program is free software; you can redistribute it and/or
+ *  modify it under the terms of the GNU General Public License
+ *  as published by the Free Software Foundation; either version 2
+ *  of the License, or (at your option) any later version.
+ *
+ *  This program is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU General Public License for more details.
+ *
+ *  You should have received a copy of the GNU General Public License
+ *  along with this program; if not, write to the Free Software
+ *  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA
+ *  02111-1307, USA.
+ *
+ * DESCRIPTION:
+ *      Mission begin melt/wipe screen special effect.
+ *
+ *-----------------------------------------------------------------------------
+ */
 
 #include "z_zone.h"
+#include "doomdef.h"
 #include "i_video.h"
 #include "v_video.h"
 #include "m_random.h"
-
-#include "doomdef.h"
-
 #include "f_wipe.h"
 
-//
-//                       SCREEN WIPE PACKAGE
-//
+ //
+ // SCREEN WIPE PACKAGE
+ //
 
-// when zero, stop the wipe
-static dboolean	go = 0;
-
-static byte*	wipe_scr_start;
-static byte*	wipe_scr_end;
-static byte*	wipe_scr;
+ // Parts re-written to support true-color video modes. Column-major
+ // formatting removed. - POPE
 
 
-void
-wipe_shittyColMajorXform
-( short*	array,
-  int		width,
-  int		height )
+// e6y: resolution limitation is removed
+static int* y_lookup = NULL;
+extern dboolean wasWiped;
+extern video_t video;
+
+// e6y: resolution limitation is removed
+void R_InitMeltRes(void)
 {
-    int		x;
-    int		y;
-    short*	dest;
+    if (y_lookup) 
+        free(y_lookup);
 
-    dest = (short*) Z_Malloc(width*height*2, PU_STATIC, 0);
-
-    for(y=0;y<height;y++)
-	for(x=0;x<width;x++)
-	    dest[x*height+y] = array[y*width+x];
-
-    memcpy(array, dest, width*height*2);
-
-    Z_Free(dest);
-
+    y_lookup = calloc(1, video.width * sizeof(*y_lookup));
 }
 
-int
-wipe_initColorXForm
-( int	width,
-  int	height,
-  int	ticks )
+static int wipe_initMelt(int ticks)
 {
-    memcpy(wipe_scr, wipe_scr_start, width*height);
+    int i;
+
+    // setup initial column positions (y<0 => not ready to scroll yet)
+    y_lookup[0] = -(M_Random() % 16);
+    for (i = 1; i <= video.width; i++)
+    {
+        int r = (M_Random() % 3) - 1;
+        y_lookup[i] = y_lookup[i - 1] + r;
+        if (y_lookup[i] > 0)
+            y_lookup[i] = 0;
+        else
+            if (y_lookup[i] == -16)
+                y_lookup[i] = -15;
+    }
     return 0;
 }
 
-int
-wipe_doColorXForm
-( int	width,
-  int	height,
-  int	ticks )
+static int wipe_doMelt(int ticks)
 {
-    dboolean	changed;
-    byte*	w;
-    byte*	e;
-    int		newval;
+    dboolean done = true;
+    int i;
+    const int depth = 0;
 
-    changed = false;
-    w = wipe_scr;
-    e = wipe_scr_end;
-    
-    while (w!=wipe_scr+width*height)
-    {
-	if (*w != *e)
-	{
-	    if (*w > *e)
-	    {
-		newval = *w - ticks;
-		if (newval < *e)
-		    *w = *e;
-		else
-		    *w = newval;
-		changed = true;
-	    }
-	    else if (*w < *e)
-	    {
-		newval = *w + ticks;
-		if (newval > *e)
-		    *w = *e;
-		else
-		    *w = newval;
-		changed = true;
-	    }
-	}
-	w++;
-	e++;
+    while (ticks--) {
+        for (i = 0; i <= (video.width); i++) {
+            if (y_lookup[i] < 0) {
+                y_lookup[i]++;
+                done = false;
+                continue;
+            }
+            if (y_lookup[i] < video.height) {
+                byte* s, * d;
+                int j, k, dy;
+
+                /* cph 2001/07/29 -
+                  *  The original melt rate was 8 pixels/sec, i.e. 25 frames to melt
+                  *  the whole screen, so make the melt rate depend on SCREENHEIGHT
+                  *  so it takes no longer in high res
+                  */
+                dy = (y_lookup[i] < 16) ? y_lookup[i] + 1 : video.height / 25;
+                if (y_lookup[i] + dy >= video.height)
+                    dy = video.height - y_lookup[i];
+
+                /*if (V_GetMode() != VID_MODEGL) {
+                 s = wipe_scr_end.data    + (y_lookup[i]*wipe_scr_end.byte_pitch+(i*depth));
+                 d = wipe_scr.data        + (y_lookup[i]*wipe_scr.byte_pitch+(i*depth));
+                 for (j=dy;j;j--) {
+                   for (k=0; k<depth; k++)
+                     d[k] = s[k];
+                   d += wipe_scr.byte_pitch;
+                   s += wipe_scr_end.byte_pitch;
+                 }
+                }*/
+                y_lookup[i] += dy;
+                /*if (V_GetMode() != VID_MODEGL) {
+                 s = wipe_scr_start.data  + (i*depth);
+                 d = wipe_scr.data        + (y_lookup[i]*wipe_scr.byte_pitch+(i*depth));
+                 for (j=SCREENHEIGHT-y_lookup[i];j;j--) {
+                   for (k=0; k<depth; k++)
+                     d[k] = s[k];
+                   d += wipe_scr.byte_pitch;
+                   s += wipe_scr_end.byte_pitch;
+                 }
+                }*/
+                done = false;
+            }
+        }
     }
 
-    return !changed;
-
-}
-
-int
-wipe_exitColorXForm
-( int	width,
-  int	height,
-  int	ticks )
-{
-    return 0;
-}
-
-
-static int*	y;
-
-int
-wipe_initMelt
-( int	width,
-  int	height,
-  int	ticks )
-{
-    int i, r;
-    
-    // copy start screen to main screen
-    memcpy(wipe_scr, wipe_scr_start, width*height);
-    
-    // makes this wipe faster (in theory)
-    // to have stuff in column-major format
-    wipe_shittyColMajorXform((short*)wipe_scr_start, width/2, height);
-    wipe_shittyColMajorXform((short*)wipe_scr_end, width/2, height);
-    
-    // setup initial column positions
-    // (y<0 => not ready to scroll yet)
-    y = (int *) Z_Malloc(width*sizeof(int), PU_STATIC, 0);
-    y[0] = -(M_Random()%16);
-    for (i=1;i<width;i++)
-    {
-	r = (M_Random()%3) - 1;
-	y[i] = y[i-1] + r;
-	if (y[i] > 0) y[i] = 0;
-	else if (y[i] == -16) y[i] = -15;
-    }
-
-    return 0;
-}
-
-int
-wipe_doMelt
-( int	width,
-  int	height,
-  int	ticks )
-{
-    int		i;
-    int		j;
-    int		dy;
-    int		idx;
-    
-    short*	s;
-    short*	d;
-    dboolean	done = true;
-
-    width/=2;
-
-    while (ticks--)
-    {
-	for (i=0;i<width;i++)
-	{
-	    if (y[i]<0)
-	    {
-		y[i]++; done = false;
-	    }
-	    else if (y[i] < height)
-	    {
-		dy = (y[i] < 16) ? y[i]+1 : 8;
-		if (y[i]+dy >= height) dy = height - y[i];
-		s = &((short *)wipe_scr_end)[i*height+y[i]];
-		d = &((short *)wipe_scr)[y[i]*width+i];
-		idx = 0;
-		for (j=dy;j;j--)
-		{
-		    d[idx] = *(s++);
-		    idx += width;
-		}
-		y[i] += dy;
-		s = &((short *)wipe_scr_start)[i*height];
-		d = &((short *)wipe_scr)[y[i]*width+i];
-		idx = 0;
-		for (j=height-y[i];j;j--)
-		{
-		    d[idx] = *(s++);
-		    idx += width;
-		}
-		done = false;
-	    }
-	}
-    }
+    gld_wipe_doMelt(ticks, y_lookup);
 
     return done;
-
 }
 
-int
-wipe_exitMelt
-( int	width,
-  int	height,
-  int	ticks )
+// CPhipps - modified to allocate and deallocate screens[2 to 3] as needed, saving memory
+
+static int wipe_exitMelt(int ticks)
 {
-    Z_Free(y);
+
+    gld_wipe_exitMelt(ticks);
     return 0;
 }
 
-int
-wipe_StartScreen
-( int	x,
-  int	y,
-  int	width,
-  int	height )
+int wipe_StartScreen(void)
 {
-    wipe_scr_start = screens[2];
-    I_ReadScreen(wipe_scr_start);
+    //if(!render_wipescreen||wasWiped) return 0;//e6y
+    wasWiped = true;//e6y
+
+    gld_wipe_StartScreen();
     return 0;
 }
 
-int
-wipe_EndScreen
-( int	x,
-  int	y,
-  int	width,
-  int	height )
+int wipe_EndScreen(void)
 {
-    wipe_scr_end = screens[3];
-    I_ReadScreen(wipe_scr_end);
-    V_DrawBlock(x, y, 0, width, height, wipe_scr_start); // restore start scr.
+    //if(!render_wipescreen||!wasWiped) return 0;//e6y
+    wasWiped = false;//e6y
+
+    gld_wipe_EndScreen();
     return 0;
 }
 
-int
-wipe_ScreenWipe
-( int	wipeno,
-  int	x,
-  int	y,
-  int	width,
-  int	height,
-  int	ticks )
+// killough 3/5/98: reformatted and cleaned up
+int wipe_ScreenWipe(int ticks)
 {
-    int rc;
-    static int (*wipes[])(int, int, int) =
+    static dboolean go;                               // when zero, stop the wipe
+    if (!go)                                         // initial stuff
     {
-	wipe_initColorXForm, wipe_doColorXForm, wipe_exitColorXForm,
-	wipe_initMelt, wipe_doMelt, wipe_exitMelt
-    };
-
-    void V_MarkRect(int, int, int, int);
-
-    // initial stuff
-    if (!go)
-    {
-	go = 1;
-	// wipe_scr = (byte *) Z_Malloc(width*height, PU_STATIC, 0); // DEBUG
-	wipe_scr = screens[0];
-	(*wipes[wipeno*3])(width, height, ticks);
+        go = 1;
+        wipe_initMelt(ticks);
     }
-
     // do a piece of wipe-in
-    V_MarkRect(0, 0, width, height);
-    rc = (*wipes[wipeno*3+1])(width, height, ticks);
-    //  V_DrawBlock(x, y, 0, width, height, wipe_scr); // DEBUG
-
-    // final stuff
-    if (rc)
+    if (wipe_doMelt(ticks))     // final stuff
     {
-	go = 0;
-	(*wipes[wipeno*3+2])(width, height, ticks);
+        wipe_exitMelt(ticks);
+        go = 0;
     }
-
     return !go;
-
 }

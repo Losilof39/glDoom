@@ -287,6 +287,7 @@
     <ClCompile Include="glsbar.c" />
     <ClCompile Include="GL_utils.c" />
     <ClCompile Include="gl_video.c" />
+    <ClCompile Include="gl_wipe.c" />
     <ClCompile Include="g_game.c" />
     <ClCompile Include="hu_lib.c" />
     <ClCompile Include="hu_stuff.c" />

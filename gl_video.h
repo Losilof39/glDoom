@@ -13,4 +13,5 @@ typedef enum { gl_2d, gl_3d } glmode_t;
 dboolean StartUpOpenGL();
 void OGL_Error( int, char * );
 void GetGLInfo();
+void I_Start2DFrame();
 

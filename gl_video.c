@@ -101,18 +101,19 @@ void I_ShutdownGraphics(void)
 
 void I_Start2DFrame()
    {
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-
-    glOrtho(0, video.width, 0, video.height, 0.5, 10.0);
-    glViewport( 0, 0, video.width, video.height);
-
-    glTranslatef( 0.0f, 0.0f, -1.0f );
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
-
-    glTranslatef( 0.0f, 0.0f, 0.0f );
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glOrtho(
+        (GLdouble)0,
+        (GLdouble)video.width,
+        (GLdouble)video.height,
+        (GLdouble)0,
+        (GLdouble)-1.0,
+        (GLdouble)1.0
+    );
+    glDisable(GL_DEPTH_TEST);
 
    }
 
@@ -154,7 +155,7 @@ void I_StartFrame (void)
    {
     // er?
    // Will put the OpenGL frame start code in here...
-    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    glClear( GL_DEPTH_BUFFER_BIT );
 
     I_Start3DFrame();
 
@@ -215,10 +216,11 @@ void I_FinishUpdate(void)
        }
     else
        {
-        glOrtho(0, video.width, 0, video.height, 0.5, 10.0);
-        glViewport( 0, 0, video.width, video.height);
+        I_Start2DFrame();
+        /*glOrtho(0, video.width, 0, video.height, 0.5, 10.0);
+        glViewport( 0, 0, video.width, video.height);*/
 
-        glTranslatef( 0.0f, 0.0f, -1.0f );
+        //glTranslatef( 0.0f, 0.0f, -1.0f );
        }
 
     // Swap the rendering buffers...

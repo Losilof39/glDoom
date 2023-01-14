@@ -164,7 +164,6 @@ char	*basedefault = "default.cfg";      // default file
 
 
 void D_CheckNetGame (void);
-void D_ProcessEvents (void);
 void G_BuildTiccmd (ticcmd_t* cmd);
 void D_DoAdvanceDemo (void);
 
@@ -194,39 +193,12 @@ void D_PostEvent (event_t* ev)
         (gamestate == GS_LEVEL && (
             HU_Responder(ev) ||
             ST_Responder(ev) ||
-            AM_Responder(ev)
+            AM_Responder(ev) ||
+            CO_Responder(ev)
             )
             ) ||
         G_Responder(ev);
 
-   }
-
-
-//
-// D_ProcessEvents
-// Send all the events of the given timestamp down the responder chain
-//
-
-void D_ProcessEvents (void)
-   {
-    //event_t*	ev;
-    //// IF STORE DEMO, DO NOT ACCEPT INPUT
-    //if (( gamemode == commercial ) && (W_CheckNumForName("map01")<0))
-    //    return;
-	
-    //for (; eventtail != eventhead; eventtail = (++eventtail)&(MAXEVENTS-1))
-    //   {
-    //    ev = &events[eventtail];
-    //    if (CO_Responder(ev))
-    //       {
-    //        continue;               // console ate the event
-    //       }
-    //    if (M_Responder(ev))
-    //       {
-    //        continue;               // menu ate the event
-    //       }
-    //    G_Responder(ev);
-    //   }
    }
 
 
@@ -258,6 +230,43 @@ extern  int             showMessages;
 void R_ExecuteSetViewSize (void);
 extern  int             hudmode;
 
+void I_uSleep(unsigned long usecs)
+{
+    SDL_Delay(usecs / 1000);
+}
+
+//
+// D_Wipe
+//
+// CPhipps - moved the screen wipe code from D_Display to here
+// The screens to wipe between are already stored, this just does the timing
+// and screen updating
+
+static void D_Wipe(void)
+{
+    dboolean done;
+    int wipestart = I_GetTime() - 1;
+
+    //glClear(GL_COLOR_BUFFER_BIT);
+
+    do
+    {
+        int nowtime, tics;
+        do
+        {
+            I_uSleep(5000); // CPhipps - don't thrash cpu in this loop
+            nowtime = I_GetTime();
+            tics = nowtime - wipestart;
+        } while (!tics);
+        wipestart = nowtime;
+        done = wipe_ScreenWipe(tics);
+        I_UpdateNoBlit();
+        M_Drawer();                   // menu is drawn even on top of wipes
+        I_FinishUpdate();             // page flip or blit buffer
+
+    } while (!done);
+}
+
 void D_Display (void)
    {
     static  dboolean		viewactivestate = false;
@@ -287,13 +296,10 @@ void D_Display (void)
        }
 
     // save the current screen if about to wipe
-    if (gamestate != wipegamestate)
+    if ((wipe = (gamestate != wipegamestate)))
        {
-        wipe = true;
-        wipe_StartScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
+        wipe_StartScreen();
        }
-    else
-       wipe = false;
 
     if (gamestate == GS_LEVEL && gametic)
        {
@@ -416,36 +422,17 @@ void D_Display (void)
     //CO_Drawer();          // Console is drawn on top of even the menu...
     NetUpdate ();         // send out any new accumulation
 
-// FIXME... This disables the screen wipe... (I think)
-    wipe = false;
-
     // normal update
     if (!wipe)
        {
         I_FinishUpdate ();              // page flip or blit buffer
-        return;
        }
-    
-    // wipe update
-    wipe_EndScreen(0, 0, SCREENWIDTH, SCREENHEIGHT);
-
-    wipestart = I_GetTime () - 1;
-    do
-       {
-        do
-           {
-            nowtime = I_GetTime ();
-            tics = nowtime - wipestart;
-           }
-        while(!tics);
-        wipestart = nowtime;
-        done = wipe_ScreenWipe(wipe_Melt, 0, 0, SCREENWIDTH, SCREENHEIGHT, tics);
-        I_UpdateNoBlit ();
-        M_Drawer ();                            // menu is drawn even on top of wipes
-        //CO_Drawer();                            // Console is drawn on top of even the menu...
-        I_FinishUpdate ();                      // page flip or blit buffer
-       }
-    while(!done);
+    else
+    {
+        wipe_EndScreen();
+        D_Wipe();
+    }
+  
    }
 
 GLTexData PauseTexData;
@@ -1679,6 +1666,7 @@ void D_DoomMain (void)
     //printf ("V_Init: allocate screens.\n");
     con_printf("V_Init: allocate screens.\n");
     V_Init ();
+    R_InitMeltRes();
 
     //printf ("Z_Init: Init zone memory allocation daemon. \n");
     con_printf("Z_init: Init zone memory allocation daemon. \n");
