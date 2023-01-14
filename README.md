@@ -12,13 +12,15 @@ This repository contains improvements for glDoom port
 * Cleanups for modern types (uintptr_t, intptr_t and MSVC specific functions like (underscore)access etc..)
 * Cleaned up all Win32 code and added a SDL2 backend
 * Ported to Linux but it's not stable yet
-* Mouse support (still a bit janky)
+* Mouse support
 * Audio is rewritten using SDL2 and taken from chocolate doom
+* Now the melting screen works!
 
 ### Current Problems
 * No vertical mouse movement
 * Multiplayer doesn't work
 * Can't play any custom WAD
+* Clipping issue due to changing fov and resolution
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
