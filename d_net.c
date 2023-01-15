@@ -393,6 +393,7 @@ void NetUpdate (void)
     for (i = 0; i < newtics; i++)
        {
         I_StartTic();
+        D_ProcessEvents();
         if (maketic - gameticdiv >= BACKUPTICS/2-1)
 	        break;          // can't hold any more
 	

@@ -34,7 +34,6 @@
 
 #include "z_zone.h"
 #include "doomdef.h"
-#include "i_video.h"
 #include "v_video.h"
 #include "m_random.h"
 #include "f_wipe.h"
@@ -106,27 +105,7 @@ static int wipe_doMelt(int ticks)
                 if (y_lookup[i] + dy >= video.height)
                     dy = video.height - y_lookup[i];
 
-                /*if (V_GetMode() != VID_MODEGL) {
-                 s = wipe_scr_end.data    + (y_lookup[i]*wipe_scr_end.byte_pitch+(i*depth));
-                 d = wipe_scr.data        + (y_lookup[i]*wipe_scr.byte_pitch+(i*depth));
-                 for (j=dy;j;j--) {
-                   for (k=0; k<depth; k++)
-                     d[k] = s[k];
-                   d += wipe_scr.byte_pitch;
-                   s += wipe_scr_end.byte_pitch;
-                 }
-                }*/
                 y_lookup[i] += dy;
-                /*if (V_GetMode() != VID_MODEGL) {
-                 s = wipe_scr_start.data  + (i*depth);
-                 d = wipe_scr.data        + (y_lookup[i]*wipe_scr.byte_pitch+(i*depth));
-                 for (j=SCREENHEIGHT-y_lookup[i];j;j--) {
-                   for (k=0; k<depth; k++)
-                     d[k] = s[k];
-                   d += wipe_scr.byte_pitch;
-                   s += wipe_scr_end.byte_pitch;
-                 }
-                }*/
                 done = false;
             }
         }
@@ -148,7 +127,7 @@ static int wipe_exitMelt(int ticks)
 
 int wipe_StartScreen(void)
 {
-    //if(!render_wipescreen||wasWiped) return 0;//e6y
+    if(wasWiped) return 0;//e6y
     wasWiped = true;//e6y
 
     gld_wipe_StartScreen();
@@ -157,7 +136,7 @@ int wipe_StartScreen(void)
 
 int wipe_EndScreen(void)
 {
-    //if(!render_wipescreen||!wasWiped) return 0;//e6y
+    if(!wasWiped) return 0;//e6y
     wasWiped = false;//e6y
 
     gld_wipe_EndScreen();

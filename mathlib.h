@@ -4,9 +4,14 @@
 
 #define MATHLIB
 
+#include "tables.h"
+
 #define M_PI    3.141592657f
 #define DEG2RAD(x) ((x)*(M_PI/180.0f))
 #define RAD2DEG(x) ((x)*(180.0f/M_PI))
+
+#define BAM2DEG(x) ((float)x*90.0f/(float)ANG90)
+#define DEG2BAM(x) ((angle_t)((float)x*(float)ANG90/90.0f))
 
 #define YAW   1
 #define PITCH 0

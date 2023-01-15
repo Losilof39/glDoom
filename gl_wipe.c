@@ -32,7 +32,6 @@
  */
 
 #include "v_video.h"
-#include "i_video.h"
 #include "gl_video.h"
 #include "m_random.h"
 #include <glad/glad.h>
