@@ -221,76 +221,76 @@ int main(int argc, char** szCmdLine)
 
 dboolean ResizeMainWindow(char *mode)
    {
-    char *parm;
-    int   width, height;
-    int   t_width, t_height;
-    int   x, y, sx, sy, ex, ey;
-
-    if ((parm = strtok(mode, " ")) != NULL)
-       {
-        width = atoi(parm);
-        if ((parm = strtok(NULL, " ")) != NULL)
-           {
-            height = atoi(parm);
-            t_width = video.width;
-            t_height = video.height;
-            video.width = width;
-            video.height = height;
-
-            if (video.fullscreen == true)
-               {
-                // can't do this right without shutting down OpenGL
-                // and restarting it.  But don't want to reload ALL
-                // the game graphics used so far.  Later on maybe...
-                return false;
-
-                if (SetVideoMode() == false)
-                   {
-                    video.width = t_width;
-                    video.height = t_height;
-                   }
-                else
-                   {
-                    x = y = 0;
-                    sx = video.width;
-                    sy = video.height;
-                    SDL_SetWindowSize(pWindow, sx, sy);
-                    SDL_SetWindowPosition(pWindow, x, y);
-                    //R_InitViewData();
-                    return true;
-                   }
-//                would need to release rendering context here
-//                and create new one then reload all GL graphics... ugh...
-               }
-            else
-               {
-                
-                // Center the window on the screen
-                x = SDL_WINDOWPOS_CENTERED;
-                y = SDL_WINDOWPOS_CENTERED;
-                sx = video.width;
-                sy = video.height;
-                /*
-                  Check to be sure the requested window size fits on the screen and
-                  adjust each dimension to fit if the requested size does not fit.
-                */
-                if ((sx <= DevInfo.width) && (sy <= DevInfo.height))
-                   {
-                    SDL_SetWindowSize(pWindow, sx, sy);
-                    SDL_SetWindowPosition(pWindow, x, y);
-                    //R_InitViewData();
-                    return true;
-                   }
-                else
-                   {
-                    video.width = t_width;
-                    video.height = t_height;
-                   }
-               }
-            R_InitViewData();
-           }
-       }
-    return false;
+//    char *parm;
+//    int   width, height;
+//    int   t_width, t_height;
+//    int   x, y, sx, sy, ex, ey;
+//
+//    if ((parm = strtok(mode, " ")) != NULL)
+//       {
+//        width = atoi(parm);
+//        if ((parm = strtok(NULL, " ")) != NULL)
+//           {
+//            height = atoi(parm);
+//            t_width = video.width;
+//            t_height = video.height;
+//            video.width = width;
+//            video.height = height;
+//
+//            if (video.fullscreen == true)
+//               {
+//                // can't do this right without shutting down OpenGL
+//                // and restarting it.  But don't want to reload ALL
+//                // the game graphics used so far.  Later on maybe...
+//                return false;
+//
+//                if (SetVideoMode() == false)
+//                   {
+//                    video.width = t_width;
+//                    video.height = t_height;
+//                   }
+//                else
+//                   {
+//                    x = y = 0;
+//                    sx = video.width;
+//                    sy = video.height;
+//                    SDL_SetWindowSize(pWindow, sx, sy);
+//                    SDL_SetWindowPosition(pWindow, x, y);
+//                    //R_InitViewData();
+//                    return true;
+//                   }
+////                would need to release rendering context here
+////                and create new one then reload all GL graphics... ugh...
+//               }
+//            else
+//               {
+//                
+//                // Center the window on the screen
+//                x = SDL_WINDOWPOS_CENTERED;
+//                y = SDL_WINDOWPOS_CENTERED;
+//                sx = video.width;
+//                sy = video.height;
+//                /*
+//                  Check to be sure the requested window size fits on the screen and
+//                  adjust each dimension to fit if the requested size does not fit.
+//                */
+//                if ((sx <= DevInfo.width) && (sy <= DevInfo.height))
+//                   {
+//                    SDL_SetWindowSize(pWindow, sx, sy);
+//                    SDL_SetWindowPosition(pWindow, x, y);
+//                    //R_InitViewData();
+//                    return true;
+//                   }
+//                else
+//                   {
+//                    video.width = t_width;
+//                    video.height = t_height;
+//                   }
+//               }
+//            R_InitViewData();
+//           }
+//       }
+//    return false;
    }
 
 
@@ -354,8 +354,8 @@ void InitData()
 	float fRatio = 0.0f;
 
     // Set the "Doom" screen variables to default
-    SCREENWIDTH = 320;
-    SCREENHEIGHT = 200;
+    SCREENWIDTH = DEF_WIDTH;
+    SCREENHEIGHT = DEF_HEIGHT;
 
     video.nearclip = 1.5f;
     video.farclip = 5000.0f;

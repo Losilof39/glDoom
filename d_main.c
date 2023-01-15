@@ -342,7 +342,7 @@ void D_Display (void)
              break;
 
         case GS_INTERMISSION:
-             WI_Drawer();
+             //WI_Drawer();
              GL_WI_Drawer();
              break;
 

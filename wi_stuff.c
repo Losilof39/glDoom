@@ -91,10 +91,10 @@ rcsid[] = "$Id: wi_stuff.c,v 1.7 1997/02/03 22:45:13 b1 Exp $";
 
 // SINGPLE-PLAYER STUFF
 #define SP_STATSX		50
-#define SP_STATSY		(((SCREENHEIGHT-200)/2)+50)
+#define SP_STATSY		50
 
 #define SP_TIMEX		16
-#define SP_TIMEY		(((SCREENHEIGHT-200)/2)+168)
+#define SP_TIMEY		168
 
 
 // NET GAME STUFF
