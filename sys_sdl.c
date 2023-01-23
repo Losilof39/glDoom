@@ -315,7 +315,10 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         I_Error("Failed to init SDL");
  
-    sprintf(&window_title, "GLDoom %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
+#if _DEBUG
+    sprintf(&window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
+#else
+    sprintf(&window_title, "GLDOOM-RE");
 
     pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
                                video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
