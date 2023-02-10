@@ -1,4 +1,7 @@
 // gl_utils.h
+#ifndef GL_UTILS_H
+#define GL_UTILS_H
+
 #include "doomtype.h"
 #include "gldefs.h"
 
@@ -13,3 +16,4 @@ int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 int GL_LoadFlatTexture(int TexNumb);
 int GL_LoadSkyTop( char *filename );
 
+#endif

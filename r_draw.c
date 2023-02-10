@@ -93,6 +93,7 @@ byte*			dc_source;
 
 // just for profiling 
 int			dccount;
+extern video_t video;
 
 //
 // A column is a vertical slice/span from a wall texture that,

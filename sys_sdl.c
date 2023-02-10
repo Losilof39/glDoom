@@ -319,6 +319,7 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     sprintf(&window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 #else
     sprintf(&window_title, "GLDOOM-RE");
+#endif
 
     pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
                                video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
@@ -357,8 +358,8 @@ void InitData()
 	float fRatio = 0.0f;
 
     // Set the "Doom" screen variables to default
-    SCREENWIDTH = DEF_WIDTH;
-    SCREENHEIGHT = DEF_HEIGHT;
+    SCREENWIDTH = 320;
+    SCREENHEIGHT = 200;
 
     video.nearclip = 1.5f;
     video.farclip = 5000.0f;
