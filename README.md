@@ -18,9 +18,7 @@ This repository contains improvements for glDoom port
 
 ### Current Problems
 * No vertical mouse movement
-* Multiplayer doesn't work
-* Can't play any custom WAD
-* Clipping issue due to changing fov and resolution
+* Clipping issue due to changing fov
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
