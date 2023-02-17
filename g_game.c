@@ -289,6 +289,7 @@ int weapon_recoil;           // weapon recoil
 int default_player_bobbing;  // whether player bobs or not         
 int player_bobbing;          // whether player bobs or not       
 int weapon_preferences[2][NUMWEAPONS+1];                   
+int curweapon = 2;
 int health_red;    // health amount less than which status is red
 int health_yellow; // health amount less than which status is yellow
 int health_green;  // health amount above is blue, below is green
@@ -502,53 +503,87 @@ void G_BuildTiccmd (ticcmd_t* cmd)
         dclicks = 0;                   
        } 
 
+    // mouse scrolling doesnt work yet..
+#if 0
+    if (gamekeydown[KEYD_MWHEELDOWN])
+    {
+        curweapon++;
+
+        if (curweapon > 8)
+            curweapon = 0;
+
+        cmd->buttons |= BT_CHANGE;
+        cmd->buttons |= curweapon << BT_WEAPONSHIFT;
+    }
+
+    if (gamekeydown[KEYD_MWHEELUP])
+    {
+        curweapon--;
+
+        if (curweapon < 0)
+            curweapon = 8;
+
+        cmd->buttons |= BT_CHANGE;
+        cmd->buttons |= curweapon << BT_WEAPONSHIFT;
+    }
+#endif
+
     if (gamekeydown[key_weapon1])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 0<<BT_WEAPONSHIFT;
+        curweapon = 0;
        }
     else
     if (gamekeydown[key_weapon2])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 1<<BT_WEAPONSHIFT;
+        curweapon = 1;
        }
     else
     if (gamekeydown[key_weapon3])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 2<<BT_WEAPONSHIFT;
+        curweapon = 2;
        }
     else
     if (gamekeydown[key_weapon4])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 3<<BT_WEAPONSHIFT;
+        curweapon = 3;
        }
     else
     if (gamekeydown[key_weapon5])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 4<<BT_WEAPONSHIFT;
+        curweapon = 4;
        }
     else
     if (gamekeydown[key_weapon6])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 5<<BT_WEAPONSHIFT;
+        curweapon = 5;
        }
     else
     if (gamekeydown[key_weapon7])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 6<<BT_WEAPONSHIFT;
+        curweapon = 6;
        }
     else
     if (gamekeydown[key_weapon8])
        {
         cmd->buttons |= BT_CHANGE; 
         cmd->buttons |= 7<<BT_WEAPONSHIFT;
+        curweapon = 7;
        }
+
 /*
     else
     if (gamekeydown[key_weapon9])

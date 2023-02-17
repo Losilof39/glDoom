@@ -41,6 +41,9 @@ typedef enum
     ev_joystick
 } evtype_t;
 
+#define KEYD_MWHEELUP   (0x80 + 0x6b)
+#define KEYD_MWHEELDOWN (0x80 + 0x6c)
+
 // Event structure.
 typedef struct
 {
