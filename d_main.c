@@ -1699,7 +1699,7 @@ void D_DoomMain (void)
                 con_printf("|       This wad appears to be from a version %d.%d WAD.          |\n", *demover/100,*demover%100);
                }
             con_printf("|     You are advised that this may not run and the demos       |\n");
-            con_printf("|     may not play even if it does run.  glDoom will NOT        |\n");
+            con_printf("|     may not play even if it does run. glDoom Re will NOT      |\n");
             con_printf("|     work properly on WAD versions earlier than 1.9            |\n");
             con_printf("+---------------------------------------------------------------+\n");
            }

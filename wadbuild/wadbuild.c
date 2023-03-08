@@ -3,9 +3,35 @@
 // name using the lump files listed in the lst file.
 #include <stdio.h>
 #include <stdlib.h>
+#ifdef _MSC_VER
 #include <io.h>
+#else
+#include <unistd.h>
+#endif
 #include <fcntl.h>
 #include <string.h>
+
+#ifdef __linux__
+#define _MAX_PATH   260 // max. length of full pathname
+#endif
+
+#if defined(_WIN32)
+#define Open _open
+#define Close _close
+#define Read _read
+#define LSeek _lseek
+#define Write _write
+#define Strupr _strupr
+#define Filelength _filelength
+#else
+#define Open open
+#define Close close
+#define Read read
+#define LSeek lseek
+#define Write write
+#define Strupr strupr
+#define Filelength filelength
+#endif
 
 typedef struct
    {
@@ -54,9 +80,9 @@ void main(int argc, char *argv[])
     strcpy(wadname, str);
     strcat(wadname, ".wad");
 
-    wadfile = _open(wadname, O_RDWR | O_CREAT | O_TRUNC | O_BINARY, 666);
+    wadfile = Open(wadname, O_RDWR | O_CREAT | O_TRUNC | O_BINARY, 666);
     wadhead.offset = sizeof(wadhead_t);
-    _write(wadfile, &wadhead, sizeof(wadhead_t));
+    Write(wadfile, &wadhead, sizeof(wadhead_t));
     while (fgets(readline, 256, namelist ) != NULL)
        {
         if (strlen(readline) == 0)
@@ -83,7 +109,7 @@ void main(int argc, char *argv[])
             str[i] = '\0';
            }
         strcpy(tstr, str);
-        _strupr(tstr);
+        Strupr(tstr);
         if ((tch = strrchr(tstr, '/')) == NULL)
            {
             if ((tch = strrchr(tstr, '\\')) != NULL)
@@ -108,22 +134,22 @@ void main(int argc, char *argv[])
            }
         printf("Entry %d: %s -> %s ", wadhead.entries, str, resname);
         pad = 0;
-        if ((resource = _open(str, O_RDONLY | O_BINARY)) == -1)
+        if ((resource = Open(str, O_RDONLY | O_BINARY)) == -1)
            {
             // Just a place holder... MARKER FILE
             waddir[wadhead.entries].length = 0;
            }
         else
            {
-            flength = _filelength(resource);
+            flength = Filelength(resource);
             databuff = (unsigned char *)realloc(databuff, flength+4);
-            _read(resource, databuff, flength);
-            _close(resource);
+            Read(resource, databuff, flength);
+            Close(resource);
             if ((flength%4) != 0)
                {
                 pad = (4-(flength % 4));
                }
-            _write(wadfile, databuff, flength+pad);
+            Write(wadfile, databuff, flength+pad);
             waddir[wadhead.entries].length = flength;
            }
         printf("%ld bytes.", flength);
@@ -133,10 +159,10 @@ void main(int argc, char *argv[])
         wadhead.entries++;
         printf("\n");
        }
-    _write(wadfile, waddir, sizeof(waddir_t)*wadhead.entries);
-    _lseek(wadfile, 0, SEEK_SET);
-    _write(wadfile, &wadhead, sizeof(wadhead_t));
-    _close(wadfile);
+    Write(wadfile, waddir, sizeof(waddir_t)*wadhead.entries);
+    LSeek(wadfile, 0, SEEK_SET);
+    Write(wadfile, &wadhead, sizeof(wadhead_t));
+    Close(wadfile);
     fclose(namelist);
    }
 

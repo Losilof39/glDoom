@@ -1,5 +1,5 @@
 # glDoom Resurrected (again!)
-This repository contains improvements for glDoom port
+This repository contains improvements for the glDoom port by Bruce Lewis
 
 ### Fixes (original from REDPOWAR)
 * new floor/ceiling generation code (similar to code from Doom Legacy port)
@@ -19,6 +19,8 @@ This repository contains improvements for glDoom port
 ### Current Problems
 * No vertical mouse movement
 * Clipping issue due to changing fov
+* Fullscreen option not working
+* Resoltuition option not working
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
@@ -26,6 +28,7 @@ I am planning for this port, the following (in order of priority)
 1. Remove all unused code and make code more readable
 2. Write new OpenGL renderer that will use modern features from 4.5 and replace the Legacy one
 3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+4. Cleanup Win32 Code
 
 Plus more!
 

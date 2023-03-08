@@ -26,11 +26,14 @@
 #include <stdio.h>
 #ifdef _WIN32
 #include <io.h>
+#else
+#include <unistd.h>
 #endif
 #include <fcntl.h>
 
+
 #ifndef MAX
-#define MAX(a,b) ((a)>(b)?(a):(b))
+#define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
 // Fixed to use builtin bool type with C++.
@@ -43,15 +46,25 @@ typedef enum
     true 
 } dboolean;
 #endif
+#ifdef _MSC_VER
+#include <windows.h>
+#include <rpc.h>
+#include <rpcndr.h>
+#endif
+
+#ifndef _MSC_VER
 typedef unsigned char byte;
 
-      typedef short        SHORT;
-      typedef int          LONG;
-      typedef unsigned int DWORD;
-      typedef long long    DLONG;
-      typedef unsigned short WORD;
-      typedef unsigned char BYTE;
-
+typedef short        SHORT;
+typedef int          LONG;
+typedef unsigned int DWORD;
+#endif
+typedef long long    DLONG;
+#ifndef _MSC_VER
+typedef unsigned short WORD;
+typedef unsigned char BYTE;
+#endif
+#ifndef _MSC_VER
 // win32 structs manually defined to be more portable
 typedef struct BITMAPFILEHEADER {
     WORD  bfType;
@@ -88,14 +101,14 @@ typedef struct RECT {
     LONG right;
     LONG bottom;
 } RECT;
-
+#endif
 #ifndef _WIN32
 #define O_BINARY 0
 #endif
 
+#ifndef _MSC_VER
 #define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
-
-
+#endif
 static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(handle); fseek(handle, 0L, SEEK_SET); return sz; }
 
 #if defined(_WIN32)
@@ -118,8 +131,6 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 
 #define con_printf(...) printf(__VA_ARGS__)
 
-//#define strcasecmp strcmp
-//#define strncasecmp strncmp
 
 // Predefined with some OS.
 #ifdef LINUX
