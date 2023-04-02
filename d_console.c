@@ -53,12 +53,10 @@ void M_WriteText(int x, int y, char *string);
 
 #ifdef _WIN32
 #ifdef OLD_WIN32
-#define strnicmp strnicmp
+#define strncasecmp strnicmp
 #else
-#define strnicmp _strnicmp
+#define strncasecmp _strnicmp
 #endif
-#else
-#define strnicmp strncasecmp
 #endif
 
 ////////////////////////////////////////////////////////////////////////
@@ -81,7 +79,7 @@ extern int TexWide, TexHigh;
 #define CONSREV      'C'
 #define CONSMSGS     64
 
-char szProgName[] = "GLDOOM";
+char szProgName[] = "GLDOOM-RE";
 char szVersion[8];
 
 typedef enum { asleep, sleepy, waking, awake } consolemode;
@@ -1109,7 +1107,7 @@ dboolean LoadNewMap(char *cmd)
                 return false;
                }
            }
-        if (strnicmp(cmd,"map",3) == 0)
+        if (strncasecmp(cmd,"map",3) == 0)
            {
             if ((cmd[3] >= '0') && (cmd[3] <= '9') &&
                 (cmd[4] >= '0') && (cmd[4] <= '9'))
@@ -1920,7 +1918,7 @@ int CO_HandleCommand(char *cmd)
            }
        }
     
-    if (strnicmp(cmd, "record ", 7) == 0)
+    if (strncasecmp(cmd, "record ", 7) == 0)
        {
         static char buf[ST_MSGWIDTH];
         if (strlen(&cmd[7]) > 0)
@@ -1944,7 +1942,7 @@ int CO_HandleCommand(char *cmd)
         return false;
        }
 
-    if (strnicmp(cmd, "play ", 5) == 0)
+    if (strncasecmp(cmd, "play ", 5) == 0)
        {
         static char buf[ST_MSGWIDTH];
         if (strlen(&cmd[7]) > 0)

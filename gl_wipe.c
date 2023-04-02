@@ -35,7 +35,7 @@
 #include "gl_video.h"
 #include "m_random.h"
 #include <glad/glad.h>
-
+#include <stdlib.h>
 extern video_t  video;
 
 static GLuint wipe_scr_start_tex = 0;
@@ -100,7 +100,7 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
 
     for (i = 0; i <= video.width; i++)
     {
-        int yoffs = MAX(0, y_lookup[i]);
+        int yoffs = max(0, y_lookup[i]);
 
         float tx = (float)i / total_w;
         float sx = (float)i;

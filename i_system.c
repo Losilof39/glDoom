@@ -139,7 +139,7 @@ void I_DeferQuit(void)
 
 void I_Quit(void)
    {
-    lfprintf("Exiting glDoom...\n");
+    lfprintf("Exiting glDoom Re...\n");
     D_QuitNetGame();
     I_ShutdownSound();
     I_ShutdownMusic();
