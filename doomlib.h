@@ -10,7 +10,7 @@
 
 char *D_strupper( char *str );
 char *D_strlower( char *str );
-
-int D_strncasecmp(char *s1, char *s2, int count);
-int D_strcasecmp(char *s1, char *s2);
-
+#ifdef ANSI_C
+int strncasecmp(char *s1, char *s2, int count);
+int strcasecmp(char *s1, char *s2);
+#endif

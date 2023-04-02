@@ -21,25 +21,24 @@ char *D_strupper (char *str)
     return str;
    }
 
-char *D_strlower (char *str)
-   {
-    char *c, t;
+char* D_strlower(char* str)
+{
+    char* c, t;
 
     t = 'A' - 'a';
 
     c = str;
 
     while (*c)
-       {
+    {
         *c = ((*c >= 'A') && (*c <= 'Z')) ? *c - t : *c;
         c++;
-       }
+    }
     return str;
-   }
+}
 
-
-
-int D_strncasecmp(char *s1, char *s2, int count)
+#ifdef ANSI_C
+int strncasecmp(char *s1, char *s2, int count)
    {
     unsigned char c1, c2, c3;
 	
@@ -68,8 +67,8 @@ int D_strncasecmp(char *s1, char *s2, int count)
 	return -1;
    }
 
-int D_strcasecmp(char *s1, char *s2)
+int strcasecmp(char *s1, char *s2)
    {
     return(D_strncasecmp(s1, s2, 99999));
    }
-
+#endif

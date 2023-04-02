@@ -5,9 +5,9 @@
 
 typedef struct
    {
-    DWORD dwCurrWidth;
-    DWORD dwCurrHeight;
-    DWORD dwCurrBPP;
+    uint32_t dwCurrWidth;
+    uint32_t dwCurrHeight;
+    uint32_t dwCurrBPP;
    }video_info_t;
 
 typedef struct

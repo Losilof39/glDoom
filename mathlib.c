@@ -38,10 +38,16 @@ void ml_MakeIdentity( ml_vec3_t *mat )
 // apply rotations contained in angles to vector and put into newvec
 void ml_VectorRotate(ml_vec3_t vector, ml_vec3_t angles, ml_vec3_t newvec)
    {
-    int        c;
     float      angle;
-    float      sp, cp, sy, cy, sr, cr;
-    ml_vec3_t  tempvect, xresult, yresult;
+    float      sp, cp, sy, cy;
+#ifdef VIEWROLL
+    float cr, sr;
+#endif
+
+    ml_vec3_t xresult;
+#ifdef VIEWROLL
+    ml_vec3_t yresult;
+#endif
     ml_vec3_t  xmatrix[3], ymatrix[3];
 #ifdef VIEWROLL
     ml_vec3_t  zmatrix[3];

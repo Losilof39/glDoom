@@ -24,6 +24,9 @@
 #define __DOOMTYPE__
 
 #include <stdio.h>
+#ifdef ANSI_C
+#include "doomlib.h"
+#endif
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -36,63 +39,45 @@
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-// Fixed to use builtin bool type with C++.
-#ifdef __cplusplus
-typedef bool dboolean;
-#else
-typedef enum 
-{ 
-    false, 
-    true 
-} dboolean;
-#endif
 #ifdef _MSC_VER
-#include <windows.h>
 #include <rpc.h>
 #include <rpcndr.h>
 #endif
 
 #ifndef _MSC_VER
 typedef unsigned char byte;
-
 typedef short        SHORT;
-typedef int          LONG;
-typedef unsigned int DWORD;
-#endif
-typedef long long    DLONG;
-#ifndef _MSC_VER
+typedef long          LONG;
 typedef unsigned short WORD;
-typedef unsigned char BYTE;
-#endif
-#ifndef _MSC_VER
+
 // win32 structs manually defined to be more portable
 typedef struct BITMAPFILEHEADER {
-    WORD  bfType;
-    DWORD bfSize;
-    WORD  bfReserved1;
-    WORD  bfReserved2;
-    DWORD bfOffBits;
+    uint16_t  bfType;
+    uint32_t bfSize;
+    uint16_t  bfReserved1;
+    uint16_t  bfReserved2;
+    uint32_t bfOffBits;
 }BITMAPFILEHEADER;
 
 typedef struct BITMAPINFOHEADER {
-    DWORD biSize;
+    uint32_t biSize;
     LONG  biWidth;
     LONG  biHeight;
-    WORD  biPlanes;
-    WORD  biBitCount;
-    DWORD biCompression;
-    DWORD biSizeImage;
+    uint16_t  biPlanes;
+    uint16_t  biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
     LONG  biXPelsPerMeter;
     LONG  biYPelsPerMeter;
-    DWORD biClrUsed;
-    DWORD biClrImportant;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
 } BITMAPINFOHEADER;
 
 typedef struct tagRGBQUAD {
-    BYTE rgbBlue;
-    BYTE rgbGreen;
-    BYTE rgbRed;
-    BYTE rgbReserved;
+    byte rgbBlue;
+    byte rgbGreen;
+    byte rgbRed;
+    byte rgbReserved;
 } RGBQUAD;
 
 typedef struct RECT {
@@ -101,17 +86,32 @@ typedef struct RECT {
     LONG right;
     LONG bottom;
 } RECT;
-#endif
-#ifndef _WIN32
+
 #define O_BINARY 0
 #endif
 
-#ifndef _MSC_VER
-#define ZeroMemory(Destination,Length) memset((Destination),0,(Length))
+// Fixed to use builtin bool type with C++.
+#ifdef __cplusplus
+typedef bool dboolean;
+#else
+typedef enum
+{
+    false,
+    true
+} dboolean;
 #endif
+
+
 static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(handle); fseek(handle, 0L, SEEK_SET); return sz; }
 
-#if defined(_WIN32)
+#ifndef ANSI_C
+#ifdef _MSC_VER
+#define strncasecmp _strnicmp
+#define strcasecmp _stricmp
+#endif
+#endif
+
+#if defined(_MSC_VER)
 #define Open(filename, openflag, ...) _open(filename, openflag, __VA_ARGS__)
 #define Close(filehandle) _close(filehandle)
 #define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
@@ -128,9 +128,6 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 #endif
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
-
-#define con_printf(...) printf(__VA_ARGS__)
-
 
 // Predefined with some OS.
 #ifdef LINUX

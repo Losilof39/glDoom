@@ -587,7 +587,7 @@ void V_Init (void)
    { 
     int		i, j, x;
     //byte*	base;
-    DWORD  *buff;
+    uint32_t  *buff;
 		
     // stick these in low dos memory on PCs
 
@@ -597,7 +597,7 @@ void V_Init (void)
        {
         x = SCREENWIDTH * SCREENHEIGHT;
         screens[i] = (byte *)malloc(x);
-        buff = (DWORD *)screens[i];
+        buff = (uint32_t *)screens[i];
         x /= 4;
         for (j = 0; j < x; j++)
            buff[j] = 0x00000000;

@@ -387,9 +387,9 @@ void R_InitSpriteDefs (char** namelist)
     if (!numsprites)
        return;
 		
-    con_printf("Loading sprite data...\n");
+    printf("Loading sprite data...\n");
     LoadSpriteData();
-    con_printf("Loaded info for %d sprites...\n", info_count);
+    printf("Loaded info for %d sprites...\n", info_count);
 
     sprites = Z_Malloc(numsprites *sizeof(*sprites), PU_STATIC, NULL);
 	

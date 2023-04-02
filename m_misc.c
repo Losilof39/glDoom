@@ -923,7 +923,7 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
 
 void M_ScreenShot(void)
    {
-    int    fn, i, x, y;
+    int    i;
     char  *buffer, *c;
     char   lbmname[14];
     

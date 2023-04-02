@@ -912,7 +912,7 @@ extern dboolean RedBias, GreenBias, WhiteBias;
 void GL_DrawSky(float compass)
 {
     int   bquad, equad, tcomp;
-    float lcomp, rcomp, remainder;
+    float lcomp, rcomp;
     float tseam, middle;
 
     float fSkyTop, fSkyBottom, fSkyMiddle, fSkyHalfHeight;
@@ -1267,7 +1267,7 @@ void MConcat(double in1[3][3], double in2[3][3], double out[3][3])
 /////////////////////////////////////////////////////////////////////
 void UpdateViewAngles(ml_vec3_t angles)
    {
-    ml_vec3_t mtemp1[3], mtemp2[3], mroll[3], mpitch[3], myaw[3];
+    ml_vec3_t mtemp[3], mroll[3], mpitch[3], myaw[3];
     double    s, c, roll, pitch, yaw;
    
     pitch = angles[0];
@@ -1302,12 +1302,12 @@ void UpdateViewAngles(ml_vec3_t angles)
     
 //  concat two rotations
 
-    mtemp1[0][0] = myaw[0][0];
-    mtemp1[0][2] = myaw[0][2];
+    mtemp[0][0] = myaw[0][0];
+    mtemp[0][2] = myaw[0][2];
 
-    mtemp1[1][0] = mpitch[1][2] * myaw[2][0];
-    mtemp1[1][1] = mpitch[1][1] * myaw[1][1];
-    mtemp1[1][2] = mpitch[1][2] * myaw[2][2];
+    mtemp[1][0] = mpitch[1][2] * myaw[2][0];
+    mtemp[1][1] = mpitch[1][1] * myaw[1][1];
+    mtemp[1][2] = mpitch[1][2] * myaw[2][2];
 
     // set the 'Z' axis here - we're done with it
     vpn[0] = mpitch[2][2] * myaw[2][0];
@@ -1316,13 +1316,13 @@ void UpdateViewAngles(ml_vec3_t angles)
 
 //  concat third rotation - roll doesn't affect the 'Z' axis
 
-    vright[0] = mroll[0][0] * mtemp1[0][0] + mroll[0][1] * mtemp1[1][0];
-    vright[1] = mroll[0][1] * mtemp1[1][1];
-    vright[2] = mroll[0][0] * mtemp1[0][2] + mroll[0][1] * mtemp1[1][2];
+    vright[0] = mroll[0][0] * mtemp[0][0] + mroll[0][1] * mtemp[1][0];
+    vright[1] = mroll[0][1] * mtemp[1][1];
+    vright[2] = mroll[0][0] * mtemp[0][2] + mroll[0][1] * mtemp[1][2];
 
-    vup[0] = mroll[1][0] * mtemp1[0][0] + mroll[1][1] * mtemp1[1][0];
-    vup[1] = mroll[1][1] * mtemp1[1][1];
-    vup[2] = mroll[1][0] * mtemp1[0][2] + mroll[1][1] * mtemp1[1][2];
+    vup[0] = mroll[1][0] * mtemp[0][0] + mroll[1][1] * mtemp[1][0];
+    vup[1] = mroll[1][1] * mtemp[1][1];
+    vup[2] = mroll[1][0] * mtemp[0][2] + mroll[1][1] * mtemp[1][2];
    }
 
 /////////////////////////////////////////////////////////////////////
@@ -1471,9 +1471,6 @@ void R_InitViewData()
 /////////////////////////////////////////////////////////////////////
 void R_AlignFrustum(ml_vert3_t position, ml_vec3_t orient)
    {
-    double    angle;
-    ml_vec3_t normal;
-
     UpdateViewAngles(orient);
 
     SetWorldspaceClipPlane(position, fixviewplanes[LCLIP].normal, &frustumplanes[LCLIP]);
@@ -1577,7 +1574,7 @@ dboolean R_ClipVertsToFrustum(DW_Polygon *TempPoly)
 // and UV coords for moving walls
 void R_BuildRenderQueue()
 {
-    int           i, texnumb, wall;
+    int           i, wall;
     dboolean       inside;
     DW_Polygon   *TempPoly;
     float         wallhigh, newhigh;
@@ -1703,7 +1700,6 @@ void GL_RenderPlayerView(player_t* player)
     static ml_vec3_t     ViewOrient;
     DW_Polygon   *TempPoly;
     static dboolean   FirstTime = true;
-    DW_Vertex3D   LightPos;
 
     DW_FloorCeil*   psubsector;
     sector_t*       psector;
@@ -2084,8 +2080,8 @@ void R_RenderPlayerView (player_t* player)
     // check for new console commands.
     NetUpdate ();
 
-    ZeroMemory(DrawFlat, sizeof(dboolean) * numsectors);
-    ZeroMemory(DrawSide, sizeof(drawside_t) * numsides);
+    memset(DrawFlat, 0, sizeof(dboolean) * numsectors);
+    memset(DrawSide, 0, sizeof(drawside_t) * numsides);
     sorted_flats_count = 0;
     sorted_walls_count = 0;
 

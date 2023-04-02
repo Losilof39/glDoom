@@ -34,7 +34,7 @@ static const char rcsid[] = "$Id: d_net.c,v 1.3 1997/02/03 22:01:47 b1 Exp $";
 #include "g_game.h"
 #include "doomdef.h"
 #include "doomstat.h"
-
+#include "d_main.h"
 #include "d_console.h"
 
 #define	NCMD_EXIT		0x80000000
@@ -357,7 +357,7 @@ void GetPackets (void)
 // sends out a packet
 //
 int      gametime;
-
+extern 
 void NetUpdate (void)
    {
     int             nowtime;
@@ -488,7 +488,7 @@ void D_ArbitrateNetStart (void)
     if (doomcom->consoleplayer)
        {
         // listen for setup info from key player
-        con_printf("listening for network start info...\n");
+        printf("listening for network start info...\n");
         while (1)
            {
             //timeout += I_GetTime();
@@ -521,7 +521,7 @@ void D_ArbitrateNetStart (void)
         // key player, send the setup info
 // Player 1 is the "server" in that it controls the game.
 // It does not fulfill the other tasks of a server, though.
-        con_printf("sending network start info...\n");
+        printf("sending network start info...\n");
         do
            {
             if (CheckAbort() == true)
@@ -601,7 +601,7 @@ void D_CheckNetGame (void)
             return;
        }
 
-    con_printf("startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n",
+    printf("startskill %i  deathmatch: %i  startmap: %i  startepisode: %i\n",
                 startskill, deathmatch, startmap, startepisode);
 
     // read values out of doomcom
@@ -620,7 +620,7 @@ void D_CheckNetGame (void)
         nodeingame[i] = true;
        }
 	
-    con_printf("player %i of %i (%i nodes)\n", consoleplayer+1, doomcom->numplayers, doomcom->numnodes);
+    printf("player %i of %i (%i nodes)\n", consoleplayer+1, doomcom->numplayers, doomcom->numnodes);
    }
 
 
