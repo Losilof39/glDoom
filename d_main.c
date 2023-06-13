@@ -318,7 +318,7 @@ void D_Display (void)
                  break;
              if (automapactive)
                 {
-                 AM_Drawer ();
+                 //AM_Drawer ();
                  GL_AM_Drawer();
                  GL_DrawStatusBar(1);
                 }
@@ -326,7 +326,7 @@ void D_Display (void)
                  redrawsbar = true;
              if (inhelpscreensstate && !inhelpscreens)
                  redrawsbar = true;              // just put away the help screen
-             ST_Drawer(viewheight == SCREENHEIGHT, redrawsbar );
+             //ST_Drawer(viewheight == SCREENHEIGHT, redrawsbar );
              fullscreen = viewheight == SCREENHEIGHT;
              if (!automapactive)
                 {
@@ -341,18 +341,18 @@ void D_Display (void)
              break;
 
         case GS_FINALE:
-             F_Drawer();
+             //F_Drawer();
              GL_F_Drawer();
              break;
 
         case GS_DEMOSCREEN:
-             D_PageDrawer();
+             //D_PageDrawer();
              GL_DrawFullScreen(glPageName);
              break;
        }
     
     // draw buffered stuff to screen
-    I_UpdateNoBlit();
+    //I_UpdateNoBlit();   // UNUSED
     
     // draw the view directly
     if (gamestate == GS_LEVEL && !automapactive && gametic)
@@ -366,15 +366,16 @@ void D_Display (void)
 
     if (gamestate == GS_LEVEL && gametic)
        {
-        HU_Drawer ();
+        //HU_Drawer ();
         GL_HU_Drawer();
        }
-    
+#if 0
     // clean up border stuff
     if (gamestate != oldgamestate && gamestate != GS_LEVEL)
        {
         I_SetPalette (W_CacheLumpName ("PLAYPAL",PU_CACHE));
        }
+
 
     // see if the border needs to be initially drawn
     if (gamestate == GS_LEVEL && oldgamestate != GS_LEVEL)
@@ -384,6 +385,7 @@ void D_Display (void)
        }
 
     // see if the border needs to be updated to the screen
+
     if (gamestate == GS_LEVEL && !automapactive && scaledviewwidth != SCREENWIDTH && viewheight != SCREENHEIGHT)
        {
         if (menuactive || menuactivestate || !viewactivestate)
@@ -394,6 +396,7 @@ void D_Display (void)
             borderdrawcount--;
            }
        }
+#endif
 
     menuactivestate = menuactive;
     viewactivestate = viewactive;
@@ -413,7 +416,7 @@ void D_Display (void)
 */
        }
     // menus go directly to the screen
-    M_Drawer ();          // menu is drawn even on top of everything
+    //M_Drawer ();          // UNUSED
 
     glmode = gl_2d;
 
@@ -423,7 +426,11 @@ void D_Display (void)
        {
         GL_DrawConsole();
        }
-    //CO_Drawer();          // Console is drawn on top of even the menu...
+
+    // Console is drawn on top of even the menu...
+    // 
+    //CO_Drawer();          // UNUSED
+
     NetUpdate ();         // send out any new accumulation
 
     // normal update
@@ -496,58 +503,61 @@ extern  dboolean         demorecording;
 
 void D_DoomLoop (void)
    {
-//    if (demorecording)
-//        G_BeginRecording ();
-//		
-//    if (M_CheckParm ("-debugfile"))
-//       {
-//        char    filename[20];
-//        sprintf (filename,"debug%i.txt",consoleplayer);
-//	    //printf ("debug output to: %s\n",filename);
-//        lfprintf("debug output to: %s\n",filename);
-//        debugfile = fopen (filename,"w");
-//       }
-//	
-//    I_InitGraphics();
-//
-//    while (1)
-//       {
-//        // frame syncronous IO operations
-//        I_StartFrame();                
-//	
-//        // process one or more tics
-//        if (singletics)
-//           {
-//            I_StartTic ();
-//            D_ProcessEvents ();
-//            G_BuildTiccmd (&netcmds[consoleplayer][maketic%BACKUPTICS]);
-//            if (advancedemo)
-//               D_DoAdvanceDemo();
-//            M_Ticker ();
-//            G_Ticker ();
-//            gametic++;
-//            maketic++;
-//           }
-//        else
-//           {
-//            TryRunTics (); // will run at least one tic
-//           }
-//		
-//        S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
-//
-//        // Update display, next frame, with current state.
-//        D_Display ();
-//
-//#ifndef SNDSERV
-//        // Sound mixing for the buffer is snychronous.
-//        //I_UpdateSound();
-//#endif	
-//        // Synchronous sound output is explicitly called.
-//#ifndef SNDINTR
-//        // Update sound output.
-//        //I_SubmitSound();
-//#endif
-//       }
+    // UNUSED
+#if 0
+    if (demorecording)
+        G_BeginRecording ();
+		
+    if (M_CheckParm ("-debugfile"))
+       {
+        char    filename[20];
+        sprintf (filename,"debug%i.txt",consoleplayer);
+	    //printf ("debug output to: %s\n",filename);
+        lfprintf("debug output to: %s\n",filename);
+        debugfile = fopen (filename,"w");
+       }
+	
+    I_InitGraphics();
+
+    while (1)
+       {
+        // frame syncronous IO operations
+        I_StartFrame();                
+	
+        // process one or more tics
+        if (singletics)
+           {
+            I_StartTic ();
+            D_ProcessEvents ();
+            G_BuildTiccmd (&netcmds[consoleplayer][maketic%BACKUPTICS]);
+            if (advancedemo)
+               D_DoAdvanceDemo();
+            M_Ticker ();
+            G_Ticker ();
+            gametic++;
+            maketic++;
+           }
+        else
+           {
+            TryRunTics (); // will run at least one tic
+           }
+		
+        S_UpdateSounds (players[consoleplayer].mo);// move positional sounds
+
+        // Update display, next frame, with current state.
+        D_Display ();
+
+#ifndef SNDSERV
+        // Sound mixing for the buffer is snychronous.
+        //I_UpdateSound();
+#endif	
+        // Synchronous sound output is explicitly called.
+#ifndef SNDINTR
+        // Update sound output.
+        //I_SubmitSound();
+#endif
+       }
+#endif
    }
 
 void MY_DoomSetup(void)
@@ -573,7 +583,8 @@ void MY_DoomLoop (void)
     I_StartFrame();
 	
     // process one or more tics
-    if (singletics)
+
+    if (singletics) // used for demos
        {
         I_StartTic();
         D_ProcessEvents();

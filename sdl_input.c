@@ -5,6 +5,7 @@
 // This module is for Win32
 
 #include "thirdparty/SDL2/include/SDL.h"
+#include "d_main.h"
 #include "sys_sdl.h"
 #include "sdl_kbrd.h"
 #include "d_event.h"
@@ -22,6 +23,7 @@ Uint8* keystates[256] = { false };
 
 extern dboolean      bQuit;
 extern int keylink;
+extern int gametic;
 
 void lfprintf(char *message, ... );
 
@@ -56,6 +58,7 @@ void I_CheckInputs(void)
    {
     event_t event;
     SDL_Event ev;
+    static int mwheeluptic = 0, mwheeldowntic = 0;
 
     SDL_MouseMotionEvent mouse_motion = { 0 };
     SDL_MouseButtonEvent mouse_button = { 0 };
@@ -155,12 +158,31 @@ void I_CheckInputs(void)
 
         if ((usemouse) && (mouseavail)) {
 
+        case SDL_MOUSEWHEEL:
+        {
+            if (ev.wheel.y > 0)
+            {
+                event.type = ev_keydown;
+                event.data1 = KEYD_MWHEELUP;
+                mwheeluptic = gametic;
+                D_PostEvent(&event);
+            }
+            else if (ev.wheel.y < 0)
+            {
+                event.type = ev_keydown;
+                event.data1 = KEYD_MWHEELDOWN;
+                mwheeldowntic = gametic;
+                D_PostEvent(&event);
+            }
+        }break;
+
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
             event.type = ev_mouse;
             event.data1 = I_SDLtoDoomMouseState(SDL_GetMouseState(NULL, NULL));
             event.data2 = event.data3 = 0;
             D_PostEvent(&event);
+
             break;
         }
 
@@ -185,6 +207,22 @@ void I_CheckInputs(void)
         }
 
 
+    }
+
+    if (mwheeluptic && mwheeluptic + 1 < gametic)
+    {
+        event.type = ev_keyup;
+        event.data1 = KEYD_MWHEELUP;
+        D_PostEvent(&event);
+        mwheeluptic = 0;
+    }
+
+    if (mwheeldowntic && mwheeldowntic + 1 < gametic)
+    {
+        event.type = ev_keyup;
+        event.data1 = KEYD_MWHEELDOWN;
+        D_PostEvent(&event);
+        mwheeldowntic = 0;
     }
 
     I_CheckKeyboard();
