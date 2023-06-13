@@ -122,7 +122,7 @@ void  MY_DoomSetup(void);
 void  MY_DoomLoop(void);
 void  glDoomExit(void);
 
-unsigned char szBadWadMessage[] = { "glDoom is unable to determine the game type\n"
+unsigned char szBadWadMessage[] = { "glDoom Re is unable to determine the game type\n"
                                     "of the game WAD file. Please make sure that:\n"
                                     "1. You have your game wad in the current directory,\n"
                                     "2. You have it named one of the standard wad names OR\n"
@@ -324,8 +324,9 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     sprintf(&window_title, "GLDOOM-RE");
 #endif
 
-    pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 
-                               video.width, video.height, SDL_WINDOW_OPENGL | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
+    pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        video.width, video.height, SDL_WINDOW_OPENGL | (video.fullscreen ? SDL_WINDOW_FULLSCREEN : 0) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
+  
 
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
@@ -341,7 +342,7 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 
     R_InitViewData();
 
-    con_printf("glDoom Version %d.%d%c\n", version/100, version%100, revision);
+    con_printf("glDoom Re Version %d.%d%c\n", version/100, version%100, revision);
     con_printf("Starting OpenGL...\n");
     SDL_ShowCursor(SDL_DISABLE);
 

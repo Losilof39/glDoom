@@ -6,7 +6,9 @@
 
 #include "tables.h"
 
+#ifndef M_PI
 #define M_PI    3.141592657f
+#endif
 #define DEG2RAD(x) ((x)*(M_PI/180.0f))
 #define RAD2DEG(x) ((x)*(180.0f/M_PI))
 

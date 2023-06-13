@@ -238,7 +238,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -423,10 +423,6 @@
     <ClInclude Include="sys_sdl.h" />
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
-    <ClInclude Include="thirdparty\glad\include\glad\glad.h" />
-    <ClInclude Include="thirdparty\glad\include\KHR\khrplatform.h" />
-    <ClInclude Include="thirdparty\SDL2\include\begin_code.h" />
-    <ClInclude Include="thirdparty\SDL2\include\close_code.h" />
     <ClInclude Include="v_video.h" />
     <ClInclude Include="sdl_inpt.h" />
     <ClInclude Include="sdl_kbrd.h" />

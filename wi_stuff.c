@@ -1120,10 +1120,11 @@ void WI_drawTime( int x, int y, int t )
        }
    }
 
+extern void WI_unloadData(void);
 
 void WI_End(void)
 {
-    void WI_unloadData(void);
+    //--> ? void WI_unloadData(void);
     WI_unloadData();
 }
 

@@ -31,7 +31,7 @@
  *  to MIDI format 1 music in memory.
  */
 
-#if !defined( MMUS2MID_H )
+#ifndef MMUS2MID_H
 #define MMUS2MID_H
 
 #define doom_wtohs(x) ((short)x)
