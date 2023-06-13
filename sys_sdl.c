@@ -192,7 +192,7 @@ int main(int argc, char* szCmdLine)
         return 0;
        }
 
-    printf("Command line: %s\n", *szCmdLine);
+    printf("Command line: %s\n", szCmdLine);
     printf("Beginning DOOM data setup...\n");
     MY_DoomSetup();
 
