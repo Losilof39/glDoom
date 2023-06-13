@@ -387,7 +387,6 @@ extern float fXAngle;
 void G_BuildTiccmd (ticcmd_t* cmd) 
    { 
     dboolean   strafe;
-    dboolean   bstrafe; 
     int       speed;
     int       tspeed; 
     int       forward;
@@ -1859,7 +1858,7 @@ void G_RecordDemo (char* name)
     usergame = false; 
     strcpy (demoname, name); 
     strcat (demoname, ".lmp"); 
-    con_printf("Record demo : %s\n", demoname);
+    printf("Record demo : %s\n", demoname);
     maxsize = 0x70000;
     i = M_CheckParm ("-maxdemo");
     if (i && i<myargc-1)
@@ -2035,7 +2034,6 @@ void G_DoPlayDemo_II(void)
     int		a,b,c; 
     char	vcheck[VERSIONSIZE]; 
     skill_t skill; 
-    int     episode, map, dversion, tversion;
 
     demotype = DEMO_II;
 
@@ -2235,7 +2233,7 @@ void G_TimeDemo (char* name)
 
     defdemoname = name; 
     gameaction = ga_playdemo; 
-    con_printf("Playing timedemo %s -noblit %d -nodraw %d\n", name, noblit, nodrawers);
+    printf("Playing timedemo %s -noblit %d -nodraw %d\n", name, noblit, nodrawers);
 } 
  
  

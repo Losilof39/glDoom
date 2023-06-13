@@ -252,7 +252,7 @@ typedef struct DW_Polygon
     int                Sector;
     int                BackSector;
     int                LSector;
-    DLONG              coloff;
+    uint64_t              coloff;
     struct DW_Polygon *Next;
    }DW_Polygon;
 

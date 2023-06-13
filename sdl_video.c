@@ -57,7 +57,7 @@ void GetModeList(char *dbgname)
 
         f = mode.format;
 
-        con_printf("%d - %d x %d\tBpp: %d - %d Hz\n",
+        printf("%d - %d x %d\tBpp: %d - %d Hz\n",
             i, mode.w, mode.h,
             SDL_BITSPERPIXEL(f),
             mode.refresh_rate );

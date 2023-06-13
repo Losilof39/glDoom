@@ -114,7 +114,7 @@ void InitGLPalette(int red, int green, int blue)
 
 int CreateColorMap(int red, int green, int blue)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             TempTexName;
     unsigned char   TexData[4];
 
     TexWide = 1;
@@ -146,7 +146,7 @@ int CreateColorMap(int red, int green, int blue)
 
 int CreatePointLightMap(int red, int green, int blue, dboolean alphaonly)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, d, t, TempTexName;
 
     TexWide = 16;
     TexHigh = 16;
@@ -362,7 +362,7 @@ int GL_LoadTexture(int TexNumb)
 
 int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
    {
-    int            x, n, r, wide, s, d, glw,w;
+    int            x, n, r, s, d, glw,w;
     int            TempTexNumb = 0, iPower;
     short          sx, sy, fields;
     int            px, py, part, parts;
@@ -550,7 +550,7 @@ int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     static int      x, ixsize, iysize, cwidth;
     unsigned short *tshort;
 
-    int		       i, j, n;
+    int		       i, n;
     int            iOffSet, iPower;
 
     int            TempTexNumb;
@@ -659,7 +659,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
    {
     static int      x, ixsize, iysize;
     unsigned short *tshort;
-    int		       i, j, n, d, s;
+    int		       i, d, s;
     int            TempTexNumb;
     int            iGLWide, iGLHigh, iPower;
 
@@ -887,7 +887,7 @@ int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
    {
     static int     x, ixsize, iysize;
     unsigned short *tshort;
-    int		       i, j, n, d, s;
+    int		       i, d, s;
     int            TempTexNumb;
 
     tshort = (unsigned short *)Screen;

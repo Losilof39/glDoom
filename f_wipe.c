@@ -93,8 +93,7 @@ static int wipe_doMelt(int ticks)
                 continue;
             }
             if (y_lookup[i] < video.height) {
-                byte* s, * d;
-                int j, k, dy;
+                int dy;
 
                 /* cph 2001/07/29 -
                   *  The original melt rate was 8 pixels/sec, i.e. 25 frames to melt

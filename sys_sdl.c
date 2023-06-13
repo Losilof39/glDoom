@@ -143,7 +143,7 @@ extern int    keylink;
 char      szDbgName[] = "glDoom.dbg";
 
 
-int main(int argc, char** szCmdLine)
+int main(int argc, char* szCmdLine)
    {
     ClearLog(szDbgName);
 
@@ -170,16 +170,16 @@ int main(int argc, char** szCmdLine)
 
     if (video.fullscreen == false)
        {
-        con_printf("Display: %dx%d\n", video.width, video.height);
+        printf("Display: %dx%d\n", video.width, video.height);
        }
     else
        {
-        con_printf("Display: %dx%dx%d bpp\n", video.width, video.height, video.bpp);
+        printf("Display: %dx%dx%d bpp\n", video.width, video.height, video.bpp);
        }
 
     bQuit = false;
 
-    con_printf("Beginning DOOM code startup...\n");
+    printf("Beginning DOOM code startup...\n");
     D_DoomMain();
     if ((gamemode == netabort) || (gamemode == undetermined))
        {
@@ -187,18 +187,18 @@ int main(int argc, char** szCmdLine)
         I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
-            con_printf(szBadWadMessage);
+            printf(szBadWadMessage);
            }
         return 0;
        }
 
-    con_printf("Command line: %s\n", *szCmdLine);
-    con_printf("Beginning DOOM data setup...\n");
+    printf("Command line: %s\n", *szCmdLine);
+    printf("Beginning DOOM data setup...\n");
     MY_DoomSetup();
 
     GameMode = GAME_START;
 
-    con_printf("Starting game loop...\n");
+    printf("Starting game loop...\n");
     while (!bQuit)
 	   {
 
@@ -342,8 +342,8 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 
     R_InitViewData();
 
-    con_printf("glDoom Re Version %d.%d%c\n", version/100, version%100, revision);
-    con_printf("Starting OpenGL...\n");
+    printf("glDoom Re Version %d.%d%c\n", version/100, version%100, revision);
+    printf("Starting OpenGL...\n");
     SDL_ShowCursor(SDL_DISABLE);
 
     if (StartUpOpenGL() == false)
@@ -357,10 +357,6 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 
 void InitData()
    {
-    char  DoomDir[_MAX_PATH];
-	int   iWidth, iHeight;
-	float fRatio = 0.0f;
-
     // Set the "Doom" screen variables to default
     SCREENWIDTH = 320;
     SCREENHEIGHT = 200;
@@ -470,7 +466,7 @@ void EvaluateParameters(char* szCmdLine)
 	{
 	    if ((int)(video.width * 3) != (int)(video.height * 4))
 		{
-			con_printf("Invalid aspect ratio requested...resetting to %dx%d.\n", DEF_WIDTH, DEF_HEIGHT);
+			printf("Invalid aspect ratio requested...resetting to %dx%d.\n", DEF_WIDTH, DEF_HEIGHT);
 			video.width = DEF_WIDTH;
 			video.height = DEF_HEIGHT;
 		}

@@ -177,10 +177,10 @@ typedef enum
 
 typedef struct
    {
-    DLONG         dwPacketID;
-    DLONG         dwReturnAddress;
-    DLONG         dwMessageType;
-    DLONG         dwMessageSize;
+    uint64_t         dwPacketID;
+    uint64_t         dwReturnAddress;
+    uint64_t         dwMessageType;
+    uint64_t         dwMessageSize;
     unsigned char cMessage[];
    }net_packet_t;
 
@@ -188,39 +188,39 @@ typedef struct
 // The game flags is 32 bit field that uses game_flags_t
 typedef struct
    {
-    DLONG  dwGameFlags;   // see game_flags_t
+    uint64_t  dwGameFlags;   // see game_flags_t
    }game_req_t;
 
 typedef struct
    {
-    DLONG  dwGameReply;
-    DLONG  dwGameFlags;
-    DLONG  dwNumPlayers;
-    DLONG  dwIPAddress[];
+    uint64_t  dwGameReply;
+    uint64_t  dwGameFlags;
+    uint64_t  dwNumPlayers;
+    uint64_t  dwIPAddress[];
    }game_rep_t;
 
 typedef struct
    {
-    DLONG  dwDataRequest;
+    uint64_t  dwDataRequest;
    }status_req_t;
 
 typedef struct
    {
-    DLONG  dwForwardMove;
-    DLONG  dwSideMove;
-    DLONG  dwAngleTurn;
-    DLONG  dwConsistancy;
-    DLONG  dwChatChar;
-    DLONG  dwButtons;
+    uint64_t  dwForwardMove;
+    uint64_t  dwSideMove;
+    uint64_t  dwAngleTurn;
+    uint64_t  dwConsistancy;
+    uint64_t  dwChatChar;
+    uint64_t  dwButtons;
    }tic_data_t;
 
 typedef struct
    {
-    DLONG      dwCheckSum;
-    DLONG      dwPlayer;
-    DLONG      dwRetransmitFrom;
-    DLONG      dwStartTic;
-    DLONG      dwNumTics;
+    uint64_t      dwCheckSum;
+    uint64_t      dwPlayer;
+    uint64_t      dwRetransmitFrom;
+    uint64_t      dwStartTic;
+    uint64_t      dwNumTics;
     tic_data_t TicData[];
    }tic_header_t;
 

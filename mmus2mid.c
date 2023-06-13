@@ -764,8 +764,6 @@ void mus2mid(unsigned char* data)
   UBYTE *mus,*mid;
   static MIDI mididata;
   int err,midlen;
-  char *p,*q;
-  int i;
 
   if (data)
   {

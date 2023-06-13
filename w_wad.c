@@ -37,19 +37,19 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include <alloca.h>
 #define O_BINARY		0
 #else
-   #include <stdio.h>
-   #include <stdlib.h>
-    #ifdef _WIN32
-    #include <io.h>
-    #else
-    #include <inttypes.h>
-    #include <unistd.h>
-    #endif
-   #include <malloc.h>
-   #include <string.h>
-   #include <sys/types.h>
-   #include <sys/stat.h>
-   #include <fcntl.h>
+#include <stdio.h>
+#include <stdlib.h>
+#ifdef _WIN32
+#include <io.h>
+#else
+#include <inttypes.h>
+#include <unistd.h>
+#endif
+#include <malloc.h>
+#include <string.h>
+#include <sys/types.h>
+#include <sys/stat.h>
+#include <fcntl.h>
 #endif
 
 #include "doomtype.h"
@@ -73,12 +73,6 @@ lumpinfo_t*		lumpinfo;
 int			numlumps;
 
 void**			lumpcache;
-
-#if _WIN32
-#define strcmpi	_strcmpi
-#else
-#define strcmpi	strcasecmp
-#endif
 
 #ifndef _WIN32
 static void strupr(char* s)
@@ -162,14 +156,14 @@ void W_AddFile (char *filename)
 		
     if ( (handle = Open (filename,O_RDONLY | O_BINARY)) == -1)
        {
-	        con_printf(" couldn't open %s\n",filename);
+	        printf(" couldn't open %s\n",filename);
 	        return;
        }
 
-    con_printf(" adding %s\n", filename);
+    printf(" adding %s\n", filename);
     startlump = numlumps;
 	
-    if (strcmpi(filename + strlen(filename) -3 ,"wad"))
+    if (strcasecmp(filename + strlen(filename) -3 ,"wad"))
     {
 	    // single lump file
 	    fileinfo = &singleinfo;

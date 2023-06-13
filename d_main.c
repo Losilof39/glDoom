@@ -27,8 +27,6 @@
 
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
-//#include <windows.h>
-//#include <gl/gl.h>
 #include "thirdparty/glad/include/glad/glad.h"
 
 #define	BGCOLOR		7
@@ -285,10 +283,6 @@ void D_Display (void)
     static  dboolean		fullscreen = false;
     static  gamestate_t		oldgamestate = -1;
     static  int			borderdrawcount;
-    int				nowtime;
-    int				tics;
-    int				wipestart;
-    dboolean			done;
     dboolean			wipe;
     dboolean			redrawsbar;
 
@@ -856,8 +850,8 @@ dboolean CheckGameMode()
 
     e = W_CheckNumForName("playpal");
 
-    con_printf("Determining game mode...\n");
-    con_printf("Checking for Doom 2/Final Doom...\n");
+    printf("Determining game mode...\n");
+    printf("Checking for Doom 2/Final Doom...\n");
     // check for Doom2/Final Doom lumps here
     for (m = 1, bValid = true; m < 33; m++)
        {
@@ -881,10 +875,10 @@ dboolean CheckGameMode()
        }
     if (gamemode == commercial)
        {
-        con_printf("HEY! - This is NOT Doom 2 or Final Doom!!!\n");
+        printf("HEY! - This is NOT Doom 2 or Final Doom!!!\n");
        }
-
-    con_printf("Checking for Ultimate Doom...\n");
+    
+    printf("Checking for Ultimate Doom...\n");
     // check for Ultimate Doom lumps here
     for (e = 4, m = 1, bValid = true; m < 10; m++)
        {
@@ -908,11 +902,11 @@ dboolean CheckGameMode()
        }
     if (gamemode == retail)
        {
-        con_printf("HEY! - This is NOT Ultimate Doom!!!\n");
+        printf("HEY! - This is NOT Ultimate Doom!!!\n");
        }
 
 
-    con_printf("Checking for Registered Doom...\n");
+    printf("Checking for Registered Doom...\n");
     // check for Registered Doom lumps here
     for (e = 2, bValid = true; ((e < 4) && (bValid == true)); e++)
        {
@@ -939,10 +933,10 @@ dboolean CheckGameMode()
 
     if (gamemode == registered)
        {
-        con_printf("HEY! - This is NOT the REGISTERED version of Doom!!!\n");
+        printf("HEY! - This is NOT the REGISTERED version of Doom!!!\n");
        }
 
-    con_printf("Checking for Shareware Doom...\n");
+    printf("Checking for Shareware Doom...\n");
     // check for shareware lumps here
     for (e = 1, m = 1, bValid = true; m < 10; m++)
        {
@@ -962,7 +956,7 @@ dboolean CheckGameMode()
        }
     if (gamemode == registered)
        {
-        con_printf("HEY! - This isn't even the SHAREWARE version of Doom!!!\n");
+        printf("HEY! - This isn't even the SHAREWARE version of Doom!!!\n");
        }
 
     gamemode = undetermined;
@@ -1028,14 +1022,15 @@ char *D_FindNext()
 //
 void IdentifyVersion (void)
    {
+#ifdef __linux__
     char*    doomwad;
+#endif
     char tempbuf[16];
+#ifdef __linux__
     char* candidate;
-    char *c;
-    char   *doomwaddir, id[4];
+#endif
     int     i;
     //struct  _stat buf;
-    FILE   *fh;
 
 #ifdef NORMALUNIX
     char   *home;
@@ -1180,7 +1175,7 @@ void IdentifyVersion (void)
             {
                 candidate = cur_file->d_name;
                 sprintf(tempbuf, "%s.wad", szWadNames[i]);
-                if (!D_strncasecmp(candidate, tempbuf, strlen(candidate)))
+                if (!strncasecmp(candidate, tempbuf, strlen(candidate)))
                 {
                     doomwad = candidate;
                     break;
@@ -1194,7 +1189,7 @@ void IdentifyVersion (void)
 
         if ( !Access(tempbuf, R_OK))
            {
-            con_printf("Found game WAD for: %s\n", szGameNames[i]);
+            printf("Found game WAD for: %s\n", szGameNames[i]);
             strcpy(gamename, szWadNames[i]);
             gamemode = iGameModes[i];
             language = iLanguages[i];
@@ -1317,10 +1312,10 @@ void FindResponseFile(void)
             handle = fopen (&myargv[i][1],"rb");
             if (!handle)
                {
-                con_printf ("Response file [%s] doesn't exist...\n", &myargv[i][1]);
+              printf ("Response file [%s] doesn't exist...\n", &myargv[i][1]);
                 return;
                }
-            con_printf("Found response file %s!\n", &myargv[i][1]);
+            printf("Found response file %s!\n", &myargv[i][1]);
             while (fgets(readline, 255, handle) != NULL)
                {
                 linetext = D_PrepTextLine(readline);
@@ -1349,29 +1344,31 @@ void D_DoomMain (void)
    {
     int             p;
     char            file[256];
+#ifdef __linux__
     char*           candidate;
+#endif
     byte           *demover;
 
     //FindResponseFile();
 	
-    con_printf("M_loadDefaults: Load system defaults.\n");
+    printf("M_loadDefaults: Load system defaults.\n");
     M_LoadDefaults (); // load before initing other systems
 
     IdentifyVersion();
 
     if (gamemode == undetermined)
        {
-         con_printf("No official IWAD found!\n");
+         printf("No official IWAD found!\n");
          return;
        }
 	
-    if (D_strcasecmp(noext(basename(gamename)), "tnt") == 0)
+    if (strcasecmp(noext(basename(gamename)), "tnt") == 0)
        {
         tnt = true;
         plutonia = false;
        }
 
-    if (D_strcasecmp(noext(basename(gamename)), "plutonia") == 0)
+    if (strcasecmp(noext(basename(gamename)), "plutonia") == 0)
        {
         tnt = false;
         plutonia = true;
@@ -1397,7 +1394,7 @@ void D_DoomMain (void)
        }
 
     if (devparm)
-        con_printf(D_DEVSTR);
+        printf(D_DEVSTR);
     
     if (M_CheckParm("-cdrom"))
        {
@@ -1444,7 +1441,7 @@ void D_DoomMain (void)
             {
                 candidate = cur_file->d_name;
                 
-                if (!D_strncasecmp(candidate, "gldoom.wad", strlen("gldoom.wad")))
+                if (!strncasecmp(candidate, "gldoom.wad", strlen("gldoom.wad")))
                 {
                     D_AddFile(candidate);
                     break;
@@ -1501,7 +1498,7 @@ void D_DoomMain (void)
        {
         if (gamemode == shareware)
            {
-            con_printf("\nYou cannot -file with the shareware version. Register!\n\n");
+            printf("\nYou cannot -file with the shareware version. Register!\n\n");
            }
         else
            {
@@ -1544,11 +1541,11 @@ void D_DoomMain (void)
            {
 	        sprintf (file,"%s.lmp", myargv[p+1]);
 	        D_AddFile (file);
-	        con_printf("Playing demo %s.lmp.\n",myargv[p+1]);
+	        printf("Playing demo %s.lmp.\n",myargv[p+1]);
            }
         else
            {
-	        con_printf("Playing demo II %s.dem.\n",myargv[p+1]);
+	        printf("Playing demo II %s.dem.\n",myargv[p+1]);
            }
        }
     
@@ -1578,12 +1575,12 @@ void D_DoomMain (void)
        {
 	    int     frags;
 	    frags = atoi(myargv[p+1]);
-	    con_printf("Levels will end after %d frag",frags);
+	    printf("Levels will end after %d frag",frags);
 	    if (frags > 1)
            {
-	        con_printf("s");
+	        printf("s");
            }
-	    con_printf(".\n");
+	    printf(".\n");
        }
 
     p = M_CheckParm ("-timer");
@@ -1591,18 +1588,18 @@ void D_DoomMain (void)
        {
 	    int     time;
 	    time = atoi(myargv[p+1]);
-	    con_printf("Levels will end after %d minute",time);
+	    printf("Levels will end after %d minute",time);
 	    if (time>1)
            {
-	        con_printf("s");
+	        printf("s");
            }
-	    con_printf(".\n");
+	    printf(".\n");
        }
 
     p = M_CheckParm("-nosound");
     if (p != 0)
        {
-	    con_printf("Sound disabled.\n");
+	    printf("Sound disabled.\n");
         nosound = true;
         nosound_t = true;
        }
@@ -1667,28 +1664,28 @@ void D_DoomMain (void)
            }
         if (autostart != true)
            {
-            con_printf("Invalid start map requested...\n");
+            printf("Invalid start map requested...\n");
            }
        }
 
     
     // init subsystems
     //printf ("V_Init: allocate screens.\n");
-    con_printf("V_Init: allocate screens.\n");
+    printf("V_Init: allocate screens.\n");
     V_Init ();
     R_InitMeltRes();
 
     //printf ("Z_Init: Init zone memory allocation daemon. \n");
-    con_printf("Z_init: Init zone memory allocation daemon. \n");
+    printf("Z_init: Init zone memory allocation daemon. \n");
     Z_Init ();
 
     //printf ("W_Init: Init WADfiles.\n");
-    con_printf("W_Init: Init WADfiles.\n");
+    printf("W_Init: Init WADfiles.\n");
     W_InitMultipleFiles(wadfiles);
     
     if (CheckGameMode() == false)
        {
-        con_printf("Unable to determine game mode - aborting...\n");
+        printf("Unable to determine game mode - aborting...\n");
         return;
        }
 
@@ -1698,21 +1695,21 @@ void D_DoomMain (void)
         demover = (byte *)W_CacheLumpName("DEMO1", PU_CACHE);
         if (*demover != 109)
            {
-            con_printf("+---------------------------------------------------------------+\n");
-            con_printf("|      B A D   D E M O   V E R S I O N   D E T E C T E D !      |\n");
-            con_printf("+---------------------------------------------------------------+\n");
+            printf("+---------------------------------------------------------------+\n");
+            printf("|      B A D   D E M O   V E R S I O N   D E T E C T E D !      |\n");
+            printf("+---------------------------------------------------------------+\n");
             if (modifiedgame)
                {
-                con_printf("|       This wad contains demos from a version %d.%d WAD.         |\n", *demover/100,*demover%100);
+                printf("|       This wad contains demos from a version %d.%d WAD.         |\n", *demover/100,*demover%100);
                }
             else
                {
-                con_printf("|       This wad appears to be from a version %d.%d WAD.          |\n", *demover/100,*demover%100);
+                printf("|       This wad appears to be from a version %d.%d WAD.          |\n", *demover/100,*demover%100);
                }
-            con_printf("|     You are advised that this may not run and the demos       |\n");
-            con_printf("|     may not play even if it does run. glDoom Re will NOT      |\n");
-            con_printf("|     work properly on WAD versions earlier than 1.9            |\n");
-            con_printf("+---------------------------------------------------------------+\n");
+            printf("|     You are advised that this may not run and the demos       |\n");
+            printf("|     may not play even if it does run. glDoom Re will NOT      |\n");
+            printf("|     work properly on WAD versions earlier than 1.9            |\n");
+            printf("+---------------------------------------------------------------+\n");
            }
        }
 
@@ -1741,7 +1738,7 @@ void D_DoomMain (void)
            break;
        }
     
-    con_printf("%s\n",title);
+    printf("%s\n",title);
 
     // Check for -file in shareware
     if (modifiedgame)
@@ -1769,12 +1766,12 @@ void D_DoomMain (void)
     // If additonal PWAD files are used, print modified banner
     if (modifiedgame)
        {
-       con_printf("===========================================================================\n");
-       con_printf("ATTENTION:  This version of DOOM has been modified.  If you would like to\n");
-       con_printf("get a copy of the original game, call 1-800-IDGAMES or see the readme file.\n");
-       con_printf("        You will not receive technical support for modified games.\n");
-       //con_printf("                      press enter to continue\n");
-       con_printf("===========================================================================\n");
+       printf("===========================================================================\n");
+       printf("ATTENTION:  This version of DOOM has been modified.  If you would like to\n");
+       printf("get a copy of the original game, call 1-800-IDGAMES or see the readme file.\n");
+       printf("        You will not receive technical support for modified games.\n");
+       //printf("                      press enter to continue\n");
+       printf("===========================================================================\n");
        //    );
        //getchar ();
        }
@@ -1782,9 +1779,9 @@ void D_DoomMain (void)
     
     if ((conversion == true) && (gamemode != undetermined))
        {
-       con_printf("===========================================================================\n");
-       con_printf("                              Full Conversion!\n");
-       con_printf("===========================================================================\n");
+       printf("===========================================================================\n");
+       printf("                              Full Conversion!\n");
+       printf("===========================================================================\n");
        }
     else
        {
@@ -1794,25 +1791,25 @@ void D_DoomMain (void)
           case shareware:
              //case undetermined:
              //printf (
-             con_printf("===========================================================================\n");
-             con_printf("                                Shareware!\n");
-             con_printf("===========================================================================\n");
+             printf("===========================================================================\n");
+             printf("                                Shareware!\n");
+             printf("===========================================================================\n");
              //);
              break;
           case registered:
           case retail:
           case commercial:
              //printf (
-             con_printf("===========================================================================\n");
-             con_printf("                 Commercial product - do not distribute!\n");
-             con_printf("         Please report software piracy to the SPA: 1-800-388-PIR8\n");
-             con_printf("===========================================================================\n");
+             printf("===========================================================================\n");
+             printf("                 Commercial product - do not distribute!\n");
+             printf("         Please report software piracy to the SPA: 1-800-388-PIR8\n");
+             printf("===========================================================================\n");
              //);
              break;
           case undetermined:
-             con_printf("===========================================================================\n");
-             con_printf("                  Unable to determine game mode - aborting\n");
-             con_printf("===========================================================================\n");
+             printf("===========================================================================\n");
+             printf("                  Unable to determine game mode - aborting\n");
+             printf("===========================================================================\n");
              break;
           default:
              // Ouch.
@@ -1824,29 +1821,29 @@ void D_DoomMain (void)
     CreateGLPalette();
 
     //printf ("M_Init: Init miscellaneous info.\n");
-    con_printf("M_Init: Init miscellaneous info.\n");
+    printf("M_Init: Init miscellaneous info.\n");
     M_Init();
 
     //printf ("R_Init: Init DOOM refresh daemon - ");
-    con_printf("R_Init: Init DOOM refresh daemon - ");
+    printf("R_Init: Init DOOM refresh daemon - ");
     R_Init();
 
     //printf ("\nP_Init: Init Playloop state.\n");
-    con_printf("\nP_Init: Init Playloop state.\n");
+    printf("\nP_Init: Init Playloop state.\n");
     P_Init();
 
     //con_printf("WS_Init: Init weapon sprites.\n");
     //WS_Init();
 
-    con_printf("WS_Init: Init sprites - ");
+    printf("WS_Init: Init sprites - ");
     LoadAllSprites();
 
     //printf ("I_Init: Setting up machine state.\n");
-    con_printf("I_Init: Setting up machine state.\n");
+    printf("I_Init: Setting up machine state.\n");
     I_Init();
 
     //printf ("D_CheckNetGame: Checking network game status.\n");
-    con_printf("D_CheckNetGame: Checking network game status.\n");
+    printf("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame();
     if (gamemode == netabort)
        {
@@ -1854,23 +1851,23 @@ void D_DoomMain (void)
        }
 
     //printf ("S_Init: Setting up sound.\n");
-    con_printf("S_Init: Setting up sound.\n");
+    printf("S_Init: Setting up sound.\n");
     //S_Init (snd_SfxVolume*8, snd_MusicVolume*8 );
     S_Init(snd_SfxVolume, snd_MusicVolume);
 
-    con_printf("HU_Init: Setting up heads up display.\n");
+    printf("HU_Init: Setting up heads up display.\n");
     HU_Init();
 
-    con_printf("ST_Init: Init status bar.\n");
+    printf("ST_Init: Init status bar.\n");
     ST_Init();
 
-    con_printf("CO_Init: Init console.\n");
+    printf("CO_Init: Init console.\n");
     CO_Init();
 
-    con_printf("WI_Init: Init game widgets.\n");
+    printf("WI_Init: Init game widgets.\n");
     WI_Init();
 
-    con_printf("F_Init: Init game finale.\n");
+    printf("F_Init: Init game finale.\n");
     F_Init();
 
     // check for a driver that wants intermission stats
@@ -1882,7 +1879,7 @@ void D_DoomMain (void)
        
        statcopy = (void*)atoi(myargv[p+1]);
        //printf ("External statistics registered.\n");
-       con_printf("External statistics registered.\n");
+       printf("External statistics registered.\n");
        }
     
     // start the apropriate game based on parms
@@ -1910,7 +1907,7 @@ void D_DoomMain (void)
           return;
        else
           {
-          con_printf("DEMO II [%s.dem] - BAD FILE.\n", myargv[p+1]);
+          printf("DEMO II [%s.dem] - BAD FILE.\n", myargv[p+1]);
           }
        //    D_DoomLoop ();  // never returns
        }
@@ -1918,7 +1915,7 @@ void D_DoomMain (void)
     p = M_CheckParm ("-timedemo");
     if (p && p < myargc-1)
        {
-       con_printf("-timedemo\n");
+       printf("-timedemo\n");
        G_TimeDemo (myargv[p+1]);
        return;
        //    D_DoomLoop ();  // never returns
@@ -1927,12 +1924,12 @@ void D_DoomMain (void)
     p = M_CheckParm ("-timedemo2");
     if (p && p < myargc-1)
        {
-       con_printf("-timedemo2\n");
+       printf("-timedemo2\n");
        if (G_TimeDemo_II(myargv[p+1]) == true)
           return;
        else
           {
-          con_printf("DEMO II [%s.dem] - BAD FILE.\n", myargv[p+1]);
+          printf("DEMO II [%s.dem] - BAD FILE.\n", myargv[p+1]);
           }
        //    D_DoomLoop ();  // never returns
        }

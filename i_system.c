@@ -195,7 +195,7 @@ void I_Error (char *error, ...)
     vsprintf (MsgText,error,argptr);
     lfprintf(MsgText);
     //fprintf (stderr, "\n");
-    con_printf(MsgText);
+    printf(MsgText);
     lfprintf("\n");
     va_end (argptr);
 

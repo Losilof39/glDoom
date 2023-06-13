@@ -273,9 +273,9 @@ static void I_ReadMouse()
 
 
 void I_GetEvent(void)
-   {
+{
     I_CheckInputs();
 
     I_ReadMouse();
-   }
+}
 

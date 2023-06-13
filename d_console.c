@@ -51,14 +51,6 @@ extern cheatseq_t	cheat_mypos;
 
 void M_WriteText(int x, int y, char *string);
 
-#ifdef _WIN32
-#ifdef OLD_WIN32
-#define strncasecmp strnicmp
-#else
-#define strncasecmp _strnicmp
-#endif
-#endif
-
 ////////////////////////////////////////////////////////////////////////
 // Doom98 code
 ////////////////////////////////////////////////////////////////////////
@@ -131,7 +123,7 @@ char *PowerUpOn[] = { "INVULNERABILITY ON", "BERSERKER ON", "INVISIBILITY ON", "
 char *PowerUpOff[] = { "INVULNERABILITY OFF", "BERSERKER OFF", "INVISIBILITY OFF", "ENVIRONMENT SUIT OFF", "FULL MAP OFF", "LIGHT AMPLIFICATION GOGGLES OFF" };
 char  PowerUpKey[] = "VSIRAL";
 
-typedef enum { msg_ammo, msg_health, msg_armor, msg_keys, msg_weapons, msg_all, msg_amap, msg_pack, msg_bear };
+enum { msg_ammo, msg_health, msg_armor, msg_keys, msg_weapons, msg_all, msg_amap, msg_pack, msg_bear };
 
 char *Gimme[] = { "Full ammo given", "Full health given", "Full armor given", "All keys given", "All weapons given",
                   "You got it ALL!", "Full automap given", "Backpack given", "You are now a one person army!" };
@@ -491,7 +483,7 @@ char *scanname[] = {    "NULL", // no key
 char *CleanUpCommand(char *command)
    {
     char *tchar;
-    int   i;
+    size_t   i;
 
     tchar = command;
 
@@ -874,8 +866,6 @@ void MaxMap()
 
 dboolean GiveAll(char *cmd)
    {
-    int i;
-
     MaxWeapons();
     MaxArmor();
     MaxHealth();
@@ -975,7 +965,7 @@ dboolean GiveItems(char *cmd)
                {
                 if (give_commands[i].keylength > 0)
                    {
-                    if (D_strncasecmp(give_commands[i].keyword, s, give_commands[i].keylength) == 0)
+                    if (strncasecmp(give_commands[i].keyword, s, give_commands[i].keylength) == 0)
                        {
                         //s = CleanUpCommand(&s[give_commands[i].keylength]);
                         give_commands[i].command(s);
@@ -983,7 +973,7 @@ dboolean GiveItems(char *cmd)
                    }
                 else
                    {
-                    if (D_strcasecmp(give_commands[i].keyword, s) == 0)
+                    if (strcasecmp(give_commands[i].keyword, s) == 0)
                        {
                         give_commands[i].command(s);
                        }
@@ -1002,7 +992,7 @@ dboolean GiveItems(char *cmd)
 
 dboolean MidiCommand(char *cmd)
    {
-    if ((D_strcasecmp(cmd, "pause") == 0) || (D_strcasecmp(cmd, "resume") == 0))
+    if ((strcasecmp(cmd, "pause") == 0) || (strcasecmp(cmd, "resume") == 0))
         //PauseResumeMusic();
     return false;
    }
@@ -1172,7 +1162,8 @@ dboolean ChangeLevel(char *cmd)
        {
         // 'clev' change-level cheat
         char buf[3];
-        int  i, epsd;
+        size_t  i;
+        int epsd;
         int  map;
       
         strcpy(buf, cmd);
@@ -1281,7 +1272,7 @@ dboolean BindCommand(char *cmd)
        {
         if (cvars[i].cv_type != cv_scan)
             continue;
-        if (D_strcasecmp(ts, cvars[i].name) == 0)
+        if (strcasecmp(ts, cvars[i].name) == 0)
            {
             ts = strtok(NULL, " ");
             if (ts != NULL)
@@ -1291,7 +1282,7 @@ dboolean BindCommand(char *cmd)
                    {
                     if (!scanname[sc][0])
                        continue;
-                    if (D_strcasecmp(ts, scanname[sc]) == 0)
+                    if (strcasecmp(ts, scanname[sc]) == 0)
                        {
                         sprintf(buf, "CMD %s BOUND TO SCANCODE %3d\n", cvars[i].name, sc);
                         CO_AddConsoleMessage(buf);
@@ -1562,7 +1553,7 @@ dboolean CO_Responder(event_t* ev)
                     }
                  break;
            }
-        if ((D_strcasecmp(szCommand, "idbehold") == 0) && (bDisplayed == false))
+        if ((strcasecmp(szCommand, "idbehold") == 0) && (bDisplayed == false))
            {
             CO_AddConsoleMessage(STSTR_BEHOLD);
             bDisplayed = true;
@@ -1696,7 +1687,7 @@ extern float SetBack;
 
 void GL_DrawConsole()
    {
-    int h, v, yoff, d, s, i, j, clines, mline;
+    int i, clines, mline;
     static char tstr[32];
     static int  cursor = 0;
     int         curpos;
@@ -1893,7 +1884,7 @@ void CO_AddConsoleMessage(char *s)
 
 int CO_HandleCommand(char *cmd)
    {
-    int    i, sc;
+    int    i;
     char  *ts;
 
     // b. - enabled for more debug fun.
@@ -1903,7 +1894,7 @@ int CO_HandleCommand(char *cmd)
        {
         if (con_commands[i].keylength > 0)
            {
-            if (D_strncasecmp(con_commands[i].keyword, cmd, con_commands[i].keylength) == 0)
+            if (strncasecmp(con_commands[i].keyword, cmd, con_commands[i].keylength) == 0)
                {
                 cmd = CleanUpCommand(&cmd[con_commands[i].keylength]);
                 return(con_commands[i].command(cmd));
@@ -1911,7 +1902,7 @@ int CO_HandleCommand(char *cmd)
            }
         else
            {
-            if (D_strcasecmp(con_commands[i].keyword, cmd) == 0)
+            if (strcasecmp(con_commands[i].keyword, cmd) == 0)
                {
                 return(con_commands[i].command(cmd));
                }
@@ -1933,7 +1924,7 @@ int CO_HandleCommand(char *cmd)
         return false;
        }
 
-    if (D_strcasecmp(cmd, "finish") == 0)
+    if (strcasecmp(cmd, "finish") == 0)
        {
         static char buf[ST_MSGWIDTH];
         G_EndDemo_II();
@@ -1963,7 +1954,7 @@ int CO_HandleCommand(char *cmd)
         return false;
        }
 
-    if (D_strcasecmp(cmd, "cmdlist") == 0)
+    if (strcasecmp(cmd, "cmdlist") == 0)
        {
         i = 0;
         while (cmdlist[i][0] != '\0')
@@ -1971,7 +1962,7 @@ int CO_HandleCommand(char *cmd)
         return false;
        }
 
-    if (D_strcasecmp(cmd, "cvarlist") == 0)
+    if (strcasecmp(cmd, "cvarlist") == 0)
        {
         static char buf[128];
         i = 0;
@@ -1989,7 +1980,7 @@ int CO_HandleCommand(char *cmd)
        {
         if ((cvars[i].cv_type != cv_value) && (cvars[i].cv_type != cv_string))
             continue;
-        if (D_strcasecmp(ts, cvars[i].name) == 0)
+        if (strcasecmp(ts, cvars[i].name) == 0)
            {
             static char buf[ST_MSGWIDTH];
             ts = strtok(NULL, " ");

@@ -299,7 +299,7 @@ dboolean StartUpOpenGL()
 
     if (!glContext)
     {
-        con_printf("Failed to create an OpenGL context!\n");
+        printf("Failed to create an OpenGL context!\n");
         I_Quit();
     }
 
@@ -307,7 +307,7 @@ dboolean StartUpOpenGL()
 
     if (gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress) < 0)
     {
-        con_printf("Failed to load OpenGL library!\n");
+        printf("Failed to load OpenGL library!\n");
         I_Quit();
     }
 
@@ -333,14 +333,14 @@ void GetGLInfo()
     szt = glGetString(GL_VENDOR);
     GL_Vendor = (char *)malloc(strlen(szt)+1);
     strcpy(GL_Vendor, szt);
-    con_printf("OpenGL Vendor   : %s\n", GL_Vendor);
-    if (D_strcasecmp(GL_Vendor, "3DLABS") == 0)
+    printf("OpenGL Vendor   : %s\n", GL_Vendor);
+    if (strcasecmp(GL_Vendor, "3DLABS") == 0)
        GL_3Dlabs = true;
 
     szt = glGetString(GL_RENDERER);
     GL_Renderer = (char *)malloc(strlen(szt)+1);
     strcpy(GL_Renderer, szt);
-    con_printf("OpenGL Renderer : %s\n", GL_Renderer);
+    printf("OpenGL Renderer : %s\n", GL_Renderer);
 
     //if ((D_strcasecmp(GL_Vendor, "Microsoft Corporation") == 0) &&
     //    (D_strcasecmp(GL_Renderer, "GDI Generic") == 0))
@@ -353,7 +353,7 @@ void GetGLInfo()
     szt = glGetString(GL_VERSION);
     GL_Version = (char *)malloc(strlen(szt)+1);
     strcpy(GL_Version, szt);
-    con_printf("OpenGL Version  : %s\n", GL_Version);
+    printf("OpenGL Version  : %s\n", GL_Version);
 
     szt = glGetString(GL_EXTENSIONS);
     tempstr = (char *)malloc(strlen(szt)+2);
@@ -366,11 +366,11 @@ void GetGLInfo()
            {
             GL_EXT_List[GL_EXT_Count] = (char *)malloc(strlen(szu)+1);
             strcpy(GL_EXT_List[GL_EXT_Count], szu);
-            con_printf("OpenGL Extension : %s\n", GL_EXT_List[GL_EXT_Count]);
+            printf("OpenGL Extension : %s\n", GL_EXT_List[GL_EXT_Count]);
             szu = strtok( NULL, " " );
             GL_EXT_Count++;
            }
        }
     free(tempstr);
-    con_printf("End of OpenGL extensions...\n");
+    printf("End of OpenGL extensions...\n");
    }

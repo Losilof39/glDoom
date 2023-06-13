@@ -493,18 +493,18 @@ void R_InitTextures (void)
     temp3 = ((temp2-temp1+63)/64) + ((numtextures+63)/64);
     // [AB] - this originally broke TNT and PLUTONIA wad loading, so I reverted it to vanilla
     // [AB] - no idea why it was changed..  seems pointless to me.
-    con_printf("[");
+    printf("[");
     for (i = 0; i < temp3; i++)
-        con_printf(" ");
-    con_printf("         ]");
+        printf(" ");
+    printf("         ]");
     for (i = 0; i < temp3; i++)
-        con_printf("\x8");
-    con_printf("\x8\x8\x8\x8\x8\x8\x8\x8\x8\x8");
+        printf("\x8");
+    printf("\x8\x8\x8\x8\x8\x8\x8\x8\x8\x8");
 	
     for (i=0; i<numtextures ; i++, directory++)
     {
         if (!(i&63))
-            con_printf(".");
+            printf(".");
 
         if (i == numtextures1)
         {
@@ -710,7 +710,7 @@ int	R_CheckTextureNumForName(char* name)
     D_strupper(tname);
 
     for (i = 0; i < numtextures; i++)
-        if (!D_strncasecmp(textures[i]->name, tname, 8))
+        if (!strncasecmp(textures[i]->name, tname, 8))
             return i;
 
     return -1;

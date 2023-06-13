@@ -512,8 +512,7 @@ extern int numplayers;
 void I_InitNetwork(void)
    {
     //dboolean		trueval = true;
-    int			i, err, adaptor = 0;
-    int			p;
+    int			i;
     //struct hostent*	hostentry;	// host information entry
     //WORD wVersionRequested;  
     //WSADATA wsaData; 

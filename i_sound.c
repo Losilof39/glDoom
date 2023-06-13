@@ -137,8 +137,6 @@ static void InitSfxModule(dboolean use_sfx_prefix)
 
 static void InitMusicModule(void)
 {
-    int i;
-
     music_module = NULL;
 
     // Initialize the module
