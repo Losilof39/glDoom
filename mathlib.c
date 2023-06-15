@@ -3,6 +3,7 @@
 //
 #include <math.h>
 #include "mathlib.h"
+#include <string.h>
 
 ml_vec3_t identity[3] = { 1.0, 0.0, 0.0,
                           0.0, 1.0, 0.0,

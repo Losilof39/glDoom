@@ -26,16 +26,17 @@ void I_ReleaseKeyboard()
 
 void I_SetupKeyboard()
 {
+    int k;
     // Set the keyboard buffer to "all keys up"
-    for (int k = 0; k < 256; k++)
+    for (k = 0; k < 256; k++)
         si_Kbd[k] = SDL_KEYUP;
 }
 
 void I_CheckKeyboard()
 {
     static  event_t  event[256];
-
-    for (int i = 1; i < 256; i++)
+    int i;
+    for (i = 1; i < 256; i++)
     {
         // key released
         if (!keystates[i] && (si_Kbd[i] == SDL_KEYDOWN))

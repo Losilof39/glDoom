@@ -1,7 +1,7 @@
 // d_console.c
 // This is the console control program it is NOT covered
 // by the Doom license agreement.
-// Copyright © 1998, Bruce A. Lewis
+// Copyright ï¿½ 1998, Bruce A. Lewis
 // This code may not be re-used in a commercial product
 // of any kind without express written consent from
 // the author, Bruce A. Lewis.
@@ -2001,7 +2001,7 @@ int CO_HandleCommand(char *cmd)
                    {
                     strncpy(cvars[i].var, ts, cvars[i].maxval);
                     cvars[i].var[cvars[i].maxval] = '\0';
-                    sprintf(buf, "%s SET TO '%d'\n", cvars[i].name, cvars[i].var);
+                    sprintf(buf, "%s SET TO '%ls'\n", cvars[i].name, cvars[i].var);
                     CO_AddConsoleMessage(buf);
                    }
                }
