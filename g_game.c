@@ -2033,7 +2033,6 @@ void G_DoPlayDemo_II(void)
     int		i; 
     int		a,b,c; 
     char	vcheck[VERSIONSIZE]; 
-    skill_t skill; 
 
     demotype = DEMO_II;
 

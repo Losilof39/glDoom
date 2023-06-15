@@ -93,7 +93,7 @@ extern byte *screens[5];
 extern GameMode_t gamemode;
 
 char         szMsgText[2048];
-char         window_title[50];
+const char         *window_title[50];
 
 extern devinfo_t DevInfo;
 
@@ -108,7 +108,7 @@ dboolean        bQuit = false;
 void  Cleanup(void);
 void  InitData();
 void  ParseCommand(int,char**);
-void  EvaluateParameters(char*);
+void  EvaluateParameters(char**);
 dboolean  CreateMainWindow( int, int, int, dboolean);
 
 void ClearLog(char *szFileName);
@@ -143,7 +143,7 @@ extern int    keylink;
 char      szDbgName[] = "glDoom.dbg";
 
 
-int main(int argc, char* szCmdLine)
+int main(int argc, char** szCmdLine)
    {
     ClearLog(szDbgName);
 
@@ -192,7 +192,7 @@ int main(int argc, char* szCmdLine)
         return 0;
        }
 
-    printf("Command line: %s\n", szCmdLine);
+    printf("Command line: %s\n", (char*)szCmdLine);
     printf("Beginning DOOM data setup...\n");
     MY_DoomSetup();
 
@@ -293,6 +293,8 @@ dboolean ResizeMainWindow(char *mode)
            }
        }
     return false;
+#else
+    return false;
 #endif
    }
 
@@ -302,8 +304,8 @@ dboolean ResizeMainWindow(char *mode)
 void Cleanup()
    {
     int  i;
-    char DoomDir[_MAX_PATH];
-    char tstr[16];
+//    char DoomDir[_MAX_PATH];
+//    char tstr[16];
 
     SDL_ShowCursor(SDL_ENABLE);
 
@@ -319,12 +321,12 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
         I_Error("Failed to init SDL");
  
 #if _DEBUG
-    sprintf(&window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
+    sprintf(window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 #else
-    sprintf(&window_title, "GLDOOM-RE");
+    sprintf(window_title, "GLDOOM-RE");
 #endif
 
-    pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+    pWindow = SDL_CreateWindow((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         video.width, video.height, SDL_WINDOW_OPENGL | (video.fullscreen ? SDL_WINDOW_FULLSCREEN : 0) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
   
 
@@ -383,11 +385,7 @@ void ParseCommand(int argc, char** szCmdLine)
     int i = 1;
     char cwd[_MAX_PATH];
 
-#ifdef _WIN32
-    _getcwd(cwd, _MAX_PATH);
-#else
-    getcwd(cwd, _MAX_PATH);
-#endif
+    Getcwd(cwd, _MAX_PATH);
 
     M_InitParms();
     
@@ -400,7 +398,7 @@ void ParseCommand(int argc, char** szCmdLine)
        }
    }
 
-void EvaluateParameters(char* szCmdLine)
+void EvaluateParameters(char** szCmdLine)
    {
     int  p;
 

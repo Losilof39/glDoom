@@ -5,9 +5,9 @@
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
+#include <inttypes.h>
 #include <fcntl.h>
 #include <malloc.h>
 

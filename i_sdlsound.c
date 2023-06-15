@@ -83,7 +83,7 @@ static dboolean(*ExpandSoundData)(sfxinfo_t* sfxinfo,
 
 static allocated_sound_t* allocated_sounds_head = NULL;
 static allocated_sound_t* allocated_sounds_tail = NULL;
-static int allocated_sounds_size = 0;
+static size_t allocated_sounds_size = 0;
 
 
 // Hook a sound into the linked list at the head.
@@ -222,7 +222,7 @@ static allocated_sound_t* AllocateSound(sfxinfo_t* sfxinfo, size_t len)
     // Skip past the chunk structure for the audio buffer
 
     snd->chunk.abuf = (byte*)(snd + 1);
-    snd->chunk.alen = len;
+    snd->chunk.alen = (Uint32)len;
     snd->chunk.allocated = 1;
     snd->chunk.volume = MIX_MAX_VOLUME;
     snd->pitch = NORM_PITCH;

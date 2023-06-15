@@ -28,7 +28,7 @@ static const char
 rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
 #include "thirdparty/SDL2/include/SDL.h"
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -38,12 +38,11 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #ifdef _WIN32
     #include <io.h>
 #else
-    #include <inttypes.h>
     #include <unistd.h>
 #endif
 
 #include <ctype.h>
-
+#include <inttypes.h>
 
 #include "doomdef.h"
 
@@ -924,7 +923,7 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
 void M_ScreenShot(void)
    {
     int    i;
-    char  *buffer, *c;
+    char  *buffer;
     char   lbmname[14];
     
     // find a file name to save it to

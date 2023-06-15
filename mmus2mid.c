@@ -181,10 +181,10 @@ static UBYTE MidiEvent(MIDI *mididata,UBYTE midicode,UBYTE MIDIchannel,
 //
 static int TWriteByte(MIDI *mididata, int MIDItrack, UBYTE byte)
 {
-  ULONG pos ;
+  size_t pos ;
 
   pos = mididata->track[MIDItrack].len;
-  if (pos >= (ULONG)track[MIDItrack].alloced)
+  if (pos >= (size_t)track[MIDItrack].alloced)
   {
     track[MIDItrack].alloced =        // double allocation
       track[MIDItrack].alloced?       // or set initial TRACKBUFFERSIZE
@@ -652,7 +652,7 @@ int MidiToMIDI(UBYTE *mid,MIDI *mididata)
 // proff: I moved this down, because I need MIDItoMidi
 
 static void FreeTracks(MIDI *mididata);
-static void TWriteLength(UBYTE **midiptr,ULONG length);
+static void TWriteLength(UBYTE **midiptr,size_t length);
 
 //
 // FreeTracks()
@@ -684,7 +684,7 @@ static void FreeTracks(MIDI *mididata)
 // Passed a pointer to the pointer to a midi buffer, and the length to write
 // Returns nothing
 //
-static void TWriteLength(UBYTE **midiptr,ULONG length)
+static void TWriteLength(UBYTE **midiptr,size_t length)
 {
 // proff: Added typecast to avoid warning
   *(*midiptr)++ = (unsigned char)((length>>24)&0xff);

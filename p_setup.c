@@ -28,7 +28,7 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 //#include <windows.h>
 //#include <gl/gl.h>
 //#include <gl/glu.h>
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include <math.h>
 #include <stdlib.h>
 
@@ -791,7 +791,7 @@ float InnerProduct(float *f, float *m, float *e)
 
 void NormalVector(float x1, float y1, float x2, float y2, int side)
    {
-    float v1[3], v2[3], d, n[3];
+    float /* v1[3], v2[3], */ d, n[3];
 
     // horizontal vector
     //v1[0] = x2 - x1;

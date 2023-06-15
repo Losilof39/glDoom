@@ -244,7 +244,6 @@ static dboolean IsMid(byte* mem, int len)
 
 static void* I_SDL_RegisterSong(void* data, int len)
 {
-    char* filename;
     Mix_Music* music;
 
     if (!music_initialized)

@@ -51,7 +51,7 @@
     <ClCompile Include="g_game.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="GL_utils.c">
+    <ClCompile Include="gl_utils.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gl_video.c">

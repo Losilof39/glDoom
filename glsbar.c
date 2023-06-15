@@ -2,10 +2,10 @@
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
-#include "thirdparty/glad/include/glad/glad.h"
+#include <inttypes.h>
+#include <glad/glad.h>
 
 #include "doomtype.h"
 #include "r_defs.h"

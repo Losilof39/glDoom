@@ -1,12 +1,12 @@
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
+#include <inttypes.h>
 //#endif
 #include <fcntl.h>
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include "doomdata.h"
 #include "r_defs.h"
 #include "gldefs.h"

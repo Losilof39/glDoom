@@ -117,16 +117,31 @@ void I_Start2DFrame()
 
    }
 
+//hack for gluPerspective taken from: https://www.gamedev.net/forums/topic/180495-glfrustum-and-glperspective-difference/
+
+void w3sgluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
+    GLdouble top, bottom, left, right;
+    double pi180 = 0.017453292519943295769236907684886;
+    top = zNear * tan(pi180 * fovy / 2);
+    bottom = -top;
+    right = aspect * top;
+    left = -right;
+    glMatrixMode(GL_PROJECTION);
+    glLoadIdentity();
+    glFrustum(left, right, bottom, top, zNear, zFar);
+    glMatrixMode(GL_MODELVIEW);
+}
 
 void I_Start3DFrame()
 {
+    GLdouble top, bottom, left, right;
     glFovY   = video.fovy;
     glAspect = (float)video.width / (float)video.height;
 
     glMatrixMode( GL_PROJECTION );
     glLoadIdentity();
 
-    gluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
+    w3sgluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
     glViewport( 0, 0, video.width, video.height);
 
     glTranslatef( 0.0f, 0.0f, 2.0f );

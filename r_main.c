@@ -26,7 +26,7 @@
 
 static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #include <stdlib.h>
 #include <math.h>

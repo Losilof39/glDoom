@@ -25,21 +25,19 @@
 static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <ctype.h>
-
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
-
+#include <inttypes.h>
 
 #include "doomdef.h"
 #include "dstrings.h"
@@ -1522,7 +1520,7 @@ void M_SaveSelect(int choice)
     strcpy(saveOldString,savegamestrings[choice]);
     if (!strcmp(savegamestrings[choice],EMPTYSTRING))
 	savegamestrings[choice][0] = 0;
-    saveCharIndex = strlen(savegamestrings[choice]);
+    saveCharIndex = (int)strlen(savegamestrings[choice]);
 }
 
 //
@@ -3510,7 +3508,7 @@ char *sckeyname[]={ "NULL", // no key
 
 int M_GetKeyString(int c,int offset)
   {
-  char* s;
+  const char* s;
   SDL_Keycode keycode;
 
   if (c == SDL_SCANCODE_PAUSE)
@@ -3528,7 +3526,7 @@ int M_GetKeyString(int c,int offset)
         s = "JUNK";
 
     strcpy(&menu_buffer[offset],s); // string to display
-    offset += strlen(s);
+    offset += (int)strlen(s);
     }
   return offset;
   }
@@ -3699,7 +3697,7 @@ void GL_DrawInstructions()
           strcpy(menu_buffer,"");
           x = 43;
          }
-       x = 160-((strlen(menu_buffer)*gl_fwidth)/2);
+       x = 160-(int)((strlen(menu_buffer)*gl_fwidth)/2);
        GL_WriteTextN(x, 20, menu_buffer, tc_grey);
       }
    else // when you're changing something
@@ -4357,7 +4355,8 @@ void GL_DrawSetting(setup_menu_t* s)
 void M_DrawSetting(setup_menu_t* s)
    {
    int*  key;
-   int   weapon,flags,i,cursor_start,char_width,len,x,y,color;
+   int   weapon,flags,i,cursor_start,char_width,x,y,color;
+   size_t len;
    byte  ch,*ptr;
    char* text;
    char  c[2];
@@ -4504,7 +4503,7 @@ void M_DrawSetting(setup_menu_t* s)
             len = strlen(text); 
             *(text+len-1) = 0;
             len--;
-            if (chat_index > len)
+            if (chat_index > (int)len)
                chat_index--;
             }
          

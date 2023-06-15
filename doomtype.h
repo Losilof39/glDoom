@@ -27,11 +27,14 @@
 #ifdef ANSI_C
 #include "doomlib.h"
 #endif
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
+#include <direct.h>
 #else
 #include <unistd.h>
+#include <dirent.h>
 #endif
+#include <inttypes.h>
 #include <fcntl.h>
 
 
@@ -101,23 +104,20 @@ typedef enum
 } dboolean;
 #endif
 
-
-static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(handle); fseek(handle, 0L, SEEK_SET); return sz; }
-
-#ifndef ANSI_C
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ANSI_C)
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
 #endif
-#endif
 
 #if defined(_MSC_VER)
-#define Open(filename, openflag, ...) _open(filename, openflag, __VA_ARGS__)
+#define Open(filename, openflag, ...) _open(filename, openflag)
 #define Close(filehandle) _close(filehandle)
 #define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
 #define LSeek(filehandle, offset, origin) _lseek(filehandle, offset, origin)
 #define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
 #define Access(filename, accessmode) _access(filename, accessmode)
+#define Getcwd(dstbuf, size_in_bytes) _getcwd(dstbuf, size_in_bytes)
+#define Tell(FileHandle) _tell(FileHandle)
 #else
 #define Open(filename, openflag, ...) open(filename, openflag)
 #define Close(filehandle) close(filehandle)
@@ -125,7 +125,23 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 #define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
 #define Write(filehandle, buf, maxcharcount) write(filehandle, buf, maxcharcount)
 #define Access(filename, accessmode) access(filename, accessmode)
+#define Getcwd(dstbuf, size_in_bytes) getcwd(dstbuf, size_in_bytes)
+#define Tell(FileHandle) tell(FileHandle)
 #endif
+
+#ifdef _WIN64
+#define GetTicks SDL_GetTicks64
+#else
+#define GetTicks SDL_GetTicks
+#endif
+static long filelength_(int handle)
+{
+    long sz;
+    LSeek(handle, 0L, SEEK_END);
+    sz = Tell(handle);
+    LSeek(handle, 0L, SEEK_SET);
+    return sz;
+}
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 

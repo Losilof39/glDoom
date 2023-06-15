@@ -28,7 +28,7 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 
 //#include <windows.h>
 //#include <gl/gl.h>
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #include <stdio.h>
 
@@ -1507,7 +1507,6 @@ void GL_DrawStatusBar0()
 
 void GL_DrawStatusBar1()
    {
-    float setbackh;
     int card;
 
     glColor4f(1.0f, 1.0f, 1.0f, 1.0f);

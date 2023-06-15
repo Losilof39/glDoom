@@ -6,7 +6,7 @@
 // of any kind without express written consent from
 // the author, Bruce A. Lewis.
 //
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include <ctype.h>
 ////////////////////////////////////////////////////////////////////////
 // Doom defines and external data
@@ -2001,7 +2001,7 @@ int CO_HandleCommand(char *cmd)
                    {
                     strncpy(cvars[i].var, ts, cvars[i].maxval);
                     cvars[i].var[cvars[i].maxval] = '\0';
-                    sprintf(buf, "%s SET TO '%s'\n", cvars[i].name, cvars[i].var);
+                    sprintf(buf, "%s SET TO '%d'\n", cvars[i].name, cvars[i].var);
                     CO_AddConsoleMessage(buf);
                    }
                }

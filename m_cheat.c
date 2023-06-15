@@ -27,6 +27,7 @@ rcsid[] = "$Id: m_cheat.c,v 1.1 1997/02/03 21:24:34 b1 Exp $";
 
 #include "m_cheat.h"
 #include "stdlib.h"
+#include <ctype.h>
 
 //
 // CHEAT SEQUENCE PACKAGE

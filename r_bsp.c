@@ -268,7 +268,7 @@ void R_AddLine (seg_t*	line)
     angle_t		angle2;
     angle_t		span;
     angle_t		tspan;
-    int         subsector;
+    //int         subsector;
     int         side;
     //float       fangle1, fangle2, vangle;
 

@@ -156,7 +156,7 @@ typedef struct
     int        width;
     int        height;
     int        bpp;
-    int        fullscreen;
+    dboolean        fullscreen;
     int        allowsoft;
     float      nearclip;
     float      farclip;

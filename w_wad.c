@@ -42,9 +42,9 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
+#include <inttypes.h>
 #include <malloc.h>
 #include <string.h>
 #include <sys/types.h>
@@ -206,7 +206,7 @@ void W_AddFile (char *filename)
 	
     storehandle = reloadname ? -1 : handle;
 	
-    for (i = startlump ; i < numlumps ; i++, lump_p++, fileinfo++)
+    for (i = (unsigned int)startlump ; i < (unsigned int)numlumps ; i++, lump_p++, fileinfo++)
     {
 	    lump_p->handle = storehandle;
 	    lump_p->position = LONG(fileinfo->filepos);
@@ -249,8 +249,8 @@ void W_Reload(void)
     // Fill in lumpinfo
     lump_p = &lumpinfo[reloadlump];
 	
-    for (i=reloadlump ;
-	    i<reloadlump+lumpcount ;
+    for (i=(unsigned int)reloadlump ;
+	    i<(unsigned int)reloadlump+lumpcount ;
 	    i++,lump_p++, fileinfo++)
     {
 	if (lumpcache[i])
@@ -447,7 +447,7 @@ W_CacheLumpNum
 {
     byte* ptr;
 
-    if ((unsigned)lump >= numlumps)
+    if ((unsigned)lump >= (unsigned)numlumps)
         I_Error("W_CacheLumpNum: %i >= numlumps", lump);
 
     if (!lumpcache[lump])

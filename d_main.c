@@ -27,7 +27,7 @@
 
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -48,10 +48,10 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #include <io.h>
 #include <direct.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #include <dirent.h>
 #endif
+#include <inttypes.h>
 
 
 #include "doomdef.h"
