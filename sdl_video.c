@@ -69,6 +69,11 @@ void GetModeList(char *dbgname)
     }
    }
 
+dboolean SetFullScreen()
+{
+    return SDL_SetWindowFullscreen(pWindow, SDL_WINDOW_FULLSCREEN_DESKTOP);
+}
+
 dboolean SetVideoMode()
    {
     SDL_DisplayMode mode;

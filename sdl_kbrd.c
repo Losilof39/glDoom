@@ -12,7 +12,7 @@
 #include "d_event.h"
 #include "sys_sdl.h"
 
-extern Uint8* keystates[256];
+extern dboolean* keystates[256];
 unsigned char        KeyState[256]; // current keys states
 short                si_Kbd[256];   // previous keys states
 

@@ -1000,6 +1000,7 @@ char *D_FindFirst( char *filespec )
        {
         return NULL;
        }*/
+    return NULL;
    }
 
 char *D_FindNext()
@@ -1012,6 +1013,7 @@ char *D_FindNext()
        {
         return NULL;
        }*/
+    return NULL;
    }
 
 //

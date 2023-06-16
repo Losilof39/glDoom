@@ -327,13 +327,10 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 #endif
 
     pWindow = SDL_CreateWindow((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        video.width, video.height, SDL_WINDOW_OPENGL | (video.fullscreen ? SDL_WINDOW_FULLSCREEN : 0) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
+        video.width, video.height, SDL_WINDOW_OPENGL | (video.fullscreen ? true : false) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
   
-
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-
-    SDL_SetWindowFullscreen(pWindow, fullscreen);
 
     if (!pWindow)
     {
@@ -371,7 +368,7 @@ void InitData()
     video.width         = DEF_WIDTH;
     video.height        = DEF_HEIGHT;
     video.bpp           = DEF_COLORB;
-    video.fullscreen    = false;
+    video.fullscreen = SetFullScreen();
 	video.wide = true;
     video.bpp  = DEF_COLORB;
     video.fov  = 90;

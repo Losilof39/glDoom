@@ -82,7 +82,7 @@ byte* I_ZoneBase (int*	size)
 
 int I_TickElapsedTime(void)
 {
-    return (int64_t)I_GetTime() * TICRATE % 1000 * FRACUNIT / 1000;
+    return (uintptr_t)I_GetTime() * TICRATE % 1000 * FRACUNIT / 1000;
 }
 
 //
@@ -95,15 +95,15 @@ int  I_GetTime (void)
 //    struct timeval	tp;
 //    struct timezone	tzp;
     int			newtics;
-    unsigned long       currtime;
+    uintptr_t       currtime;
     //static int		basetime=0;
-    static unsigned long    basetime = 0;
+    static uintptr_t    basetime = 0;
   
 //    gettimeofday(&tp, &tzp);
 //    if (!basetime)
 //	basetime = tp.tv_sec;
 //    newtics = (tp.tv_sec-basetime)*TICRATE + tp.tv_usec*TICRATE/1000000;
-    currtime = SDL_GetTicks64();
+    currtime = GetTicks();
     if (!basetime)
        basetime = currtime;
     newtics = ((currtime-basetime)/(1000/TICRATE));

@@ -19,7 +19,7 @@ extern int       usemouse;
 extern SDL_Window* pWindow;
 extern video_t   video;
 
-Uint8* keystates[256] = { false };
+dboolean* keystates[256] = { false };
 
 extern dboolean      bQuit;
 extern int keylink;
@@ -113,7 +113,7 @@ void I_CheckInputs(void)
             }
 
             // catch the other keys
-            keystates[ev.key.keysym.scancode] = 1;
+            keystates[ev.key.keysym.scancode] = true;
         }break;
 
         case SDL_KEYUP:

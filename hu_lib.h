@@ -186,6 +186,10 @@ HUlib_keyInIText
 
 void HUlib_drawIText(hu_itext_t* it);
 
+void GL_HUlib_drawTextLine(hu_textline_t* l, dboolean drawcursor);
+void GL_HUlib_drawSText(hu_stext_t* s);
+void GL_HUlib_drawIText(hu_itext_t* it);
+
 // erases all itext lines
 void HUlib_eraseIText(hu_itext_t* it); 
 

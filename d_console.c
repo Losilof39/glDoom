@@ -67,8 +67,8 @@ extern int TexWide, TexHigh;
 #define CONSOLE_FLAT "CEIL5_1"
 #define CONSOLE_BORD "FLAT18"
 #define CONSBORD     2
-#define CONSVERS     96
-#define CONSREV      'C'
+#define CONSVERS     97
+#define CONSREV      'RC1'
 #define CONSMSGS     64
 
 char szProgName[] = "GLDOOM-RE";
@@ -994,6 +994,7 @@ dboolean MidiCommand(char *cmd)
    {
     if ((strcasecmp(cmd, "pause") == 0) || (strcasecmp(cmd, "resume") == 0))
         //PauseResumeMusic();
+    
     return false;
    }
 
@@ -1068,6 +1069,7 @@ dboolean CDCommand(char *cmd)
     if (isdigits(cmd) && (strlen(cmd) < 3))
         PlayCDTrack(atoi(cmd));
     return false;*/
+    return false;
    }
 
 char *NewMapSyntax[] = { "Syntax: MAP EXMY (X = episode & Y = mission)",
@@ -1379,7 +1381,9 @@ con_command_t con_commands[] = { "iddqd",      0, GodMode,      "god mode",
                                  "give",       4, GiveItems,    "give the requested item",
                                  "midi",       4, MidiCommand,  "control midi playback",
                                  "mypos",      0, ShowPosition, "show current player position",
+#if 0
                                  "cd",         2, CDCommand,    "control CD music",
+#endif
                                  "map ",       4, LoadNewMap,   "change to new level",
                                  "idclev",     0, ChangeLevel,  "change to new level",
                                  "idclev",     6, ChangeLevel,  "change to new level",

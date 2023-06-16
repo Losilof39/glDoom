@@ -1146,7 +1146,7 @@ void DrawAmmoBox(void)
     glPushMatrix();
 
     glTranslatef( 1056.0f, -16.0f, 3232.0f );
-    now = (double)(SDL_GetTicks64() % 5000)*RFactor;
+    now = (double)(GetTicks() % 5000)*RFactor;
     rotation = now;
     glRotatef(rotation, 0.0f, 1.0f, 0.0f );
 
