@@ -34,8 +34,11 @@
 
 #include "doomtype.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable:6387)
+#endif
 
-int use_libsamplerate = 0;
+dboolean use_libsamplerate = 0;
 
 // Scale factor used when converting libsamplerate floating point numbers
 // to integers. Too high means the sounds can clip; too low means they
@@ -429,7 +432,7 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
             mixer_format, mixer_channels, mixer_freq))
     {
         convertor.len = length;
-        convertor.buf = malloc(convertor.len * convertor.len_mult);
+        convertor.buf = (unsigned char*)malloc(convertor.len * (size_t)convertor.len_mult);
         assert(convertor.buf != NULL);
         memcpy(convertor.buf, data, length);
 

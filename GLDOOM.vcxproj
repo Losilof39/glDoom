@@ -388,7 +388,6 @@
     <ClInclude Include="i_system.h" />
     <ClInclude Include="i_video.h" />
     <ClInclude Include="mathlib.h" />
-    <ClInclude Include="memory.h" />
     <ClInclude Include="mmus2mid.h" />
     <ClInclude Include="m_argv.h" />
     <ClInclude Include="m_bbox.h" />
@@ -425,7 +424,7 @@
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
     <ClInclude Include="v_video.h" />
-    <ClInclude Include="sdl_inpt.h" />
+    <ClInclude Include="sdl_input.h" />
     <ClInclude Include="sdl_kbrd.h" />
     <ClInclude Include="sdl_video.h" />
     <ClInclude Include="wi_stuff.h" />

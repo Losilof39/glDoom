@@ -30,6 +30,7 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244)
+#pragma warning(disable:6001)
 #endif
 
 #include <stdlib.h>
@@ -1014,7 +1015,6 @@ extern dboolean       *DrawFlat;
 
 extern dboolean RedBias, GreenBias, WhiteBias;
 
-float  CheckXZAltitude(DW_Polygon *poly, DW_Vertex3D *light, DW_Polygon *lmap, float radius );
 void GL_DrawThings(void);
 
 extern int   gl_fog;
@@ -1696,7 +1696,7 @@ void GL_RenderPlayerView(player_t* player)
     int           i, texnumb, sector, subsector, wall, flat;
     double        fview;
     float         yangle, lightv;
-    float         flathigh, radius = 128;
+    float         flathigh;//, radius = 128;
     float         fogcolor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
     double        offsetf, offsetu;
     //DW_Vertex3D   PlayerPosition;

@@ -27,7 +27,11 @@
 static const char
 rcsid[] = "$Id: v_video.c,v 1.5 1997/02/03 22:45:13 b1 Exp $";
 
-
+#ifdef _MSC_VER
+#pragma warning(disable:6011)
+#pragma warning(disable:6385)
+#pragma warning(disable:6386)
+#endif
 #include "i_system.h"
 #include "r_local.h"
 
@@ -208,12 +212,12 @@ void V_DrawPatchOffsetBuff( int x, int y, unsigned char *buff, int bx, int by, i
     desttop = buff+(y*bx)+x;
     txp = Transparent+(y*bx)+x;
 
-    h = SHORT(patch->height);
-    w = SHORT(patch->width);
+    h = DSHORT(patch->height);
+    w = DSHORT(patch->width);
 
     for (col = 0; ((col < w) && (x < bx)) ;x++, col++, desttop++, txp++)
        { 
-        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
+        column = (column_t *)((byte *)patch + DLONG(patch->columnofs[col]));
  
         // step through the posts in a column 
         while (column->topdelta != 0xff )
@@ -285,7 +289,7 @@ void V_DrawPatchBuff ( int x, int y, unsigned char *buff, patch_t* patch )
 
     for (col = 0; col < pwidth ;col++, desttop++, txp++)
        { 
-        column = (column_t *)((byte *)patch + LONG(columnofs[col])); 
+        column = (column_t *)((byte *)patch + DLONG(columnofs[col]));
  
         // step through the posts in a column 
         while (column->topdelta != 0xff )
@@ -330,10 +334,10 @@ void V_DrawPatch ( int x, int y, int scrn, patch_t* patch )
     byte*	source; 
     int		w; 
 	 
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
+    y -= DSHORT(patch->topoffset); 
+    x -= DSHORT(patch->leftoffset); 
 #ifdef RANGECHECK 
-    if (x<0 ||x+SHORT(patch->width) >SCREENWIDTH || y<0 || y+SHORT(patch->height)>SCREENHEIGHT || (unsigned)scrn>4)
+    if (x<0 ||x+DSHORT(patch->width) >SCREENWIDTH || y<0 || y+DSHORT(patch->height)>SCREENHEIGHT || (unsigned)scrn>4)
        {
         fprintf( stderr, "Patch at %d,%d exceeds LFB\n", x,y );
         // No I_Error abort - what is up with TNT.WAD?
@@ -344,17 +348,17 @@ void V_DrawPatch ( int x, int y, int scrn, patch_t* patch )
  
     if (!scrn)
        {
-        V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
+        V_MarkRect (x, y, DSHORT(patch->width), DSHORT(patch->height)); 
        }
 
     col = 0; 
     desttop = screens[scrn]+y*SCREENWIDTH+x; 
 
-    w = SHORT(patch->width);
+    w = DSHORT(patch->width);
 
     for ( ; col<w ; x++, col++, desttop++)
        { 
-        column = (column_t *)((byte *)patch + LONG(patch->columnofs[col])); 
+        column = (column_t *)((byte *)patch + DLONG(patch->columnofs[col]));
  
         // step through the posts in a column 
         while (column->topdelta != 0xff ) 
@@ -394,13 +398,13 @@ V_DrawPatchFlipped
     byte*	source; 
     int		w; 
 	 
-    y -= SHORT(patch->topoffset); 
-    x -= SHORT(patch->leftoffset); 
+    y -= DSHORT(patch->topoffset); 
+    x -= DSHORT(patch->leftoffset); 
 #ifdef RANGECHECK 
     if (x<0
-	||x+SHORT(patch->width) >SCREENWIDTH
+	||x+DSHORT(patch->width) >SCREENWIDTH
 	|| y<0
-	|| y+SHORT(patch->height)>SCREENHEIGHT 
+	|| y+DSHORT(patch->height)>SCREENHEIGHT 
 	|| (unsigned)scrn>4)
     {
       fprintf( stderr, "Patch origin %d,%d exceeds LFB\n", x,y );
@@ -409,16 +413,16 @@ V_DrawPatchFlipped
 #endif 
  
     if (!scrn)
-	V_MarkRect (x, y, SHORT(patch->width), SHORT(patch->height)); 
+	V_MarkRect (x, y, DSHORT(patch->width), DSHORT(patch->height));
 
     col = 0; 
     desttop = screens[scrn]+y*SCREENWIDTH+x; 
 	 
-    w = SHORT(patch->width); 
+    w = DSHORT(patch->width);
 
     for ( ; col<w ; x++, col++, desttop++) 
     { 
-	column = (column_t *)((byte *)patch + LONG(patch->columnofs[w-1-col])); 
+	column = (column_t *)((byte *)patch + DLONG(patch->columnofs[w-1-col]));
  
 	// step through the posts in a column 
 	while (column->topdelta != 0xff ) 

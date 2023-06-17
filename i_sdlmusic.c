@@ -79,8 +79,6 @@ static dboolean SDLIsInitialized(void)
 // Initialize music subsystem
 static dboolean I_SDL_InitMusic(void)
 {
-    dboolean fluidsynth_sf_is_set = false;
-
     // If SDL_mixer is not initialized, we have to initialize it
     // and have the responsibility to shut it down later on.
 

@@ -25,9 +25,9 @@
 static const char
 rcsid[] = "$Id: r_segs.c,v 1.3 1997/01/29 20:10:19 b1 Exp $";
 
-
-
-
+#ifdef _MSC_VER
+#pragma warning(disable:6001)
+#endif
 
 #include <stdlib.h>
 

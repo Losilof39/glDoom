@@ -20,6 +20,5 @@ typedef struct
 void GetVideoInfo(void);
 void GetModeList(char *dbgname);
 dboolean SetVideoMode();
-dboolean SetFullScreen();
 //void ResetVideoMode(void);
 

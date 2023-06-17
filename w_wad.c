@@ -27,6 +27,10 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244)
+#pragma warning(disable:6308)
+#pragma warning(disable:28182)
+#pragma warning(disable:6031)
+#pragma warning(disable:6255)
 #endif
 
 #ifdef NORMALUNIX
@@ -183,7 +187,7 @@ void W_AddFile (char *filename)
 	    // single lump file
 	    fileinfo = &singleinfo;
 	    singleinfo.filepos = 0;
-	    singleinfo.size = LONG(filelength_(handle));
+	    singleinfo.size = DLONG(filelength_(handle));
 	    ExtractFileBase (filename, singleinfo.name);
 	    numlumps++;
     }
@@ -202,8 +206,8 @@ void W_AddFile (char *filename)
 	    
 	    // ???modifiedgame = true;		
 	}
-	    header.numlumps = LONG(header.numlumps);
-	    header.infotableofs = LONG(header.infotableofs);
+	    header.numlumps = DLONG(header.numlumps);
+	    header.infotableofs = DLONG(header.infotableofs);
 	    length = header.numlumps*sizeof(filelump_t);
 	    fileinfo = alloca (length);
 	    LSeek (handle, header.infotableofs, SEEK_SET);
@@ -224,8 +228,8 @@ void W_AddFile (char *filename)
     for (i = (unsigned int)startlump ; i < (unsigned int)numlumps ; i++, lump_p++, fileinfo++)
     {
 	    lump_p->handle = storehandle;
-	    lump_p->position = LONG(fileinfo->filepos);
-	    lump_p->size = LONG(fileinfo->size);
+	    lump_p->position = DLONG(fileinfo->filepos);
+	    lump_p->size = DLONG(fileinfo->size);
 	    strncpy(lump_p->name, fileinfo->name, 8);
     }
     if (reloadname)
@@ -254,8 +258,8 @@ void W_Reload(void)
 	    I_Error ("W_Reload: couldn't open %s",reloadname);
 
     Read(handle, &header, sizeof(header));
-    lumpcount = LONG(header.numlumps);
-    header.infotableofs = LONG(header.infotableofs);
+    lumpcount = DLONG(header.numlumps);
+    header.infotableofs = DLONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
     fileinfo = alloca(length);
     LSeek(handle, header.infotableofs, SEEK_SET);
@@ -271,8 +275,8 @@ void W_Reload(void)
 	if (lumpcache[i])
 	    Z_Free (lumpcache[i]);
 
-	    lump_p->position = LONG(fileinfo->filepos);
-	    lump_p->size = LONG(fileinfo->size);
+	    lump_p->position = DLONG(fileinfo->filepos);
+	    lump_p->size = DLONG(fileinfo->size);
     }
     Close (handle);
 }

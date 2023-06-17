@@ -30,6 +30,7 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 #pragma warning(disable:6011)
 #pragma warning(disable:4312)
 #pragma warning(disable:6297)
+#pragma warning(disable:6387)
 #endif
 
 #include <glad/glad.h>
@@ -1697,8 +1698,6 @@ void GL_DrawFullScreen(GLTexData *Image)
 
 void GL_DrawReadThis1(void)
    {
-    GLTexData *Image = 0;
-
     inhelpscreens = true;
     switch ( gamemode )
        {
@@ -1744,8 +1743,6 @@ void M_DrawReadThis2(void)
 
 void GL_DrawReadThis2(void)
    {
-    GLTexData *Image = 0;
-
     inhelpscreens = true;
     switch ( gamemode )
        {
@@ -2935,7 +2932,7 @@ int M_StringWidth(char* string)
 	if (c < 0 || c >= HU_FONTSIZE)
 	    w += 4;
 	else
-	    w += SHORT (hu_font[c]->width);
+	    w += DSHORT (hu_font[c]->width);
     }
 		
     return w;
@@ -2950,7 +2947,7 @@ int M_StringHeight(char* string)
 {
     int             i;
     int             h;
-    int             height = SHORT(hu_font[0]->height);
+    int             height = DSHORT(hu_font[0]->height);
 	
     h = height;
     for (i = 0;(unsigned)i < strlen(string);i++)
@@ -2996,7 +2993,7 @@ void M_WriteText( int x, int y, char *string)
             continue;
            }
 		
-        w = SHORT (hu_font[c]->width);
+        w = DSHORT (hu_font[c]->width);
         if (cx+w > SCREENWIDTH)
             break;
         V_DrawPatchDirect(cx, cy, 0, hu_font[c]);
@@ -3576,7 +3573,7 @@ void M_DrawMenuString(int cx, int cy, int color)
       cx += SPACEWIDTH;    // space
       continue;
       }
-    w = SHORT (hu_font[c]->width);
+    w = DSHORT (hu_font[c]->width);
     if (cx + w > SCREENWIDTH)
       break;
     
@@ -3607,7 +3604,7 @@ int M_GetPixelWidth(char* ch)
       len += SPACEWIDTH;   // space
       continue;
       }
-    len += SHORT (hu_font[c]->width);
+    len += DSHORT (hu_font[c]->width);
     len--; // adjust so everything fits
     }
   len++; // replace what you took away on the last char only
@@ -4262,7 +4259,7 @@ void GL_DrawSetting(setup_menu_t* s)
    {
     int*  key;
     int   flags,x,y,color;
-    dboolean  bright = false;
+    //dboolean  bright = false;
    
     x = s->m_x;
     y = s->m_y;
@@ -5256,7 +5253,7 @@ dboolean M_Responder (event_t* ev)
         {
         if (ev->type == ev_joystick)
           {
-          int i,oldbutton,group;
+          int oldbutton,group;
           dboolean search = true;
       
           if (ptr1->m_joy == NULL)
@@ -5309,7 +5306,7 @@ dboolean M_Responder (event_t* ev)
           }
         else if (ev->type == ev_mouse)
           {
-          int i,oldbutton,group;
+          int oldbutton,group;
           dboolean search = true;
 
           if (ptr1->m_mouse == NULL)
@@ -5347,7 +5344,7 @@ dboolean M_Responder (event_t* ev)
           }
         else  // keyboard key
           {
-          int i,oldkey,group;
+          int oldkey,group;
           dboolean search = true;
         
           // see if 'ch' is already bound elsewhere. if so, you have

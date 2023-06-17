@@ -35,7 +35,7 @@
 #include "doomtype.h"
 #include "sys_sdl.h"
 #include "gl_video.h"
-#include "sdl_inpt.h"
+#include "sdl_input.h"
 #include "sdl_video.h"
 
 #include "doomstat.h"

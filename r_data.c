@@ -27,6 +27,13 @@
 static const char
 rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
+#ifdef _MSC_VER
+#pragma warning(disable:6387)
+#pragma warning(disable:6011)
+#pragma warning(disable:6385)
+#endif // _MSC_VER
+
+
 #include "i_system.h"
 #include "z_zone.h"
 
@@ -258,7 +265,7 @@ void R_GenerateComposite (int texnum)
     {
         realpatch = W_CacheLumpNum (patch->patch, PU_CACHE);
         x1 = patch->originx;
-        x2 = x1 + SHORT(realpatch->width);
+        x2 = x1 + DSHORT(realpatch->width);
 
         if (x1<0)
             x = 0;
@@ -275,7 +282,7 @@ void R_GenerateComposite (int texnum)
             continue;
             
             patchcol = (column_t *)((byte *)realpatch
-                        + LONG(realpatch->columnofs[x-x1]));
+                        + DLONG(realpatch->columnofs[x-x1]));
             R_DrawColumnInCache (patchcol,
                     block + colofs[x],
                     patch->originy,
@@ -328,7 +335,7 @@ void R_GenerateLookup (int texnum)
     {
         realpatch = W_CacheLumpNum (patch->patch, PU_CACHE);
         x1 = patch->originx;
-        x2 = x1 + SHORT(realpatch->width);
+        x2 = x1 + DSHORT(realpatch->width);
         
         if (x1 < 0)
             x = 0;
@@ -341,7 +348,7 @@ void R_GenerateLookup (int texnum)
         {
             patchcount[x]++;
             collump[x] = patch->patch;
-            colofs[x] = LONG(realpatch->columnofs[x-x1])+3;
+            colofs[x] = DLONG(realpatch->columnofs[x-x1])+3;
         }
     }
 	
@@ -444,7 +451,7 @@ void R_InitTextures (void)
     // Load the patch names from pnames.lmp.
     name[8] = 0;	
     names = W_CacheLumpName ("PNAMES", PU_STATIC);
-    nummappatches = LONG ( *((int *)names) );
+    nummappatches = DLONG ( *((int *)names) );
     name_p = names+4;
     patchlookup = alloca (nummappatches*sizeof(*patchlookup));
     
@@ -459,14 +466,14 @@ void R_InitTextures (void)
     // The data is contained in one or two lumps,
     //  TEXTURE1 for shareware, plus TEXTURE2 for commercial.
     maptex = maptex1 = W_CacheLumpName ("TEXTURE1", PU_STATIC);
-    numtextures1 = LONG(*maptex);
+    numtextures1 = DLONG(*maptex);
     maxoff = W_LumpLength (W_GetNumForName ("TEXTURE1"));
     directory = maptex+1;
 	
     if (W_CheckNumForName ("TEXTURE2") != -1)
     {
 	maptex2 = W_CacheLumpName ("TEXTURE2", PU_STATIC);
-	numtextures2 = LONG(*maptex2);
+	numtextures2 = DLONG(*maptex2);
 	maxoff2 = W_LumpLength (W_GetNumForName ("TEXTURE2"));
     }
     else
@@ -514,7 +521,7 @@ void R_InitTextures (void)
             directory = maptex+1;
         }
             
-        offset = LONG(*directory);
+        offset = DLONG(*directory);
 
         if (offset > maxoff)
             I_Error ("R_InitTextures: bad texture directory");
@@ -523,12 +530,12 @@ void R_InitTextures (void)
 
         texture = textures[i] =
             Z_Malloc (sizeof(texture_t)
-                + sizeof(texpatch_t)*(SHORT(mtexture->patchcount)-1),
+                + sizeof(texpatch_t)*(DSHORT(mtexture->patchcount)-1),
                 PU_STATIC, 0);
         
-        texture->width = SHORT(mtexture->width);
-        texture->height = SHORT(mtexture->height);
-        texture->patchcount = SHORT(mtexture->patchcount);
+        texture->width = DSHORT(mtexture->width);
+        texture->height = DSHORT(mtexture->height);
+        texture->patchcount = DSHORT(mtexture->patchcount);
 
         memcpy (texture->name, mtexture->name, sizeof(texture->name));
         mpatch = &mtexture->patches[0];
@@ -536,10 +543,10 @@ void R_InitTextures (void)
 
         for (j=0 ; j<texture->patchcount ; j++, mpatch++, patch++)
         {
-            patch->originx = SHORT(mpatch->originx);
-            patch->originy = SHORT(mpatch->originy);
+            patch->originx = DSHORT(mpatch->originx);
+            patch->originy = DSHORT(mpatch->originy);
             
-            patch->patch = patchlookup[SHORT(mpatch->patch)];
+            patch->patch = patchlookup[DSHORT(mpatch->patch)];
 
             if (patch->patch == -1)
             {
@@ -622,9 +629,9 @@ void R_InitSpriteLumps (void)
 	    printf (".");
 
 	patch = W_CacheLumpNum (firstspritelump+i, PU_CACHE);
-	spritewidth[i] = SHORT(patch->width)<<FRACBITS;
-	spriteoffset[i] = SHORT(patch->leftoffset)<<FRACBITS;
-	spritetopoffset[i] = SHORT(patch->topoffset)<<FRACBITS;
+	spritewidth[i] = DSHORT(patch->width)<<FRACBITS;
+	spriteoffset[i] = DSHORT(patch->leftoffset)<<FRACBITS;
+	spritetopoffset[i] = DSHORT(patch->topoffset)<<FRACBITS;
     }
 }
 

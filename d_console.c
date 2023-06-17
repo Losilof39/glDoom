@@ -35,8 +35,12 @@
 #pragma warning(disable:4133)
 #pragma warning(disable:4047)
 #ifdef _WIN32
-#pragma warning(disable:4018)
+#pragma warning(disable:4071)
 #endif
+#pragma warning(disable:4018)
+#pragma warning(disable:4701)
+#pragma warning(disable:6001)
+#pragma warning(disable:4100)
 #endif
 
 #define ST_MSGWIDTH        256
@@ -947,18 +951,6 @@ con_command_t give_commands[] = { "all",       0, GiveAll,          "gives (ammo
                                   "health",    0, GiveHealth,       "gives 100% health (or 200% health)",
                                   "keys",      0, GiveKeys,         "gives all six keys (key cards and skull keys)",
                                   "weapons",   0, GiveWeapons,      "gives all weapons",
-                                  //"shells",    0, GiveShells,       "gives shotgun shells",
-                                  //"bullets",   0, GiveBullets,      "gives bullets",
-                                  //"rockets",   0, GiveRockets,      "gives rockets",
-                                  //"cells",     0, GiveCells,        "gives cells",
-                                  //"suit",      0, GiveSuit,         "gives radiation suit",
-                                  //"berserk",   0, GiveBerserk,      "gives berserk pack",
-                                  //"inviso",    0, GiveInviso,       "gives invisibility",
-                                  //"invul",     0, GiveInvul,        "gives invulnerability",
-                                  //"shotgun",   0, GiveShotgun,      "gives the pump shotgun",
-                                  //"launcher",  0, GiveLauncher,     "gives the rocket launcher",
-                                  //"plasma",    0, GivePlasma,       "gives the plasma rifle",
-                                  //"bfg",       0, GiveBFG,          "gives the bfg 9000",
                                   0, 0, 0, 0 };
 
 dboolean GiveItems(char *cmd)

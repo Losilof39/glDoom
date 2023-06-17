@@ -37,7 +37,6 @@
 #include <inttypes.h>
 #include <fcntl.h>
 
-
 #ifndef MAX
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif

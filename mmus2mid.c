@@ -58,6 +58,11 @@
 
 #ifdef _MSC_VER
 #pragma warning(disable:4244)
+#pragma warning(disable:6308)
+#pragma warning(disable:6001)
+#pragma warning(disable:6297)
+#pragma warning(disable:28183)
+#pragma warning(disable:6386)
 #endif
 
 #include <ctype.h>

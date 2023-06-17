@@ -56,6 +56,10 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #pragma implementation "i_net.h"
 #endif
 #include "i_net.h"
+#ifdef _MSC_VER
+#pragma warning(disable:6387)
+#pragma warning(disable:6011)
+#endif
 
 //
 //static struct sockaddr broadcastaddr;

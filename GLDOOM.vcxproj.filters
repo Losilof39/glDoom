@@ -457,7 +457,7 @@
     <ClInclude Include="wi_stuff.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="sdl_inpt.h">
+    <ClInclude Include="sdl_input.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="sdl_kbrd.h">
@@ -467,9 +467,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="z_zone.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="memory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="resource.h">

@@ -8,6 +8,7 @@
 #pragma warning(disable:6385)
 #pragma warning(disable:4033)
 #pragma warning(disable:4715)
+#pragma warning(disable:4701)
 #endif
 
 #ifdef _WIN32
@@ -16,7 +17,6 @@
 #include <unistd.h>
 #endif
 #include <inttypes.h>
-//#endif
 #include <fcntl.h>
 #include <glad/glad.h>
 #include "doomdata.h"

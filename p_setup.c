@@ -31,6 +31,11 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #ifdef _MSC_VER
 #pragma warning(disable:4244)
 #pragma warning(disable:6011)
+#pragma warning(disable:6001)
+#pragma warning(disable:6386)
+#pragma warning(disable:6387)
+#pragma warning(disable:6255)
+#pragma warning(disable:4701)
 #endif
 #include <glad/glad.h>
 #include <math.h>
@@ -54,14 +59,16 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "doomstat.h"
 #include "sys_sdl.h"
 #include "gldefs.h"
-#include <memory.h>
 
 #include "info.h"
 
 #include "doomlib.h"
 #include "mathlib.h"
 
-#include "memory.h"
+#include <malloc.h>
+
+#define FREE(x)  {if((x) != NULL) free(x);}
+#define ZFREE(x) {if((x) != NULL){free(x); (x) = NULL;}}
 
 void lfprintf(char *message, ... );
 void P_SpawnMapThing(mapthing_t* mthing);
@@ -157,8 +164,8 @@ void P_LoadVertexes(int lump)
     // internal representation as fixed.
     for (i=0 ; i<numvertexes ; i++, li++, ml++)
     {
-	    li->x = SHORT(ml->x)<<FRACBITS;
-	    li->y = SHORT(ml->y)<<FRACBITS;
+	    li->x = DSHORT(ml->x)<<FRACBITS;
+	    li->y = DSHORT(ml->y)<<FRACBITS;
     }
 
     // Free buffer memory.
@@ -187,16 +194,16 @@ void P_LoadSegs(int lump)
     li = segs;
     for (i=0 ; i<numsegs ; i++, li++, ml++)
     {
-	    li->v1 = &vertexes[SHORT(ml->v1)];
-	    li->v2 = &vertexes[SHORT(ml->v2)];
+	    li->v1 = &vertexes[DSHORT(ml->v1)];
+	    li->v2 = &vertexes[DSHORT(ml->v2)];
 					
-        li->side = SHORT(ml->side);
-	    li->angle = (SHORT(ml->angle))<<16;
-	    li->offset = (SHORT(ml->offset))<<16;
-	    linedef = SHORT(ml->linedef);
+        li->side = DSHORT(ml->side);
+	    li->angle = (DSHORT(ml->angle))<<16;
+	    li->offset = (DSHORT(ml->offset))<<16;
+	    linedef = DSHORT(ml->linedef);
 	    ldef = &lines[linedef];
 	    li->linedef = ldef;
-	    side = SHORT(ml->side);
+	    side = DSHORT(ml->side);
 	    li->sidedef = &sides[ldef->sidenum[side]];
 	    li->frontsector = sides[ldef->sidenum[side]].sector;
 	if (ldef-> flags & ML_TWOSIDED)
@@ -228,8 +235,8 @@ void P_LoadSubsectors(int lump)
     
     for (i=0 ; i<numsubsectors ; i++, ss++, ms++)
     {
-	    ss->numlines = SHORT(ms->numsegs);
-	    ss->firstline = SHORT(ms->firstseg);
+	    ss->numlines = DSHORT(ms->numsegs);
+	    ss->firstline = DSHORT(ms->firstseg);
     }
 	
     Z_Free (data);
@@ -254,13 +261,13 @@ void P_LoadSectors(int lump)
     ss = sectors;
     for (i=0 ; i<numsectors ; i++, ss++, ms++)
     {
-	    ss->floorheight = SHORT(ms->floorheight)<<FRACBITS;
-	    ss->ceilingheight = SHORT(ms->ceilingheight)<<FRACBITS;
+	    ss->floorheight = DSHORT(ms->floorheight)<<FRACBITS;
+	    ss->ceilingheight = DSHORT(ms->ceilingheight)<<FRACBITS;
 	    ss->floorpic = R_FlatNumForName(ms->floorpic);
 	    ss->ceilingpic = R_FlatNumForName(ms->ceilingpic);
-	    ss->lightlevel = SHORT(ms->lightlevel);
-	    ss->special = SHORT(ms->special);
-	    ss->tag = SHORT(ms->tag);
+	    ss->lightlevel = DSHORT(ms->lightlevel);
+	    ss->special = DSHORT(ms->special);
+	    ss->tag = DSHORT(ms->tag);
 	    ss->thinglist = NULL;
     }
 	
@@ -288,15 +295,15 @@ void P_LoadNodes(int lump)
     
     for (i=0 ; i<numnodes ; i++, no++, mn++)
     {
-	    no->x = SHORT(mn->x)<<FRACBITS;
-	    no->y = SHORT(mn->y)<<FRACBITS;
-	    no->dx = SHORT(mn->dx)<<FRACBITS;
-	    no->dy = SHORT(mn->dy)<<FRACBITS;
+	    no->x = DSHORT(mn->x)<<FRACBITS;
+	    no->y = DSHORT(mn->y)<<FRACBITS;
+	    no->dx = DSHORT(mn->dx)<<FRACBITS;
+	    no->dy = DSHORT(mn->dy)<<FRACBITS;
 	for (j=0 ; j<2 ; j++)
 	{
-	    no->children[j] = SHORT(mn->children[j]);
+	    no->children[j] = DSHORT(mn->children[j]);
 	    for (k=0 ; k<4 ; k++)
-		no->bbox[j][k] = SHORT(mn->bbox[j][k])<<FRACBITS;
+		no->bbox[j][k] = DSHORT(mn->bbox[j][k])<<FRACBITS;
 	}
     }
 	
@@ -348,11 +355,11 @@ void P_LoadThings(int lump)
             break;
 
         // Do spawn all other stuff. 
-        mt->x = SHORT(mt->x);
-        mt->y = SHORT(mt->y);
-        mt->angle = SHORT(mt->angle);
-        mt->type = SHORT(mt->type);
-        mt->options = SHORT(mt->options);
+        mt->x = DSHORT(mt->x);
+        mt->y = DSHORT(mt->y);
+        mt->angle = DSHORT(mt->angle);
+        mt->type = DSHORT(mt->type);
+        mt->options = DSHORT(mt->options);
 	
         P_SpawnMapThing(mt);
        }
@@ -383,11 +390,11 @@ void P_LoadLineDefs(int lump)
     ld = lines;
     for (i=0 ; i<numlines ; i++, mld++, ld++)
     {
-	ld->flags = SHORT(mld->flags);
-	ld->special = SHORT(mld->special);
-	ld->tag = SHORT(mld->tag);
-	v1 = ld->v1 = &vertexes[SHORT(mld->v1)];
-	v2 = ld->v2 = &vertexes[SHORT(mld->v2)];
+	ld->flags = DSHORT(mld->flags);
+	ld->special = DSHORT(mld->special);
+	ld->tag = DSHORT(mld->tag);
+	v1 = ld->v1 = &vertexes[DSHORT(mld->v1)];
+	v2 = ld->v2 = &vertexes[DSHORT(mld->v2)];
 	ld->dx = v2->x - v1->x;
 	ld->dy = v2->y - v1->y;
 	
@@ -425,8 +432,8 @@ void P_LoadLineDefs(int lump)
 	    ld->bbox[BOXTOP] = v1->y;
 	}
 
-	ld->sidenum[0] = SHORT(mld->sidenum[0]);
-	ld->sidenum[1] = SHORT(mld->sidenum[1]);
+	ld->sidenum[0] = DSHORT(mld->sidenum[0]);
+	ld->sidenum[1] = DSHORT(mld->sidenum[1]);
 
 	if (ld->sidenum[0] != -1)
 	    ld->frontsector = sides[ld->sidenum[0]].sector;
@@ -461,12 +468,12 @@ void P_LoadSideDefs(int lump)
     sd = sides;
     for (i=0 ; i<numsides ; i++, msd++, sd++)
     {
-	    sd->textureoffset = SHORT(msd->textureoffset)<<FRACBITS;
-	    sd->rowoffset = SHORT(msd->rowoffset)<<FRACBITS;
+	    sd->textureoffset = DSHORT(msd->textureoffset)<<FRACBITS;
+	    sd->rowoffset = DSHORT(msd->rowoffset)<<FRACBITS;
 	    sd->toptexture = R_TextureNumForName(msd->toptexture);
 	    sd->bottomtexture = R_TextureNumForName(msd->bottomtexture);
 	    sd->midtexture = R_TextureNumForName(msd->midtexture);
-	    sd->sector = &sectors[SHORT(msd->sector)];
+	    sd->sector = &sectors[DSHORT(msd->sector)];
         sd->sectornumb = msd->sector;
     }
 
@@ -486,7 +493,7 @@ void P_LoadBlockMap(int lump)
     count = W_LumpLength(lump)/2;
 
     for (i=0 ; i<count ; i++)
-       blockmaplump[i] = SHORT(blockmaplump[i]);
+       blockmaplump[i] = DSHORT(blockmaplump[i]);
 
     bmaporgx = blockmaplump[0]<<FRACBITS;
     bmaporgy = blockmaplump[1]<<FRACBITS;

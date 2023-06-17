@@ -65,7 +65,7 @@ void I_CheckInputs(void)
     static int mwheeluptic = 0, mwheeldowntic = 0;
 
     SDL_MouseMotionEvent mouse_motion = { 0 };
-    SDL_MouseButtonEvent mouse_button = { 0 };
+    //SDL_MouseButtonEvent mouse_button = { 0 };
 
     while (SDL_PollEvent(&ev))
     {

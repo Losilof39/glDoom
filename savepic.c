@@ -27,7 +27,7 @@ void SavePic(int x, int y, unsigned char *texels, char *filename)
 {
     unsigned short w, h, vo, ho, run;
     int            wide, high, fn, col = 0, row = 0, start = 0;
-    int          *columns, isize = 0;
+    int          *columns;//, isize = 0;
     unsigned char *image, *p;
     unsigned char  colbuff[128];
 

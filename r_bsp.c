@@ -253,7 +253,7 @@ void R_ClearClipSegs (void)
     newend = solidsegs + 2;
 }
 
-float AngleTo( float x1, float z1, float x2, float z2 );
+//float AngleTo( float x1, float z1, float x2, float z2 );
 extern camera_t camera;
 extern float    langle, rangle;
 extern drawside_t *DrawSide;

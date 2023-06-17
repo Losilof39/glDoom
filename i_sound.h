@@ -235,7 +235,7 @@ extern int snd_maxslicetime_ms;
 extern char* snd_musiccmd;
 extern int snd_pitchshift;
 extern char* snd_dmxoption;
-extern int use_libsamplerate;
+extern dboolean use_libsamplerate;
 extern float libsamplerate_scale;
 
 // Sound modules

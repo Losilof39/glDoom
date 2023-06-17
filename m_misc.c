@@ -27,6 +27,9 @@
 #ifdef _MSC_VER
 #pragma warning(disable:4244)
 #pragma warning(disable:6054)
+#pragma warning(disable:6031)
+#pragma warning(disable:6385)
+#pragma warning(disable:4071)
 #endif
 
 static const char
@@ -113,7 +116,7 @@ M_DrawText
 	    continue;
 	}
 		
-	w = SHORT (hu_font[c]->width);
+	w = DSHORT (hu_font[c]->width);
 	if (x+w > SCREENWIDTH)
 	    break;
 	if (direct)
@@ -693,7 +696,7 @@ void GetCfgName()
 void M_LoadDefaults (void)
 {
     int		i = 0;
-    int		len = 0;
+    //int		len = 0;
     FILE* f;
     char	def[80];
     char	strparm[100];
@@ -840,14 +843,14 @@ WritePCXfile
     pcx->bits_per_pixel = 8;		// 256 color
     pcx->xmin = 0;
     pcx->ymin = 0;
-    pcx->xmax = SHORT(width-1);
-    pcx->ymax = SHORT(height-1);
-    pcx->hres = SHORT(width);
-    pcx->vres = SHORT(height);
+    pcx->xmax = DSHORT(width-1);
+    pcx->ymax = DSHORT(height-1);
+    pcx->hres = DSHORT(width);
+    pcx->vres = DSHORT(height);
     memset (pcx->palette,0,sizeof(pcx->palette));
     pcx->color_planes = 1;		// chunky image
-    pcx->bytes_per_line = SHORT(width);
-    pcx->palette_type = SHORT(2);	// not a grey scale
+    pcx->bytes_per_line = DSHORT(width);
+    pcx->palette_type = DSHORT(2);	// not a grey scale
     memset (pcx->filler,0,sizeof(pcx->filler));
 
 
