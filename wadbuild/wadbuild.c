@@ -1,6 +1,8 @@
-// wadbuild.c
-// reads a wadname.lst file and builds wad file with same
-// name using the lump files listed in the lst file.
+/* 
+   wadbuild.c
+   reads a wadname.lst file and builds wad file with same
+   name using the lump files listed in the lst file.
+*/
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef _MSC_VER
@@ -11,11 +13,18 @@
 #include <fcntl.h>
 #include <string.h>
 
-#ifdef __linux__
-#define _MAX_PATH   260 // max. length of full pathname
+#ifdef _MSC_VER
+#pragma warning(disable:6031)
+#pragma warning(disable:6053)
+#pragma warning(disable:6308)
+#pragma warning(disable:28183)
 #endif
 
-#if defined(_WIN32)
+#ifndef _MAX_PATH
+#define _MAX_PATH   260 /* max. length of full pathname */
+#endif
+
+#if defined(_MSC_VER)
 #define Open _open
 #define Close _close
 #define Read _read
@@ -89,7 +98,8 @@ void main(int argc, char *argv[])
            {
             continue;
            }
-        if ((str = strchr(readline, '#')) != NULL)
+        str = strchr(readline, '#');
+        if (str != NULL)
            {
             str[0] = '\0';
            }
@@ -110,9 +120,11 @@ void main(int argc, char *argv[])
            }
         strcpy(tstr, str);
         Strupr(tstr);
-        if ((tch = strrchr(tstr, '/')) == NULL)
+        tch = strrchr(tstr, '/');
+        if (tch == NULL)
            {
-            if ((tch = strrchr(tstr, '\\')) != NULL)
+            tch = strrchr(tstr, '\\');
+            if (tch != NULL)
                {
                 tch++;
                }
@@ -127,16 +139,18 @@ void main(int argc, char *argv[])
            }
         memset(resname, 0, 10);
         strncpy(resname, tch, 8);
-        if ((ne = strrchr(resname, '.')) != NULL)
+        ne = strrchr(resname, '.');
+        if (ne != NULL)
            {
             ne[0] = '\0';
             strcpy(fext, &ne[1]);
            }
         printf("Entry %d: %s -> %s ", wadhead.entries, str, resname);
         pad = 0;
-        if ((resource = Open(str, O_RDONLY | O_BINARY)) == -1)
+        resource = Open(str, O_RDONLY | O_BINARY);
+        if (resource == -1)
            {
-            // Just a place holder... MARKER FILE
+            /* Just a place holder... MARKER FILE */
             waddir[wadhead.entries].length = 0;
            }
         else
@@ -165,4 +179,3 @@ void main(int argc, char *argv[])
     Close(wadfile);
     fclose(namelist);
    }
-
