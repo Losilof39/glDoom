@@ -5,6 +5,10 @@
 // This module is for Win32
 
 #include "thirdparty/SDL2/include/SDL.h"
+#ifdef _MSC_VER
+#pragma warning(disable:4047)
+#endif // _MSC_VER
+
 #include "d_main.h"
 #include "sys_sdl.h"
 #include "sdl_kbrd.h"
@@ -153,7 +157,7 @@ void I_CheckInputs(void)
             }
 
             // catch the other keys
-            keystates[ev.key.keysym.scancode] = 0;
+            keystates[ev.key.keysym.scancode] = false;
         }break;
 
         if ((usemouse) && (mouseavail)) {

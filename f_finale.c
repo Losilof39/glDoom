@@ -27,6 +27,11 @@
 //#include <gl/glu.h>
 #include <glad/glad.h>
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:6297)
+#endif
+
 static const char
 rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";
 

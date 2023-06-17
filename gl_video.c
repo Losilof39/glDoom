@@ -23,7 +23,12 @@
 
 #include <glad/glad.h>
 #include <SDL.h>
-
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:6054)
+#pragma warning(disable:6387)
+#pragma warning(disable:6001)
+#endif
 #include <stdlib.h>
 #include <math.h>
 
@@ -134,7 +139,6 @@ void w3sgluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble 
 
 void I_Start3DFrame()
 {
-    GLdouble top, bottom, left, right;
     glFovY   = video.fovy;
     glAspect = (float)video.width / (float)video.height;
 

@@ -1,3 +1,15 @@
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:6011)
+#pragma warning(disable:6031)
+#pragma warning(disable:6001)
+#pragma warning(disable:6387)
+#pragma warning(disable:6386)
+#pragma warning(disable:6385)
+#pragma warning(disable:4033)
+#pragma warning(disable:4715)
+#endif
+
 #ifdef _WIN32
 #include <io.h>
 #else
@@ -367,7 +379,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
     short          sx, sy, fields;
     int            px, py, part, parts;
 
-    if ((TexList[TexNumb].DWide > 1024) || (TexList[TexNumb].DWide > 1024))
+    if ((TexList[TexNumb].DWide > 1024) || (TexList[TexNumb].DHigh > 1024))
        {
         SkyTex[0] = 0;
         SkyTex[1] = 0;

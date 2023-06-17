@@ -23,6 +23,9 @@
 static const char
 rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 
+#ifdef _MSC_VER
+#pragma warning(disable:6387)
+#endif
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -94,7 +97,7 @@ int  I_GetTime (void)
 
 //    struct timeval	tp;
 //    struct timezone	tzp;
-    int			newtics;
+    uintptr_t			newtics;
     uintptr_t       currtime;
     //static int		basetime=0;
     static uintptr_t    basetime = 0;
@@ -107,7 +110,7 @@ int  I_GetTime (void)
     if (!basetime)
        basetime = currtime;
     newtics = ((currtime-basetime)/(1000/TICRATE));
-    return newtics;
+    return (int)newtics;
 }
 
 
@@ -162,10 +165,10 @@ void I_EndRead(void)
 {
 }
 
-byte*	I_AllocLow(int length)
+byte*	I_AllocLow(size_t length)
 {
     byte*	mem;
-        
+   
     mem = (byte *)malloc (length);
     memset (mem,0,length);
     return mem;

@@ -1,5 +1,12 @@
 // save pic
 //
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:6011)
+#pragma warning(disable:4267)
+#pragma warning(disable:6387)
+#pragma warning(disable:6386)
+#endif
 #include <stdlib.h>
 #include <string.h>
 #ifdef _WIN32
@@ -90,10 +97,10 @@ void SavePic(int x, int y, unsigned char *texels, char *filename)
 
     // open the file to save the "lump" in
     fn = Open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
-    Write(fn, &w, sizeof(short));
-    Write(fn, &h, sizeof(short));
-    Write(fn, &vo, sizeof(short));
-    Write(fn, &ho, sizeof(short));
+    Write(fn, &w, sizeof(unsigned short));
+    Write(fn, &h, sizeof(unsigned short));
+    Write(fn, &vo, sizeof(unsigned short));
+    Write(fn, &ho, sizeof(unsigned short));
     Write(fn, columns, sizeof(int)*x);
     Write(fn, image, ((p-image)+1));
     // close the output file

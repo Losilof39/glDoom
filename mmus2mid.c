@@ -56,6 +56,9 @@
  * See mmus2mid.diff for details.
  */
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#endif
 
 #include <ctype.h>
 #include <stdio.h>

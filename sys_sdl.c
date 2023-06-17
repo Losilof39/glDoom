@@ -93,7 +93,7 @@ extern byte *screens[5];
 extern GameMode_t gamemode;
 
 char         szMsgText[2048];
-const char         *window_title[50];
+char         *window_title[50];
 
 extern devinfo_t DevInfo;
 
@@ -323,7 +323,7 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 #if _DEBUG
     sprintf(window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 #else
-    sprintf(window_title, "GLDOOM-RE");
+    sprintf((char* const)window_title, "GLDOOM-RE");
 #endif
 
     pWindow = SDL_CreateWindow((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,

@@ -25,6 +25,13 @@
 static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:6011)
+#pragma warning(disable:4312)
+#pragma warning(disable:6297)
+#endif
+
 #include <glad/glad.h>
 
 #include <sys/types.h>

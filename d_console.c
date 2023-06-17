@@ -29,6 +29,16 @@
 #include "z_zone.h"
 #include "gldefs.h"
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:4715)
+#pragma warning(disable:4133)
+#pragma warning(disable:4047)
+#ifdef _WIN32
+#pragma warning(disable:4018)
+#endif
+#endif
+
 #define ST_MSGWIDTH        256
 #define CMDLENGTH         1024
 
@@ -68,7 +78,7 @@ extern int TexWide, TexHigh;
 #define CONSOLE_BORD "FLAT18"
 #define CONSBORD     2
 #define CONSVERS     97
-#define CONSREV      'RC1'
+#define CONSREV      "RC1"
 #define CONSMSGS     64
 
 char szProgName[] = "GLDOOM-RE";
@@ -76,7 +86,7 @@ char szVersion[8];
 
 typedef enum { asleep, sleepy, waking, awake } consolemode;
 
-char revision = CONSREV;
+const char *revision = CONSREV;
 int version = CONSVERS;
 
 int iConsoleSpeed = 10;
@@ -213,8 +223,8 @@ typedef struct
    {
     int  *var;
     char *name;
-    int  cv_type;
-    int  maxval;
+    cv_types  cv_type;
+    size_t  maxval;
    }KeyDef_t;
 
 KeyDef_t cvars[] = { &key_right, "KEY_RIGHT", cv_scan, 0,
@@ -1609,7 +1619,7 @@ void CO_Init()
     iConsLogo = GL_MakeSpriteTexture(consname, &ConsLogo, false);
 
     iFontHigh = hu_font[0]->height;
-    sprintf(szVersion, "V%d.%02d%c", version/100,version%100,revision);
+    sprintf(szVersion, "V%d.%02d%s", version/100,version%100,revision);
     iNamePosX = SCREENWIDTH-(CO_StringWidth(szProgName)+1);
     iVerPosX = SCREENWIDTH-(CO_StringWidth(szVersion)+1);
     for (i = 0; i < CONSMSGS; i++)
@@ -2005,7 +2015,7 @@ int CO_HandleCommand(char *cmd)
                    {
                     strncpy(cvars[i].var, ts, cvars[i].maxval);
                     cvars[i].var[cvars[i].maxval] = '\0';
-                    sprintf(buf, "%s SET TO '%ls'\n", cvars[i].name, cvars[i].var);
+                    sprintf(buf, "%s SET TO '%d'\n", cvars[i].name, *cvars[i].var);
                     CO_AddConsoleMessage(buf);
                    }
                }

@@ -27,6 +27,10 @@
 static const char
 rcsid[] = "$Id: p_maputl.c,v 1.5 1997/02/03 22:45:11 b1 Exp $";
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#pragma warning(disable:6011)
+#endif
 
 #include <stdlib.h>
 
@@ -691,7 +695,7 @@ P_TraverseIntercepts
 	
     count = intercept_p - intercepts;
     
-    in = 0;			// shut up compiler warning
+    in = NULL;			// shut up compiler warning
 	
     while (count--)
     {

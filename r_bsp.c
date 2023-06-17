@@ -25,6 +25,9 @@
 static const char
 rcsid[] = "$Id: r_bsp.c,v 1.4 1997/02/03 22:45:12 b1 Exp $";
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#endif
 
 #include "doomdef.h"
 

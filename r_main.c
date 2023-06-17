@@ -28,6 +28,10 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
 #include <glad/glad.h>
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#endif
+
 #include <stdlib.h>
 #include <math.h>
 #include "mathlib.h"

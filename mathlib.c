@@ -9,6 +9,9 @@ ml_vec3_t identity[3] = { 1.0, 0.0, 0.0,
                           0.0, 1.0, 0.0,
                           0.0, 0.0, 1.0 };
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#endif
 
 void ml_VectorCopy( ml_vec3_t v1, ml_vec3_t v2)
    {

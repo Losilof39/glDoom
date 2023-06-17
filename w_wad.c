@@ -25,6 +25,9 @@
 static const char
 rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#endif
 
 #ifdef NORMALUNIX
 #include <ctype.h>
@@ -63,6 +66,18 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include "w_wad.h"
 
 #include "doomlib.h"
+#ifdef IMPL
+static long filelength_(int handle)
+{
+    long sz;
+    LSeek(handle, 0L, SEEK_END);
+    sz = Tell(handle);
+    LSeek(handle, 0L, SEEK_SET);
+    return sz;
+}
+#else
+#define filelength_ _filelength 
+#endif
 
 //
 // GLOBALS

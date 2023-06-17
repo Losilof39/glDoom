@@ -92,16 +92,27 @@ typedef struct RECT {
 
 #define O_BINARY 0
 #endif
-
 // Fixed to use builtin bool type with C++.
 #ifdef __cplusplus
 typedef bool dboolean;
+#else
+#ifdef DBOOLEAN_C89
+#ifdef _MSC_VER
+#include <windows.h>
+#include <rpc.h>
+typedef boolean dboolean;
+#else
+typedef unsigned char dboolean;
+#endif
+#define false 0
+#define true 1
 #else
 typedef enum
 {
     false,
     true
 } dboolean;
+#endif
 #endif
 
 #if defined(_MSC_VER) && !defined(ANSI_C)
@@ -134,14 +145,6 @@ typedef enum
 #else
 #define GetTicks SDL_GetTicks
 #endif
-static long filelength_(int handle)
-{
-    long sz;
-    LSeek(handle, 0L, SEEK_END);
-    sz = Tell(handle);
-    LSeek(handle, 0L, SEEK_SET);
-    return sz;
-}
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 

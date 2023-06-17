@@ -26,11 +26,13 @@
 //#include <gl/glu.h>
 #include <glad/glad.h>
 
-
 static const char rcsid[] = "$Id: am_map.c,v 1.4 1997/02/03 21:24:33 b1 Exp $";
 
-#include <stdio.h>
+#ifdef _MSC_VER
+#pragma warning(disable:4244)
+#endif
 
+#include <stdio.h>
 
 #include "z_zone.h"
 #include "doomdef.h"
