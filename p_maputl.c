@@ -27,15 +27,7 @@
 static const char
 rcsid[] = "$Id: p_maputl.c,v 1.5 1997/02/03 22:45:11 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6011)
-#pragma warning(disable:6001)
-#pragma warning(disable:4071)
-#endif
-
 #include <stdlib.h>
-
 
 #include "m_bbox.h"
 

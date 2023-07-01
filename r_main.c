@@ -28,11 +28,6 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
 #include <glad/glad.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6001)
-#endif
-
 #include <stdlib.h>
 #include <math.h>
 #include "mathlib.h"
@@ -864,21 +859,21 @@ void R_SetupFrame (player_t* player)
     viewy = player->mo->y;
     viewangle = player->mo->angle + viewangleoffset;
 
-    camera.x = player->mo->x*pfactor;
-    camera.y = player->viewz*nfactor;
-    camera.z = player->mo->y*nfactor;
+    camera.x = (float)player->mo->x*(float)pfactor;
+    camera.y = (float)player->mo->y*(float)nfactor;
+    camera.z = (float)player->mo->z*(float)nfactor;
 
-    camera.oy = ((((double)viewangle/63536.0)/-16384.0f)*90.0f)+90.0f;
+    camera.oy = (((float)(viewangle/63536.0f)/-16384.0f)*90.0f)+90.0f;
     if (camera.oy >= 360.0f)
         camera.oy -= 360.0f;
     else
     if (camera.oy < 0.0f)
         camera.oy += 360.0f;
 
-    langle = camera.oy + (video.fov / 2.0);
+    langle = camera.oy + (video.fov / 2.0f);
     if (langle >= 360.0f)
         langle -= 360.0f;
-    rangle = camera.oy - (video.fov / 2.0);
+    rangle = camera.oy - (video.fov / 2.0f);
     if (rangle < 0.0f)
         rangle += 360.0f;
     if (langle < rangle)
@@ -1119,7 +1114,7 @@ void FixWallHorzCoords(DW_Polygon *TempPoly)
        fHorzOff = 0.0f;
     else
        {
-        fHorzOff = ((float)(sides[TempPoly->SideDef].textureoffset >> FRACBITS) * (1.0/(double)TexList[TempPoly->Texture[0]].DWide));
+        fHorzOff = (float)((sides[TempPoly->SideDef].textureoffset >> FRACBITS) * (1.0f/(float)TexList[TempPoly->Texture[0]].DWide));
        }
     while (fHorzOff < 0.0f)
        fHorzOff += 1.0f;
@@ -1151,7 +1146,7 @@ void DrawAmmoBox(void)
 
     glTranslatef( 1056.0f, -16.0f, 3232.0f );
     now = (double)(GetTicks() % 5000)*RFactor;
-    rotation = now;
+    rotation = (float)now;
     glRotatef(rotation, 0.0f, 1.0f, 0.0f );
 
     // Ammo box front
@@ -1363,7 +1358,7 @@ void R_InitViewData()
     video.farclip = 5000.0f;
 
     // calculate this only on view size/fov changes
-    video.hFov = tan(DEG2RAD(video.fov / 2.0f)) * 2.0f;
+    video.hFov = (float)tan(DEG2RAD(video.fov / 2.0f)) * 2.0f;
     video.vFov = video.hFov * ((float)video.height / (float)video.width);
 
     halfwidth = video.nearclip * video.hFov;
@@ -1609,10 +1604,10 @@ void R_BuildRenderQueue()
                 switch (TempPoly->Position)
                 {
                 case DW_LOWER:
-                    ch = (double)sectors[TempPoly->BackSector].floorheight * pfactor;
+                    ch = (float)sectors[TempPoly->BackSector].floorheight * (float)pfactor;
                     TempPoly->Point[0].v[1] = ch;
                     TempPoly->Point[3].v[1] = ch;
-                    fh = (double)sectors[TempPoly->Sector].floorheight * pfactor;
+                    fh = (float)sectors[TempPoly->Sector].floorheight * (float)pfactor;
                     TempPoly->Point[1].v[1] = fh;
                     TempPoly->Point[2].v[1] = fh;
                     break;
@@ -1620,20 +1615,20 @@ void R_BuildRenderQueue()
                     if (TempPoly->BackSector != -1)
                     {
                         if (sectors[TempPoly->Sector].ceilingheight > sectors[TempPoly->BackSector].ceilingheight)
-                            ch = (double)sectors[TempPoly->BackSector].ceilingheight * pfactor;
+                            ch = (float)sectors[TempPoly->BackSector].ceilingheight * (float)pfactor;
                         else
-                            ch = (double)sectors[TempPoly->Sector].ceilingheight * pfactor;
+                            ch = (float)sectors[TempPoly->Sector].ceilingheight * (float)pfactor;
 
                         if ((sectors[TempPoly->Sector].floorheight > sectors[TempPoly->BackSector].floorheight) ||
                             (sides[TempPoly->SideDef].bottomtexture == 0))
-                            fh = (double)sectors[TempPoly->Sector].floorheight * pfactor;
+                            fh = (float)sectors[TempPoly->Sector].floorheight * (float)pfactor;
                         else
-                            fh = (double)sectors[TempPoly->BackSector].floorheight * pfactor;
+                            fh = (float)sectors[TempPoly->BackSector].floorheight * (float)pfactor;
                     }
                     else
                     {
-                        ch = (double)sectors[TempPoly->Sector].ceilingheight * pfactor;
-                        fh = (double)sectors[TempPoly->Sector].floorheight * pfactor;
+                        ch = (float)sectors[TempPoly->Sector].ceilingheight * (float)pfactor;
+                        fh = (float)sectors[TempPoly->Sector].floorheight * (float)pfactor;
                     }
                     if (TexList[TempPoly->Texture[0]].Transparent == true)
                     {
@@ -1652,15 +1647,15 @@ void R_BuildRenderQueue()
                     TempPoly->Point[2].v[1] = fh;
                     break;
                 case DW_UPPER:
-                    ch = (double)sectors[TempPoly->Sector].ceilingheight * pfactor;
+                    ch = (float)sectors[TempPoly->Sector].ceilingheight * (float)pfactor;
                     TempPoly->Point[0].v[1] = ch;
                     TempPoly->Point[3].v[1] = ch;
-                    fh = (double)sectors[TempPoly->BackSector].ceilingheight * pfactor;
+                    fh = (float)sectors[TempPoly->BackSector].ceilingheight * (float)pfactor;
                     TempPoly->Point[1].v[1] = fh;
                     TempPoly->Point[2].v[1] = fh;
                     break;
                 default:
-                    TempPoly->Point[1].v[1] = TempPoly->Point[2].v[1] = (double)sectors[TempPoly->BackSector].ceilingheight * pfactor;
+                    TempPoly->Point[1].v[1] = TempPoly->Point[2].v[1] = (float)sectors[TempPoly->BackSector].ceilingheight * (float)pfactor;
                     break;
                 }
                 newhigh = TempPoly->Point[0].v[1] - TempPoly->Point[1].v[1];
@@ -1694,7 +1689,7 @@ void R_BuildRenderQueue()
 void GL_RenderPlayerView(player_t* player)
    {
     int           i, texnumb, sector, subsector, wall, flat;
-    double        fview;
+    float        fview;
     float         yangle, lightv;
     float         flathigh;//, radius = 128;
     float         fogcolor[4] = { 0.0f, 0.0f, 0.0f, 1.0f };
@@ -1711,9 +1706,9 @@ void GL_RenderPlayerView(player_t* player)
 
     glPushMatrix();
 
-    fview = ((double)viewangle*pfactor);
+    fview = (float)(viewangle*pfactor);
 
-    yangle = 90.0 + ((fview / -16384.0) * 90.0);
+    yangle = 90.0f + ((fview / -16384.0f) * 90.0f);
     if (yangle >= 180.0f)
         yangle -=360.0f;
     else
@@ -1757,7 +1752,7 @@ void GL_RenderPlayerView(player_t* player)
         glFogfv(GL_FOG_COLOR, fogcolor);
        }
 
-    glTranslatef( ViewPosition[0], ViewPosition[1], ViewPosition[2]);
+    glTranslatef((GLfloat)ViewPosition[0], (GLfloat)ViewPosition[1], (GLfloat)ViewPosition[2]);
 
     for (wall = 0; wall < sorted_walls_count; wall++)
     {
@@ -1866,11 +1861,11 @@ void GL_RenderPlayerView(player_t* player)
 
         if (psector->floorheight != psector->ceilingheight)
         {
-            glPolygonOffset(offsetf,offsetu);
+            glPolygonOffset((float)offsetf,(float)offsetu);
 
             if (player->viewz > psector->floorheight)
             {
-                flathigh  = (double)psector->floorheight * pfactor;
+                flathigh  = (float)psector->floorheight * (float)pfactor;
                 lightv    = psector->lightlevel;
                 lightv   /= 255.0f;
 
@@ -1924,7 +1919,7 @@ void GL_RenderPlayerView(player_t* player)
 
             if (player->viewz < psector->ceilingheight)
             {
-                flathigh  = (double)psector->ceilingheight * pfactor;
+                flathigh  = (float)psector->ceilingheight * (float)pfactor;
                 lightv    = psector->lightlevel;
                 lightv   /= 255.0f;
 

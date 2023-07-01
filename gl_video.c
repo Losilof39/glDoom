@@ -23,12 +23,6 @@
 
 #include <glad/glad.h>
 #include <SDL.h>
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6054)
-#pragma warning(disable:6387)
-#pragma warning(disable:6001)
-#endif
 #include <stdlib.h>
 #include <math.h>
 
@@ -85,7 +79,7 @@ dboolean             software = false;
 
 glmode_t             glmode;
 
-double               glFovY;    // Rendering field of view
+float               glFovY;    // Rendering field of view
 float                SetBack;   // 3D setback for 2D displays
 float                glLeft, glTop, glRight, glBottom, glAspect;
 
@@ -156,7 +150,7 @@ void I_Start3DFrame()
 
     glTranslatef( 0.0f, 0.0f, 0.0f );
 
-    SetBack  = -120.0f / tanf(DEG2RAD(glFovY * 0.5f));
+    SetBack  = -120.0f / tanf((float)DEG2RAD(glFovY * 0.5f));
     SetBack -= 2.0f;
 
     glTop    = 120.0f;

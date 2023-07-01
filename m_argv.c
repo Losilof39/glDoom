@@ -23,11 +23,6 @@
 static const char
 rcsid[] = "$Id: m_argv.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:6387)
-#pragma warning(disable:6001)
-#endif
-
 #include <string.h>
 #include <malloc.h>
 #include "doomtype.h"

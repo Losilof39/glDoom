@@ -27,11 +27,6 @@
 //#include <gl/glu.h>
 #include <glad/glad.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6297)
-#endif
-
 static const char
 rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";
 
@@ -393,12 +388,11 @@ void GL_TileBackground(DW_TexList *tex)
 void GL_F_TextWrite (void)
    {
     
-    int		x,y;
+    float		x,y;
     int		count;
     char*	ch;
     int		c;
-    int		cx;
-    int		cy;
+    float		cx, cy;
     float   Left, Bottom, Top, Right;
 
     GL_TileBackground( glFinaleFlat );
@@ -410,8 +404,8 @@ void GL_F_TextWrite (void)
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    x = 10;
-    y = 10;
+    x = 10.0f;
+    y = 10.0f;
 
     // draw some of the text onto the screen
     cx = x;
@@ -446,7 +440,7 @@ void GL_F_TextWrite (void)
             break;
 
         Top = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLHudFont[c].Height*1.2);
+        Bottom = Top-(GLHudFont[c].Height*1.2f);
 
         Left = (-160.0f+cx);
         Right = Left + GLHudFont[c].Width;
@@ -787,7 +781,7 @@ void GL_F_CastDrawer (void)
     spriteframe_t*	sprframe;
     int			lump, ch;
     dboolean		flip;
-    float       TextWidth;
+    int       TextWidth;
     char        c;
     float       fTop, fBottom, fOffset, x1, x2;
     
@@ -807,7 +801,7 @@ void GL_F_CastDrawer (void)
             TextWidth += 4;
             continue;
            }
-        TextWidth += GLHudFont[c].Width;
+        TextWidth += (int)GLHudFont[c].Width;
        }
     GL_WriteText(160-(TextWidth/2), 180, castorder[castnum].name);
     //F_CastPrint (castorder[castnum].name);
@@ -1082,7 +1076,7 @@ void GL_F_BunnyScroll (void)
 	    return;
     if (finalecount < 1180)
        {
-	    GL_DrawPatch(&glEndX[0], (SCREENWIDTH-13*8)/2,(SCREENHEIGHT-8*8)/2);
+	    GL_DrawPatch(&glEndX[0], (float)(SCREENWIDTH-13*8)/2,(float)(SCREENHEIGHT-8*8)/2);
 	    laststage = 0;
 	    return;
        }
@@ -1096,7 +1090,7 @@ void GL_F_BunnyScroll (void)
 	laststage = stage;
     }
 	
-    GL_DrawPatch(&glEndX[stage], (SCREENWIDTH-13*8)/2,(SCREENHEIGHT-8*8)/2);
+    GL_DrawPatch(&glEndX[stage], (float)(SCREENWIDTH-13*8)/2,(float)(SCREENHEIGHT-8*8)/2);
     //sprintf (name,"END%i",stage);
     //V_DrawPatch ((SCREENWIDTH-13*8)/2, (SCREENHEIGHT-8*8)/2,0, W_CacheLumpName (name,PU_CACHE));
 }

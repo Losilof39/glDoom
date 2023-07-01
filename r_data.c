@@ -27,13 +27,6 @@
 static const char
 rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:6387)
-#pragma warning(disable:6011)
-#pragma warning(disable:6385)
-#endif // _MSC_VER
-
-
 #include "i_system.h"
 #include "z_zone.h"
 

@@ -206,7 +206,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4113;4005;4311;26451</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
@@ -252,7 +252,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
       <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
-      <DisableSpecificWarnings>4113;4005;4311;26451</DisableSpecificWarnings>
+      <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>

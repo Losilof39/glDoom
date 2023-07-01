@@ -32,12 +32,6 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #define	BGCOLOR		7
 #define	FGCOLOR		8
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:4312)
-#pragma warning(disable:6387)
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 #include <sys/types.h>
@@ -1884,11 +1878,7 @@ void D_DoomMain (void)
     p = M_CheckParm ("-statcopy");
     if (p && p<myargc-1)
        {
-       // for statistics driver
-       extern  void*	statcopy;                            
-       
        statcopy = (void*)atoi(myargv[p+1]);
-       //printf ("External statistics registered.\n");
        printf("External statistics registered.\n");
        }
     

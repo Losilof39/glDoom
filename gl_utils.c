@@ -1,17 +1,4 @@
 #ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6011)
-#pragma warning(disable:6031)
-#pragma warning(disable:6001)
-#pragma warning(disable:6387)
-#pragma warning(disable:6386)
-#pragma warning(disable:6385)
-#pragma warning(disable:4033)
-#pragma warning(disable:4715)
-#pragma warning(disable:4701)
-#endif
-
-#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>
@@ -563,7 +550,7 @@ int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     int            iGLWide, iGLHigh;
 
     if (Sprite == NULL)
-        return;
+        return 0;
 
     //ixsize = Sprite->width-Sprite->leftoffset;
     //iysize = Sprite->height-Sprite->topoffset;
@@ -716,7 +703,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     Tex[0].LeftOff = 0.0f;
     Tex[0].TopOff = 0.0f;
     Tex[0].glWidth = 256.0f;
-    Tex[0].glHeight = TexHigh;
+    Tex[0].glHeight = (float)TexHigh;
 
     TexWide = ixsize - 256;
 
@@ -744,14 +731,14 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
         TempTexNumb = MakeRGBATexture(true, false, TexWide, TexHigh);
        }
     Tex[1].TexName = TempTexNumb;
-    Tex[1].Width = ixsize-256;
+    Tex[1].Width = (float)ixsize-256;
     Tex[1].Height = (float)iysize;
     Tex[1].XDisp = (float)(ixsize-256)/(float)TexWide;
     Tex[1].YDisp = 1.0f - ((float)iysize/(float)TexHigh);
     Tex[1].LeftOff = 0.0f;
     Tex[1].TopOff = 0.0f;
-    Tex[1].glWidth = TexWide;
-    Tex[1].glHeight = TexHigh;
+    Tex[1].glWidth = (float)TexWide;
+    Tex[1].glHeight = (float)TexHigh;
 
     return TempTexNumb;
    }

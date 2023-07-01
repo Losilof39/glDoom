@@ -1,11 +1,7 @@
 // save pic
 //
 #ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6011)
 #pragma warning(disable:4267)
-#pragma warning(disable:6387)
-#pragma warning(disable:6386)
 #endif
 #include <stdlib.h>
 #include <string.h>

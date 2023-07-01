@@ -34,11 +34,7 @@
 
 #include "doomtype.h"
 
-#ifdef _MSC_VER
-#pragma warning(disable:6387)
-#endif
-
-dboolean use_libsamplerate = 0;
+dboolean use_libsamplerate = false;
 
 // Scale factor used when converting libsamplerate floating point numbers
 // to integers. Too high means the sounds can clip; too low means they
