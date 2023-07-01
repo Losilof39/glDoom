@@ -245,11 +245,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GLdoom.rc">
-      <Filter>Source Files</Filter>
-    </ResourceCompile>
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="am_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -469,24 +464,24 @@
     <ClInclude Include="z_zone.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="resource.h">
+    <ClInclude Include="mmus2mid.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="mmus2mid.h">
+    <ClInclude Include="resources\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="gldfont.bin">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="INTERPIC.bin">
-      <Filter>Resource Files</Filter>
-    </None>
-    <None Include="Playpal.bin">
-      <Filter>Resource Files</Filter>
-    </None>
     <None Include="docs\gldoom.doc" />
+    <None Include="resources\gldfont.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\INTERPIC.bin">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="resources\Playpal.bin">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />
@@ -503,7 +498,18 @@
     <Text Include="docs\TodoList.txt" />
   </ItemGroup>
   <ItemGroup>
-    <Image Include="glDoom.ico">
+    <ResourceCompile Include="resources\GLdoom.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\glDoom.ico">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\gldoom.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="resources\ogldoom.gif">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

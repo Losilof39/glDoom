@@ -797,8 +797,7 @@ char *dirname(char *pathname)
         c++;
         *c = '\0';
        }
-    else
-    if ((c = strrchr(tpath, '/')) != NULL)
+    else if ((c = strrchr(tpath, '/')) != NULL)
        {
         c++;
         *c = '\0';
@@ -832,8 +831,8 @@ char *noext(char *pathname)
     static char tstr[_MAX_PATH];
     int   i;
     char *c;
-
-    if ((c = strrchr(pathname, '.')) != NULL)
+    c = strrchr(pathname, '.');
+    if (c != NULL)
        {
         i = (c - pathname);
         strncpy(tstr, pathname, i);
@@ -1846,11 +1845,9 @@ void D_DoomMain (void)
     printf("WS_Init: Init sprites - ");
     LoadAllSprites();
 
-    //printf ("I_Init: Setting up machine state.\n");
     printf("I_Init: Setting up machine state.\n");
     I_Init();
 
-    //printf ("D_CheckNetGame: Checking network game status.\n");
     printf("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame();
     if (gamemode == netabort)
@@ -1858,9 +1855,8 @@ void D_DoomMain (void)
         return;
        }
 
-    //printf ("S_Init: Setting up sound.\n");
+
     printf("S_Init: Setting up sound.\n");
-    //S_Init (snd_SfxVolume*8, snd_MusicVolume*8 );
     S_Init(snd_SfxVolume, snd_MusicVolume);
 
     printf("HU_Init: Setting up heads up display.\n");

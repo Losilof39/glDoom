@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <direct.h>
 #endif
 
@@ -15,7 +15,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 // Application Includes...
 /////////////////////////////////////////////////////////////////////////////////////
-#include "resource.h"  // Required for Win32 Resources
 #include "sys_sdl.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -99,7 +98,7 @@ extern devinfo_t DevInfo;
 
 extern       video_t     video;
 
-char        szMidiFile[] = "doomsong.mid";
+char        szMidiFile[] = "DOOMSONG.MID";
 
 int         MusicType = MUSIC_MIDI;
 int         RenderType = RENDER_GL;
@@ -319,7 +318,7 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         I_Error("Failed to init SDL");
  
-#if _DEBUG
+#ifdef _DEBUG
     sprintf(window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 #else
     sprintf((char* const)window_title, "GLDOOM-RE");

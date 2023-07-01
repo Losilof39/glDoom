@@ -81,6 +81,7 @@ static dboolean I_SDL_InitMusic(void)
 {
     // If SDL_mixer is not initialized, we have to initialize it
     // and have the responsibility to shut it down later on.
+    size_t mus_cmd;
 
     if (SDLIsInitialized())
     {
@@ -116,8 +117,8 @@ static dboolean I_SDL_InitMusic(void)
 
     // If snd_musiccmd is set, we need to call Mix_SetMusicCMD to
     // configure an external music playback program.
-
-    if (strlen(snd_musiccmd) > 0)
+    mus_cmd = strlen(snd_musiccmd);
+    if (mus_cmd > 0)
     {
         Mix_SetMusicCMD(snd_musiccmd);
     }

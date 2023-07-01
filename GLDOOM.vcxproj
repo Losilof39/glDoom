@@ -352,9 +352,6 @@
     <ClCompile Include="z_zone.c" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="GLdoom.rc" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="am_map.h" />
     <ClInclude Include="doomcmd.h" />
     <ClInclude Include="doomdata.h" />
@@ -405,7 +402,7 @@
     <ClInclude Include="p_setup.h" />
     <ClInclude Include="p_spec.h" />
     <ClInclude Include="p_tick.h" />
-    <ClInclude Include="resource.h" />
+    <ClInclude Include="resources\resource.h" />
     <ClInclude Include="r_bsp.h" />
     <ClInclude Include="r_data.h" />
     <ClInclude Include="r_defs.h" />
@@ -433,12 +430,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="docs\gldoom.doc" />
-    <None Include="gldfont.bin" />
-    <None Include="INTERPIC.bin" />
-    <None Include="Playpal.bin" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="glDoom.ico" />
+    <None Include="resources\gldfont.bin" />
+    <None Include="resources\INTERPIC.bin" />
+    <None Include="resources\Playpal.bin" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />
@@ -453,6 +447,14 @@
     <Text Include="docs\relnotes_94d.txt" />
     <Text Include="docs\relnotes_94e.txt" />
     <Text Include="docs\TodoList.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="resources\GLdoom.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\glDoom.ico" />
+    <Image Include="resources\gldoom.png" />
+    <Image Include="resources\ogldoom.gif" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

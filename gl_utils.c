@@ -11,7 +11,7 @@
 #pragma warning(disable:4701)
 #endif
 
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>

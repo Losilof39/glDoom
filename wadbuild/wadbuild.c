@@ -79,7 +79,8 @@ void main(int argc, char *argv[])
            argv[0]);
         exit(-1);
        }
-    if ((namelist = fopen(argv[1], "r")) == NULL)
+    namelist = fopen(argv[1], "r");
+    if (namelist == NULL)
        {
         fprintf(stderr, "Error: Can't open input list file %s\n", argv[1]);
         exit(-1);
@@ -94,7 +95,8 @@ void main(int argc, char *argv[])
     Write(wadfile, &wadhead, sizeof(wadhead_t));
     while (fgets(readline, 256, namelist ) != NULL)
        {
-        if (strlen(readline) == 0)
+        size_t len = strlen(readline);
+        if (len == 0)
            {
             continue;
            }
@@ -103,7 +105,7 @@ void main(int argc, char *argv[])
            {
             str[0] = '\0';
            }
-        if (strlen(readline) == 0)
+        if (len == 0)
            {
             continue;
            }
