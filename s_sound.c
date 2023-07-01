@@ -15,10 +15,6 @@
 // DESCRIPTION:  none
 //
 
-#ifdef _MSC_VER
-#pragma warning(disable:6011)
-#endif
-
 #include <stdio.h>
 #include <stdlib.h>
 

@@ -27,11 +27,6 @@
 static const char
 rcsid[] = "$Id: v_video.c,v 1.5 1997/02/03 22:45:13 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:6011)
-#pragma warning(disable:6385)
-#pragma warning(disable:6386)
-#endif
 #include "i_system.h"
 #include "r_local.h"
 

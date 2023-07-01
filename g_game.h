@@ -80,6 +80,8 @@ dboolean G_Responder (event_t*	ev);
 
 void G_ScreenShot (void);
 
+// for statistics driver
+extern  void* statcopy;
 
 #endif
 //-----------------------------------------------------------------------------

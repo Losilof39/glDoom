@@ -25,14 +25,6 @@
 static const char
 rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6308)
-#pragma warning(disable:28182)
-#pragma warning(disable:6031)
-#pragma warning(disable:6255)
-#endif
-
 #ifdef NORMALUNIX
 #include <ctype.h>
 #include <sys/types.h>
@@ -42,11 +34,10 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <alloca.h>
-#define O_BINARY		0
 #else
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>
@@ -63,6 +54,10 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include "m_swap.h"
 #include "i_system.h"
 #include "z_zone.h"
+
+#ifndef O_BINARY
+#define O_BINARY		0
+#endif
 
 #ifdef __GNUG__
 #pragma implementation "w_wad.h"
@@ -195,17 +190,17 @@ void W_AddFile (char *filename)
     {
 	    // WAD file
 	    Read (handle, &header, sizeof(header));
-	if (strncmp(header.identification,"IWAD",4))
-	{
-	    // Homebrew levels?
-	    if (strncmp(header.identification,"PWAD",4))
+	    if (strncmp(header.identification,"IWAD",4))
 	    {
-		    I_Error ("Wad file %s doesn't have IWAD "
+	        // Homebrew levels?
+	        if (strncmp(header.identification,"PWAD",4))
+	        {
+		        I_Error ("Wad file %s doesn't have IWAD "
 			         "or PWAD id\n", filename);
-	    }
+	        }
 	    
 	    // ???modifiedgame = true;		
-	}
+	    }
 	    header.numlumps = DLONG(header.numlumps);
 	    header.infotableofs = DLONG(header.infotableofs);
 	    length = header.numlumps*sizeof(filelump_t);

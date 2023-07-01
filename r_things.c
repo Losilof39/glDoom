@@ -29,16 +29,6 @@ rcsid[] = "$Id: r_things.c,v 1.5 1997/02/03 16:47:56 b1 Exp $";
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6011)
-#pragma warning(disable:6385)
-#pragma warning(disable:6386)
-#pragma warning(disable:6001)
-#pragma warning(disable:33011)
-#pragma warning(disable:4701)
-#endif
-
 #include "doomdef.h"
 #include "m_swap.h"
 
@@ -1436,7 +1426,7 @@ void GL_DrawThings(void)
     float           sx, sy, sz, Orient, x1, x2, tLight;
     float           fLight, fTop, fBottom, fOffset;
 	
-    Orient =  360.0f+(camera.oy*-1.0);
+    Orient =  360.0f+(camera.oy*-1.0f);
     Orient +=  180.0f;
     if (Orient > 360.0f)
        Orient -= 360.0f;
@@ -1456,10 +1446,10 @@ void GL_DrawThings(void)
             lump = spr->patch;
             if (SprData[lump].TexName != 0)
                {
-                sx = (double)spr->gx * pfactor;
-                sy = (double)spr->gz * pfactor;
+                sx = (float)spr->gx * (float)pfactor;
+                sy = (float)spr->gz * (float)pfactor;
 //    vis->gzt = thing->z + spritetopoffset[lump];
-                sz = 0.0 - ((double)spr->gy * pfactor);
+                sz = 0.0f - ((float)spr->gy * (float)pfactor);
 
                 glPushMatrix();
                 //glLoadIdentity();
@@ -1527,7 +1517,7 @@ void GL_DrawThings(void)
                                }
                             else
                                {
-                                tLight = SprData[lump].Intensity / 255.0;
+                                tLight = SprData[lump].Intensity / 255.0f;
                                 if (tLight > fLight)
                                    {
                                     fLight = tLight;

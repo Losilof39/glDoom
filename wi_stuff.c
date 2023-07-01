@@ -27,11 +27,6 @@
 //#include <gl/glu.h>
 #include <glad/glad.h>
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6386)
-#endif
-
 static const char
 rcsid[] = "$Id: wi_stuff.c,v 1.7 1997/02/03 22:45:13 b1 Exp $";
 
@@ -659,10 +654,10 @@ void WI_drawEL(void)
 void GL_WI_drawOnLnode( int n, GLTexData *Tex)
    {
     int		i;
-    int		left;
-    int		top;
-    int		right;
-    int		bottom;
+    float		left;
+    float		top;
+    float		right;
+    float		bottom;
     dboolean	fits = false;
     float   Left, Bottom, Right, Top;
 
@@ -972,14 +967,14 @@ int GL_WI_drawNum( int x, int y, int n, int digits )
     while (digits--)
        {
         x -= fontwidth;
-        GL_DrawPatch(&WiNum[n % 10], x, y);
+        GL_DrawPatch(&WiNum[n % 10], (float)x, (float)y);
         n /= 10;
        }
 
     // draw a minus sign if necessary
     if (neg)
        {
-        GL_DrawPatch(&WiMinus, x-=8, y);
+        GL_DrawPatch(&WiMinus, (float)x-=8, (float)y);
        }
 
     return x;
@@ -1040,7 +1035,7 @@ void GL_WI_drawPercent( int x, int y, int p )
     if (p < 0)
         return;
 
-    GL_DrawPatch(&Percent, x, y);
+    GL_DrawPatch(&Percent, (float)x, (float)y);
     GL_WI_drawNum(x, y, p, -1);
    }
 
@@ -1079,7 +1074,7 @@ void GL_WI_drawTime( int x, int y, int t )
             // draw
             if (div==60 || t / div)
                {
-                GL_DrawPatch(&Colon, x, y);
+                GL_DrawPatch(&Colon, (float)x, (float)y);
                }
 	    
            } while (t / div);
@@ -1087,7 +1082,7 @@ void GL_WI_drawTime( int x, int y, int t )
     else
        {
         // "sucks"
-        GL_DrawPatch(&Sucks, x - DSHORT(sucks->width), y);
+        GL_DrawPatch(&Sucks, (float)x - DSHORT(sucks->width), (float)y);
        }
    }
 

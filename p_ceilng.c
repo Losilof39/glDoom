@@ -23,10 +23,6 @@
 static const char
 rcsid[] = "$Id: p_ceilng.c,v 1.4 1997/02/03 16:47:53 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:28182)
-#endif
-
 #include "z_zone.h"
 #include "doomdef.h"
 #include "p_local.h"

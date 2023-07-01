@@ -5,9 +5,6 @@
 // This module is for Win32
 
 #include "thirdparty/SDL2/include/SDL.h"
-#ifdef _MSC_VER
-#pragma warning(disable:4047)
-#endif // _MSC_VER
 
 #include "d_main.h"
 #include "sys_sdl.h"
@@ -23,7 +20,7 @@ extern int       usemouse;
 extern SDL_Window* pWindow;
 extern video_t   video;
 
-dboolean* keystates[256] = { false };
+dboolean keystates[256] = { false };
 
 extern dboolean      bQuit;
 extern int keylink;

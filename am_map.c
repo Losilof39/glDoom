@@ -28,10 +28,6 @@
 
 static const char rcsid[] = "$Id: am_map.c,v 1.4 1997/02/03 21:24:33 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#endif
-
 #include <stdio.h>
 
 #include "z_zone.h"
@@ -113,7 +109,7 @@ void lfprintf(char *message, ... );
 #define AM_NUMMARKPOINTS 10
 
 // scale on entry
-#define INITSCALEMTOF (.2*FRACUNIT)
+#define INITSCALEMTOF (2*FRACUNIT)
 // how much the automap moves window per tic in frame-buffer coordinates
 // moves 140 pixels in 1 second
 #define F_PANINC	4
@@ -203,18 +199,18 @@ mline_t cheat_player_arrow[] = {
 
 #define R (FRACUNIT)
 mline_t triangle_guy[] = {
-    { { -.867*R, -.5*R }, { .867*R, -.5*R } },
-    { { .867*R, -.5*R } , { 0, R } },
-    { { 0, R }, { -.867*R, -.5*R } }
+    { { -867*R, -5*R }, { 67*R, -5*R } },
+    { { 867*R, -5*R } , { 0, R } },
+    { { 0, R }, { -867*R, -5*R } }
 };
 #undef R
 #define NUMTRIANGLEGUYLINES (sizeof(triangle_guy)/sizeof(mline_t))
 
 #define R (FRACUNIT)
 mline_t thintriangle_guy[] = {
-    { { -.5*R, -.7*R }, { R, 0 } },
-    { { R, 0 }, { -.5*R, .7*R } },
-    { { -.5*R, .7*R }, { -.5*R, -.7*R } }
+    { { -5*R, -7*R }, { R, 0 } },
+    { { R, 0 }, { -5*R, 7*R } },
+    { { -5*R, 7*R }, { -5*R, -7*R } }
 };
 #undef R
 #define NUMTHINTRIANGLEGUYLINES (sizeof(thintriangle_guy)/sizeof(mline_t))

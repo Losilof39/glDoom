@@ -25,14 +25,6 @@
 static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
-#ifdef _MSC_VER
-#pragma warning(disable:4244)
-#pragma warning(disable:6011)
-#pragma warning(disable:4312)
-#pragma warning(disable:6297)
-#pragma warning(disable:6387)
-#endif
-
 #include <glad/glad.h>
 
 #include <sys/types.h>
@@ -40,7 +32,7 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 #include <fcntl.h>
 #include <stdlib.h>
 #include <ctype.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>
@@ -1395,7 +1387,7 @@ void GL_DrawSaveLoadBorder(int x,int y)
         glEnd();
 
         x += 8;
-        xo += LSCenter.Width;
+        xo += (int)LSCenter.Width;
        }
 
     glBindTexture(GL_TEXTURE_2D, LSRight.TexName);
@@ -3041,7 +3033,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (c == '\n')
            {
             cx = x;
-            cy += (GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight*1.2f);
             continue;
            }
 		
@@ -3056,7 +3048,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
             break;
 
         Top = (120.0f-(((cy-GLGreyFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLGreyFont[c].Height*1.2);
+        Bottom = Top-(GLGreyFont[c].Height*1.2f);
 
         Left = (-160.0f+cx);
         Right = Left + GLGreyFont[c].Width;
@@ -3073,7 +3065,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
           glVertex3f( Right, Top, SetBack);
         glEnd();
 
-        cx += (GLGreyFont[c].Width-1);
+        cx += (int)(GLGreyFont[c].Width-1);
        }
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_ALPHA_TEST);
@@ -3119,7 +3111,7 @@ void GL_WriteText( int x, int y, char *string)
         if (c == '\n')
            {
             cx = x;
-            cy += (GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight*1.2f);
             continue;
            }
 		
@@ -3134,7 +3126,7 @@ void GL_WriteText( int x, int y, char *string)
             break;
 
         Top = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLHudFont[c].Height*1.2);
+        Bottom = Top-(GLHudFont[c].Height*1.2f);
 
         Left = (-160.0f+cx);
         Right = Left + GLHudFont[c].Width;
@@ -3151,7 +3143,7 @@ void GL_WriteText( int x, int y, char *string)
           glVertex3f( Right, Top, SetBack);
         glEnd();
 
-        cx += GLHudFont[c].Width;
+        cx += (int)GLHudFont[c].Width;
        }
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_ALPHA_TEST);
@@ -6115,7 +6107,7 @@ void GL_DrawMenu()
                }
             x = 160 - M_StringWidth(string)/2;
             GL_WriteText(x,y,string);
-            y += GLFontHeight;
+            y += (int)GLFontHeight;
            }
         return;
        }
@@ -6249,7 +6241,7 @@ void GL_DrawMenu()
 
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
-        Left = -160 + (currentMenu->x+SKULLXOFF);
+        Left = -160.0f + (currentMenu->x+SKULLXOFF);
         Right = Left + (MenuSkull[whichSkull].Width);
         Top = (120.0f - (float)(((currentMenu->y-5) + (itemOn*LINEHEIGHT)) * 1.2f));
         Bottom = Top - (MenuSkull[whichSkull].Height * 1.2f);
