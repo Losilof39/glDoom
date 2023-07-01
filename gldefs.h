@@ -14,6 +14,14 @@ typedef struct
    }GLPixelRGBA;
 
 typedef struct
+{
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+}MY_PAL;
+
+
+typedef struct
    {
     int   TexName;
     float Width;   // Actual texture width

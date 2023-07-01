@@ -9,7 +9,7 @@
 #endif
 #include <stdlib.h>
 #include <string.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>

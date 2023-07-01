@@ -45,7 +45,7 @@
 #include "d_main.h"
 #include "w_wad.h"
 #include "z_zone.h"
-
+#include "gldefs.h"
 #include "doomdef.h"
 #include "doomlib.h"
 
@@ -254,13 +254,6 @@ void I_ReadScreen (byte* scr)
 {
     memcpy (scr, screens[0], SCREENWIDTH*SCREENHEIGHT);
 }
-
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
 
 MY_PAL  gamepal[256];
 extern MY_PAL  statpal[256];

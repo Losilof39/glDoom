@@ -46,7 +46,7 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #else
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>
@@ -92,13 +92,6 @@ lumpinfo_t*		lumpinfo;
 int			numlumps;
 
 void**			lumpcache;
-
-#ifndef _WIN32
-static void strupr(char* s)
-{
-    while (*s) { *s = toupper(*s); s++; }
-}
-#endif
 
 void
 ExtractFileBase
@@ -209,7 +202,7 @@ void W_AddFile (char *filename)
 	    header.numlumps = DLONG(header.numlumps);
 	    header.infotableofs = DLONG(header.infotableofs);
 	    length = header.numlumps*sizeof(filelump_t);
-	    fileinfo = alloca (length);
+	    fileinfo = Z_Malloc (length, PU_STATIC, 0);
 	    LSeek (handle, header.infotableofs, SEEK_SET);
 	    Read (handle, fileinfo, length);
 	    numlumps += header.numlumps;
@@ -261,7 +254,7 @@ void W_Reload(void)
     lumpcount = DLONG(header.numlumps);
     header.infotableofs = DLONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
-    fileinfo = alloca(length);
+    fileinfo = Z_Malloc(length, PU_STATIC, 0);
     LSeek(handle, header.infotableofs, SEEK_SET);
     Read(handle, fileinfo, length);
     

@@ -98,6 +98,7 @@ char*	e1text = E1TEXT;
 char*	e2text = E2TEXT;
 char*	e3text = E3TEXT;
 char*	e4text = E4TEXT;
+char*   e5text = E5TEXT;
 
 char*	c1text = C1TEXT;
 char*	c2text = C2TEXT;
@@ -173,6 +174,10 @@ void F_StartFinale (void)
 	    finaleflat = "MFLR8_3";
 	    finaletext = e4text;
 	    break;
+      case 5:
+          finaleflat = "FLOOR7_2";
+          finaletext = e5text;
+          break;
 	  default:
 	    // Ouch.
 	    break;
@@ -1229,6 +1234,13 @@ void F_Drawer (void)
 	    V_DrawPatch (0,0,0,
 			 W_CacheLumpName("ENDPIC",PU_CACHE));
 	    break;
+        // [crispy] Sigil
+      case 5:
+          V_DrawPatch(0, 0, 0,
+              W_CacheLumpName("SIGILEND", PU_CACHE));
+          break;
+      default:
+          return;
 	}
     }
 			

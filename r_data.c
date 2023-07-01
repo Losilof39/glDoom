@@ -550,8 +550,10 @@ void R_InitTextures (void)
 
             if (patch->patch == -1)
             {
-                I_Error ("R_InitTextures: Missing patch in texture %s",
-                texture->name);
+                // [crispy] make non-fatal
+                fprintf(stderr, "R_InitTextures: Missing patch in texture %s\n",
+                    texture->name);
+                patch->patch = 0;
             }
         }		
         texturecolumnlump[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
@@ -690,7 +692,10 @@ int R_FlatNumForName (char* name)
     {
 	namet[8] = 0;
 	memcpy (namet, name,8);
-	I_Error ("R_FlatNumForName: %s not found",namet);
+    I_Error("R_TextureNumForName: %s not found", name);
+        // [crispy] make non-fatal
+        fprintf(stderr, "R_TextureNumForName: %s not found\n",
+            name);
     }
     return i - firstflat;
 }

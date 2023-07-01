@@ -66,12 +66,6 @@ GLubyte              *TexRGB, *MipMaps[16][32768];
 dboolean              TexTransparent = false;
 extern dboolean       GL_3Dlabs;
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
 
 extern MY_PAL  gamepal[256];
 MY_PAL         statpal[256];

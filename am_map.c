@@ -54,6 +54,7 @@ static const char rcsid[] = "$Id: am_map.c,v 1.4 1997/02/03 21:24:33 b1 Exp $";
 #include "dstrings.h"
 
 #include "am_map.h"
+#include "gldefs.h"
 
 void lfprintf(char *message, ... );
 
@@ -314,13 +315,6 @@ extern int key_map_grid;                                            // phares
 extern dboolean viewactive;
 //extern byte screens[][SCREENWIDTH*SCREENHEIGHT];
 
-
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
 
 extern MY_PAL  statpal[256];
 

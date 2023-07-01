@@ -64,7 +64,8 @@ extern GameMission_t	gamemission;
 // Set if homebrew PWAD stuff has been added.
 extern  dboolean	modifiedgame;
 
-
+// [crispy] Sigil
+extern dboolean haved1e5;
 // -------------------------------------------
 // Language.
 extern  Language_t   language;
