@@ -11,9 +11,9 @@
 int GL_MakeScreenTexture(patch_t *patch, GLTexData *Tex);
 int GL_MakeSpriteTexture(patch_t *patch, GLTexData *Tex, dboolean smooth);
 int GL_MakeGreyFontTexture(patch_t *patch, GLTexData *Tex, dboolean smooth);
-int MakeRGBTexture(int dw, int dh);
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
-int GL_LoadFlatTexture(int TexNumb);
-int GL_LoadSkyTop( char *filename );
+unsigned int MakeRGBTexture(int dw, int dh);
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int GL_LoadFlatTexture(int TexNumb);
+unsigned int GL_LoadSkyTop( char *filename );
 
 #endif

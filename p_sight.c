@@ -141,8 +141,6 @@ dboolean P_CrossSubsector (int num)
     subsector_t*	sub;
     sector_t*		front;
     sector_t*		back;
-    fixed_t		opentop;
-    fixed_t		openbottom;
     divline_t		divl;
     vertex_t*		v1;
     vertex_t*		v2;

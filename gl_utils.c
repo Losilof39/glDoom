@@ -229,7 +229,8 @@ extern texture_t**	textures;
 
 int GL_LoadSkyTop( char *filename )
    {
-    int TempTexName, fn, s, d;
+    unsigned int TempTexName;
+    int fn, s, d;
     unsigned char   *texels;
     BITMAPFILEHEADER bmfh;
     BITMAPINFOHEADER bmi;
@@ -432,7 +433,8 @@ extern int firstflat;
 
 int GL_LoadFlatTexture(int TexNumb)
    {
-    int            TempTexNumb, n;
+    unsigned int            TempTexNumb;
+    int n;
     unsigned char *lump, *pixels;
 
     lump = W_CacheLumpNum(firstflat+TexList[TexNumb].Number, PU_CACHE);
@@ -949,9 +951,10 @@ int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     return TempTexNumb;
    }
 
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, c, d, h, t, m, n;
+    unsigned int TempTexName;
     unsigned char  *TexAa;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*4));
 
@@ -1024,7 +1027,8 @@ int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
 
 int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, c, d, h, t, m, n;
+    unsigned int TempTexName;
     unsigned char  *TexAa, tcolor;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*4));
 
@@ -1104,9 +1108,10 @@ int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
     return(TempTexName);
    }
 
-int MakeRGBTexture(int dw, int dh)
+unsigned int MakeRGBTexture(int dw, int dh)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, c, d, h, t, m, n;
+    unsigned int TempTexName;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
 
     TexTransparent = false;

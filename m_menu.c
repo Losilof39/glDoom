@@ -3524,7 +3524,7 @@ int M_GetKeyString(int c,size_t offset)
     strcpy(&menu_buffer[offset],s); // string to display
     offset += strlen(s);
     }
-  return offset;
+  return (int)offset;
   }
 
 /////////////////////////////
