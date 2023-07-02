@@ -156,7 +156,6 @@ int main(int argc, char** szCmdLine)
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
   
-
     // Create the main program window, start up OpenGL and create our viewport
     if (!CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen))
         I_Error("int main(): Unable to create main SDL2 window!");
@@ -191,7 +190,7 @@ int main(int argc, char** szCmdLine)
         return 0;
        }
 
-    printf("Command line: %s\n", (char*)szCmdLine);
+    printf("Command line: %s\n", szCmdLine);
     printf("Beginning DOOM data setup...\n");
     MY_DoomSetup();
 

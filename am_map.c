@@ -199,7 +199,7 @@ mline_t cheat_player_arrow[] = {
 
 #define R (FRACUNIT)
 mline_t triangle_guy[] = {
-    { { -867*R, -5*R }, { 67*R, -5*R } },
+    { { -867*R, -5*R }, { 867*R, -5*R } },
     { { 867*R, -5*R } , { 0, R } },
     { { 0, R }, { -867*R, -5*R } }
 };
