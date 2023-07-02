@@ -18,8 +18,8 @@
 
 void lfprintf(char *message, ... );
 
-int MakeRGBTexture(int dw, int dh);
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int MakeRGBTexture(int dw, int dh);
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
 void V_DrawPatchBuff(int, int, unsigned char *, patch_t *);
 
@@ -745,16 +745,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     return TempTexNumb;
    }
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
-   }rgba_t;
-
-
-void AntiAlias(rgba_t *inbuff, rgba_t *outbuff, int w, int h)
+void AntiAlias(GLPixelRGBA *inbuff, GLPixelRGBA *outbuff, int w, int h)
    {
     int     x, y, s, d, n;
     short   mr, mg, mb;
@@ -990,7 +981,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
         for (r = 0; r < (TexWide*TexHigh*4); r++)
            TexAa[r] = TexRGB[r];
-        AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
+        AntiAlias( (GLPixelRGBA*)TexAa, (GLPixelRGBA*)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
     if (clamp == true)
@@ -1073,7 +1064,7 @@ int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
         for (r = 0; r < (TexWide*TexHigh*4); r++)
            TexAa[r] = TexRGB[r];
-        AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
+        AntiAlias( (GLPixelRGBA *)TexAa, (GLPixelRGBA *)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
     if (clamp == true)

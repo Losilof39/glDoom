@@ -137,7 +137,7 @@ void D_QuitNetGame (void);
 
 //? how many ticks to run?
 void TryRunTics (void);
-
+#if 0
 // These are the game type flags
 // There can be up to 32 flags in the DLONG (32 bits)
 // Since the flag is NOT an integer value but is instead
@@ -233,6 +233,7 @@ typedef enum
     tic_update,
     net_msg_end
    }net_message_t;
+#endif
 
 #endif
 

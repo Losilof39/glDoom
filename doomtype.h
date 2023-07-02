@@ -63,14 +63,14 @@ typedef struct BITMAPFILEHEADER {
 
 typedef struct BITMAPINFOHEADER {
     uint32_t biSize;
-    LONG  biWidth;
-    LONG  biHeight;
+    long  biWidth;
+    long  biHeight;
     uint16_t  biPlanes;
     uint16_t  biBitCount;
     uint32_t biCompression;
     uint32_t biSizeImage;
-    LONG  biXPelsPerMeter;
-    LONG  biYPelsPerMeter;
+    long  biXPelsPerMeter;
+    long  biYPelsPerMeter;
     uint32_t biClrUsed;
     uint32_t biClrImportant;
 } BITMAPINFOHEADER;
@@ -83,14 +83,17 @@ typedef struct tagRGBQUAD {
 } RGBQUAD;
 
 typedef struct RECT {
-    LONG left;
-    LONG top;
-    LONG right;
-    LONG bottom;
+    long left;
+    long top;
+    long right;
+    long bottom;
 } RECT;
+#endif
 
+#ifndef O_BINARY 
 #define O_BINARY 0
 #endif
+
 // Fixed to use builtin bool type with C++.
 #ifdef __cplusplus
 typedef bool dboolean;
