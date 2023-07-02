@@ -1821,6 +1821,11 @@ void D_DoomMain (void)
 
     CreateGLPalette();
 
+    // check for NRFTL
+    havenerve = (gamemode == commercial) &&
+        (W_CheckNumForName("DMAPINFO") != -1);
+
+
     // [crispy] check for presence of a 5th episode
     haved1e5 = (gamemode != commercial) &&
         (W_CheckNumForName("m_epi5") != -1) &&

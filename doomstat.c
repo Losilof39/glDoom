@@ -45,6 +45,7 @@ dboolean	modifiedgame;
 // [crispy] Sigil
 dboolean haved1e5 = true;
 
-
+// NRFTL
+dboolean havenerve;
 
 

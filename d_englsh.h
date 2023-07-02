@@ -189,6 +189,16 @@
 #define HUSTR_E5M8	"E5M8: Halls of Perdition"
 #define HUSTR_E5M9	"E5M9: Realm of Iblis"
 
+#define NHUSTR_1	"level 1: The Earth Base"
+#define NHUSTR_2	"level 2: The Pain Labs"
+#define NHUSTR_3	"level 3: Canyon of the Dead"
+#define NHUSTR_4	"level 4: Hell Mountain"
+#define NHUSTR_5	"level 5: Vivisection"
+#define NHUSTR_6	"level 6: Inferno of Blood"
+#define NHUSTR_7	"level 7: Baron's Banquet"
+#define NHUSTR_8	"level 8: Tomb of Malevolence"
+#define NHUSTR_9	"level 9: March of the Demons"
+
 #define HUSTR_1	"level 1: entryway"
 #define HUSTR_2	"level 2: underhalls"
 #define HUSTR_3	"level 3: the gantlet"

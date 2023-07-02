@@ -66,6 +66,8 @@ extern  dboolean	modifiedgame;
 
 // [crispy] Sigil
 extern dboolean haved1e5;
+// NRFTL
+extern dboolean havenerve;
 // -------------------------------------------
 // Language.
 extern  Language_t   language;
