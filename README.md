@@ -10,6 +10,9 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 ### Fixes from Gibbon
 * 64bit cleanups to allow it to build and run on 64bit systems
 * Cleanups for modern types (``` uintptr_t ```, ``` intptr_t ``` and MSVC specific functions like ``` _access ``` etc..)
+* Add SIGIL support.
+* Add vsync
+* Add NRTL support
 
 ### Fixes from Losilof39
 * Cleaned up all Win32 code and added a SDL2 backend
