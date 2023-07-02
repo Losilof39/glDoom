@@ -135,7 +135,7 @@ char gammamsg[5][26] =
 // we are going to be entering a savegame string
 int			saveStringEnter;              
 int             	saveSlot;	// which slot to save in
-int			saveCharIndex;	// which char we're editing
+size_t			saveCharIndex;	// which char we're editing
 // old save description before edit
 char			saveOldString[SAVESTRINGSIZE];  
 
@@ -1522,7 +1522,7 @@ void M_SaveSelect(int choice)
     strcpy(saveOldString,savegamestrings[choice]);
     if (!strcmp(savegamestrings[choice],EMPTYSTRING))
 	savegamestrings[choice][0] = 0;
-    saveCharIndex = (int)strlen(savegamestrings[choice]);
+    saveCharIndex = strlen(savegamestrings[choice]);
 }
 
 //
@@ -3494,7 +3494,7 @@ char *sckeyname[]={ "NULL", // no key
 // M_GetKeyString finds the correct string to represent the key binding
 // for the current item being drawn.
 
-int M_GetKeyString(int c,int offset)
+int M_GetKeyString(int c,size_t offset)
   {
   const char* s;
   SDL_Keycode keycode;
@@ -3514,9 +3514,9 @@ int M_GetKeyString(int c,int offset)
         s = "JUNK";
 
     strcpy(&menu_buffer[offset],s); // string to display
-    offset += (int)strlen(s);
+    offset += strlen(s);
     }
-  return offset;
+  return (int)offset;
   }
 
 /////////////////////////////

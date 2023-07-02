@@ -1131,7 +1131,6 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
 void R_DrawPlayerSprites (void)
    {
     int		i;
-    int		lightnum;
     pspdef_t*	psp;
     
     // get light level
@@ -1165,7 +1164,6 @@ void R_DrawPlayerSprites (void)
 void GL_DrawPlayerSprites (void)
    {
     int		i;
-    int		lightnum;
     pspdef_t*	psp;
     
     // get light level
