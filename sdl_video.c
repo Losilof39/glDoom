@@ -1,4 +1,4 @@
-//sdl_video.c
+// sdl_video.c
 // This module handles the video interface to Windows
 
 #include <stdio.h>

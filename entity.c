@@ -1,6 +1,9 @@
-// entity.c
-// This file is intended to take the place
-// of the info.c file when it is finished.
+/* entity.c */
+
+/* 
+** This file is intended to take the place
+** of the info.c file when it is finished.
+*/
 
 /* Theory
 
@@ -26,7 +29,7 @@
 
 */ 
 
-// structures would be moved into entity.h when the times comes
+/* structures would be moved into entity.h when the times comes */
 
 /*
    Info.c describes a series of "states" for the entities in the
