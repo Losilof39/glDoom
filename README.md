@@ -53,8 +53,8 @@ Use the Visual Studio project and build for your desired architecture.
 Run ``` sh build.sh ``` in the commandline to build.
 
 ### Game data
-Before playing DOOM, you will need to also create the ``` gldoom.wad ``` file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
-Be sure that ``` gldoom.wad ``` and your IWAD of choice (DOOM, DOOM 2, Ultimate Doom, ...) are in the same folder as the executable!
+Before playing DOOM, you will need to also create the ```gldoom.wad ``` file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
+Be sure that ```gldoom.wad ``` and your IWAD of choice (DOOM, DOOM 2, Ultimate Doom, ...) are in the same folder as the executable!
 In order to hear the music in-game you should download [this](https://archive.org/download/free-soundfonts-sf2-2019-04/SC-55.sf2) soundfont, rename it to ``` soundfont.sf2``` and place it in the game directory. You could use other `.sf2` files but I would recommend to use the SC-55, which is the soundcard originally used to create the DOOM music.
 
 ### Why maintain glDoom?
