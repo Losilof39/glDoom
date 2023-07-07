@@ -419,8 +419,7 @@ W_ReadLump
 	    I_Error ("W_ReadLump: %i >= numlumps",lump);
 
     l = lumpinfo+lump;
-	
-    // ??? I_BeginRead ();
+
 	
     if (l->handle == -1)
     {
@@ -440,8 +439,6 @@ W_ReadLump
 
     if (l->handle == -1)
 	Close (handle);
-		
-    // ??? I_EndRead ();
 }
 
 //
