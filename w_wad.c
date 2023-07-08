@@ -65,7 +65,7 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include "w_wad.h"
 
 #include "doomlib.h"
-#ifdef IMPL
+#ifdef __GNUC__
 static long filelength_(int handle)
 {
     long sz;
@@ -75,7 +75,7 @@ static long filelength_(int handle)
     return sz;
 }
 #else
-#define filelength_ _filelength 
+#define filelength_ 
 #endif
 
 //

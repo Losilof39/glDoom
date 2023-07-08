@@ -37,7 +37,7 @@ byte*		save_p;
 
 // Pads save_p to a 4-byte boundary
 //  so that the load/save works on SGI&Gecko.
-#define PADSAVEP()	save_p += (4 - ((int) save_p & 3)) & 3
+#define PADSAVEP()	save_p += (4 - ((int) save_p &3)) & 3
 
 
 

@@ -897,9 +897,9 @@ dboolean AM_clipMline( mline_t *ml, fline_t *fl )
        TOP    = 8
       };
     
-    register	outcode1 = 0;
-    register	outcode2 = 0;
-    register	outside;
+    register int outcode1 = 0;
+    register int outcode2 = 0;
+    register int outside;
     
     fpoint_t	tmp;
     int		dx;
