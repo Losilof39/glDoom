@@ -75,7 +75,7 @@ static long filelength_(int handle)
     return sz;
 }
 #else
-#define filelength_ 
+#define filelength_ _filelength 
 #endif
 
 //
