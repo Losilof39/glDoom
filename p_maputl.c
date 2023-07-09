@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -230,7 +230,7 @@ P_InterceptVector
 ( divline_t*	v2,
   divline_t*	v1 )
 {
-#if 1
+#ifndef FLOAT_DEBUG
     fixed_t	frac;
     fixed_t	num;
     fixed_t	den;
