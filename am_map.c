@@ -50,6 +50,7 @@ static const char rcsid[] = "$Id: am_map.c,v 1.4 1997/02/03 21:24:33 b1 Exp $";
 #include "dstrings.h"
 
 #include "am_map.h"
+#include "gldefs.h"
 
 void lfprintf(char *message, ... );
 
@@ -311,13 +312,6 @@ extern dboolean viewactive;
 //extern byte screens[][SCREENWIDTH*SCREENHEIGHT];
 
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
-
 extern MY_PAL  statpal[256];
 
 void
@@ -336,7 +330,7 @@ AM_getIslope
 ( mline_t*	ml,
   islope_t*	is )
 {
-    int dx, dy;
+    fixed_t dx, dy;
 
     dy = ml->a.y - ml->b.y;
     dx = ml->b.x - ml->a.x;
@@ -903,9 +897,9 @@ dboolean AM_clipMline( mline_t *ml, fline_t *fl )
        TOP    = 8
       };
     
-    register	outcode1 = 0;
-    register	outcode2 = 0;
-    register	outside;
+    register int outcode1 = 0;
+    register int outcode2 = 0;
+    register int outside;
     
     fpoint_t	tmp;
     int		dx;

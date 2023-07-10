@@ -42,12 +42,6 @@ rcsid[] = "$Id: r_data.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 #include "r_sky.h"
 #include <stdint.h>
 
-#ifdef LINUX
-#include  <alloca.h>
-#endif
-
-#define alloca malloc
-
 #include "r_data.h"
 #include "doomlib.h"
 
@@ -320,7 +314,7 @@ void R_GenerateLookup (int texnum)
     //  that are covered by more than one patch.
     // Fill in the lump / offset, so columns
     //  with only a single patch are all done.
-    patchcount = (byte *)alloca (texture->width);
+    patchcount = (byte *)Z_Malloc(texture->width, PU_STATIC, 0);
     memset (patchcount, 0, texture->width);
     patch = texture->patches;
 		
@@ -446,7 +440,7 @@ void R_InitTextures (void)
     names = W_CacheLumpName ("PNAMES", PU_STATIC);
     nummappatches = DLONG ( *((int *)names) );
     name_p = names+4;
-    patchlookup = alloca (nummappatches*sizeof(*patchlookup));
+    patchlookup = Z_Malloc(nummappatches*sizeof(*patchlookup), PU_STATIC, 0);
     
     for (i=0 ; i<nummappatches ; i++)
     {
@@ -543,8 +537,10 @@ void R_InitTextures (void)
 
             if (patch->patch == -1)
             {
-                I_Error ("R_InitTextures: Missing patch in texture %s",
-                texture->name);
+                // [crispy] make non-fatal
+                fprintf(stderr, "R_InitTextures: Missing patch in texture %s\n",
+                    texture->name);
+                patch->patch = 0;
             }
         }		
         texturecolumnlump[i] = Z_Malloc (texture->width*2, PU_STATIC,0);
@@ -683,7 +679,10 @@ int R_FlatNumForName (char* name)
     {
 	namet[8] = 0;
 	memcpy (namet, name,8);
-	I_Error ("R_FlatNumForName: %s not found",namet);
+    I_Error("R_TextureNumForName: %s not found", name);
+        // [crispy] make non-fatal
+        fprintf(stderr, "R_TextureNumForName: %s not found\n",
+            name);
     }
     return i - firstflat;
 }
@@ -767,7 +766,7 @@ void R_PrecacheLevel (void)
 	return;
     
     // Precache flats.
-    flatpresent = alloca(numflats);
+    flatpresent = Z_Malloc(numflats, PU_STATIC, 0);
     memset (flatpresent,0,numflats);	
 
     for (i=0 ; i<numsectors ; i++)
@@ -789,7 +788,7 @@ void R_PrecacheLevel (void)
     }
     
     // Precache textures.
-    texturepresent = alloca(numtextures);
+    texturepresent = Z_Malloc(numtextures, PU_STATIC, 0);
     memset (texturepresent,0, numtextures);
 	
     for (i=0 ; i<numsides ; i++)
@@ -824,7 +823,7 @@ void R_PrecacheLevel (void)
     }
     
     // Precache sprites.
-    spritepresent = alloca(numsprites);
+    spritepresent = Z_Malloc(numsprites, PU_STATIC, 0);
     memset (spritepresent,0, numsprites);
 	
     for (th = thinkercap.next ; th != &thinkercap ; th=th->next)
