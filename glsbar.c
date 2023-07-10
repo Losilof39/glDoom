@@ -53,7 +53,7 @@ void lfprintf(char *message, ... );
 
 void GL_StatArmsOvl(MY_RGBA *RGBData);
 int  GL_MakeSpriteTexture(patch_t *, GLTexData *Tex, dboolean smooth);
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 
 void InsertArmsPlate()
    {

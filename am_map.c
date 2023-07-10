@@ -157,6 +157,12 @@ typedef struct
 } islope_t;
 
 
+typedef struct
+{
+    unsigned char r;
+    unsigned char g;
+    unsigned char b;
+}MY_PAL;
 
 //
 // The vector graphics for the automap.
@@ -334,9 +340,9 @@ AM_getIslope
 
     dy = ml->a.y - ml->b.y;
     dx = ml->b.x - ml->a.x;
-    if (!dy) is->islp = (dx<0?-MAXINT:MAXINT);
+    if (!dy) is->islp = (dx<0?-DMAXINT:DMAXINT);
     else is->islp = FixedDiv(dx, dy);
-    if (!dx) is->slp = (dy<0?-MAXINT:MAXINT);
+    if (!dx) is->slp = (dy<0?-DMAXINT:DMAXINT);
     else is->slp = FixedDiv(dy, dx);
 
 }
@@ -412,8 +418,8 @@ void AM_findMinMaxBoundaries(void)
     fixed_t a;
     fixed_t b;
 
-    min_x = min_y =  MAXINT;
-    max_x = max_y =  MININT;
+    min_x = min_y =  DMAXINT;
+    max_x = max_y =  DMININT;
   
     for (i=0;i<numvertexes;i++)
     {
@@ -450,7 +456,7 @@ void AM_changeWindowLoc(void)
     if (m_paninc.x || m_paninc.y)
     {
 	followplayer = 0;
-	f_oldloc.x = MAXINT;
+	f_oldloc.x = DMAXINT;
     }
 
     m_x += m_paninc.x;
@@ -482,7 +488,7 @@ void AM_initVariables(void)
     automapactive = true;
     fb = screens[0];
 
-    f_oldloc.x = MAXINT;
+    f_oldloc.x = DMAXINT;
     amclock = 0;
     lightlev = 0;
 
@@ -720,7 +726,7 @@ dboolean AM_Responder( event_t *ev )
         if (ev->data1 == key_map_follow)
            {
             followplayer = !followplayer;
-            f_oldloc.x = MAXINT;
+            f_oldloc.x = DMAXINT;
             plr->message = followplayer ? AMSTR_FOLLOWON : AMSTR_FOLLOWOFF;
            }
         else

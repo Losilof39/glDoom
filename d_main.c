@@ -238,9 +238,9 @@ extern  int             showMessages;
 void R_ExecuteSetViewSize (void);
 extern  int             hudmode;
 
-void I_uSleep(unsigned long usecs)
+void I_uSleep(uintptr_t usecs)
 {
-    SDL_Delay(usecs / 1000);
+    SDL_Delay((unsigned int)usecs / 1000);
 }
 
 //
