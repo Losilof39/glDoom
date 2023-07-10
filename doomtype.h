@@ -98,21 +98,9 @@ typedef struct RECT {
 #ifdef __cplusplus
 typedef bool dboolean;
 #else
-#ifdef DBOOLEAN_C89
-#ifdef _MSC_VER
-#include <windows.h>
-#include <rpc.h>
-typedef boolean dboolean;
-#else
-typedef unsigned char dboolean;
-#endif
-#define false 0
-#define true 1
-#else
 #define false 0
 #define true 1
 typedef int dboolean;
-#endif
 #endif
 
 #if defined(_MSC_VER) && !defined(ANSI_C)

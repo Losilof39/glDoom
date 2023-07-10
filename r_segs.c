@@ -42,10 +42,9 @@ void lfprintf(char *message, ... );
 dboolean		segtextured;	
 
 // False if the back side is the same plane.
-dboolean		markfloor;	
-dboolean		markceiling;
-
-dboolean		maskedtexture;
+int     		markfloor;	
+int     		markceiling;
+int		maskedtexture;
 int		toptexture;
 int		bottomtexture;
 int		midtexture;
@@ -359,8 +358,8 @@ void R_RenderSegLoop (void)
     }
 }
 
-extern dboolean *DrawFlat;
-extern dboolean *DrawSide;
+extern byte *DrawFlat;
+extern drawside_t *DrawSide;
 static char   *MsgText[2048];
 
 //

@@ -729,7 +729,7 @@ RECT              *SectorBBox = 0;
 
 // keeps track which walls (side) or flats are visible
 drawside_t        *DrawSide           = NULL;
-dboolean          *DrawFlat           = NULL;
+byte          *DrawFlat           = NULL;
 sector_plane_t   **sorted_flats       = NULL;
 int                sorted_flats_count = 0;
 
@@ -2650,7 +2650,7 @@ void CreateNewFlats()
 
     ZFREE(DrawFlat);
 
-    DrawFlat = (dboolean *)malloc(sizeof(dboolean) * numsectors);
+    DrawFlat = (byte *)malloc(sizeof(byte *) * numsectors);
     for (sector = 0; sector < numsectors; sector++)
         DrawFlat[sector] = false;
 

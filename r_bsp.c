@@ -235,7 +235,7 @@ void R_ClipPassWallSegment( int first, int last )
     R_StoreWallRange (start->last + 1, last);
 }
 
-extern dboolean *DrawFlat;
+extern byte *DrawFlat;
 
 //
 // R_ClearClipSegs
