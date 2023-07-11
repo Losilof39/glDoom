@@ -156,14 +156,6 @@ typedef struct
     fixed_t slp, islp;
 } islope_t;
 
-
-typedef struct
-{
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-}MY_PAL;
-
 //
 // The vector graphics for the automap.
 //  A line drawing of the player pointing right,
