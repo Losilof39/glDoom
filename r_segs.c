@@ -42,10 +42,9 @@ void lfprintf(char *message, ... );
 dboolean		segtextured;	
 
 // False if the back side is the same plane.
-dboolean		markfloor;	
-dboolean		markceiling;
-
-dboolean		maskedtexture;
+int     		markfloor;	
+int     		markceiling;
+int		maskedtexture;
 int		toptexture;
 int		bottomtexture;
 int		midtexture;
@@ -158,7 +157,7 @@ R_RenderMaskedSegRange
     for (dc_x = x1 ; dc_x <= x2 ; dc_x++)
     {
 	// calculate lighting
-	if (maskedtexturecol[dc_x] != MAXSHORT)
+	if (maskedtexturecol[dc_x] != DMAXSHORT)
 	{
 	    if (!fixedcolormap)
 	    {
@@ -178,7 +177,7 @@ R_RenderMaskedSegRange
 		(byte *)R_GetColumn(texnum,maskedtexturecol[dc_x]) -3);
 			
 	    R_DrawMaskedColumn (col);
-	    maskedtexturecol[dc_x] = MAXSHORT;
+	    maskedtexturecol[dc_x] = DMAXSHORT;
 	}
 	spryscale += rw_scalestep;
     }
@@ -359,8 +358,8 @@ void R_RenderSegLoop (void)
     }
 }
 
-extern dboolean *DrawFlat;
-extern dboolean *DrawSide;
+extern byte *DrawFlat;
+extern drawside_t *DrawSide;
 static char   *MsgText[2048];
 
 //
@@ -484,8 +483,8 @@ void R_StoreWallRange( int	start, int	stop )
         ds_p->silhouette = SIL_BOTH;
         ds_p->sprtopclip = screenheightarray;
         ds_p->sprbottomclip = negonearray;
-        ds_p->bsilheight = MAXINT;
-        ds_p->tsilheight = MININT;
+        ds_p->bsilheight = DMAXINT;
+        ds_p->tsilheight = DMININT;
        }
     else
        {
@@ -502,7 +501,7 @@ void R_StoreWallRange( int	start, int	stop )
         if (backsector->floorheight > viewz)
            {
             ds_p->silhouette = SIL_BOTTOM;
-            ds_p->bsilheight = MAXINT;
+            ds_p->bsilheight = DMAXINT;
             // ds_p->sprbottomclip = negonearray;
            }
 	
@@ -515,21 +514,21 @@ void R_StoreWallRange( int	start, int	stop )
         if (backsector->ceilingheight < viewz)
            {
             ds_p->silhouette |= SIL_TOP;
-            ds_p->tsilheight = MININT;
+            ds_p->tsilheight = DMININT;
             // ds_p->sprtopclip = screenheightarray;
            }
 		
         if (backsector->ceilingheight <= frontsector->floorheight)
            {
             ds_p->sprbottomclip = negonearray;
-            ds_p->bsilheight = MAXINT;
+            ds_p->bsilheight = DMAXINT;
             ds_p->silhouette |= SIL_BOTTOM;
            }
 	
         if (backsector->floorheight >= frontsector->ceilingheight)
            {
             ds_p->sprtopclip = screenheightarray;
-            ds_p->tsilheight = MININT;
+            ds_p->tsilheight = DMININT;
             ds_p->silhouette |= SIL_TOP;
            }
 	
@@ -734,12 +733,12 @@ void R_StoreWallRange( int	start, int	stop )
     if (maskedtexture && !(ds_p->silhouette&SIL_TOP))
        {
         ds_p->silhouette |= SIL_TOP;
-        ds_p->tsilheight = MININT;
+        ds_p->tsilheight = DMININT;
        }
     if (maskedtexture && !(ds_p->silhouette&SIL_BOTTOM))
        {
         ds_p->silhouette |= SIL_BOTTOM;
-        ds_p->bsilheight = MAXINT;
+        ds_p->bsilheight = DMAXINT;
        }
     ds_p++;
    }

@@ -429,7 +429,7 @@ extern char*	sndserver_filename;
 extern int	mb_used;
 #endif
 
-#ifdef LINUX
+#ifdef __linux__
 char*		mousetype;
 char*		mousedev;
 #endif

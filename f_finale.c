@@ -780,7 +780,7 @@ void GL_F_CastDrawer (void)
     spritedef_t*	sprdef;
     spriteframe_t*	sprframe;
     int			lump, ch;
-    dboolean		flip;
+    byte 		flip;
     int       TextWidth;
     char        c;
     float       fTop, fBottom, fOffset, x1, x2;
@@ -810,7 +810,7 @@ void GL_F_CastDrawer (void)
     sprdef = &sprites[caststate->sprite];
     sprframe = &sprdef->spriteframes[ caststate->frame & FF_FRAMEMASK];
     lump = sprframe->lump[0];
-    flip = (dboolean)sprframe->flip[0];
+    flip = sprframe->flip[0];
 
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
@@ -863,7 +863,7 @@ void F_CastDrawer (void)
     spritedef_t*	sprdef;
     spriteframe_t*	sprframe;
     int			lump;
-    dboolean		flip;
+    byte		flip;
     patch_t*		patch;
     
     // erase the entire screen to a background
@@ -875,7 +875,7 @@ void F_CastDrawer (void)
     sprdef = &sprites[caststate->sprite];
     sprframe = &sprdef->spriteframes[ caststate->frame & FF_FRAMEMASK];
     lump = sprframe->lump[0];
-    flip = (dboolean)sprframe->flip[0];
+    flip = sprframe->flip[0];
 			
     patch = W_CacheLumpNum (lump+firstspritelump, PU_CACHE);
     if (flip)

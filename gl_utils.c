@@ -20,7 +20,7 @@ void lfprintf(char *message, ... );
 
 unsigned int MakeRGBTexture(int dw, int dh);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
-int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
 void V_DrawPatchBuff(int, int, unsigned char *, patch_t *);
 
 unsigned char  PointPattern[16*16] = {   0,  0,  0,  0,  0,  0,  0, 31, 31,  0,  0,  0,  0,  0,  0,  0,
@@ -1010,7 +1010,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
     return(TempTexName);
    }
 
-int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
+unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
     int             r, c, d, h, t, m, n;
     unsigned int TempTexName;

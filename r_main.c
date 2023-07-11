@@ -1006,7 +1006,7 @@ extern int             ftranslate[1024];
 extern DW_Polygon     *PolyList;
 extern DW_FloorCeil   *FloorList, *CeilList;
 extern drawside_t     *DrawSide;
-extern dboolean       *DrawFlat;
+extern byte       *DrawFlat;
 
 extern dboolean RedBias, GreenBias, WhiteBias;
 
@@ -2079,7 +2079,7 @@ void R_RenderPlayerView (player_t* player)
     // check for new console commands.
     NetUpdate ();
 
-    memset(DrawFlat, 0, sizeof(dboolean) * numsectors);
+    memset(DrawFlat, 0, sizeof(byte *) * numsectors);
     memset(DrawSide, 0, sizeof(drawside_t) * numsides);
     sorted_flats_count = 0;
     sorted_walls_count = 0;

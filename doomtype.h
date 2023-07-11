@@ -98,23 +98,9 @@ typedef struct RECT {
 #ifdef __cplusplus
 typedef bool dboolean;
 #else
-#ifdef DBOOLEAN_C89
-#ifdef _MSC_VER
-#include <windows.h>
-#include <rpc.h>
-typedef boolean dboolean;
-#else
-typedef unsigned char dboolean;
-#endif
 #define false 0
 #define true 1
-#else
-typedef enum
-{
-    false,
-    true
-} dboolean;
-#endif
+typedef int dboolean;
 #endif
 
 #if defined(_MSC_VER) && !defined(ANSI_C)
@@ -151,39 +137,25 @@ typedef enum
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
 // Predefined with some OS.
-#ifdef LINUX
-#include <values.h>
+#ifdef IMPL
+#define DMINCHAR    128
+#define DMAXCHAR    127
+#define DMINSHORT    (-32768)
+#define DMAXSHORT      32767
+#define DMININT     (-2147483647 - 1)
+#define DMAXINT       2147483647
+#define DMINLONG    (-2147483647L - 1)
+#define DMAXLONG      2147483647L
 #else
-#ifndef MAXCHAR
-#define MAXCHAR		((char)0x7f)
+#define DMAXCHAR CHAR_MAX
+#define DMAXSHORT SHRT_MAX
+#define DMAXINT INT_MAX
+#define DMAXLONG LONG_MAX
+#define DMINCHAR CHAR_MIN
+#define DMINSHORT SHRT_MIN
+#define DMININT INT_MIN
+#define DMINLONG LONG_MIN
 #endif
-#ifndef MAXSHORT
-#define MAXSHORT	((short)0x7fff)
-#endif
-
-// Max pos 32-bit int.
-#ifndef MAXINT
-#define MAXINT		((int)0x7fffffff)	
-#endif
-#ifndef MAXLONG
-#define MAXLONG		((long long)0x7fffffff)
-#endif
-#ifndef MINCHAR
-#define MINCHAR		((char)0x80)
-#endif
-#ifndef MINSHORT
-#define MINSHORT	((short)0x8000)
-#endif
-
-// Max negative 32-bit integer.
-#ifndef MININT
-#define MININT		((int)0x80000000)	
-#endif
-#ifndef MINLONG
-#define MINLONG		((long long)0x80000000)
-#endif
-#endif
-
 
 #endif
 //-----------------------------------------------------------------------------
