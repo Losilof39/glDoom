@@ -2,10 +2,10 @@
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
-#include "thirdparty/glad/include/glad/glad.h"
+#include <inttypes.h>
+#include <glad/glad.h>
 
 #include "doomtype.h"
 #include "r_defs.h"
@@ -53,7 +53,7 @@ void lfprintf(char *message, ... );
 
 void GL_StatArmsOvl(MY_RGBA *RGBData);
 int  GL_MakeSpriteTexture(patch_t *, GLTexData *Tex, dboolean smooth);
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 
 void InsertArmsPlate()
    {

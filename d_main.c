@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -27,7 +27,7 @@
 
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -48,10 +48,10 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #include <io.h>
 #include <direct.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #include <dirent.h>
 #endif
+#include <inttypes.h>
 
 
 #include "doomdef.h"
@@ -238,9 +238,9 @@ extern  int             showMessages;
 void R_ExecuteSetViewSize (void);
 extern  int             hudmode;
 
-void I_uSleep(unsigned long usecs)
+void I_uSleep(uintptr_t usecs)
 {
-    SDL_Delay(usecs / 1000);
+    SDL_Delay((unsigned int)usecs / 1000);
 }
 
 //
@@ -791,8 +791,7 @@ char *dirname(char *pathname)
         c++;
         *c = '\0';
        }
-    else
-    if ((c = strrchr(tpath, '/')) != NULL)
+    else if ((c = strrchr(tpath, '/')) != NULL)
        {
         c++;
         *c = '\0';
@@ -826,8 +825,8 @@ char *noext(char *pathname)
     static char tstr[_MAX_PATH];
     int   i;
     char *c;
-
-    if ((c = strrchr(pathname, '.')) != NULL)
+    c = strrchr(pathname, '.');
+    if (c != NULL)
        {
         i = (c - pathname);
         strncpy(tstr, pathname, i);
@@ -1000,6 +999,7 @@ char *D_FindFirst( char *filespec )
        {
         return NULL;
        }*/
+    return NULL;
    }
 
 char *D_FindNext()
@@ -1012,6 +1012,7 @@ char *D_FindNext()
        {
         return NULL;
        }*/
+    return NULL;
    }
 
 //
@@ -1838,11 +1839,9 @@ void D_DoomMain (void)
     printf("WS_Init: Init sprites - ");
     LoadAllSprites();
 
-    //printf ("I_Init: Setting up machine state.\n");
     printf("I_Init: Setting up machine state.\n");
     I_Init();
 
-    //printf ("D_CheckNetGame: Checking network game status.\n");
     printf("D_CheckNetGame: Checking network game status.\n");
     D_CheckNetGame();
     if (gamemode == netabort)
@@ -1850,9 +1849,8 @@ void D_DoomMain (void)
         return;
        }
 
-    //printf ("S_Init: Setting up sound.\n");
+
     printf("S_Init: Setting up sound.\n");
-    //S_Init (snd_SfxVolume*8, snd_MusicVolume*8 );
     S_Init(snd_SfxVolume, snd_MusicVolume);
 
     printf("HU_Init: Setting up heads up display.\n");
@@ -1874,11 +1872,7 @@ void D_DoomMain (void)
     p = M_CheckParm ("-statcopy");
     if (p && p<myargc-1)
        {
-       // for statistics driver
-       extern  void*	statcopy;                            
-       
        statcopy = (void*)atoi(myargv[p+1]);
-       //printf ("External statistics registered.\n");
        printf("External statistics registered.\n");
        }
     

@@ -9,7 +9,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 
 ### Fixes from Gibbon
 * 64bit cleanups to allow it to build and run on 64bit systems
-* Cleanups for modern types (uintptr_t, intptr_t and MSVC specific functions like (underscore)access etc..)
+* Cleanups for modern types (``` uintptr_t ```, ``` intptr_t ``` and MSVC specific functions like ``` _access ``` etc..)
 
 ### Fixes from Losilof39
 * Cleaned up all Win32 code and added a SDL2 backend
@@ -23,7 +23,10 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 * Removal of unused declarations
 * Code cleanup
 * Remove type defintions 
-* Add ANSI C Implementation in some parts.
+* Add ANSI C Implementation in some parts
+* Fixed win32 build
+* Add GetTicks macro
+* Cleanup msvc level 3 and a little of level 4 warnings
 
 ### Current Problems
 * No vertical mouse movement
@@ -44,16 +47,15 @@ Plus more!
 ## Compiling
 
 ### Windows
-Use the Visual Studio project and build for your architecture.
-Now it compiles on x64.
+Use the Visual Studio project and build for your desired architecture.
 
 ### Linux
 Run ``` sh build.sh ``` in the commandline to build.
 
 ### Game data
-Before playing DOOM, you will need to also create the gldoom.wad file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
-Be sure that gldoom.wad and your IWAD of choice (DOOM, DOOM 2, Ultimate Doom, ...) are in the same folder as the executable!
-In order to hear the music in-game you should download [this](https://archive.org/download/free-soundfonts-sf2-2019-04/SC-55.sf2) soundfont, rename it to "soundfont.sf2" and place it in the game directory. You could use other sf2 files but I would recommend to use the SC-55, which is the soundcard originally used to create the DOOM music.
+Before playing DOOM, you will need to also create the ```gldoom.wad ``` file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
+Be sure that ```gldoom.wad ``` and your IWAD of choice (DOOM, DOOM 2, Ultimate Doom, ...) are in the same folder as the executable!
+In order to hear the music in-game you should download [this](https://archive.org/download/free-soundfonts-sf2-2019-04/SC-55.sf2) soundfont, rename it to ``` soundfont.sf2``` and place it in the game directory. You could use other `.sf2` files but I would recommend to use the SC-55, which is the soundcard originally used to create the DOOM music.
 
 ### Why maintain glDoom?
-The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom or PRBoom, it's history and legacy is an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39) is a great way to learn how a large project like Doom is organized, coded and I'm honored to maintain this great work of art alive and bring new features to it!
+The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom, PRBoom, PRBoom+ and dsda-doom. His history and legacy it's an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39) and other contribuitors is a great way to learn how a large project like Doom is organized, coded and I'm honored to maintain this great work of art alive and bring new features to it!

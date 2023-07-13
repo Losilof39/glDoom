@@ -3,11 +3,11 @@
 //
 #include <math.h>
 #include "mathlib.h"
+#include <string.h>
 
 ml_vec3_t identity[3] = { 1.0, 0.0, 0.0,
                           0.0, 1.0, 0.0,
                           0.0, 0.0, 1.0 };
-
 
 void ml_VectorCopy( ml_vec3_t v1, ml_vec3_t v2)
    {
@@ -38,10 +38,10 @@ void ml_MakeIdentity( ml_vec3_t *mat )
 // apply rotations contained in angles to vector and put into newvec
 void ml_VectorRotate(ml_vec3_t vector, ml_vec3_t angles, ml_vec3_t newvec)
    {
-    float      angle;
-    float      sp, cp, sy, cy;
+    double      angle;
+    double      sp, cp, sy, cy;
 #ifdef VIEWROLL
-    float cr, sr;
+    double cr, sr;
 #endif
 
     ml_vec3_t xresult;
@@ -126,10 +126,10 @@ void ml_VectorRotate(ml_vec3_t vector, ml_vec3_t angles, ml_vec3_t newvec)
 // "de-scale" vector into a unit vector
 void ml_VectorNormalise(ml_vec3_t v)
    {
-    float length;
+    double length;
 
     length = sqrt((v[0]*v[0]) + (v[1]*v[1]) + (v[2]*v[2]));
-    if (length != 0.0f)
+    if (length != 0.0)
        {
         v[0] /= length;
         v[1] /= length;

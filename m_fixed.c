@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -57,7 +57,7 @@ FixedDiv
   fixed_t	b )
 {
     if ( (abs(a)>>14) >= abs(b))
-	return (a^b)<0 ? MININT : MAXINT;
+	return (a^b)<0 ? DMININT : DMAXINT;
     return FixedDiv2 (a,b);
 }
 

@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -38,10 +38,8 @@
 
 
 
-#ifdef LINUX
+#ifdef __linux__
 #include <math.h>
-#else
-#define PI				3.141592657
 #endif
 
 

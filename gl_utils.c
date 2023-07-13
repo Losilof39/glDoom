@@ -1,12 +1,11 @@
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
-//#endif
+#include <inttypes.h>
 #include <fcntl.h>
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include "doomdata.h"
 #include "r_defs.h"
 #include "gldefs.h"
@@ -19,9 +18,9 @@
 
 void lfprintf(char *message, ... );
 
-int MakeRGBTexture(int dw, int dh);
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
-int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int MakeRGBTexture(int dw, int dh);
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
+unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
 void V_DrawPatchBuff(int, int, unsigned char *, patch_t *);
 
 unsigned char  PointPattern[16*16] = {   0,  0,  0,  0,  0,  0,  0, 31, 31,  0,  0,  0,  0,  0,  0,  0,
@@ -230,7 +229,8 @@ extern texture_t**	textures;
 
 int GL_LoadSkyTop( char *filename )
    {
-    int TempTexName, fn, s, d;
+    unsigned int TempTexName;
+    int fn, s, d;
     unsigned char   *texels;
     BITMAPFILEHEADER bmfh;
     BITMAPINFOHEADER bmi;
@@ -367,7 +367,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
     short          sx, sy, fields;
     int            px, py, part, parts;
 
-    if ((TexList[TexNumb].DWide > 1024) || (TexList[TexNumb].DWide > 1024))
+    if ((TexList[TexNumb].DWide > 1024) || (TexList[TexNumb].DHigh > 1024))
        {
         SkyTex[0] = 0;
         SkyTex[1] = 0;
@@ -433,7 +433,8 @@ extern int firstflat;
 
 int GL_LoadFlatTexture(int TexNumb)
    {
-    int            TempTexNumb, n;
+    unsigned int            TempTexNumb;
+    int n;
     unsigned char *lump, *pixels;
 
     lump = W_CacheLumpNum(firstflat+TexList[TexNumb].Number, PU_CACHE);
@@ -557,7 +558,7 @@ int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     int            iGLWide, iGLHigh;
 
     if (Sprite == NULL)
-        return;
+        return 0;
 
     //ixsize = Sprite->width-Sprite->leftoffset;
     //iysize = Sprite->height-Sprite->topoffset;
@@ -710,7 +711,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     Tex[0].LeftOff = 0.0f;
     Tex[0].TopOff = 0.0f;
     Tex[0].glWidth = 256.0f;
-    Tex[0].glHeight = TexHigh;
+    Tex[0].glHeight = (float)TexHigh;
 
     TexWide = ixsize - 256;
 
@@ -738,14 +739,14 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
         TempTexNumb = MakeRGBATexture(true, false, TexWide, TexHigh);
        }
     Tex[1].TexName = TempTexNumb;
-    Tex[1].Width = ixsize-256;
+    Tex[1].Width = (float)ixsize-256;
     Tex[1].Height = (float)iysize;
     Tex[1].XDisp = (float)(ixsize-256)/(float)TexWide;
     Tex[1].YDisp = 1.0f - ((float)iysize/(float)TexHigh);
     Tex[1].LeftOff = 0.0f;
     Tex[1].TopOff = 0.0f;
-    Tex[1].glWidth = TexWide;
-    Tex[1].glHeight = TexHigh;
+    Tex[1].glWidth = (float)TexWide;
+    Tex[1].glHeight = (float)TexHigh;
 
     return TempTexNumb;
    }
@@ -950,9 +951,10 @@ int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     return TempTexNumb;
    }
 
-int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
+unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, c, d, h, t, m, n;
+    unsigned int TempTexName;
     unsigned char  *TexAa;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*4));
 
@@ -1023,9 +1025,10 @@ int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
     return(TempTexName);
    }
 
-int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
+unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, c, d, h, t, m, n;
+    unsigned int TempTexName;
     unsigned char  *TexAa, tcolor;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*4));
 
@@ -1105,9 +1108,10 @@ int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
     return(TempTexName);
    }
 
-int MakeRGBTexture(int dw, int dh)
+unsigned int MakeRGBTexture(int dw, int dh)
    {
-    int             r, c, d, h, t, m, n, TempTexName;
+    int             r, c, d, h, t, m, n;
+    unsigned int TempTexName;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
 
     TexTransparent = false;

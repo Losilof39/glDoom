@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -29,7 +29,6 @@ rcsid[] = "$Id: r_things.c,v 1.5 1997/02/03 16:47:56 b1 Exp $";
 #include <stdio.h>
 #include <stdlib.h>
 
-
 #include "doomdef.h"
 #include "m_swap.h"
 
@@ -40,7 +39,7 @@ rcsid[] = "$Id: r_things.c,v 1.5 1997/02/03 16:47:56 b1 Exp $";
 #include "r_local.h"
 
 #include "doomstat.h"
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include "gldefs.h"
 
 #define MINZ				(FRACUNIT*4)
@@ -1132,7 +1131,6 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
 void R_DrawPlayerSprites (void)
    {
     int		i;
-    int		lightnum;
     pspdef_t*	psp;
     
     // get light level
@@ -1166,7 +1164,6 @@ void R_DrawPlayerSprites (void)
 void GL_DrawPlayerSprites (void)
    {
     int		i;
-    int		lightnum;
     pspdef_t*	psp;
     
     // get light level
@@ -1236,7 +1233,7 @@ void R_SortVisSprites (void)
     vsprsortedhead.next = vsprsortedhead.prev = &vsprsortedhead;
     for (i=0 ; i<count ; i++)
     {
-	bestscale = MAXINT;
+	bestscale = DMAXINT;
 	for (ds=unsorted.next ; ds!= &unsorted ; ds=ds->next)
 	{
 	    if (ds->scale < bestscale)
@@ -1427,7 +1424,7 @@ void GL_DrawThings(void)
     float           sx, sy, sz, Orient, x1, x2, tLight;
     float           fLight, fTop, fBottom, fOffset;
 	
-    Orient =  360.0f+(camera.oy*-1.0);
+    Orient =  360.0f+(camera.oy*-1.0f);
     Orient +=  180.0f;
     if (Orient > 360.0f)
        Orient -= 360.0f;
@@ -1447,10 +1444,10 @@ void GL_DrawThings(void)
             lump = spr->patch;
             if (SprData[lump].TexName != 0)
                {
-                sx = (double)spr->gx * pfactor;
-                sy = (double)spr->gz * pfactor;
+                sx = (float)spr->gx * (float)pfactor;
+                sy = (float)spr->gz * (float)pfactor;
 //    vis->gzt = thing->z + spritetopoffset[lump];
-                sz = 0.0 - ((double)spr->gy * pfactor);
+                sz = 0.0f - ((float)spr->gy * (float)pfactor);
 
                 glPushMatrix();
                 //glLoadIdentity();
@@ -1518,7 +1515,7 @@ void GL_DrawThings(void)
                                }
                             else
                                {
-                                tLight = SprData[lump].Intensity / 255.0;
+                                tLight = SprData[lump].Intensity / 255.0f;
                                 if (tLight > fLight)
                                    {
                                     fLight = tLight;

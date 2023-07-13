@@ -1,7 +1,6 @@
 // mathlib.h
 
 #ifndef MATHLIB
-
 #define MATHLIB
 
 #include "tables.h"

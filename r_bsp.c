@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -24,7 +24,6 @@
 
 static const char
 rcsid[] = "$Id: r_bsp.c,v 1.4 1997/02/03 22:45:12 b1 Exp $";
-
 
 #include "doomdef.h"
 
@@ -236,7 +235,7 @@ void R_ClipPassWallSegment( int first, int last )
     R_StoreWallRange (start->last + 1, last);
 }
 
-extern dboolean *DrawFlat;
+extern byte *DrawFlat;
 
 //
 // R_ClearClipSegs
@@ -250,7 +249,7 @@ void R_ClearClipSegs (void)
     newend = solidsegs + 2;
 }
 
-float AngleTo( float x1, float z1, float x2, float z2 );
+//float AngleTo( float x1, float z1, float x2, float z2 );
 extern camera_t camera;
 extern float    langle, rangle;
 extern drawside_t *DrawSide;
@@ -268,7 +267,7 @@ void R_AddLine (seg_t*	line)
     angle_t		angle2;
     angle_t		span;
     angle_t		tspan;
-    int         subsector;
+    //int         subsector;
     int         side;
     //float       fangle1, fangle2, vangle;
 

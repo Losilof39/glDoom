@@ -1,4 +1,4 @@
-//// Emacs style mode select   -*- C++ -*- 
+//// Emacs style mode select   -*- C -*- 
 ////-----------------------------------------------------------------------------
 ////
 //// $Id:$
@@ -31,9 +31,9 @@ rcsid[] = "$Id: m_bbox.c,v 1.1 1997/02/03 22:45:10 b1 Exp $";
 #ifdef _WIN32
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
+#include <inttypes.h>
 #include <fcntl.h>
 
 //#include <sys/socket.h>

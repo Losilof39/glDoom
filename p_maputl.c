@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -27,9 +27,7 @@
 static const char
 rcsid[] = "$Id: p_maputl.c,v 1.5 1997/02/03 22:45:11 b1 Exp $";
 
-
 #include <stdlib.h>
-
 
 #include "m_bbox.h"
 
@@ -232,7 +230,7 @@ P_InterceptVector
 ( divline_t*	v2,
   divline_t*	v1 )
 {
-#if 1
+#ifndef FLOAT_DEBUG
     fixed_t	frac;
     fixed_t	num;
     fixed_t	den;
@@ -691,11 +689,11 @@ P_TraverseIntercepts
 	
     count = intercept_p - intercepts;
     
-    in = 0;			// shut up compiler warning
+    in = NULL;			// shut up compiler warning
 	
     while (count--)
     {
-	dist = MAXINT;
+	dist = DMAXINT;
 	for (scan = intercepts ; scan<intercept_p ; scan++)
 	{
 	    if (scan->frac < dist)
@@ -723,7 +721,7 @@ P_TraverseIntercepts
         if ( !func (in) )
 	    return false;	// don't bother going farther
 
-	in->frac = MAXINT;
+	in->frac = DMAXINT;
     }
 	
     return true;		// everything was traversed

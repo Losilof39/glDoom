@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -108,7 +108,7 @@ void GL_HUlib_drawTextLine( hu_textline_t *l, dboolean drawcursor )
     HudText[l->len] = '\0';
 
     // draw the cursor if requested
-    if (drawcursor && x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
+    if (drawcursor && x + DSHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
        {
         HudText[l->len] = '_';
         HudText[l->len+1] = '\0';
@@ -137,7 +137,7 @@ HUlib_drawTextLine
 	    && c >= l->sc
 	    && c <= '_')
 	{
-	    w = SHORT(l->f[c - l->sc]->width);
+	    w = DSHORT(l->f[c - l->sc]->width);
 	    if (x+w > SCREENWIDTH)
 		break;
 	    V_DrawPatchDirect(x, l->y, FG, l->f[c - l->sc]);
@@ -153,7 +153,7 @@ HUlib_drawTextLine
 
     // draw the cursor if requested
     if (drawcursor
-	&& x + SHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
+	&& x + DSHORT(l->f['_' - l->sc]->width) <= SCREENWIDTH)
     {
 	V_DrawPatchDirect(x, l->y, FG, l->f['_' - l->sc]);
     }
@@ -175,7 +175,7 @@ void HUlib_eraseTextLine(hu_textline_t* l)
     if (!automapactive &&
 	viewwindowx && l->needsupdate)
     {
-	lh = SHORT(l->f[0]->height) + 1;
+	lh = DSHORT(l->f[0]->height) + 1;
 	for (y=l->y,yoffset=y*SCREENWIDTH ; y<l->y+lh ; y++,yoffset+=SCREENWIDTH)
 	{
 	    if (y < viewwindowy || y >= viewwindowy + viewheight)
@@ -213,7 +213,7 @@ HUlib_initSText
     s->cl = 0;
     for (i=0;i<h;i++)
 	HUlib_initTextLine(&s->l[i],
-			   x, y - i*(SHORT(font[0]->height)+1),
+			   x, y - i*(DSHORT(font[0]->height)+1),
 			   font, startchar);
 
 }

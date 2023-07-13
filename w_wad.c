@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -25,7 +25,6 @@
 static const char
 rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
-
 #ifdef NORMALUNIX
 #include <ctype.h>
 #include <sys/types.h>
@@ -35,16 +34,15 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <alloca.h>
-#define O_BINARY		0
 #else
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
+#include <inttypes.h>
 #include <malloc.h>
 #include <string.h>
 #include <sys/types.h>
@@ -57,12 +55,28 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include "i_system.h"
 #include "z_zone.h"
 
+#ifndef O_BINARY
+#define O_BINARY		0
+#endif
+
 #ifdef __GNUG__
 #pragma implementation "w_wad.h"
 #endif
 #include "w_wad.h"
 
 #include "doomlib.h"
+#ifdef IMPL
+static long filelength_(int handle)
+{
+    long sz;
+    LSeek(handle, 0L, SEEK_END);
+    sz = Tell(handle);
+    LSeek(handle, 0L, SEEK_SET);
+    return sz;
+}
+#else
+#define filelength_ _filelength 
+#endif
 
 //
 // GLOBALS
@@ -168,7 +182,7 @@ void W_AddFile (char *filename)
 	    // single lump file
 	    fileinfo = &singleinfo;
 	    singleinfo.filepos = 0;
-	    singleinfo.size = LONG(filelength_(handle));
+	    singleinfo.size = DLONG(filelength_(handle));
 	    ExtractFileBase (filename, singleinfo.name);
 	    numlumps++;
     }
@@ -176,19 +190,19 @@ void W_AddFile (char *filename)
     {
 	    // WAD file
 	    Read (handle, &header, sizeof(header));
-	if (strncmp(header.identification,"IWAD",4))
-	{
-	    // Homebrew levels?
-	    if (strncmp(header.identification,"PWAD",4))
+	    if (strncmp(header.identification,"IWAD",4))
 	    {
-		    I_Error ("Wad file %s doesn't have IWAD "
+	        // Homebrew levels?
+	        if (strncmp(header.identification,"PWAD",4))
+	        {
+		        I_Error ("Wad file %s doesn't have IWAD "
 			         "or PWAD id\n", filename);
-	    }
+	        }
 	    
 	    // ???modifiedgame = true;		
-	}
-	    header.numlumps = LONG(header.numlumps);
-	    header.infotableofs = LONG(header.infotableofs);
+	    }
+	    header.numlumps = DLONG(header.numlumps);
+	    header.infotableofs = DLONG(header.infotableofs);
 	    length = header.numlumps*sizeof(filelump_t);
 	    fileinfo = alloca (length);
 	    LSeek (handle, header.infotableofs, SEEK_SET);
@@ -206,11 +220,11 @@ void W_AddFile (char *filename)
 	
     storehandle = reloadname ? -1 : handle;
 	
-    for (i = startlump ; i < numlumps ; i++, lump_p++, fileinfo++)
+    for (i = (unsigned int)startlump ; i < (unsigned int)numlumps ; i++, lump_p++, fileinfo++)
     {
 	    lump_p->handle = storehandle;
-	    lump_p->position = LONG(fileinfo->filepos);
-	    lump_p->size = LONG(fileinfo->size);
+	    lump_p->position = DLONG(fileinfo->filepos);
+	    lump_p->size = DLONG(fileinfo->size);
 	    strncpy(lump_p->name, fileinfo->name, 8);
     }
     if (reloadname)
@@ -239,8 +253,8 @@ void W_Reload(void)
 	    I_Error ("W_Reload: couldn't open %s",reloadname);
 
     Read(handle, &header, sizeof(header));
-    lumpcount = LONG(header.numlumps);
-    header.infotableofs = LONG(header.infotableofs);
+    lumpcount = DLONG(header.numlumps);
+    header.infotableofs = DLONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
     fileinfo = alloca(length);
     LSeek(handle, header.infotableofs, SEEK_SET);
@@ -249,15 +263,15 @@ void W_Reload(void)
     // Fill in lumpinfo
     lump_p = &lumpinfo[reloadlump];
 	
-    for (i=reloadlump ;
-	    i<reloadlump+lumpcount ;
+    for (i=(unsigned int)reloadlump ;
+	    i<(unsigned int)reloadlump+lumpcount ;
 	    i++,lump_p++, fileinfo++)
     {
 	if (lumpcache[i])
 	    Z_Free (lumpcache[i]);
 
-	    lump_p->position = LONG(fileinfo->filepos);
-	    lump_p->size = LONG(fileinfo->size);
+	    lump_p->position = DLONG(fileinfo->filepos);
+	    lump_p->size = DLONG(fileinfo->size);
     }
     Close (handle);
 }
@@ -447,7 +461,7 @@ W_CacheLumpNum
 {
     byte* ptr;
 
-    if ((unsigned)lump >= numlumps)
+    if ((unsigned)lump >= (unsigned)numlumps)
         I_Error("W_CacheLumpNum: %i >= numlumps", lump);
 
     if (!lumpcache[lump])

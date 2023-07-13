@@ -5,6 +5,7 @@
 // This module is for Win32
 
 #include "thirdparty/SDL2/include/SDL.h"
+
 #include "d_main.h"
 #include "sys_sdl.h"
 #include "sdl_kbrd.h"
@@ -19,7 +20,7 @@ extern int       usemouse;
 extern SDL_Window* pWindow;
 extern video_t   video;
 
-Uint8* keystates[256] = { false };
+dboolean keystates[256] = { false };
 
 extern dboolean      bQuit;
 extern int keylink;
@@ -61,7 +62,7 @@ void I_CheckInputs(void)
     static int mwheeluptic = 0, mwheeldowntic = 0;
 
     SDL_MouseMotionEvent mouse_motion = { 0 };
-    SDL_MouseButtonEvent mouse_button = { 0 };
+    //SDL_MouseButtonEvent mouse_button = { 0 };
 
     while (SDL_PollEvent(&ev))
     {
@@ -113,7 +114,7 @@ void I_CheckInputs(void)
             }
 
             // catch the other keys
-            keystates[ev.key.keysym.scancode] = 1;
+            keystates[ev.key.keysym.scancode] = true;
         }break;
 
         case SDL_KEYUP:
@@ -153,7 +154,7 @@ void I_CheckInputs(void)
             }
 
             // catch the other keys
-            keystates[ev.key.keysym.scancode] = 0;
+            keystates[ev.key.keysym.scancode] = false;
         }break;
 
         if ((usemouse) && (mouseavail)) {

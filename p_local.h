@@ -1,5 +1,4 @@
 // Emacs style mode select   -*- C++ -*- 
-//-----------------------------------------------------------------------------
 //
 // $Id:$
 //
@@ -92,8 +91,8 @@ void	P_PlayerThink (player_t* player);
 //
 // P_MOBJ
 //
-#define ONFLOORZ		MININT
-#define ONCEILINGZ		MAXINT
+#define ONFLOORZ		DMININT
+#define ONCEILINGZ		DMAXINT
 
 // Time interval for item respawning.
 #define ITEMQUESIZE		128

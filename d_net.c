@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -686,7 +686,7 @@ void TryRunTics (void)
     // get available tics
     NetUpdate ();
 	
-    lowtic = MAXINT;
+    lowtic = DMAXINT;
     numplaying = 0;
     for (i = 0; i < doomcom->numnodes; i++)
        {
@@ -748,7 +748,7 @@ void TryRunTics (void)
     while (lowtic < gametic/ticdup + counts)	
        {
         NetUpdate();   
-        lowtic = MAXINT;
+        lowtic = DMAXINT;
 
         for (i = 0; i < doomcom->numnodes; i++)
         if (nodeingame[i] && nettics[i] < lowtic)
