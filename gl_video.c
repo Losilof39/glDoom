@@ -327,50 +327,50 @@ void I_InitGraphics(void)
 
 void GetGLInfo()
    {
-    //char *szu, *tempstr;
-    //const GLubyte *szt;
+    char *szu, *tempstr;
+    const GLubyte *szt;
 
-    //szt = glGetString(GL_VENDOR);
-    //GL_Vendor = (char *)malloc(strlen(szt)+1);
-    //strcpy(GL_Vendor, szt);
-    //printf("OpenGL Vendor   : %s\n", GL_Vendor);
-    //if (strcasecmp(GL_Vendor, "3DLABS") == 0)
-    //   GL_3Dlabs = true;
+    szt = glGetString(GL_VENDOR);
+    GL_Vendor = (char *)malloc(strlen(szt)+1);
+    strcpy(GL_Vendor, szt);
+    printf("OpenGL Vendor   : %s\n", GL_Vendor);
+    if (strcasecmp(GL_Vendor, "3DLABS") == 0)
+       GL_3Dlabs = true;
 
-    //szt = glGetString(GL_RENDERER);
-    //GL_Renderer = (char *)malloc(strlen(szt)+1);
-    //strcpy(GL_Renderer, szt);
-    //printf("OpenGL Renderer : %s\n", GL_Renderer);
+    szt = glGetString(GL_RENDERER);
+    GL_Renderer = (char *)malloc(strlen(szt)+1);
+    strcpy(GL_Renderer, szt);
+    printf("OpenGL Renderer : %s\n", GL_Renderer);
 
-    ////if ((D_strcasecmp(GL_Vendor, "Microsoft Corporation") == 0) &&
-    ////    (D_strcasecmp(GL_Renderer, "GDI Generic") == 0))
-    ////   {
-    ////    // oh CRAP, it's the dreaded Microsoft Software OpenGL Renderer...
-    ////    con_printf("SOFTWARE OpenGL Renderer!!!\n");
-    ////    software = true;
-    ////   }
-
-    //szt = glGetString(GL_VERSION);
-    //GL_Version = (char *)malloc(strlen(szt)+1);
-    //strcpy(GL_Version, szt);
-    //printf("OpenGL Version  : %s\n", GL_Version);
-
-    //szt = glGetString(GL_EXTENSIONS);
-    //tempstr = (char *)malloc(strlen(szt)+2);
-    //strcpy(tempstr, szt);
-    //if (tempstr != NULL)
+    //if ((D_strcasecmp(GL_Vendor, "Microsoft Corporation") == 0) &&
+    //    (D_strcasecmp(GL_Renderer, "GDI Generic") == 0))
     //   {
-    //    szu = strtok( (char *)tempstr, " " );
-    //    GL_EXT_Count = 0;
-    //    while (( szu != NULL ) && (GL_EXT_Count < GL_MAX_EXT))
-    //       {
-    //        GL_EXT_List[GL_EXT_Count] = (char *)malloc(strlen(szu)+1);
-    //        strcpy(GL_EXT_List[GL_EXT_Count], szu);
-    //        printf("OpenGL Extension : %s\n", GL_EXT_List[GL_EXT_Count]);
-    //        szu = strtok( NULL, " " );
-    //        GL_EXT_Count++;
-    //       }
+    //    // oh CRAP, it's the dreaded Microsoft Software OpenGL Renderer...
+    //    con_printf("SOFTWARE OpenGL Renderer!!!\n");
+    //    software = true;
     //   }
-    //free(tempstr);
-    //printf("End of OpenGL extensions...\n");
+
+    szt = glGetString(GL_VERSION);
+    GL_Version = (char *)malloc(strlen(szt)+1);
+    strcpy(GL_Version, szt);
+    printf("OpenGL Version  : %s\n", GL_Version);
+
+    szt = glGetString(GL_EXTENSIONS);
+    tempstr = (char *)malloc(strlen(szt)+2);
+    strcpy(tempstr, szt);
+    if (tempstr != NULL)
+       {
+        szu = strtok( (char *)tempstr, " " );
+        GL_EXT_Count = 0;
+        while (( szu != NULL ) && (GL_EXT_Count < GL_MAX_EXT))
+           {
+            GL_EXT_List[GL_EXT_Count] = (char *)malloc(strlen(szu)+1);
+            strcpy(GL_EXT_List[GL_EXT_Count], szu);
+            printf("OpenGL Extension : %s\n", GL_EXT_List[GL_EXT_Count]);
+            szu = strtok( NULL, " " );
+            GL_EXT_Count++;
+           }
+       }
+    free(tempstr);
+    printf("End of OpenGL extensions...\n");
    }
