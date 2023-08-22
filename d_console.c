@@ -1,12 +1,12 @@
 // d_console.c
 // This is the console control program it is NOT covered
 // by the Doom license agreement.
-// Copyright © 1998, Bruce A. Lewis
+// Copyright ï¿½ 1998, Bruce A. Lewis
 // This code may not be re-used in a commercial product
 // of any kind without express written consent from
 // the author, Bruce A. Lewis.
 //
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 #include <ctype.h>
 ////////////////////////////////////////////////////////////////////////
 // Doom defines and external data
@@ -67,8 +67,8 @@ extern int TexWide, TexHigh;
 #define CONSOLE_FLAT "CEIL5_1"
 #define CONSOLE_BORD "FLAT18"
 #define CONSBORD     2
-#define CONSVERS     96
-#define CONSREV      'C'
+#define CONSVERS     97
+#define CONSREV      "Alpha"
 #define CONSMSGS     64
 
 char szProgName[] = "GLDOOM-RE";
@@ -76,7 +76,7 @@ char szVersion[8];
 
 typedef enum { asleep, sleepy, waking, awake } consolemode;
 
-char revision = CONSREV;
+const char *revision = CONSREV;
 int version = CONSVERS;
 
 int iConsoleSpeed = 10;
@@ -213,8 +213,8 @@ typedef struct
    {
     int  *var;
     char *name;
-    int  cv_type;
-    int  maxval;
+    cv_types  cv_type;
+    size_t  maxval;
    }KeyDef_t;
 
 KeyDef_t cvars[] = { &key_right, "KEY_RIGHT", cv_scan, 0,
@@ -251,7 +251,7 @@ KeyDef_t cvars[] = { &key_right, "KEY_RIGHT", cv_scan, 0,
                      &gl_widetex, "GL_WIDETEX", cv_value, 1,    // true/false
                      &nosound, "NOSOUND", cv_value, 1,          // true/false
                      &hudmode, "HUDMODE", cv_value, 3,
-                     &gamename, "GAME", cv_string, 128,// true/false
+                     (int*)&gamename, "GAME", cv_string, 128,// true/false
                      NULL,       "", cv_value, 0 };
 
 typedef struct
@@ -937,18 +937,6 @@ con_command_t give_commands[] = { "all",       0, GiveAll,          "gives (ammo
                                   "health",    0, GiveHealth,       "gives 100% health (or 200% health)",
                                   "keys",      0, GiveKeys,         "gives all six keys (key cards and skull keys)",
                                   "weapons",   0, GiveWeapons,      "gives all weapons",
-                                  //"shells",    0, GiveShells,       "gives shotgun shells",
-                                  //"bullets",   0, GiveBullets,      "gives bullets",
-                                  //"rockets",   0, GiveRockets,      "gives rockets",
-                                  //"cells",     0, GiveCells,        "gives cells",
-                                  //"suit",      0, GiveSuit,         "gives radiation suit",
-                                  //"berserk",   0, GiveBerserk,      "gives berserk pack",
-                                  //"inviso",    0, GiveInviso,       "gives invisibility",
-                                  //"invul",     0, GiveInvul,        "gives invulnerability",
-                                  //"shotgun",   0, GiveShotgun,      "gives the pump shotgun",
-                                  //"launcher",  0, GiveLauncher,     "gives the rocket launcher",
-                                  //"plasma",    0, GivePlasma,       "gives the plasma rifle",
-                                  //"bfg",       0, GiveBFG,          "gives the bfg 9000",
                                   0, 0, 0, 0 };
 
 dboolean GiveItems(char *cmd)
@@ -992,8 +980,10 @@ dboolean GiveItems(char *cmd)
 
 dboolean MidiCommand(char *cmd)
    {
+#if 0
     if ((strcasecmp(cmd, "pause") == 0) || (strcasecmp(cmd, "resume") == 0))
         //PauseResumeMusic();
+#endif    
     return false;
    }
 
@@ -1068,6 +1058,7 @@ dboolean CDCommand(char *cmd)
     if (isdigits(cmd) && (strlen(cmd) < 3))
         PlayCDTrack(atoi(cmd));
     return false;*/
+    return false;
    }
 
 char *NewMapSyntax[] = { "Syntax: MAP EXMY (X = episode & Y = mission)",
@@ -1377,9 +1368,13 @@ con_command_t con_commands[] = { "iddqd",      0, GodMode,      "god mode",
                                  "help",       4, ConHelp,      "console command help",
                                  "quit",       0, ConQuit,      "quit the game",
                                  "give",       4, GiveItems,    "give the requested item",
+#if 0
                                  "midi",       4, MidiCommand,  "control midi playback",
+#endif
                                  "mypos",      0, ShowPosition, "show current player position",
+#if 0
                                  "cd",         2, CDCommand,    "control CD music",
+#endif
                                  "map ",       4, LoadNewMap,   "change to new level",
                                  "idclev",     0, ChangeLevel,  "change to new level",
                                  "idclev",     6, ChangeLevel,  "change to new level",
@@ -1605,7 +1600,7 @@ void CO_Init()
     iConsLogo = GL_MakeSpriteTexture(consname, &ConsLogo, false);
 
     iFontHigh = hu_font[0]->height;
-    sprintf(szVersion, "V%d.%02d%c", version/100,version%100,revision);
+    sprintf(szVersion, "V%d.%02d%s", version/100,version%100,revision);
     iNamePosX = SCREENWIDTH-(CO_StringWidth(szProgName)+1);
     iVerPosX = SCREENWIDTH-(CO_StringWidth(szVersion)+1);
     for (i = 0; i < CONSMSGS; i++)
@@ -1761,11 +1756,11 @@ void GL_DrawConsole()
     if (iConsoleHeight > 10)
        {
         M_GLDrawText(iNamePosX,1,szProgName);
-        M_GLDrawText(iVerPosX,(iConsoleHeight-(CONSBORD+iFontHigh+1))/.825f,szVersion);
+        M_GLDrawText(iVerPosX,(iConsoleHeight-(CONSBORD+iFontHigh+1))/825,szVersion);
         clines = ((iConsoleHeight-(CONSBORD+iFontHigh+3))/(iFontHigh+1));
         curpos = CO_GLWriteConsoleLine(clines, szCommand, true);
         if (cursor/9)
-            M_GLDrawText(curpos,(clines*(iFontHigh+1))/.825f,"_");
+            M_GLDrawText(curpos,(clines*(iFontHigh+1))/825,"_");
         mline = iConsHead - clines;
         if (mline < 0)
            mline += CONSMSGS;
@@ -1863,12 +1858,12 @@ int CO_GLWriteConsoleLine(int l, char *s, dboolean wrap)
 
     if (lwrap == false)
        {
-        M_GLDrawText(1,((iFontHigh+1)*l)/.825f,s);
+        M_GLDrawText(1,((iFontHigh+1)*l)/825,s);
         return CO_StringWidth(s);
        }
     else
        {
-        M_GLDrawText(SCREENWIDTH-(CO_StringWidth(&s[b])+5),((iFontHigh+1)*l)/.825f,&s[b]);
+        M_GLDrawText(SCREENWIDTH-(CO_StringWidth(&s[b])+5),((iFontHigh+1)*l)/825,&s[b]);
         return CO_StringWidth(&s[b]);
        }
    }
@@ -1988,7 +1983,7 @@ int CO_HandleCommand(char *cmd)
                {
                 if (cvars[i].cv_type == cv_value)
                    {
-                    if (ts[0] >= '0' && ts[0] <= ('0'+cvars[i].maxval))
+                    if (ts[0] >= '0' && (size_t)ts[0] <= ('0'+cvars[i].maxval))
                        {
                         *cvars[i].var = ts[0] - '0';
                         sprintf(buf, "%s SET TO %d\n", cvars[i].name, *cvars[i].var);
@@ -1999,9 +1994,9 @@ int CO_HandleCommand(char *cmd)
                    }
                 else
                    {
-                    strncpy(cvars[i].var, ts, cvars[i].maxval);
+                    strncpy((char*)cvars[i].var, ts, cvars[i].maxval);
                     cvars[i].var[cvars[i].maxval] = '\0';
-                    sprintf(buf, "%s SET TO '%s'\n", cvars[i].name, cvars[i].var);
+                    sprintf(buf, "%s SET TO '%d'\n", cvars[i].name, *cvars[i].var);
                     CO_AddConsoleMessage(buf);
                    }
                }

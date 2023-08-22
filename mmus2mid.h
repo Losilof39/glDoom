@@ -1,4 +1,4 @@
-/* Emacs style mode select   -*- C++ -*-
+/* Emacs style mode select   -*- C -*-
  *-----------------------------------------------------------------------------
  *
  *
@@ -65,7 +65,7 @@ typedef struct MIDI                    /* a midi file */
    int divisions;                      /* number of ticks per quarter note */
    struct {
       unsigned char *data;             /* MIDI message stream */
-      int len;                         /* length of the track data */
+      size_t len;                         /* length of the track data */
    } track[MIDI_TRACKS];
 } MIDI;
 #endif /* !MSDOS */

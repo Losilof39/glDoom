@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -129,8 +129,8 @@ void R_InitPlanes (void)
     floorclip = (short *)calloc(SCREENWIDTH,sizeof(short));
     ceilingclip = (short *)calloc(SCREENWIDTH,sizeof(short));
 
-    spanstart = (intptr_t *)calloc(SCREENHEIGHT,sizeof(intptr_t));
-    spanstop = (intptr_t*)calloc(SCREENHEIGHT,sizeof(intptr_t));
+    spanstart = (int *)calloc(SCREENHEIGHT,sizeof(int));
+    spanstop = (int*)calloc(SCREENHEIGHT,sizeof(int));
     yslope = (fixed_t *)calloc(SCREENHEIGHT,sizeof(fixed_t));
     distscale = (fixed_t *)calloc(SCREENWIDTH,sizeof(fixed_t));
 

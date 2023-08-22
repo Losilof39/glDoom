@@ -1,5 +1,5 @@
 # this is a test wad list
- m_mplayr.lmp # this is a test comment...
+m_mplayr.lmp # this is a test comment...
 m_splayr.lmp
 m_setup.lmp
 m_auto.lmp

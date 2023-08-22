@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -23,7 +23,6 @@
 
 static const char
 rcsid[] = "$Id: p_floor.c,v 1.4 1997/02/03 16:47:54 b1 Exp $";
-
 
 #include "z_zone.h"
 #include "doomdef.h"
@@ -371,7 +370,7 @@ EV_DoFloor
 
 	  case raiseToTexture:
 	  {
-	      int	minsize = MAXINT;
+	      int	minsize = DMAXINT;
 	      side_t*	side;
 				
 	      floor->direction = 1;
@@ -467,8 +466,8 @@ EV_BuildStairs
 
     floormove_t*	floor;
     
-    fixed_t		stairsize;
-    fixed_t		speed;
+    fixed_t		stairsize = FRACUNIT;
+    fixed_t		speed = FLOORSPEED;
 
     secnum = -1;
     rtn = 0;

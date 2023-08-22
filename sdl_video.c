@@ -1,10 +1,11 @@
-//sdl_video.c
+// sdl_video.c
 // This module handles the video interface to Windows
 
 #include <stdio.h>
 #include "v_video.h"
 #include "sdl_video.h"
 #include "gl_video.h"
+#include "i_system.h"
 
 void lfprintf(char *message, ... );
 
@@ -25,9 +26,10 @@ void GetVideoInfo()
     SDL_GetCurrentDisplayMode(display_in_use, &mode);
     f = mode.format;
 
-    DevInfo.bpp    = SDL_BITSPERPIXEL(f);
-    DevInfo.width  = mode.w;
+    DevInfo.width = mode.w;
     DevInfo.height = mode.h;
+    DevInfo.bpp    = SDL_BITSPERPIXEL(f);
+
    }
 
 void GetModeList(char *dbgname)

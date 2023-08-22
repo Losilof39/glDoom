@@ -20,5 +20,5 @@ typedef struct
 void GetVideoInfo(void);
 void GetModeList(char *dbgname);
 dboolean SetVideoMode();
-void ResetVideoMode(void);
+//void ResetVideoMode(void);
 

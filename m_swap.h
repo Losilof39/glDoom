@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -34,11 +34,11 @@
 #ifdef __BIG_ENDIAN__
 short	SwapSHORT(short);
 long long	SwapLONG(long long);
-#define SHORT(x)	((short)SwapSHORT((unsigned short) (x)))
-#define LONG(x)         ((long long)SwapLONG((unsigned long long) (x)))
+#define DSHORT(x)	((short)SwapSHORT((unsigned short) (x)))
+#define DLONG(x)         ((long long)SwapLONG((unsigned long long) (x)))
 #else
-#define SHORT(x)	(x)
-#define LONG(x)         (x)
+#define DSHORT(x)	(x)
+#define DLONG(x)         (x)
 #endif
 
 

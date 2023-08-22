@@ -34,8 +34,7 @@
 
 #include "doomtype.h"
 
-
-int use_libsamplerate = 0;
+dboolean use_libsamplerate = false;
 
 // Scale factor used when converting libsamplerate floating point numbers
 // to integers. Too high means the sounds can clip; too low means they
@@ -83,7 +82,7 @@ static dboolean(*ExpandSoundData)(sfxinfo_t* sfxinfo,
 
 static allocated_sound_t* allocated_sounds_head = NULL;
 static allocated_sound_t* allocated_sounds_tail = NULL;
-static int allocated_sounds_size = 0;
+static size_t allocated_sounds_size = 0;
 
 
 // Hook a sound into the linked list at the head.
@@ -222,7 +221,7 @@ static allocated_sound_t* AllocateSound(sfxinfo_t* sfxinfo, size_t len)
     // Skip past the chunk structure for the audio buffer
 
     snd->chunk.abuf = (byte*)(snd + 1);
-    snd->chunk.alen = len;
+    snd->chunk.alen = (Uint32)len;
     snd->chunk.allocated = 1;
     snd->chunk.volume = MIX_MAX_VOLUME;
     snd->pitch = NORM_PITCH;
@@ -429,7 +428,7 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
             mixer_format, mixer_channels, mixer_freq))
     {
         convertor.len = length;
-        convertor.buf = malloc(convertor.len * convertor.len_mult);
+        convertor.buf = (unsigned char*)malloc(convertor.len * (size_t)convertor.len_mult);
         assert(convertor.buf != NULL);
         memcpy(convertor.buf, data, length);
 

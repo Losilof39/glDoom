@@ -3,7 +3,7 @@
 /////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <direct.h>
 #endif
 
@@ -15,7 +15,6 @@
 /////////////////////////////////////////////////////////////////////////////////////
 // Application Includes...
 /////////////////////////////////////////////////////////////////////////////////////
-#include "resource.h"  // Required for Win32 Resources
 #include "sys_sdl.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -36,7 +35,7 @@
 
 #include "gl_video.h"
 #include "mathlib.h"
-#include "sdl_inpt.h"
+#include "sdl_input.h"
 #include "sdl_video.h"
 
 /////////////////////////////////////////////////////////////////////////////////////
@@ -93,13 +92,13 @@ extern byte *screens[5];
 extern GameMode_t gamemode;
 
 char         szMsgText[2048];
-char         window_title[50];
+char         *window_title[50];
 
 extern devinfo_t DevInfo;
 
 extern       video_t     video;
 
-char        szMidiFile[] = "doomsong.mid";
+char        szMidiFile[] = "DOOMSONG.MID";
 
 int         MusicType = MUSIC_MIDI;
 int         RenderType = RENDER_GL;
@@ -108,7 +107,7 @@ dboolean        bQuit = false;
 void  Cleanup(void);
 void  InitData();
 void  ParseCommand(int,char**);
-void  EvaluateParameters(char*);
+void  EvaluateParameters(char**);
 dboolean  CreateMainWindow( int, int, int, dboolean);
 
 void ClearLog(char *szFileName);
@@ -143,7 +142,7 @@ extern int    keylink;
 char      szDbgName[] = "glDoom.dbg";
 
 
-int main(int argc, char* szCmdLine)
+int main(int argc, char** szCmdLine)
    {
     ClearLog(szDbgName);
 
@@ -157,7 +156,6 @@ int main(int argc, char* szCmdLine)
     // look at the command line parameters
     EvaluateParameters(szCmdLine);
   
-
     // Create the main program window, start up OpenGL and create our viewport
     if (!CreateMainWindow(video.width, video.height, video.bpp, video.fullscreen))
         I_Error("int main(): Unable to create main SDL2 window!");
@@ -293,6 +291,8 @@ dboolean ResizeMainWindow(char *mode)
            }
        }
     return false;
+#else
+    return false;
 #endif
    }
 
@@ -302,8 +302,8 @@ dboolean ResizeMainWindow(char *mode)
 void Cleanup()
    {
     int  i;
-    char DoomDir[_MAX_PATH];
-    char tstr[16];
+//    char DoomDir[_MAX_PATH];
+//    char tstr[16];
 
     SDL_ShowCursor(SDL_ENABLE);
 
@@ -312,26 +312,22 @@ void Cleanup()
     M_FreeParms();
    }
 
-
 dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 {
     if (SDL_Init(SDL_INIT_VIDEO) < 0)
         I_Error("Failed to init SDL");
  
-#if _DEBUG
-    sprintf(&window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
+#ifdef _DEBUG
+    sprintf(window_title, "GLDOOM-RE %d.%d%c - Compiled on %s at %s", version/100, version%100, revision, __DATE__, __TIME__);
 #else
-    sprintf(&window_title, "GLDOOM-RE");
+    sprintf((char* const)window_title, "GLDOOM-RE");
 #endif
 
-    pWindow = SDL_CreateWindow(window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-        video.width, video.height, SDL_WINDOW_OPENGL | (video.fullscreen ? SDL_WINDOW_FULLSCREEN : 0) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
+    pWindow = SDL_CreateWindow((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
+        width, height, SDL_WINDOW_OPENGL | (fullscreen ? true : false) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
   
-
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-
-    SDL_SetWindowFullscreen(pWindow, fullscreen);
 
     if (!pWindow)
     {
@@ -369,7 +365,7 @@ void InitData()
     video.width         = DEF_WIDTH;
     video.height        = DEF_HEIGHT;
     video.bpp           = DEF_COLORB;
-    video.fullscreen    = false;
+    video.fullscreen = false;
 	video.wide = true;
     video.bpp  = DEF_COLORB;
     video.fov  = 90;
@@ -383,16 +379,12 @@ void ParseCommand(int argc, char** szCmdLine)
     int i = 1;
     char cwd[_MAX_PATH];
 
-#ifdef _WIN32
-    _getcwd(cwd, _MAX_PATH);
-#else
-    getcwd(cwd, _MAX_PATH);
-#endif
+    if (Getcwd(cwd, _MAX_PATH))
+    {
+        M_InitParms();
 
-    M_InitParms();
-    
-    M_AddParm(cwd);
-
+        M_AddParm(cwd);
+    }
     while (i <= argc)
        {
         M_AddParm(*szCmdLine++);
@@ -400,7 +392,7 @@ void ParseCommand(int argc, char** szCmdLine)
        }
    }
 
-void EvaluateParameters(char* szCmdLine)
+void EvaluateParameters(char** szCmdLine)
    {
     int  p;
 

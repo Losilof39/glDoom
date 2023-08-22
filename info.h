@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -1149,7 +1149,6 @@ typedef struct
   spritenum_t	sprite;
   int			frame;
   int			tics;
-  // void		(*action) ();
   actionf_t			action;
   statenum_t			nextstate;
   int			misc1, misc2;

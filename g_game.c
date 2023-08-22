@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -77,8 +77,6 @@ rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #define SAVESTRINGSIZE	24
 
 void lfprintf(char *message, ... );
-
-int access( const char *path, int mode );
 
 dboolean	G_CheckDemoStatus (void); 
 void	G_ReadDemoTiccmd (ticcmd_t* cmd); 
@@ -2033,7 +2031,6 @@ void G_DoPlayDemo_II(void)
     int		i; 
     int		a,b,c; 
     char	vcheck[VERSIONSIZE]; 
-    skill_t skill; 
 
     demotype = DEMO_II;
 

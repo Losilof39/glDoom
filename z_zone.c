@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -24,17 +24,16 @@
 static const char
 rcsid[] = "$Id: z_zone.c,v 1.4 1997/02/03 16:47:58 b1 Exp $";
 
-#ifdef MACOS
-#include <stdlib.h>
-#endif
 
 #include "z_zone.h"
 #include "i_system.h"
 #include "doomdef.h"
-#ifndef MACOS
+
+#ifdef MACOS
+#include <stdlib.h>
+#else
 #include <malloc.h>
 #endif
-
 
 //
 // ZONE MEMORY ALLOCATION
@@ -423,7 +422,7 @@ void Z_CheckHeap(void)
 
 		if (block->next->prev != block)
 		{
-			int f = 0;
+			//int f = 0;
 		}
 			//I_Error("Z_CheckHeap: next block doesn't have proper back link\n");
 

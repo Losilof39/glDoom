@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -25,21 +25,19 @@
 static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <fcntl.h>
 #include <stdlib.h>
 #include <ctype.h>
-
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
-
+#include <inttypes.h>
 
 #include "doomdef.h"
 #include "dstrings.h"
@@ -137,7 +135,7 @@ char gammamsg[5][26] =
 // we are going to be entering a savegame string
 int			saveStringEnter;              
 int             	saveSlot;	// which slot to save in
-int			saveCharIndex;	// which char we're editing
+size_t			saveCharIndex;	// which char we're editing
 // old save description before edit
 char			saveOldString[SAVESTRINGSIZE];  
 
@@ -1389,7 +1387,7 @@ void GL_DrawSaveLoadBorder(int x,int y)
         glEnd();
 
         x += 8;
-        xo += LSCenter.Width;
+        xo += (int)LSCenter.Width;
        }
 
     glBindTexture(GL_TEXTURE_2D, LSRight.TexName);
@@ -1692,8 +1690,6 @@ void GL_DrawFullScreen(GLTexData *Image)
 
 void GL_DrawReadThis1(void)
    {
-    GLTexData *Image = 0;
-
     inhelpscreens = true;
     switch ( gamemode )
        {
@@ -1739,8 +1735,6 @@ void M_DrawReadThis2(void)
 
 void GL_DrawReadThis2(void)
    {
-    GLTexData *Image = 0;
-
     inhelpscreens = true;
     switch ( gamemode )
        {
@@ -2930,7 +2924,7 @@ int M_StringWidth(char* string)
 	if (c < 0 || c >= HU_FONTSIZE)
 	    w += 4;
 	else
-	    w += SHORT (hu_font[c]->width);
+	    w += DSHORT (hu_font[c]->width);
     }
 		
     return w;
@@ -2945,7 +2939,7 @@ int M_StringHeight(char* string)
 {
     int             i;
     int             h;
-    int             height = SHORT(hu_font[0]->height);
+    int             height = DSHORT(hu_font[0]->height);
 	
     h = height;
     for (i = 0;(unsigned)i < strlen(string);i++)
@@ -2991,7 +2985,7 @@ void M_WriteText( int x, int y, char *string)
             continue;
            }
 		
-        w = SHORT (hu_font[c]->width);
+        w = DSHORT (hu_font[c]->width);
         if (cx+w > SCREENWIDTH)
             break;
         V_DrawPatchDirect(cx, cy, 0, hu_font[c]);
@@ -3039,7 +3033,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (c == '\n')
            {
             cx = x;
-            cy += (GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight*1.2f);
             continue;
            }
 		
@@ -3054,7 +3048,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
             break;
 
         Top = (120.0f-(((cy-GLGreyFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLGreyFont[c].Height*1.2);
+        Bottom = Top-(GLGreyFont[c].Height*1.2f);
 
         Left = (-160.0f+cx);
         Right = Left + GLGreyFont[c].Width;
@@ -3071,7 +3065,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
           glVertex3f( Right, Top, SetBack);
         glEnd();
 
-        cx += (GLGreyFont[c].Width-1);
+        cx += (int)(GLGreyFont[c].Width-1);
        }
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_ALPHA_TEST);
@@ -3117,7 +3111,7 @@ void GL_WriteText( int x, int y, char *string)
         if (c == '\n')
            {
             cx = x;
-            cy += (GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight*1.2f);
             continue;
            }
 		
@@ -3132,7 +3126,7 @@ void GL_WriteText( int x, int y, char *string)
             break;
 
         Top = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLHudFont[c].Height*1.2);
+        Bottom = Top-(GLHudFont[c].Height*1.2f);
 
         Left = (-160.0f+cx);
         Right = Left + GLHudFont[c].Width;
@@ -3149,7 +3143,7 @@ void GL_WriteText( int x, int y, char *string)
           glVertex3f( Right, Top, SetBack);
         glEnd();
 
-        cx += GLHudFont[c].Width;
+        cx += (int)GLHudFont[c].Width;
        }
     glDisable(GL_TEXTURE_2D);
     glDisable(GL_ALPHA_TEST);
@@ -3508,9 +3502,9 @@ char *sckeyname[]={ "NULL", // no key
 // M_GetKeyString finds the correct string to represent the key binding
 // for the current item being drawn.
 
-int M_GetKeyString(int c,int offset)
+int M_GetKeyString(int c,size_t offset)
   {
-  char* s;
+  const char* s;
   SDL_Keycode keycode;
 
   if (c == SDL_SCANCODE_PAUSE)
@@ -3530,7 +3524,7 @@ int M_GetKeyString(int c,int offset)
     strcpy(&menu_buffer[offset],s); // string to display
     offset += strlen(s);
     }
-  return offset;
+  return (int)offset;
   }
 
 /////////////////////////////
@@ -3571,7 +3565,7 @@ void M_DrawMenuString(int cx, int cy, int color)
       cx += SPACEWIDTH;    // space
       continue;
       }
-    w = SHORT (hu_font[c]->width);
+    w = DSHORT (hu_font[c]->width);
     if (cx + w > SCREENWIDTH)
       break;
     
@@ -3602,7 +3596,7 @@ int M_GetPixelWidth(char* ch)
       len += SPACEWIDTH;   // space
       continue;
       }
-    len += SHORT (hu_font[c]->width);
+    len += DSHORT (hu_font[c]->width);
     len--; // adjust so everything fits
     }
   len++; // replace what you took away on the last char only
@@ -3699,7 +3693,7 @@ void GL_DrawInstructions()
           strcpy(menu_buffer,"");
           x = 43;
          }
-       x = 160-((strlen(menu_buffer)*gl_fwidth)/2);
+       x = 160-(int)((strlen(menu_buffer)*gl_fwidth)/2);
        GL_WriteTextN(x, 20, menu_buffer, tc_grey);
       }
    else // when you're changing something
@@ -4257,7 +4251,7 @@ void GL_DrawSetting(setup_menu_t* s)
    {
     int*  key;
     int   flags,x,y,color;
-    dboolean  bright = false;
+    //dboolean  bright = false;
    
     x = s->m_x;
     y = s->m_y;
@@ -4357,7 +4351,8 @@ void GL_DrawSetting(setup_menu_t* s)
 void M_DrawSetting(setup_menu_t* s)
    {
    int*  key;
-   int   weapon,flags,i,cursor_start,char_width,len,x,y,color;
+   int   weapon,flags,i,cursor_start,char_width,x,y,color;
+   size_t len;
    byte  ch,*ptr;
    char* text;
    char  c[2];
@@ -4504,7 +4499,7 @@ void M_DrawSetting(setup_menu_t* s)
             len = strlen(text); 
             *(text+len-1) = 0;
             len--;
-            if (chat_index > len)
+            if (chat_index > (int)len)
                chat_index--;
             }
          
@@ -5250,7 +5245,7 @@ dboolean M_Responder (event_t* ev)
         {
         if (ev->type == ev_joystick)
           {
-          int i,oldbutton,group;
+          int oldbutton,group;
           dboolean search = true;
       
           if (ptr1->m_joy == NULL)
@@ -5303,7 +5298,7 @@ dboolean M_Responder (event_t* ev)
           }
         else if (ev->type == ev_mouse)
           {
-          int i,oldbutton,group;
+          int oldbutton,group;
           dboolean search = true;
 
           if (ptr1->m_mouse == NULL)
@@ -5341,7 +5336,7 @@ dboolean M_Responder (event_t* ev)
           }
         else  // keyboard key
           {
-          int i,oldkey,group;
+          int oldkey,group;
           dboolean search = true;
         
           // see if 'ch' is already bound elsewhere. if so, you have
@@ -6112,7 +6107,7 @@ void GL_DrawMenu()
                }
             x = 160 - M_StringWidth(string)/2;
             GL_WriteText(x,y,string);
-            y += GLFontHeight;
+            y += (int)GLFontHeight;
            }
         return;
        }
@@ -6246,7 +6241,7 @@ void GL_DrawMenu()
 
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
-        Left = -160 + (currentMenu->x+SKULLXOFF);
+        Left = -160.0f + (currentMenu->x+SKULLXOFF);
         Right = Left + (MenuSkull[whichSkull].Width);
         Top = (120.0f - (float)(((currentMenu->y-5) + (itemOn*LINEHEIGHT)) * 1.2f));
         Bottom = Top - (MenuSkull[whichSkull].Height * 1.2f);

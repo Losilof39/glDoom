@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -28,22 +28,21 @@ static const char
 rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
 #include "thirdparty/SDL2/include/SDL.h"
-#include "thirdparty/glad/include/glad/glad.h"
+#include <glad/glad.h>
 
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <fcntl.h>
 #include <stdlib.h>
 
-#ifdef _WIN32
+#ifdef _MSC_VER
     #include <io.h>
 #else
-    #include <inttypes.h>
     #include <unistd.h>
 #endif
 
 #include <ctype.h>
-
+#include <inttypes.h>
 
 #include "doomdef.h"
 
@@ -109,7 +108,7 @@ M_DrawText
 	    continue;
 	}
 		
-	w = SHORT (hu_font[c]->width);
+	w = DSHORT (hu_font[c]->width);
 	if (x+w > SCREENWIDTH)
 	    break;
 	if (direct)
@@ -430,7 +429,7 @@ extern char*	sndserver_filename;
 extern int	mb_used;
 #endif
 
-#ifdef LINUX
+#ifdef __linux__
 char*		mousetype;
 char*		mousedev;
 #endif
@@ -689,7 +688,7 @@ void GetCfgName()
 void M_LoadDefaults (void)
 {
     int		i = 0;
-    int		len = 0;
+    //int		len = 0;
     FILE* f;
     char	def[80];
     char	strparm[100];
@@ -836,14 +835,14 @@ WritePCXfile
     pcx->bits_per_pixel = 8;		// 256 color
     pcx->xmin = 0;
     pcx->ymin = 0;
-    pcx->xmax = SHORT(width-1);
-    pcx->ymax = SHORT(height-1);
-    pcx->hres = SHORT(width);
-    pcx->vres = SHORT(height);
+    pcx->xmax = DSHORT(width-1);
+    pcx->ymax = DSHORT(height-1);
+    pcx->hres = DSHORT(width);
+    pcx->vres = DSHORT(height);
     memset (pcx->palette,0,sizeof(pcx->palette));
     pcx->color_planes = 1;		// chunky image
-    pcx->bytes_per_line = SHORT(width);
-    pcx->palette_type = SHORT(2);	// not a grey scale
+    pcx->bytes_per_line = DSHORT(width);
+    pcx->palette_type = DSHORT(2);	// not a grey scale
     memset (pcx->filler,0,sizeof(pcx->filler));
 
 
@@ -924,7 +923,7 @@ void WriteTGAFile(char *filename, int width, int height, char *buffer)
 void M_ScreenShot(void)
    {
     int    i;
-    char  *buffer, *c;
+    char  *buffer;
     char   lbmname[14];
     
     // find a file name to save it to

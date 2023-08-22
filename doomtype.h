@@ -1,4 +1,4 @@
-// Emacs style mode select   -*- C++ -*- 
+// Emacs style mode select   -*- C -*- 
 //-----------------------------------------------------------------------------
 //
 // $Id:$
@@ -27,13 +27,15 @@
 #ifdef ANSI_C
 #include "doomlib.h"
 #endif
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
+#include <direct.h>
 #else
 #include <unistd.h>
+#include <dirent.h>
 #endif
+#include <inttypes.h>
 #include <fcntl.h>
-
 
 #ifndef MAX
 #define max(a,b) ((a)>(b)?(a):(b))
@@ -61,14 +63,14 @@ typedef struct BITMAPFILEHEADER {
 
 typedef struct BITMAPINFOHEADER {
     uint32_t biSize;
-    LONG  biWidth;
-    LONG  biHeight;
+    long  biWidth;
+    long  biHeight;
     uint16_t  biPlanes;
     uint16_t  biBitCount;
     uint32_t biCompression;
     uint32_t biSizeImage;
-    LONG  biXPelsPerMeter;
-    LONG  biYPelsPerMeter;
+    long  biXPelsPerMeter;
+    long  biYPelsPerMeter;
     uint32_t biClrUsed;
     uint32_t biClrImportant;
 } BITMAPINFOHEADER;
@@ -81,12 +83,14 @@ typedef struct tagRGBQUAD {
 } RGBQUAD;
 
 typedef struct RECT {
-    LONG left;
-    LONG top;
-    LONG right;
-    LONG bottom;
+    long left;
+    long top;
+    long right;
+    long bottom;
 } RECT;
+#endif
 
+#ifndef O_BINARY 
 #define O_BINARY 0
 #endif
 
@@ -94,30 +98,25 @@ typedef struct RECT {
 #ifdef __cplusplus
 typedef bool dboolean;
 #else
-typedef enum
-{
-    false,
-    true
-} dboolean;
+#define false 0
+#define true 1
+typedef int dboolean;
 #endif
 
-
-static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(handle); fseek(handle, 0L, SEEK_SET); return sz; }
-
-#ifndef ANSI_C
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && !defined(ANSI_C)
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
 #endif
-#endif
 
 #if defined(_MSC_VER)
-#define Open(filename, openflag, ...) _open(filename, openflag, __VA_ARGS__)
+#define Open(filename, openflag, ...) _open(filename, openflag)
 #define Close(filehandle) _close(filehandle)
 #define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
 #define LSeek(filehandle, offset, origin) _lseek(filehandle, offset, origin)
 #define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
 #define Access(filename, accessmode) _access(filename, accessmode)
+#define Getcwd(dstbuf, size_in_bytes) _getcwd(dstbuf, size_in_bytes)
+#define Tell(FileHandle) _tell(FileHandle)
 #else
 #define Open(filename, openflag, ...) open(filename, openflag)
 #define Close(filehandle) close(filehandle)
@@ -125,44 +124,38 @@ static long filelength_(handle) { fseek(handle, 0L, SEEK_END); long sz = ftell(h
 #define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
 #define Write(filehandle, buf, maxcharcount) write(filehandle, buf, maxcharcount)
 #define Access(filename, accessmode) access(filename, accessmode)
+#define Getcwd(dstbuf, size_in_bytes) getcwd(dstbuf, size_in_bytes)
+#define Tell(FileHandle) tell(FileHandle)
+#endif
+
+#ifdef _WIN64
+#define GetTicks SDL_GetTicks64
+#else
+#define GetTicks SDL_GetTicks
 #endif
 
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
 // Predefined with some OS.
-#ifdef LINUX
-#include <values.h>
+#ifdef IMPL
+#define DMINCHAR    128
+#define DMAXCHAR    127
+#define DMINSHORT    (-32768)
+#define DMAXSHORT      32767
+#define DMININT     (-2147483647 - 1)
+#define DMAXINT       2147483647
+#define DMINLONG    (-2147483647L - 1)
+#define DMAXLONG      2147483647L
 #else
-#ifndef MAXCHAR
-#define MAXCHAR		((char)0x7f)
+#define DMAXCHAR CHAR_MAX
+#define DMAXSHORT SHRT_MAX
+#define DMAXINT INT_MAX
+#define DMAXLONG LONG_MAX
+#define DMINCHAR CHAR_MIN
+#define DMINSHORT SHRT_MIN
+#define DMININT INT_MIN
+#define DMINLONG LONG_MIN
 #endif
-#ifndef MAXSHORT
-#define MAXSHORT	((short)0x7fff)
-#endif
-
-// Max pos 32-bit int.
-#ifndef MAXINT
-#define MAXINT		((int)0x7fffffff)	
-#endif
-#ifndef MAXLONG
-#define MAXLONG		((long long)0x7fffffff)
-#endif
-#ifndef MINCHAR
-#define MINCHAR		((char)0x80)
-#endif
-#ifndef MINSHORT
-#define MINSHORT	((short)0x8000)
-#endif
-
-// Max negative 32-bit integer.
-#ifndef MININT
-#define MININT		((int)0x80000000)	
-#endif
-#ifndef MINLONG
-#define MINLONG		((long long)0x80000000)
-#endif
-#endif
-
 
 #endif
 //-----------------------------------------------------------------------------

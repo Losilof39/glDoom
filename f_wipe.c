@@ -1,4 +1,4 @@
-/* Emacs style mode select   -*- C++ -*-
+/* Emacs style mode select   -*- C -*-
  *-----------------------------------------------------------------------------
  *
  *
@@ -83,7 +83,6 @@ static int wipe_doMelt(int ticks)
 {
     dboolean done = true;
     int i;
-    const int depth = 0;
 
     while (ticks--) {
         for (i = 0; i <= (video.width); i++) {

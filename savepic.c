@@ -1,27 +1,29 @@
 // save pic
 //
+#ifdef _MSC_VER
+#pragma warning(disable:4267)
+#endif
 #include <stdlib.h>
 #include <string.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
-#include <inttypes.h>
 #include <unistd.h>
 #endif
+#include <inttypes.h>
 #include <fcntl.h>
 #include <malloc.h>
 
 #include "doomtype.h"
 
-int           columns;
+int           *columns;
 unsigned char *image;
 
 void SavePic(int x, int y, unsigned char *texels, char *filename)
 {
     unsigned short w, h, vo, ho, run;
     int            wide, high, fn, col = 0, row = 0, start = 0;
-    int          *columns, isize = 0;
-    unsigned char *image, *p;
+    unsigned char *p;
     unsigned char  colbuff[128];
 
     wide = x;
@@ -90,10 +92,10 @@ void SavePic(int x, int y, unsigned char *texels, char *filename)
 
     // open the file to save the "lump" in
     fn = Open(filename, O_RDWR | O_CREAT | O_TRUNC, 0666);
-    Write(fn, &w, sizeof(short));
-    Write(fn, &h, sizeof(short));
-    Write(fn, &vo, sizeof(short));
-    Write(fn, &ho, sizeof(short));
+    Write(fn, &w, sizeof(unsigned short));
+    Write(fn, &h, sizeof(unsigned short));
+    Write(fn, &vo, sizeof(unsigned short));
+    Write(fn, &ho, sizeof(unsigned short));
     Write(fn, columns, sizeof(int)*x);
     Write(fn, image, ((p-image)+1));
     // close the output file
