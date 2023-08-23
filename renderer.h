@@ -15,6 +15,7 @@ typedef struct sRenderer
 
 	void (*Setup)(void);
 	void (*Set3D)(void);
+	void (*SetColor)(float r,float g,float b);
 	void (*StartRendition)(void);
 	void (*StopRendition)(void);
 	void (*SetTexture)(unsigned int);
@@ -23,7 +24,7 @@ typedef struct sRenderer
 	void (*Set2D)(void);
 	void (*RenderString)(vec3* vertices, GLuint* indices, GLuint numIndices);
 	void (*GetColorBuffer)(GLubyte* data);
-	void (*RenderSprite)(GLuint textureId, vec3* vertices, vec2* texCoords, GLuint* indices, GLuint numIndices);
+	void (*RenderSprite)(float* v, float* uv, GLuint* indices, GLuint numIndices);
 }sRenderer;
 
 #endif

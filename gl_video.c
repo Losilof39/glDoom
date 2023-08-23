@@ -32,6 +32,8 @@
 #include "sdl_input.h"
 #include "sdl_video.h"
 #include "renderer.h"
+#include "rendererFixed.h"
+#include "rendererCore.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -209,7 +211,7 @@ dboolean StartUpOpenGL()
 
     if (M_CheckParm("-core"))
     {
-        // here goes init for modern opengl..
+        InitRendererCore(&renderer);
     }
     else
         InitRendererFixed(&renderer);
@@ -222,10 +224,6 @@ dboolean StartUpOpenGL()
     GetGLInfo();
 
     return true;
-}
-
-void I_InitGraphics(void)
-{
 }
 
 void GetGLInfo()

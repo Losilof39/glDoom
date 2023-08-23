@@ -1265,40 +1265,13 @@ void GL_DrawTitle(int y, GLTexData *tex)
     Top = 120.0f - (y * 1.2f);
     Bottom = Top - (tex->Height * 1.2f);
 
-    vec3 vertices[] = { Left, Right, Top, Bottom };
-    vec2 texCoords[] = { tex->XDisp, tex->YDisp };
+    float vertices[] = { Left, Right, Top, Bottom };
+    float texCoords[] = { tex->XDisp, tex->YDisp };
 
-    renderer.RenderSprite(tex->TexName, vertices, texCoords, NULL, 0);
+    renderer.SetTexture(tex->TexName);
+    renderer.RenderSprite(vertices, texCoords, NULL, 0);
+    renderer.SetTexture(0);
 
-    //glEnable(GL_ALPHA_TEST);
-    //glAlphaFunc(GL_GREATER, 0.0f);
-
-    //glEnable(GL_BLEND);
-    ///*if (gl_premalpha)
-    //   {
-    //    glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-    //   }
-    //else
-    //   {*/
-    //    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //   //}
-
-    //glEnable(GL_TEXTURE_2D);
-
-    //glBindTexture(GL_TEXTURE_2D, tex->TexName);
-    //glBegin(GL_QUADS);
-    //   glTexCoord2f(0.0f, 1.0f);
-    //   glVertex3f(Left, Top, SetBack);
-
-    //   glTexCoord2f(0.0f, tex->YDisp);
-    //   glVertex3f(Left, Bottom, SetBack);
-
-    //   glTexCoord2f(tex->XDisp, tex->YDisp);
-    //   glVertex3f(Right, Bottom, SetBack);
-
-    //   glTexCoord2f(tex->XDisp, 1.0f);
-    //   glVertex3f(Right, Top, SetBack);
-    //glEnd();
    }
 
 //

@@ -328,6 +328,7 @@
     <ClCompile Include="p_tick.c" />
     <ClCompile Include="p_user.c" />
     <ClCompile Include="renderer.c" />
+    <ClCompile Include="rendererCore.c" />
     <ClCompile Include="rendererFixed.c" />
     <ClCompile Include="r_bsp.c" />
     <ClCompile Include="r_data.c" />
@@ -408,6 +409,7 @@
     <ClInclude Include="p_spec.h" />
     <ClInclude Include="p_tick.h" />
     <ClInclude Include="renderer.h" />
+    <ClInclude Include="rendererCore.h" />
     <ClInclude Include="rendererFixed.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="r_bsp.h" />

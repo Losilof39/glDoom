@@ -6,12 +6,14 @@
 
 extern video_t video;
 extern glmode_t glmode;
+extern int gl_premalpha;
 extern float glTop, glBottom, glRight, glLeft, SetBack;
 
 void InitRendererFixed(sRenderer* renderer)
 {
 	renderer->Setup = Setup;
 	renderer->Set3D = Set3D;
+	renderer->SetColor = SetColor;
 	renderer->StartRendition = StartRendition;
 	renderer->StopRendition = StopRendition;
 	renderer->SetTexture = SetTexture;
@@ -69,6 +71,11 @@ void Set3D(void)
 	glLeft = -glRight;
 }
 
+void SetColor(float r, float g, float b)
+{
+	glColor3f(r, g, b);
+}
+
 void StartRendition(void)
 {
 	// er?
@@ -98,6 +105,8 @@ void StopRendition(void)
 
 void SetTexture(unsigned int texID)
 {
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texID);
 }
 
 void SetShader(unsigned int shaderID)
@@ -133,35 +142,35 @@ void GetColorBuffer(GLubyte* data)
 {
 }
 
-void RenderSprite(GLuint textureId, vec3* v, vec2* uv, GLuint* indices, GLuint numIndices)
+void RenderSprite(float* v, float* uv, GLuint* indices, GLuint numIndices)
 {
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
 
 	glEnable(GL_BLEND);
-	glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-	/*if (gl_premalpha)
+	if (gl_premalpha)
 	   {
+		glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
 	   }
 	else
-	   {*/
-	   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-	  //}
-
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, textureId);
+	   {
+	   glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	  }
 
 	glBegin(GL_QUADS);
-	glTexCoord2f(0.0f, 0.0f);
-	glVertex3f(*v[0], *v[2], SetBack);
+	glTexCoord2f(0.0f, 1.0f);
+	glVertex3f(v[0], v[2], SetBack);
 
-	glTexCoord2f(0.0f, *uv[1]);
-	glVertex3f(*v[0], *v[3], SetBack);
+	glTexCoord2f(0.0f, uv[1]);
+	glVertex3f(v[0], v[3], SetBack);
 
-	glTexCoord2f(*uv[0], *uv[1]);
-	glVertex3f(*v[1], *v[3], SetBack);
+	glTexCoord2f(uv[0], uv[1]);
+	glVertex3f(v[1], v[3], SetBack);
 
-	glTexCoord2f(*uv[0], 1.0f);
-	glVertex3f(*v[1], *v[2], SetBack);
+	glTexCoord2f(uv[0], 1.0f);
+	glVertex3f(v[1], v[2], SetBack);
 	glEnd();
+
+	glDisable(GL_ALPHA_TEST);
+	glDisable(GL_BLEND);
 }
