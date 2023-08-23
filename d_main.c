@@ -28,6 +28,9 @@
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include <glad/glad.h>
+#include "renderer.h"
+
+extern sRenderer renderer;
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -270,7 +273,8 @@ static void D_Wipe(void)
         done = wipe_ScreenWipe(tics);
         I_UpdateNoBlit();
         M_Drawer();                   // menu is drawn even on top of wipes
-        I_FinishUpdate();             // page flip or blit buffer
+        //I_FinishUpdate();             // page flip or blit buffer
+        renderer.StopRendition();
 
     } while (!done);
 }
@@ -580,7 +584,8 @@ void MY_DoomSetup(void)
 void MY_DoomLoop (void)
    {
     // frame syncronous IO operations
-    I_StartFrame();
+    //I_StartFrame();
+    renderer.StartRendition();
 	
     // process one or more tics
 

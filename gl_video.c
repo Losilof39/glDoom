@@ -31,6 +31,7 @@
 #include "gl_video.h"
 #include "sdl_input.h"
 #include "sdl_video.h"
+#include "renderer.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -64,7 +65,7 @@ SDL_GLContext glContext;
 extern video_t     video;
 
 extern int         starttime;
-
+extern sRenderer renderer;
 extern int         vsync;
 
 // OpenGL renderer stuff
@@ -225,15 +226,11 @@ void I_FinishUpdate(void)
     if (glmode == gl_3d)
        {
         I_Finish3D();
-        //glPopMatrix();
        }
     else
        {
         I_Start2DFrame();
-        /*glOrtho(0, video.width, 0, video.height, 0.5, 10.0);
-        glViewport( 0, 0, video.width, video.height);*/
 
-        //glTranslatef( 0.0f, 0.0f, -1.0f );
        }
 
     // Swap the rendering buffers...
@@ -323,6 +320,13 @@ dboolean StartUpOpenGL()
         printf("Failed to load OpenGL library!\n");
         I_Quit();
     }
+
+    if (M_CheckParm("-core"))
+    {
+        // here goes init for modern opengl..
+    }
+    else
+        InitRendererFixed(&renderer);
 
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );

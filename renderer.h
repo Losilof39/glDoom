@@ -7,6 +7,7 @@
 typedef struct sRenderer
 {
 	int bBlending;
+	int gl_mode;
 	GLuint vao;
 	GLuint ebo;
 	mat4 matOrtho;
