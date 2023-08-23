@@ -26,6 +26,10 @@ static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include <glad/glad.h>
+#include <cglm.h>
+#include "renderer.h"
+
+extern sRenderer renderer;
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1256,40 +1260,45 @@ void GL_DrawTitle(int y, GLTexData *tex)
    {
     float   Left, Bottom, Right, Top;
 
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
+    Left = (0.0f - (tex->Width / 2.0f));
+    Right = Left + tex->Width;
+    Top = 120.0f - (y * 1.2f);
+    Bottom = Top - (tex->Height * 1.2f);
 
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+    vec3 vertices[] = { Left, Right, Top, Bottom };
+    vec2 texCoords[] = { tex->XDisp, tex->YDisp };
 
-    glEnable(GL_TEXTURE_2D);
+    renderer.RenderSprite(tex->TexName, vertices, texCoords, NULL, 0);
 
-    Left = (0.0f-(tex->Width/2.0f));
-    Right = Left+tex->Width;
-    Top = 120.0f-(y*1.2f);
-    Bottom = Top-(tex->Height*1.2f);
+    //glEnable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GREATER, 0.0f);
 
-    glBindTexture(GL_TEXTURE_2D, tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    //glEnable(GL_BLEND);
+    ///*if (gl_premalpha)
+    //   {
+    //    glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
+    //   }
+    //else
+    //   {*/
+    //    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //   //}
 
-       glTexCoord2f(0.0f, tex->YDisp);
-       glVertex3f(Left, Bottom, SetBack);
+    //glEnable(GL_TEXTURE_2D);
 
-       glTexCoord2f(tex->XDisp, tex->YDisp);
-       glVertex3f(Right, Bottom, SetBack);
+    //glBindTexture(GL_TEXTURE_2D, tex->TexName);
+    //glBegin(GL_QUADS);
+    //   glTexCoord2f(0.0f, 1.0f);
+    //   glVertex3f(Left, Top, SetBack);
 
-       glTexCoord2f(tex->XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
+    //   glTexCoord2f(0.0f, tex->YDisp);
+    //   glVertex3f(Left, Bottom, SetBack);
+
+    //   glTexCoord2f(tex->XDisp, tex->YDisp);
+    //   glVertex3f(Right, Bottom, SetBack);
+
+    //   glTexCoord2f(tex->XDisp, 1.0f);
+    //   glVertex3f(Right, Top, SetBack);
+    //glEnd();
    }
 
 //

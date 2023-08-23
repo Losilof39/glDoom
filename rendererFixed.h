@@ -15,6 +15,6 @@ void RenderEntities(void);
 void Set2D(void);
 void RenderString(vec3* vertices, GLuint* indices, GLuint numIndices);
 void GetColorBuffer(GLubyte* data);
-void RenderSprite(GLuint textureId, vec3* vertices, GLuint* indices, GLuint numIndices);
+void RenderSprite(GLuint textureId, vec3* vertices, vec2* texCoords, GLuint* indices, GLuint numIndices);
 
 #endif

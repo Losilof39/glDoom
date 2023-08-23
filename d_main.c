@@ -440,7 +440,8 @@ void D_Display (void)
     // normal update
     if (!wipe)
        {
-        I_FinishUpdate ();              // page flip or blit buffer
+        //I_FinishUpdate ();              // page flip or blit buffer
+        renderer.StopRendition();
        }
     else
     {

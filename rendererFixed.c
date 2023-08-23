@@ -27,6 +27,19 @@ void Setup(void)
 {
 }
 
+void w3sgluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
+	GLdouble top, bottom, left, right;
+	double pi180 = 0.017453292519943295769236907684886;
+	top = zNear * tan(pi180 * fovy / 2);
+	bottom = -top;
+	right = aspect * top;
+	left = -right;
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	glFrustum(left, right, bottom, top, zNear, zFar);
+	glMatrixMode(GL_MODELVIEW);
+}
+
 void Set3D(void)
 {
 	float glFovY = video.fovy;
@@ -59,7 +72,7 @@ void Set3D(void)
 void StartRendition(void)
 {
 	// er?
-  // Will put the OpenGL frame start code in here...
+	// Will put the OpenGL frame start code in here...
 	glClear(GL_DEPTH_BUFFER_BIT);
 
 	Set3D();
@@ -120,6 +133,35 @@ void GetColorBuffer(GLubyte* data)
 {
 }
 
-void RenderSprite(GLuint textureId, vec3* vertices, GLuint* indices, GLuint numIndices)
+void RenderSprite(GLuint textureId, vec3* v, vec2* uv, GLuint* indices, GLuint numIndices)
 {
+	glEnable(GL_ALPHA_TEST);
+	glAlphaFunc(GL_GREATER, 0.0f);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
+	/*if (gl_premalpha)
+	   {
+	   }
+	else
+	   {*/
+	   //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+	  //}
+
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, textureId);
+
+	glBegin(GL_QUADS);
+	glTexCoord2f(0.0f, 0.0f);
+	glVertex3f(*v[0], *v[2], SetBack);
+
+	glTexCoord2f(0.0f, *uv[1]);
+	glVertex3f(*v[0], *v[3], SetBack);
+
+	glTexCoord2f(*uv[0], *uv[1]);
+	glVertex3f(*v[1], *v[3], SetBack);
+
+	glTexCoord2f(*uv[0], 1.0f);
+	glVertex3f(*v[1], *v[2], SetBack);
+	glEnd();
 }
