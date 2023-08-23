@@ -74,8 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Debug\</OutDir>
-    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath)</IncludePath>
-    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm</IncludePath>
+    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -84,6 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -162,7 +164,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies);cglm.lib</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -259,7 +261,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies);cglm.lib</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(SolutionDir)$(Platform)\$(Configuration)\GLDOOM.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
@@ -331,6 +333,7 @@
     <ClCompile Include="r_main.c" />
     <ClCompile Include="r_plane.c" />
     <ClCompile Include="r_segs.c" />
+    <ClCompile Include="r_shader.c" />
     <ClCompile Include="r_sky.c" />
     <ClCompile Include="r_things.c" />
     <ClCompile Include="savepic.c" />
@@ -407,10 +410,12 @@
     <ClInclude Include="r_data.h" />
     <ClInclude Include="r_defs.h" />
     <ClInclude Include="r_draw.h" />
+    <ClInclude Include="r_glcore.h" />
     <ClInclude Include="r_local.h" />
     <ClInclude Include="r_main.h" />
     <ClInclude Include="r_plane.h" />
     <ClInclude Include="r_segs.h" />
+    <ClInclude Include="r_shader.h" />
     <ClInclude Include="r_sky.h" />
     <ClInclude Include="r_state.h" />
     <ClInclude Include="r_things.h" />
@@ -433,6 +438,8 @@
     <None Include="resources\gldfont.bin" />
     <None Include="resources\INTERPIC.bin" />
     <None Include="resources\Playpal.bin" />
+    <None Include="shader_files\ui_frag.glsl" />
+    <None Include="shader_files\ui_vert.glsl" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />

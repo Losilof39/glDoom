@@ -39,6 +39,8 @@ rcsid[] = "$Id: r_draw.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 // Needs access to LFB (guess what).
 #include "v_video.h"
 
+
+
 // State.
 #include "doomstat.h"
 
