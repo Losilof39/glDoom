@@ -327,6 +327,8 @@
     <ClCompile Include="p_telept.c" />
     <ClCompile Include="p_tick.c" />
     <ClCompile Include="p_user.c" />
+    <ClCompile Include="renderer.c" />
+    <ClCompile Include="rendererFixed.c" />
     <ClCompile Include="r_bsp.c" />
     <ClCompile Include="r_data.c" />
     <ClCompile Include="r_draw.c" />
@@ -405,6 +407,8 @@
     <ClInclude Include="p_setup.h" />
     <ClInclude Include="p_spec.h" />
     <ClInclude Include="p_tick.h" />
+    <ClInclude Include="renderer.h" />
+    <ClInclude Include="rendererFixed.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="r_bsp.h" />
     <ClInclude Include="r_data.h" />

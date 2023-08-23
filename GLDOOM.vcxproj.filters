@@ -252,6 +252,12 @@
     <ClCompile Include="r_shader.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="renderer.c">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="rendererFixed.c">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
@@ -483,6 +489,12 @@
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="r_shader.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendererFixed.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
   </ItemGroup>
