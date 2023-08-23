@@ -32,8 +32,8 @@
 #include "sdl_input.h"
 #include "sdl_video.h"
 #include "renderer.h"
-#include "rendererFixed.h"
 #include "rendererCore.h"
+#include "rendererFixed.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -224,6 +224,10 @@ dboolean StartUpOpenGL()
     GetGLInfo();
 
     return true;
+}
+
+void I_InitGraphics(void)
+{
 }
 
 void GetGLInfo()

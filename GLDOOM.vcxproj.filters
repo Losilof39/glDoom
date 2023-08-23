@@ -19,6 +19,9 @@
     <Filter Include="Source Files\renderer">
       <UniqueIdentifier>{d1646c96-e2b7-43f0-af69-53d6bd65e7ef}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{957e763d-23bb-4918-bb86-dc1a0ec495d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c">
@@ -515,8 +518,12 @@
     <None Include="resources\Playpal.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shader_files\ui_frag.glsl" />
-    <None Include="shader_files\ui_vert.glsl" />
+    <None Include="shader_files\ui_frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\ui_vert.glsl">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />
