@@ -142,7 +142,7 @@ void GetColorBuffer(GLubyte* data)
 {
 }
 
-void RenderSprite(float* v, float* uv, GLuint* indices, GLuint numIndices)
+void RenderSprite(float* v, GLTexData* tex)
 {
 	glEnable(GL_ALPHA_TEST);
 	glAlphaFunc(GL_GREATER, 0.0f);
@@ -161,13 +161,13 @@ void RenderSprite(float* v, float* uv, GLuint* indices, GLuint numIndices)
 	glTexCoord2f(0.0f, 1.0f);
 	glVertex3f(v[0], v[2], SetBack);
 
-	glTexCoord2f(0.0f, uv[1]);
+	glTexCoord2f(0.0f, tex->YDisp);
 	glVertex3f(v[0], v[3], SetBack);
 
-	glTexCoord2f(uv[0], uv[1]);
+	glTexCoord2f(tex->XDisp, tex->YDisp);
 	glVertex3f(v[1], v[3], SetBack);
 
-	glTexCoord2f(uv[0], 1.0f);
+	glTexCoord2f(tex->XDisp, 1.0f);
 	glVertex3f(v[1], v[2], SetBack);
 	glEnd();
 

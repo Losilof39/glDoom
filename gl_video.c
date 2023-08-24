@@ -68,6 +68,7 @@ extern video_t     video;
 
 extern int         starttime;
 extern sRenderer renderer;
+extern int gl_core;
 extern int         vsync;
 
 // OpenGL renderer stuff
@@ -212,9 +213,13 @@ dboolean StartUpOpenGL()
     if (M_CheckParm("-core"))
     {
         InitRendererCore(&renderer);
+        gl_core = 1;
     }
-    else
+    else 
+    {
         InitRendererFixed(&renderer);
+        gl_core = 0;
+    }
 
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );

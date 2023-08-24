@@ -17,11 +17,13 @@ typedef struct
 typedef struct
    {
     int   TexName;
-    GLuint texVBO;
-    float Width;   // Actual texture width
-    float Height;  // Actual texture height
-    float XDisp;   // Texture coordinate displacement from right side
-    float YDisp;   // Texture coordinate displacement from bottom
+    GLuint vertVBO;
+    GLuint texVBO;  // if passed in GL_MakeScreenTexture, its the VBO of the first tex in the bi-array
+    GLuint texVBO2; // if passed in GL_MakeScreenTexture, its the VBO of the second tex in the bi-array. Otherwise its not used
+    float Width;    // Actual texture width
+    float Height;   // Actual texture height
+    float XDisp;    // Texture coordinate displacement from right side
+    float YDisp;    // Texture coordinate displacement from bottom
     float LeftOff;
     float TopOff;
     float glWidth;

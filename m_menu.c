@@ -1266,10 +1266,9 @@ void GL_DrawTitle(int y, GLTexData *tex)
     Bottom = Top - (tex->Height * 1.2f);
 
     float vertices[] = { Left, Right, Top, Bottom };
-    float texCoords[] = { tex->XDisp, tex->YDisp };
 
     renderer.SetTexture(tex->TexName);
-    renderer.RenderSprite(vertices, texCoords, NULL, 0);
+    renderer.RenderSprite(vertices, tex);
     renderer.SetTexture(0);
 
    }

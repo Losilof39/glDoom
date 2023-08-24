@@ -3,6 +3,7 @@
 
 #include <glad/glad.h>
 #include <cglm.h>
+#include "gldefs.h"
 
 typedef struct sRenderer
 {
@@ -24,7 +25,7 @@ typedef struct sRenderer
 	void (*Set2D)(void);
 	void (*RenderString)(vec3* vertices, GLuint* indices, GLuint numIndices);
 	void (*GetColorBuffer)(GLubyte* data);
-	void (*RenderSprite)(float* v, float* uv, GLuint* indices, GLuint numIndices);
+	void (*RenderSprite)(float* v, GLTexData* tex);
 }sRenderer;
 
 #endif

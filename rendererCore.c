@@ -11,7 +11,7 @@ extern int gl_premalpha;
 extern float glTop, glBottom, glRight, glLeft, SetBack;
 
 GLuint indices[6] = {0, 1, 2, 0, 2, 3};
-GLuint EBO, VBO, texVBO;
+GLuint EBO;
 
 Shader shader;
 mat4 ortho;
@@ -49,8 +49,6 @@ void InitRendererCore(sRenderer* renderer)
 void cSetup(void)
 {
 	glGenBuffers(1, &EBO);
-	glGenBuffers(1, &VBO);
-	glGenBuffers(1, &texVBO);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, EBO);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(indices), indices, GL_STATIC_DRAW);
 
@@ -115,7 +113,7 @@ void cSetTexture(unsigned int texID)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texID);
-	glActiveTexture(GL_TEXTURE0);
+	//glActiveTexture(GL_TEXTURE0);
 }
 
 void cSetShader(unsigned int shaderID)
@@ -141,18 +139,21 @@ void cGetColorBuffer(GLubyte* data)
 {
 }
 
-void cRenderSprite(float* v, float* uv, GLuint* indices, GLuint numIndices)
+void cRenderSprite(float* v, GLTexData* tex)
 {
 	float verts[] = { v[0], v[2], SetBack, v[0], v[3], SetBack, v[1], v[3], SetBack, v[1], v[2], SetBack };
-	float coords[] = { 0.0f, 1.0f, 0.0f, uv[1], uv[0], uv[1], uv[0], 1.0f };
 
-	glBindBuffer(GL_ARRAY_BUFFER, VBO);
+	if (!tex->vertVBO) 
+	{
+		glGenBuffers(1, &tex->vertVBO);
+	}
+
+	glBindBuffer(GL_ARRAY_BUFFER, tex->vertVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(0);
 
-	glBindBuffer(GL_ARRAY_BUFFER, texVBO);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
+	glBindBuffer(GL_ARRAY_BUFFER, tex->texVBO);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 2*sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(1);
 
