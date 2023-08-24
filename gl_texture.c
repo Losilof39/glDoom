@@ -12,6 +12,7 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
+#include "gl_texture.h"
 
 #define GLD_TRANSPARENT 0
 #define GLD_COLORED     1
@@ -21,7 +22,6 @@ void lfprintf(char *message, ... );
 unsigned int MakeRGBTexture(int dw, int dh);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
-void V_DrawPatchBuff(int, int, unsigned char *, patch_t *);
 
 unsigned char  PointPattern[16*16] = {   0,  0,  0,  0,  0,  0,  0, 31, 31,  0,  0,  0,  0,  0,  0,  0,
                                          0,  0,  0,  0,  0,  0, 31, 63, 63, 31,  0,  0,  0,  0,  0,  0,
@@ -330,7 +330,7 @@ int GL_LoadTexture(int TexNumb)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        V_DrawPatchOffsetBuff( px,py, TexRaw,
+        ConvertToRawTextureOffset( px,py, TexRaw,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
        }
@@ -399,7 +399,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        V_DrawPatchOffsetBuff( px,py, SkyRaw,
+        ConvertToRawTextureOffset( px,py, SkyRaw,
                                //TexList[TexNumb].DWide, TexList[TexNumb].DHigh,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
@@ -503,7 +503,7 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
+    ConvertToRawTexture(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -609,7 +609,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
+    ConvertToRawTexture(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -701,7 +701,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     TexWide = 256;
 
     memset(RawBuff, 0, ixsize*iysize);
-    V_DrawPatchBuff(0, 0, RawBuff, Screen);
+    ConvertToRawTexture(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*iysize);
     memset(TexRaw, GLD_TRANSPARENT, 256*iysize);
     for (i = 0, d = 0, s = 0; i < iysize; i++)
@@ -922,7 +922,7 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
        }
 
     memset(RawBuff, 0, ixsize*iysize);
-    V_DrawPatchBuff(0, 0, RawBuff, Screen);
+    ConvertToRawTexture(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*200);
     for (i = 0, d = 0, s = 0; i < 200; i++)
        {
@@ -1065,6 +1065,114 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
     free(TexRGB);
     return(TempTexName);
    }
+
+void ConvertToRawTexture(int x, int y, unsigned char* buff, patch_t* patch)
+{
+    int		         count;
+    int		         col;
+    unsigned short* tshort;
+    short            pwidth;
+    column_t* column;
+    int* columnofs;
+    byte* desttop;
+    byte* dest;
+    byte* source;
+    byte* txp, * draw;
+    int		         w;
+
+    desttop = buff;
+    txp = Transparent;
+
+    tshort = (unsigned short*)patch;
+    w = *tshort;
+    pwidth = *tshort;
+    tshort++;
+    tshort++;
+    tshort++;
+    tshort++;
+    columnofs = (int*)tshort;
+
+    for (col = 0; col < pwidth; col++, desttop++, txp++)
+    {
+        column = (column_t*)((byte*)patch + columnofs[col]);
+
+        // step through the posts in a column 
+        while (column->topdelta != 0xff)
+        {
+            source = (byte*)column + 3;
+
+            dest = desttop + column->topdelta * pwidth;
+            draw = txp + column->topdelta * pwidth;
+            count = column->length;
+
+            while (count--)
+            {
+                *dest = *source++;
+                *draw = GLD_COLORED;
+                dest += pwidth;
+                draw += pwidth;
+            }
+            column = (column_t*)((byte*)column + column->length + 4);
+        }
+    }
+}
+
+void ConvertToRawTextureOffset(int x, int y, unsigned char* buff, int bx, int by, int patchnum)
+{
+    int	      count;
+    int	      col;
+    column_t* column;
+    byte* desttop;
+    byte* dest;
+    byte* source;
+    byte* txp, * draw;
+    int       w, h, offset, buffsize;
+    unsigned char* bend;
+    patch_t* patch;
+
+    patch = (patch_t*)W_CacheLumpNum(patchnum, PU_CACHE);
+
+    bend = buff + (bx * by);
+    buffsize = bx * by;
+
+    offset = (y * bx) + x;
+    desttop = buff + (y * bx) + x;
+    txp = Transparent + (y * bx) + x;
+
+    h = patch->height;
+    w = patch->width ;
+
+    for (col = 0; ((col < w) && (x < bx)); x++, col++, desttop++, txp++)
+    {
+        column = (column_t*)((byte*)patch + patch->columnofs[col]);
+
+        // step through the posts in a column 
+        while (column->topdelta != 0xff)
+        {
+            source = (byte*)column + 3;
+            offset = ((y * bx) + x) + (column->topdelta * bx);
+            dest = desttop + (column->topdelta * bx);
+            draw = txp + (column->topdelta * bx);
+            count = column->length;
+
+            while (count--)
+            {
+                if ((offset >= 0) && (offset < buffsize))
+                {
+                    buff[offset] = *source++;
+                    Transparent[offset] = GLD_COLORED;
+
+                }
+                else
+                    source++;
+                offset += bx;
+                dest += bx;
+                draw += bx;
+            }
+            column = (column_t*)((byte*)column + column->length + 4);
+        }
+    }
+}
 
 unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
