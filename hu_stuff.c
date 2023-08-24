@@ -66,7 +66,6 @@ rcsid[] = "$Id: hu_stuff.c,v 1.4 1997/02/03 16:47:52 b1 Exp $";
 #define HU_INPUTWIDTH	64
 #define HU_INPUTHEIGHT	1
 
-extern int PauseTex;
 extern GLTexData PauseTexData;
 
 
@@ -476,14 +475,14 @@ void HU_Init(void)
     {
 	sprintf(buffer, "STCFN%.3d", j++);
 	hu_font[i] = (patch_t *) W_CacheLumpName(buffer, PU_STATIC);
-    GLHudFont[i].TexName = GL_MakeSpriteTexture(hu_font[i], &GLHudFont[i], false);
-    GLGreyFont[i].TexName = GL_MakeGreyFontTexture(hu_font[i], &GLGreyFont[i], false);
+    GL_MakeSpriteTexture(hu_font[i], &GLHudFont[i], false);
+    GL_MakeGreyFontTexture(hu_font[i], &GLGreyFont[i], false);
 
     if (GLFontHeight < GLHudFont[i].Height)
        GLFontHeight = GLHudFont[i].Height;
     }
 
-    PauseTex = GL_MakeSpriteTexture(W_CacheLumpName ("M_PAUSE", PU_CACHE), &PauseTexData, true);
+    GL_MakeSpriteTexture(W_CacheLumpName ("M_PAUSE", PU_CACHE), &PauseTexData, true);
     //GL_PauseInit();
 }
 

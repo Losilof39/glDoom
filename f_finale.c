@@ -1248,7 +1248,7 @@ void F_Init()
             for (i = 0; i < 7; i++)
                {
                 sprintf(texname, "END%d", i);
-                glEndX[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(texname, PU_CACHE), &glEndX[i], true);
+                GL_MakeSpriteTexture(W_CacheLumpName(texname, PU_CACHE), &glEndX[i], true);
                }
             GL_MakeScreenTexture(W_CacheLumpName("PFUB2", PU_CACHE), glPFub2);
             GL_MakeScreenTexture(W_CacheLumpName("PFUB1", PU_CACHE), glPFub1);

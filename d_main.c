@@ -168,8 +168,6 @@ void D_CheckNetGame (void);
 void G_BuildTiccmd (ticcmd_t* cmd);
 void D_DoAdvanceDemo (void);
 
-int  PauseTex;
-int  PauseHigh, PauseWide;
 
 //
 // EVENT HANDLING
@@ -483,7 +481,7 @@ void GL_DrawPausePic()
     PauseBottom = 116.0f - PauseTexData.Height;
 
     glColor3f( 1.0f, 1.0f, 1.0f );
-    glBindTexture(GL_TEXTURE_2D, PauseTex);
+    glBindTexture(GL_TEXTURE_2D, PauseTexData.TexName);
     glBegin( GL_QUADS );
       glNormal3f( 0.0f, 0.0f, 1.0f);
       glTexCoord2f( 0.0f, 1.0f );

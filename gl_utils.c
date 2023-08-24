@@ -546,7 +546,7 @@ int GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
 // GL_MakeSpriteTexture
 // Masks a column based masked pic into an OpenGL texture
 //
-int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
+void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
    {
     static int      x, ixsize, iysize, cwidth;
     unsigned short *tshort;
@@ -650,7 +650,13 @@ int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-    return TempTexNumb;
+
+    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
+
+    glGenBuffers(1, &Tex->texVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
    }
 
 // GL_MakeWideSpriteTexture

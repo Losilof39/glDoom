@@ -115,6 +115,7 @@ void cSetTexture(unsigned int texID)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texID);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void cSetShader(unsigned int shaderID)

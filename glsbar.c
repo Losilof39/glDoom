@@ -52,7 +52,7 @@ static unsigned char MsgText[2048];
 void lfprintf(char *message, ... );
 
 void GL_StatArmsOvl(MY_RGBA *RGBData);
-int  GL_MakeSpriteTexture(patch_t *, GLTexData *Tex, dboolean smooth);
+void  GL_MakeSpriteTexture(patch_t *, GLTexData *Tex, dboolean smooth);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 
 void InsertArmsPlate()

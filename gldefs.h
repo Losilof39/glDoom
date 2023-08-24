@@ -1,6 +1,7 @@
 // GLDefs.h
 
 #include "doomtype.h"
+#include <glad/glad.h>
 
 #ifndef GLDEFS
 #define GLDEFS
@@ -16,6 +17,7 @@ typedef struct
 typedef struct
    {
     int   TexName;
+    GLuint texVBO;
     float Width;   // Actual texture width
     float Height;  // Actual texture height
     float XDisp;   // Texture coordinate displacement from right side
