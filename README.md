@@ -42,7 +42,7 @@ I am planning for this port, the following (in order of priority)
 1. Remove all unused code and make code more readable
    
 2. Write new OpenGL renderer
-   - Wrap all unsoppert OpenGL functions
+   - Wrap all unsupported OpenGL functions
    - Add shaders
    - Precache all vertex data in a pool
    - Add dynamic lights
