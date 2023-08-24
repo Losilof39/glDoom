@@ -1,3 +1,4 @@
+#include <glad/glad.h>
 #include "r_shader.h"
 
 char* Shader_GetSource(const char* fileName)
@@ -96,6 +97,11 @@ void Shader_Use(Shader shader)
 void Shader_SetInt(Shader shader, const char* uniform, int value)
 {
     glUniform1i(glGetUniformLocation(shader.programID, uniform), value);
+}
+
+void Shader_SetBoolean(Shader shader, const char* uniform, dboolean value)
+{
+    glUniform1i(glGetUniformLocation(shader.programID, uniform), (GLint)value);
 }
 
 void Shader_SetFloat(Shader shader, const char* uniform, float value)

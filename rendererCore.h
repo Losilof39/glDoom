@@ -16,6 +16,9 @@ void cRenderEntities(void);
 void cSet2D(void);
 void cRenderString(vec3* vertices, GLuint* indices, GLuint numIndices);
 void cGetColorBuffer(GLubyte* data);
+#ifdef NOT_YET
 void cRenderSprite(float* v, float* uv, GLuint* indices, GLuint numIndices);
-
+#else
+void cRenderSprite(float* v, GLTexData* tex);
+#endif
 #endif

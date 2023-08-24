@@ -16,6 +16,10 @@ void RenderEntities(void);
 void Set2D(void);
 void RenderString(vec3* vertices, GLuint* indices, GLuint numIndices);
 void GetColorBuffer(GLubyte* data);
+#ifdef NOT_YET
 void RenderSprite(float* v, float* uv, GLuint* indices, GLuint numIndices);
+#else
+void RenderSprite(float* v, GLTexData* tex);
+#endif
 
 #endif

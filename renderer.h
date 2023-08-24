@@ -2,7 +2,7 @@
 #define RENDERER_H
 
 #include <glad/glad.h>
-#include <cglm.h>
+#include <cglm/cglm.h>
 #include "gldefs.h"
 
 typedef struct sRenderer
