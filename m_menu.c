@@ -75,7 +75,7 @@ extern sRenderer renderer;
 
 #include "d_console.h"
 #include "sys_sdl.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 #include "gldefs.h"
 
 #include "doomcmd.h"

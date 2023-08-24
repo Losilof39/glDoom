@@ -55,7 +55,7 @@ void M_WriteText(int x, int y, char *string);
 // Doom98 code
 ////////////////////////////////////////////////////////////////////////
 
-#include "gl_utils.h"
+#include "gl_texture.h"
 
 void WriteDebug(char*);
 

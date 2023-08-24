@@ -31,13 +31,13 @@ void InitRendererCore(sRenderer* renderer)
 	renderer->GetColorBuffer = cGetColorBuffer;
 	renderer->RenderSprite = cRenderSprite;
 
-	glm_ortho(0.0f,
+	/*glm_ortho(0.0f,
 		video.width,
 		video.height,
 		0.0f,
 		-1.0f,
 		1.0f,
-		renderer->matOrtho);
+		renderer->matOrtho);*/
 
 	glm_perspective(video.fovy,
 		(float)video.width / (float)video.height,
@@ -113,7 +113,7 @@ void cSetTexture(unsigned int texID)
 {
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texID);
-	//glActiveTexture(GL_TEXTURE0);
+	glActiveTexture(GL_TEXTURE0);
 }
 
 void cSetShader(unsigned int shaderID)
@@ -150,6 +150,7 @@ void cRenderSprite(float* v, GLTexData* tex)
 
 	glBindBuffer(GL_ARRAY_BUFFER, tex->vertVBO);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(verts), verts, GL_STATIC_DRAW);
+
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3*sizeof(float), (void*)(0));
 	glEnableVertexAttribArray(0);
 

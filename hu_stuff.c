@@ -46,7 +46,7 @@ rcsid[] = "$Id: hu_stuff.c,v 1.4 1997/02/03 16:47:52 b1 Exp $";
 
 
 #include "d_console.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 #include "gldefs.h"
 
 //

@@ -57,7 +57,7 @@ rcsid[] = "$Id: wi_stuff.c,v 1.7 1997/02/03 22:45:13 b1 Exp $";
 #include "wi_stuff.h"
 
 #include "gldefs.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 
 //
 // Data needed to add patches to full screen intermission pics.

@@ -64,7 +64,7 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 #include "dstrings.h"
 #include "sounds.h"
 
-#include "gl_utils.h"
+#include "gl_texture.h"
 #include "glsbar.h"
 
 //

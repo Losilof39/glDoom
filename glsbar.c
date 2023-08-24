@@ -13,7 +13,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gldefs.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 
 typedef struct
    {
