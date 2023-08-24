@@ -57,7 +57,7 @@ rcsid[] = "$Id: wi_stuff.c,v 1.7 1997/02/03 22:45:13 b1 Exp $";
 #include "wi_stuff.h"
 
 #include "gldefs.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 
 //
 // Data needed to add patches to full screen intermission pics.
@@ -421,7 +421,7 @@ GLTexData  gl_p[MAXPLAYERS], gl_bp[MAXPLAYERS];
 // These are full screen images : treat differently (two part textures [256 & 64])
 GLTexData  Interpic[2], GameMap[3][2];
 
-int GL_MakeScreenTexture(patch_t *, GLTexData *);
+void GL_MakeScreenTexture(patch_t *, GLTexData *);
 
 extern int gl_premalpha;
 
@@ -2220,7 +2220,7 @@ void WI_Init(void)
             for (i = 0; i < NUMMAPS; i++)
                {
                 sprintf(name, "WILV%d%d", episode, i);
-                LevelNames[episode][i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &LevelNames[episode][i], true);
+                GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &LevelNames[episode][i], true);
                }
            }
        }
@@ -2231,20 +2231,20 @@ void WI_Init(void)
         for (i = 0; i < NUMCMAPS; i++)
 	       {
             sprintf(name, "CWILV%2.2d", i);
-            LevelNames[0][i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &LevelNames[0][i], true);
+            GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &LevelNames[0][i], true);
 	       }
        }
 
     if (gamemode != commercial)
        {
         // you are here
-        YouAreHere[0].TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIURH0", PU_CACHE), &YouAreHere[0], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("WIURH0", PU_CACHE), &YouAreHere[0], true);
 
         // you are here (alt.)
-        YouAreHere[1].TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIURH1", PU_CACHE), &YouAreHere[1], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("WIURH1", PU_CACHE), &YouAreHere[1], true);
 
         // splat
-        Splat.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WISPLAT", PU_CACHE), &Splat, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("WISPLAT", PU_CACHE), &Splat, true);
 
         for (episode = 0; episode < episodes; episode++)
            {
@@ -2261,7 +2261,7 @@ void WI_Init(void)
                        {
 	                    // animations
 	                    sprintf(name, "WIA%d%.2d%.2d", episode, j, frame);
-                        AnimTex[episode][j][frame].TexName = GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &AnimTex[episode][j][frame], true);
+                        GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &AnimTex[episode][j][frame], true);
                        }
                     else
                        {
@@ -2274,84 +2274,84 @@ void WI_Init(void)
            }
        }
     // More hacks on minus sign.
-    WiMinus.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIMINUS", PU_CACHE), &WiMinus, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIMINUS", PU_CACHE), &WiMinus, true);
 
     for (i = 0; i < 10;i++)
         {
          // numbers 0-9
          sprintf(name, "WINUM%d", i);     
-         WiNum[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &WiNum[i], true);
+         GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &WiNum[i], true);
         }
 
     // percent sign
-    Percent.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIPCNT", PU_CACHE), &Percent, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIPCNT", PU_CACHE), &Percent, true);
 
     // "finished"
-    Finished.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIF", PU_CACHE), &Finished, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIF", PU_CACHE), &Finished, true);
 
     // "entering"
-    Entering.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIENTER", PU_CACHE), &Entering, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIENTER", PU_CACHE), &Entering, true);
 
     // "kills"
-    Kills.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIOSTK", PU_CACHE), &Kills, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIOSTK", PU_CACHE), &Kills, true);
 
     // "scrt"
-    Secret.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIOSTS", PU_CACHE), &Secret, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIOSTS", PU_CACHE), &Secret, true);
 
      // "secret"
-    SP_Secret.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WISCRT2", PU_CACHE), &SP_Secret, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WISCRT2", PU_CACHE), &SP_Secret, true);
 
     // Yuck. 
     if (language == french)
        {
         // "items"
         if (netgame && !deathmatch)
-            Items.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIOBJ", PU_CACHE), &Items, true);
+            GL_MakeSpriteTexture(W_CacheLumpName("WIOBJ", PU_CACHE), &Items, true);
         else
-            Items.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIOSTI", PU_CACHE), &Items, true);
+            GL_MakeSpriteTexture(W_CacheLumpName("WIOSTI", PU_CACHE), &Items, true);
        }
     else
-        Items.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIOSTI", PU_CACHE), &Items, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("WIOSTI", PU_CACHE), &Items, true);
 
     // "frgs"
-    Frags.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIFRGS", PU_CACHE), &Frags, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIFRGS", PU_CACHE), &Frags, true);
 
     // ":"
-    Colon.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WICOLON", PU_CACHE), &Colon, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WICOLON", PU_CACHE), &Colon, true);
 
     // "time"
-    Time.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WITIME", PU_CACHE), &Time, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WITIME", PU_CACHE), &Time, true);
 
     // "sucks"
-    Sucks.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WISUCKS", PU_CACHE), &Sucks, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WISUCKS", PU_CACHE), &Sucks, true);
 
     // "par"
-    Par.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIPAR", PU_CACHE), &Par, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIPAR", PU_CACHE), &Par, true);
 
     // "killers" (vertical)
-    Killers.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIKILRS", PU_CACHE), &Killers, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIKILRS", PU_CACHE), &Killers, true);
 
     // "victims" (horiz)
-    Victims.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIVCTMS", PU_CACHE), &Victims, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIVCTMS", PU_CACHE), &Victims, true);
 
     // "total"
-    Total.TexName = GL_MakeSpriteTexture(W_CacheLumpName("WIMSTT", PU_CACHE), &Total, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("WIMSTT", PU_CACHE), &Total, true);
 
     // your face
-    Star.TexName = GL_MakeSpriteTexture(W_CacheLumpName("STFST01", PU_CACHE), &Star, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("STFST01", PU_CACHE), &Star, true);
 
     // dead face
-    BStar.TexName = GL_MakeSpriteTexture(W_CacheLumpName("STFDEAD0", PU_CACHE), &BStar, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("STFDEAD0", PU_CACHE), &BStar, true);
 
     for (i = 0; i < MAXPLAYERS; i++)
        {
         // "1,2,3,4"
         sprintf(name, "STPB%d", i);      
-        gl_p[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &gl_p[i], true);
+        GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &gl_p[i], true);
 
         // "1,2,3,4"
         sprintf(name, "WIBP%d", i+1);     
-        gl_bp[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &gl_bp[i], true);
+        GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &gl_bp[i], true);
        }
    }
 

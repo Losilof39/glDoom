@@ -13,6 +13,15 @@
       <UniqueIdentifier>{3d5312ee-80fe-4ea4-9fa9-72de62eb5893}</UniqueIdentifier>
       <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;cnt;rtf;gif;jpg;jpeg;jpe</Extensions>
     </Filter>
+    <Filter Include="Header Files\renderer">
+      <UniqueIdentifier>{ed43a191-ed5b-40aa-a9d6-d95db53b6ab1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\renderer">
+      <UniqueIdentifier>{d1646c96-e2b7-43f0-af69-53d6bd65e7ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shaders">
+      <UniqueIdentifier>{957e763d-23bb-4918-bb86-dc1a0ec495d4}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c">
@@ -51,7 +60,7 @@
     <ClCompile Include="g_game.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="gl_utils.c">
+    <ClCompile Include="gl_texture.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="gl_video.c">
@@ -243,6 +252,18 @@
     <ClCompile Include="gl_wipe.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="r_shader.c">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="renderer.c">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="rendererFixed.c">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
+    <ClCompile Include="rendererCore.c">
+      <Filter>Source Files\renderer</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
@@ -308,7 +329,7 @@
     <ClInclude Include="g_game.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="gl_utils.h">
+    <ClInclude Include="gl_texture.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="gl_video.h">
@@ -470,6 +491,21 @@
     <ClInclude Include="resources\resource.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="r_glcore.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="r_shader.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendererFixed.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="rendererCore.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="docs\gldoom.doc" />
@@ -481,6 +517,12 @@
     </None>
     <None Include="resources\Playpal.bin">
       <Filter>Resource Files</Filter>
+    </None>
+    <None Include="shader_files\ui_frag.glsl">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\ui_vert.glsl">
+      <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
   <ItemGroup>

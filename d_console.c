@@ -55,7 +55,7 @@ void M_WriteText(int x, int y, char *string);
 // Doom98 code
 ////////////////////////////////////////////////////////////////////////
 
-#include "gl_utils.h"
+#include "gl_texture.h"
 
 void WriteDebug(char*);
 
@@ -1597,7 +1597,7 @@ void CO_Init()
 
     // Load the game logo "patch"
     consname = (patch_t *)W_CacheLumpName(CONSOLE_NAME, PU_STATIC);
-    iConsLogo = GL_MakeSpriteTexture(consname, &ConsLogo, false);
+    GL_MakeSpriteTexture(consname, &ConsLogo, false);
 
     iFontHigh = hu_font[0]->height;
     sprintf(szVersion, "V%d.%02d%s", version/100,version%100,revision);

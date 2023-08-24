@@ -13,7 +13,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gldefs.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 
 extern MY_PAL  gamepal[256];
 extern MY_PAL  statpal[256];

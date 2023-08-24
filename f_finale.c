@@ -49,7 +49,7 @@ rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";
 #include "r_state.h"
 
 #include "gldefs.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 #include "sys_sdl.h"
 
 void GL_DrawFullScreen(GLTexData *Image);
@@ -1260,7 +1260,7 @@ void F_Init()
             for (i = 0; i < 7; i++)
                {
                 sprintf(texname, "END%d", i);
-                glEndX[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(texname, PU_CACHE), &glEndX[i], true);
+                GL_MakeSpriteTexture(W_CacheLumpName(texname, PU_CACHE), &glEndX[i], true);
                }
             GL_MakeScreenTexture(W_CacheLumpName("PFUB2", PU_CACHE), glPFub2);
             GL_MakeScreenTexture(W_CacheLumpName("PFUB1", PU_CACHE), glPFub1);

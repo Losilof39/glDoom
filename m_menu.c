@@ -26,6 +26,9 @@ static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include <glad/glad.h>
+#include "renderer.h"
+
+extern sRenderer renderer;
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -71,7 +74,7 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include "d_console.h"
 #include "sys_sdl.h"
-#include "gl_utils.h"
+#include "gl_texture.h"
 #include "gldefs.h"
 
 #include "doomcmd.h"
@@ -1258,40 +1261,17 @@ void GL_DrawTitle(int y, GLTexData *tex)
    {
     float   Left, Bottom, Right, Top;
 
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
+    Left = (0.0f - (tex->Width / 2.0f));
+    Right = Left + tex->Width;
+    Top = 120.0f - (y * 1.2f);
+    Bottom = Top - (tex->Height * 1.2f);
 
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+    float vertices[] = { Left, Right, Top, Bottom };
 
-    glEnable(GL_TEXTURE_2D);
+    renderer.SetTexture(tex->TexName);
+    renderer.RenderSprite(vertices, tex);
+    renderer.SetTexture(0);
 
-    Left = (0.0f-(tex->Width/2.0f));
-    Right = Left+tex->Width;
-    Top = 120.0f-(y*1.2f);
-    Bottom = Top-(tex->Height*1.2f);
-
-    glBindTexture(GL_TEXTURE_2D, tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
-
-       glTexCoord2f(0.0f, tex->YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(tex->XDisp, tex->YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(tex->XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
    }
 
 //
@@ -6412,28 +6392,28 @@ void M_Init (void)
        {
         GL_MakeScreenTexture(W_CacheLumpName("HELP2", PU_CACHE), glHelp2);
        }
-    GameLogo.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_DOOM",PU_CACHE), &GameLogo, false);
-    glPlayerSetupTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_PSETUP",PU_CACHE), &glPlayerSetupTitle, false);
-    glMouseTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_MSENS",PU_CACHE), &glMouseTitle, false);
-    glOptionTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_OPTTTL",PU_CACHE), &glOptionTitle, false);
-    glDisplayTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_DISOPT",PU_CACHE), &glDisplayTitle, false);
-    glMPlayerTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_MPLTTL",PU_CACHE), &glMPlayerTitle, false);
-    glEpisodeTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_EPISOD",PU_CACHE), &glEpisodeTitle, false);
-    glNewGameTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_NEWG",PU_CACHE), &glNewGameTitle, false);
-    glSkillTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_SKILL",PU_CACHE), &glSkillTitle, false);
-    glSoundVolTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_SVOL",PU_CACHE), &glSoundVolTitle, false);
-    glLoadGameTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_LOADG",PU_CACHE), &glLoadGameTitle, false);
-    glSaveGameTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_SAVEG",PU_CACHE), &glSaveGameTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_DOOM",PU_CACHE), &GameLogo, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_PSETUP",PU_CACHE), &glPlayerSetupTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_MSENS",PU_CACHE), &glMouseTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_OPTTTL",PU_CACHE), &glOptionTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_DISOPT",PU_CACHE), &glDisplayTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_MPLTTL",PU_CACHE), &glMPlayerTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_EPISOD",PU_CACHE), &glEpisodeTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_NEWG",PU_CACHE), &glNewGameTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_SKILL",PU_CACHE), &glSkillTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_SVOL",PU_CACHE), &glSoundVolTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_LOADG",PU_CACHE), &glLoadGameTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_SAVEG",PU_CACHE), &glSaveGameTitle, false);
 
     // Create "Skull" textures...
-    MenuSkull[0].TexName = GL_MakeSpriteTexture(W_CacheLumpName(skullName[0],PU_CACHE), &MenuSkull[0], false);
-    MenuSkull[1].TexName = GL_MakeSpriteTexture(W_CacheLumpName(skullName[1],PU_CACHE), &MenuSkull[1], false);
+    GL_MakeSpriteTexture(W_CacheLumpName(skullName[0],PU_CACHE), &MenuSkull[0], false);
+    GL_MakeSpriteTexture(W_CacheLumpName(skullName[1],PU_CACHE), &MenuSkull[1], false);
 
     for (i = 0; i < main_end; i++)
        {
         if (MainMenu[i].name[0])
            {
-            glMainMenu[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(MainMenu[i].name,PU_CACHE), &glMainMenu[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(MainMenu[i].name,PU_CACHE), &glMainMenu[i], false);
            }
        }
     if (gamemode != commercial)
@@ -6442,7 +6422,7 @@ void M_Init (void)
            {
             if (EpisodeMenu[i].name[0])
                {
-                glEpisode[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(EpisodeMenu[i].name,PU_CACHE), &glEpisode[i], false);
+                GL_MakeSpriteTexture(W_CacheLumpName(EpisodeMenu[i].name,PU_CACHE), &glEpisode[i], false);
                }
            }
        }
@@ -6450,81 +6430,81 @@ void M_Init (void)
        {
         if (NewGameMenu[i].name[0])
            {
-            glNewGame[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(NewGameMenu[i].name,PU_CACHE), &glNewGame[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(NewGameMenu[i].name,PU_CACHE), &glNewGame[i], false);
            }
        }
     for (i = 0; i < mplay_end; i++)
        {
         if (MPlayerMenu[i].name[0])
            {
-            glMultiPlayer[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(MPlayerMenu[i].name,PU_CACHE), &glMultiPlayer[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(MPlayerMenu[i].name,PU_CACHE), &glMultiPlayer[i], false);
            }
        }
     for (i = 0; i < game_end; i++)
        {
         if (GameMenu[i].name[0])
            {
-            glGame[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(GameMenu[i].name,PU_CACHE), &glGame[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(GameMenu[i].name,PU_CACHE), &glGame[i], false);
            }
        }
     for (i = 0; i < display_end; i++)
        {
         if (DisplayMenu[i].name[0])
            {
-            glDisplay[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(DisplayMenu[i].name,PU_CACHE), &glDisplay[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(DisplayMenu[i].name,PU_CACHE), &glDisplay[i], false);
            }
        }
     for (i = 0; i < opt_end; i++)
        {
         if (OptionsMenu[i].name[0])
            {
-            glOptions[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(OptionsMenu[i].name,PU_CACHE), &glOptions[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(OptionsMenu[i].name,PU_CACHE), &glOptions[i], false);
            }
        }
     for (i = 0; i < sound_end; i++)
        {
         if (SoundMenu[i].name[0])
            {
-            glSound[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(SoundMenu[i].name,PU_CACHE), &glSound[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(SoundMenu[i].name,PU_CACHE), &glSound[i], false);
            }
        }
     for (i = 0; i < mouse_end; i++)
        {
         if (MouseMenu[i].name[0])
            {
-            glMouse[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(MouseMenu[i].name,PU_CACHE), &glMouse[i], false);
+            GL_MakeSpriteTexture(W_CacheLumpName(MouseMenu[i].name,PU_CACHE), &glMouse[i], false);
            }
        }
     for (i = 0; i < 2; i++)
        {
-        glDtlName[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(detailNames[i],PU_CACHE), &glDtlName[i], false);
-        glMsgName[i].TexName = GL_MakeSpriteTexture(W_CacheLumpName(msgNames[i],PU_CACHE), &glMsgName[i], false);
+        GL_MakeSpriteTexture(W_CacheLumpName(detailNames[i],PU_CACHE), &glDtlName[i], false);
+        GL_MakeSpriteTexture(W_CacheLumpName(msgNames[i],PU_CACHE), &glMsgName[i], false);
        }
 
-    glThermL.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_THERML",PU_CACHE), &glThermL, false);
-    glThermM.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_THERMM",PU_CACHE), &glThermM, false);
-    glThermR.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_THERMR",PU_CACHE), &glThermR, false);
-    glThermO.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_THERMO",PU_CACHE), &glThermO, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_THERML",PU_CACHE), &glThermL, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_THERMM",PU_CACHE), &glThermM, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_THERMR",PU_CACHE), &glThermR, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_THERMO",PU_CACHE), &glThermO, false);
 
-    LSLeft.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_LSLEFT",PU_CACHE), &LSLeft, false);
-    LSCenter.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_LSCNTR",PU_CACHE), &LSCenter, false);
-    LSRight.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_LSRGHT",PU_CACHE), &LSRight, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_LSLEFT",PU_CACHE), &LSLeft, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_LSCNTR",PU_CACHE), &LSCenter, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_LSRGHT",PU_CACHE), &LSRight, false);
 
     //SaveResources();
 
-    glSetupTitle.TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_SETTTL",PU_CACHE), &glSetupTitle, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_SETTTL",PU_CACHE), &glSetupTitle, false);
 
-    glSetupMenu[0].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_KEYBND",PU_CACHE), &glSetupMenu[0], false);
-    glSetupMenu[1].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_WEAP",PU_CACHE), &glSetupMenu[1], false);
-    glSetupMenu[2].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_STAT",PU_CACHE), &glSetupMenu[2], false);
-    glSetupMenu[3].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_AUTO",PU_CACHE), &glSetupMenu[3], false);
-    glSetupMenu[4].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_ENEM",PU_CACHE), &glSetupMenu[4], false);
-    glSetupMenu[5].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_MESS",PU_CACHE), &glSetupMenu[5], false);
-    glSetupMenu[6].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_CHAT",PU_CACHE), &glSetupMenu[6], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_KEYBND",PU_CACHE), &glSetupMenu[0], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_WEAP",PU_CACHE), &glSetupMenu[1], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_STAT",PU_CACHE), &glSetupMenu[2], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_AUTO",PU_CACHE), &glSetupMenu[3], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_ENEM",PU_CACHE), &glSetupMenu[4], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_MESS",PU_CACHE), &glSetupMenu[5], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_CHAT",PU_CACHE), &glSetupMenu[6], false);
 
-    glResetBtn[0].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_BUTT1",PU_CACHE), &glResetBtn[0], false);
-    glResetBtn[1].TexName = GL_MakeSpriteTexture(W_CacheLumpName("M_BUTT2",PU_CACHE), &glResetBtn[1], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_BUTT1",PU_CACHE), &glResetBtn[0], false);
+    GL_MakeSpriteTexture(W_CacheLumpName("M_BUTT2",PU_CACHE), &glResetBtn[1], false);
 
-    AmmoBoxSkin.TexName = GL_MakeSpriteTexture(W_CacheLumpName("ABOXSKIN",PU_CACHE), &AmmoBoxSkin, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("ABOXSKIN",PU_CACHE), &AmmoBoxSkin, false);
    }
 

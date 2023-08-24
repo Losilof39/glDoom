@@ -64,7 +64,7 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 #include "dstrings.h"
 #include "sounds.h"
 
-#include "gl_utils.h"
+#include "gl_texture.h"
 #include "glsbar.h"
 
 //
@@ -1227,7 +1227,6 @@ GLTexData   glAutoMapI[4], glInvul[4],      glInviso[4];
 GLTexData SBarTex;
 GLTexData FaceTex[45], TallNums[10], TallPerc, ShortNums[2][10], KeyTex[6];
 
-int       face_tex[45], tallnums[10], tallperc, shortnums[2][10], keytex[6];
 int       SBarTexture[2];
 
 typedef struct
@@ -1270,7 +1269,7 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
        {
         if (numstr[digit] != ' ')
            {
-            glBindTexture(GL_TEXTURE_2D, tallnums[numstr[digit]]);
+            glBindTexture(GL_TEXTURE_2D, TallNums[numstr[digit]].TexName);
             glBegin( GL_QUADS );
                glTexCoord2f( 0.0f, 1.0f );
                glVertex3f( Left,  Top, SetBack);
@@ -1288,7 +1287,7 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
 
     if (percent == true)
        {
-        glBindTexture(GL_TEXTURE_2D, tallperc);
+        glBindTexture(GL_TEXTURE_2D, TallPerc.TexName);
         glBegin( GL_QUADS );
             glTexCoord2f( 0.0f, 1.0f );
             glVertex3f( Left,  Top, SetBack);
@@ -1344,11 +1343,11 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
            {
             if (yellow == true)
                {
-                glBindTexture(GL_TEXTURE_2D, shortnums[1][numstr[digit]]);
+                glBindTexture(GL_TEXTURE_2D, ShortNums[1][numstr[digit]].TexName);
                }
             else
                {
-                glBindTexture(GL_TEXTURE_2D, shortnums[0][numstr[digit]]);
+                glBindTexture(GL_TEXTURE_2D, ShortNums[0][numstr[digit]].TexName);
                }
             glBegin( GL_QUADS );
                glTexCoord2f( 0.0f, 1.0f );
@@ -1503,7 +1502,7 @@ void GL_DrawStatusBar0()
        }
 
     // Draw the "Doom Guy's" face at the bottom
-    glBindTexture(GL_TEXTURE_2D, face_tex[st_faceindex]);
+    glBindTexture(GL_TEXTURE_2D, FaceTex[st_faceindex].TexName);
     glBegin( GL_QUADS );
       glNormal3f( 0.0f, 0.0f, 1.0f);
       glTexCoord2f( 0.0f, 0.97f );
@@ -1924,24 +1923,24 @@ void ST_loadGraphics(void)
        {
         sprintf(namebuf, "STTNUM%d", i);
         tallnum[i] = (patch_t *) W_CacheLumpName(namebuf, PU_STATIC);
-        tallnums[i] = GL_MakeSpriteTexture(tallnum[i], &TallNums[i], true);
+        GL_MakeSpriteTexture(tallnum[i], &TallNums[i], true);
 
         sprintf(namebuf, "STYSNUM%d", i);
         shortnum[i] = (patch_t *) W_CacheLumpName(namebuf, PU_STATIC);
-        shortnums[1][i] = GL_MakeSpriteTexture(shortnum[i], &ShortNums[1][i], false);
+        GL_MakeSpriteTexture(shortnum[i], &ShortNums[1][i], false);
        }
 
     // Load percent key.
     //Note: why not load STMINUS here, too?
     tallpercent = (patch_t *) W_CacheLumpName("STTPRCNT", PU_STATIC);
-    tallperc = GL_MakeSpriteTexture(tallpercent, &TallPerc, true);
+    GL_MakeSpriteTexture(tallpercent, &TallPerc, true);
 
     // key cards
     for (i = 0; i < NUMCARDS; i++)
        {
         sprintf(namebuf, "STKEYS%d", i);
         keys[i] = (patch_t *) W_CacheLumpName(namebuf, PU_STATIC);
-        keytex[i] = GL_MakeSpriteTexture(keys[i], &KeyTex[i], true);
+        GL_MakeSpriteTexture(keys[i], &KeyTex[i], true);
        }
 
     // arms background
@@ -1954,7 +1953,7 @@ void ST_loadGraphics(void)
 	    sprintf(namebuf, "STGNUM%d", i+2);
         // gray #
         arms[i][0] = (patch_t *) W_CacheLumpName(namebuf, PU_STATIC);
-        shortnums[0][i] = GL_MakeSpriteTexture(arms[i][0], &ShortNums[0][i], false);
+        GL_MakeSpriteTexture(arms[i][0], &ShortNums[0][i], false);
         // yellow #
         arms[i][1] = shortnum[i+2]; 
        }
@@ -1998,75 +1997,75 @@ void ST_loadGraphics(void)
     faces[facenum++] = W_CacheLumpName("STFDEAD0", PU_STATIC);
 
     for (i = 0; i < facenum; i++)
-       face_tex[i] = GL_MakeSpriteTexture(faces[i], &FaceTex[i], false);
+       GL_MakeSpriteTexture(faces[i], &FaceTex[i], false);
 
 
     // load alternate HUD textures here...
 // single frame sprites
 // Boxes of ammo
-    glBBullet.TexName  = GL_MakeSpriteTexture(W_CacheLumpName("AMMOA0", PU_CACHE), &glBBullet, true);
-    glBRocket.TexName  = GL_MakeSpriteTexture(W_CacheLumpName("BROKA0", PU_CACHE), &glBRocket, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("AMMOA0", PU_CACHE), &glBBullet, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("BROKA0", PU_CACHE), &glBRocket, true);
     if (gamemode != shareware) // No BFG or Plasma Rifle in the shareware
        {
-        glBCells.TexName   = GL_MakeSpriteTexture(W_CacheLumpName("CELPA0", PU_CACHE), &glBCells, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("CELPA0", PU_CACHE), &glBCells, true);
        }
-    glBShot.TexName    = GL_MakeSpriteTexture(W_CacheLumpName("SBOXA0", PU_CACHE), &glBShot, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("SBOXA0", PU_CACHE), &glBShot, true);
 // Ammo packs
-    glBullet.TexName   = GL_MakeSpriteTexture(W_CacheLumpName("CLIPA0", PU_CACHE), &glBullet, true);
-    glRocket.TexName   = GL_MakeSpriteTexture(W_CacheLumpName("ROCKA0", PU_CACHE), &glRocket, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("CLIPA0", PU_CACHE), &glBullet, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("ROCKA0", PU_CACHE), &glRocket, true);
     if (gamemode != shareware) // No BFG or Plasma Rifle in the shareware
        {
-        glCells.TexName    = GL_MakeSpriteTexture(W_CacheLumpName("CELLA0", PU_CACHE), &glCells, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("CELLA0", PU_CACHE), &glCells, true);
        }
-    glShot.TexName     = GL_MakeSpriteTexture(W_CacheLumpName("SHELA0", PU_CACHE), &glShot, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("SHELA0", PU_CACHE), &glShot, true);
 // Weapons  
-    glShot1.TexName    = GL_MakeSpriteTexture(W_CacheLumpName("SHOTA0", PU_CACHE), &glShot1, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("SHOTA0", PU_CACHE), &glShot1, true);
     if (gamemode == commercial)
        {
-        glShot2.TexName    = GL_MakeSpriteTexture(W_CacheLumpName("SGN2A0", PU_CACHE), &glShot2, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("SGN2A0", PU_CACHE), &glShot2, true);
        }
-    glRLaunch.TexName  = GL_MakeSpriteTexture(W_CacheLumpName("LAUNA0", PU_CACHE), &glRLaunch, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("LAUNA0", PU_CACHE), &glRLaunch, true);
     if (gamemode != shareware) // No BFG or Plasma rifle in the shareware
        {
-        glPlasma.TexName   = GL_MakeSpriteTexture(W_CacheLumpName("PLASA0", PU_CACHE), &glPlasma, true);
-        glBFG.TexName      = GL_MakeSpriteTexture(W_CacheLumpName("BFUGA0", PU_CACHE), &glBFG, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("PLASA0", PU_CACHE), &glPlasma, true);
+        GL_MakeSpriteTexture(W_CacheLumpName("BFUGA0", PU_CACHE), &glBFG, true);
        }
-    glChainSaw.TexName = GL_MakeSpriteTexture(W_CacheLumpName("CSAWA0", PU_CACHE), &glChainSaw, true);
-    glMiniGun.TexName  = GL_MakeSpriteTexture(W_CacheLumpName("MGUNA0", PU_CACHE), &glMiniGun, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("CSAWA0", PU_CACHE), &glChainSaw, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("MGUNA0", PU_CACHE), &glMiniGun, true);
 // Medical Kits
-    glStimPak.TexName  = GL_MakeSpriteTexture(W_CacheLumpName("STIMA0", PU_CACHE), &glStimPak, true);
-    glMediKit.TexName  = GL_MakeSpriteTexture(W_CacheLumpName("MEDIA0", PU_CACHE), &glMediKit, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("STIMA0", PU_CACHE), &glStimPak, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("MEDIA0", PU_CACHE), &glMediKit, true);
 
-    glPlayFrag.TexName = GL_MakeSpriteTexture(W_CacheLumpName("PLAYH0", PU_CACHE), &glPlayFrag, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("PLAYH0", PU_CACHE), &glPlayFrag, true);
 
 // animated sprites
 // Armor Types
-    glGArmor[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("ARM1A0", PU_CACHE), &glGArmor[0], true);
-    glGArmor[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("ARM1B0", PU_CACHE), &glGArmor[1], true);
-    glBArmor[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("ARM2A0", PU_CACHE), &glBArmor[0], true);
-    glBArmor[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("ARM2B0", PU_CACHE), &glBArmor[1], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("ARM1A0", PU_CACHE), &glGArmor[0], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("ARM1B0", PU_CACHE), &glGArmor[1], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("ARM2A0", PU_CACHE), &glBArmor[0], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("ARM2B0", PU_CACHE), &glBArmor[1], true);
 // Key cards
-    glYCKey[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("YKEYA0", PU_CACHE), &glYCKey[0], true);
-    glYCKey[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("YKEYB0", PU_CACHE), &glYCKey[1], true);
-    glBCKey[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("BKEYA0", PU_CACHE), &glBCKey[0], true);
-    glBCKey[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("BKEYB0", PU_CACHE), &glBCKey[1], true);
-    glRCKey[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("RKEYA0", PU_CACHE), &glRCKey[0], true);
-    glRCKey[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("RKEYB0", PU_CACHE), &glRCKey[1], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("YKEYA0", PU_CACHE), &glYCKey[0], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("YKEYB0", PU_CACHE), &glYCKey[1], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("BKEYA0", PU_CACHE), &glBCKey[0], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("BKEYB0", PU_CACHE), &glBCKey[1], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("RKEYA0", PU_CACHE), &glRCKey[0], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("RKEYB0", PU_CACHE), &glRCKey[1], true);
 // Skull keys
     if (gamemode != shareware)  // only the later episodes use the skull keys
        {
-        glYSKey[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("YSKUA0", PU_CACHE), &glYSKey[0], true);
-        glYSKey[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("YSKUB0", PU_CACHE), &glYSKey[1], true);
-        glBSKey[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("BSKUA0", PU_CACHE), &glBSKey[0], true);
-        glBSKey[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("BSKUB0", PU_CACHE), &glBSKey[1], true);
-        glRSKey[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("RSKUA0", PU_CACHE), &glRSKey[0], true);
-        glRSKey[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("RSKUB0", PU_CACHE), &glRSKey[1], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("YSKUA0", PU_CACHE), &glYSKey[0], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("YSKUB0", PU_CACHE), &glYSKey[1], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("BSKUA0", PU_CACHE), &glBSKey[0], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("BSKUB0", PU_CACHE), &glBSKey[1], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("RSKUA0", PU_CACHE), &glRSKey[0], true);
+        GL_MakeSpriteTexture(W_CacheLumpName("RSKUB0", PU_CACHE), &glRSKey[1], true);
        }
 // Automap
-    glAutoMapI[0].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("PMAPA0", PU_CACHE), &glAutoMapI[0], true);
-    glAutoMapI[1].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("PMAPB0", PU_CACHE), &glAutoMapI[1], true);
-    glAutoMapI[2].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("PMAPC0", PU_CACHE), &glAutoMapI[2], true);
-    glAutoMapI[3].TexName  = GL_MakeSpriteTexture(W_CacheLumpName("PMAPD0", PU_CACHE), &glAutoMapI[3], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("PMAPA0", PU_CACHE), &glAutoMapI[0], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("PMAPB0", PU_CACHE), &glAutoMapI[1], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("PMAPC0", PU_CACHE), &glAutoMapI[2], true);
+    GL_MakeSpriteTexture(W_CacheLumpName("PMAPD0", PU_CACHE), &glAutoMapI[3], true);
    }
 
 void ST_loadData(void)

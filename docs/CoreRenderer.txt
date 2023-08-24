@@ -1,0 +1,66 @@
+To do:
+
+1. Add R_RenderColoredQuad in gl_video.c
+2. Change all glBegin(GL_QUADS) to use the function R_RenderTexturedQuad
+3. Create r_shader.c and its functions
+4. Add in gl_video.c structs related to drawable objects, 2 global array
+
+struct Renderer
+{
+	Shader shaderBound;
+	int quadsCount = 0;
+	int uiCount = 0;
+}
+
+// Textures loading is already done in the source, but I need to store them somewhere
+
+// Right before we swap buffers we'll render all UI and static (map-related) object
+// Two simple for loop is gonna iterate through global arrays containing the objects to render
+// Static objects VBO are gonna be deleted whenever we change map or quit
+
+// This function will take a buffer containing positions and the texture coordinates + texture id
+// It will not render any Quad but it will create a buffer and push it into a global one
+void R_RenderTexturedQuad(void* pBuffer, GLuint texture_id);
+
+void R_RenderColoredQuad(void* pBuffer, void* color);
+
+struct DrawableQuad
+{
+	GLuint VBO = -1;
+	GLuint textureID = -1;
+	void* color;
+};
+
+DrawableQuad* visibleQuads;
+DrawableQuad* gameUI;
+
+void R_BindQuad(DrawableQuad* pQuad);
+
+=====================================================
+****************** SHADERS **************************
+=====================================================
+
+struct Shader
+{	
+	const char* name;
+	GLuint programID;
+};
+
+// 2 types of shaders: UI and static objects
+
+Shader* Shader_Create(const char* name, const char* pVertPath, const char* pFragPath);
+void Shader_SetFloat(Shader* shader, const char* uniform, float value);
+void Shader_SetMat4(Shader* shader, const char* uniform, mat4 value);
+void Shader_SetVec3(Shader* shader, const char* uniform, vec3 value);
+
+
+struct Camera
+{
+	vec3 pos;
+	vec3 up;
+	vec3 right;
+	vec3 dir;
+	mat4 projection;
+
+	vec3* GetPosition();
+};

@@ -31,6 +31,9 @@
 #include "gl_video.h"
 #include "sdl_input.h"
 #include "sdl_video.h"
+#include "renderer.h"
+#include "rendererCore.h"
+#include "rendererFixed.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -64,7 +67,8 @@ SDL_GLContext glContext;
 extern video_t     video;
 
 extern int         starttime;
-
+extern sRenderer renderer;
+extern int gl_core;
 extern int         vsync;
 
 // OpenGL renderer stuff
@@ -98,83 +102,6 @@ void I_ShutdownGraphics(void)
     ShutdownOpenGL();
    }
 
-void I_Start2DFrame()
-   {
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glOrtho(
-        (GLdouble)0,
-        (GLdouble)video.width,
-        (GLdouble)video.height,
-        (GLdouble)0,
-        (GLdouble)-1.0,
-        (GLdouble)1.0
-    );
-    glDisable(GL_DEPTH_TEST);
-
-   }
-
-//hack for gluPerspective taken from: https://www.gamedev.net/forums/topic/180495-glfrustum-and-glperspective-difference/
-
-void w3sgluPerspective(GLdouble fovy, GLdouble aspect, GLdouble zNear, GLdouble zFar) {
-    GLdouble top, bottom, left, right;
-    double pi180 = 0.017453292519943295769236907684886;
-    top = zNear * tan(pi180 * fovy / 2);
-    bottom = -top;
-    right = aspect * top;
-    left = -right;
-    glMatrixMode(GL_PROJECTION);
-    glLoadIdentity();
-    glFrustum(left, right, bottom, top, zNear, zFar);
-    glMatrixMode(GL_MODELVIEW);
-}
-
-void I_Start3DFrame()
-{
-    glFovY   = video.fovy;
-    glAspect = (float)video.width / (float)video.height;
-
-    glMatrixMode( GL_PROJECTION );
-    glLoadIdentity();
-
-    w3sgluPerspective((double)glFovY, (double)glAspect, (double)video.nearclip, (double)video.farclip );
-    glViewport( 0, 0, video.width, video.height);
-
-    glTranslatef( 0.0f, 0.0f, 2.0f );
-
-    // Define the modelview transformation.
-    glMatrixMode(GL_MODELVIEW);
-    glLoadIdentity();
-
-    glTranslatef( 0.0f, 0.0f, 0.0f );
-
-    SetBack  = -120.0f / tanf((float)DEG2RAD(glFovY * 0.5f));
-    SetBack -= 2.0f;
-
-    glTop    = 120.0f;
-    glBottom = -glTop;
-
-    glRight = glTop * glAspect;
-    glLeft = -glRight;
-}
-
-
-//
-// I_StartFrame
-//
-void I_StartFrame (void)
-   {
-    // er?
-   // Will put the OpenGL frame start code in here...
-    glClear( GL_DEPTH_BUFFER_BIT );
-
-    I_Start3DFrame();
-
-    glmode = gl_3d;
-   }
-
 //
 // I_StartTic
 //
@@ -198,47 +125,6 @@ void I_UpdateNoBlit (void)
 void GL_WriteText(int x, int y, char *msg);
 extern int loadtime;
 int        framecnt = 0;
-
-void I_Finish3D()
-   {
-    glPopMatrix();
-   }
-
-//
-// I_FinishUpdate
-//
-void I_FinishUpdate(void)
-   {
-    //if (devparm)  // Draw the frame rate on the screen
-    //   {          // which will slow it down...
-    //    now = timeGetTime();
-    //    ms = now - lasttime;
-    //    if ((ms > 0) && (ms < 1000))
-    //       {
-    //        fps = 1000.0f/(float)ms;
-    //        sprintf(fps_str, "%.1f FPS", fps);
-    //        GL_WriteText(260, 155, fps_str);
-    //       }
-    //    lasttime = now;
-    //   }
-
-    if (glmode == gl_3d)
-       {
-        I_Finish3D();
-        //glPopMatrix();
-       }
-    else
-       {
-        I_Start2DFrame();
-        /*glOrtho(0, video.width, 0, video.height, 0.5, 10.0);
-        glViewport( 0, 0, video.width, video.height);*/
-
-        //glTranslatef( 0.0f, 0.0f, -1.0f );
-       }
-
-    // Swap the rendering buffers...
-    SDL_GL_SwapWindow(pWindow);
-   }
 
 
 //
@@ -297,9 +183,16 @@ void OGL_Error( int GL_Code, char *msg )
 //  StartUpOpenGL sets the pixel format and a rendering context then returns true/false
 dboolean StartUpOpenGL()
    {
+    int rendertype = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
+
+    if (M_CheckParm("-core"))
+    {
+        rendertype = SDL_GL_CONTEXT_PROFILE_CORE;
+    }
+
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_COMPATIBILITY);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, rendertype);
 
     glContext = SDL_GL_CreateContext(pWindow);
 
@@ -317,6 +210,19 @@ dboolean StartUpOpenGL()
         I_Quit();
     }
 
+    if (M_CheckParm("-core"))
+    {
+        InitRendererCore(&renderer);
+        gl_core = 1;
+    }
+    else 
+    {
+        InitRendererFixed(&renderer);
+        gl_core = 0;
+    }
+
+    renderer.Setup();
+
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );
 
@@ -333,6 +239,9 @@ void I_InitGraphics(void)
 
 void GetGLInfo()
    {
+    if (gl_core)
+        return;
+
     char *szu, *tempstr;
     const GLubyte *szt;
 

@@ -28,6 +28,9 @@
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include <glad/glad.h>
+#include "renderer.h"
+
+extern sRenderer renderer;
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -165,8 +168,6 @@ void D_CheckNetGame (void);
 void G_BuildTiccmd (ticcmd_t* cmd);
 void D_DoAdvanceDemo (void);
 
-int  PauseTex;
-int  PauseHigh, PauseWide;
 
 //
 // EVENT HANDLING
@@ -270,7 +271,8 @@ static void D_Wipe(void)
         done = wipe_ScreenWipe(tics);
         I_UpdateNoBlit();
         M_Drawer();                   // menu is drawn even on top of wipes
-        I_FinishUpdate();             // page flip or blit buffer
+        //I_FinishUpdate();             // page flip or blit buffer
+        renderer.StopRendition();
 
     } while (!done);
 }
@@ -436,7 +438,8 @@ void D_Display (void)
     // normal update
     if (!wipe)
        {
-        I_FinishUpdate ();              // page flip or blit buffer
+        //I_FinishUpdate ();              // page flip or blit buffer
+        renderer.StopRendition();
        }
     else
     {
@@ -478,7 +481,7 @@ void GL_DrawPausePic()
     PauseBottom = 116.0f - PauseTexData.Height;
 
     glColor3f( 1.0f, 1.0f, 1.0f );
-    glBindTexture(GL_TEXTURE_2D, PauseTex);
+    glBindTexture(GL_TEXTURE_2D, PauseTexData.TexName);
     glBegin( GL_QUADS );
       glNormal3f( 0.0f, 0.0f, 1.0f);
       glTexCoord2f( 0.0f, 1.0f );
@@ -580,7 +583,8 @@ void MY_DoomSetup(void)
 void MY_DoomLoop (void)
    {
     // frame syncronous IO operations
-    I_StartFrame();
+    //I_StartFrame();
+    renderer.StartRendition();
 	
     // process one or more tics
 
