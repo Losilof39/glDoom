@@ -27,6 +27,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 * Fixed win32 build
 * Add GetTicks macro
 * Cleanup msvc level 3 and a little of level 4 warnings
+* Replaced `_filelength` function to `fstat`  
 
 ### Current Problems
 * No vertical mouse movement
@@ -48,7 +49,7 @@ I am planning for this port, the following (in order of priority)
    - Add dynamic lights
    - Add post-processing effects
      
-4. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
