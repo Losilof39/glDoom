@@ -207,7 +207,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -223,7 +223,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x86;$(SolutionDir)\thirdparty\cglm\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -253,7 +253,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -268,7 +268,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x64;$(SolutionDir)\thirdparty\cglm\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
