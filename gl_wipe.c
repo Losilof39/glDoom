@@ -45,18 +45,16 @@ GLuint CaptureScreenAsTexID(void)
 {
     GLuint id;
 
-    //gld_EnableTexture2D(GL_TEXTURE0_ARB, true);
     glEnable(GL_TEXTURE_2D);
-
     glGenTextures(1, &id);
     glBindTexture(GL_TEXTURE_2D, id);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, 3,
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
         video.width, video.height,
         0, GL_RGB, GL_UNSIGNED_BYTE, 0);
 
