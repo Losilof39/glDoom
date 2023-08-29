@@ -1,6 +1,6 @@
-// gl_utils.h
-#ifndef GL_UTILS_H
-#define GL_UTILS_H
+// gl_texture.h
+#ifndef GL_TEXTURE_H
+#define GL_TEXTURE_H
 
 #include "doomtype.h"
 #include "gldefs.h"
@@ -15,7 +15,7 @@ unsigned int MakeRGBTexture(int dw, int dh);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 void ConvertToRawTexture(int x, int y, unsigned char* buff, patch_t* patch);
 void ConvertToRawTextureOffset(int x, int y, unsigned char* buff, int bx, int by, int patchnum);
-unsigned int GL_LoadFlatTexture(int TexNumb);
-unsigned int GL_LoadSkyTop( char *filename );
+int GL_LoadFlatTexture(int TexNumb);
+int GL_LoadSkyTop( char *filename );
 
 #endif

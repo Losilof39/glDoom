@@ -639,7 +639,7 @@ void AM_maxOutWindowScale(void)
 //
 dboolean AM_Responder( event_t *ev )
    {
-    int rc;
+    dboolean rc;
     static int cheatstate=0;
     static int bigstate=0;
     static char buffer[20];

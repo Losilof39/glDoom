@@ -26,7 +26,6 @@ static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include <glad/glad.h>
-#include <cglm.h>
 #include "renderer.h"
 
 extern sRenderer renderer;
