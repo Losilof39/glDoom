@@ -28,6 +28,8 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 * Add GetTicks macro
 * Cleanup msvc level 3 and a little of level 4 warnings
 * Replaced `_filelength` function to `fstat`  
+* Created a bitmap loader based on windows api
+* Ported Win32 api to posix
 
 ### Current Problems
 * No vertical mouse movement

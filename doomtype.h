@@ -36,21 +36,13 @@
 #endif
 #include <inttypes.h>
 #include <fcntl.h>
+#include <limits.h>
 
 #ifndef MAX
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-#ifdef _MSC_VER
-#include <rpc.h>
-#include <rpcndr.h>
-#else
-typedef unsigned char byte;
-typedef short        SHORT;
-typedef long          LONG;
-typedef unsigned short WORD;
-#endif
-
+typedef unsigned char dbyte;
 
 #ifndef O_BINARY 
 #define O_BINARY 0

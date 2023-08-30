@@ -13,7 +13,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gl_texture.h"
-
+#include "d_bitmap.h" /* The bitmap loader */
 #define GLD_TRANSPARENT 0
 #define GLD_COLORED     1
 
@@ -99,47 +99,6 @@ typedef struct
     
 } texture_t;
 
-#ifndef _MSC_VER
-// win32 structs manually defined to be more portable
-typedef struct BITMAPFILEHEADER {
-    uint16_t  bfType;
-    uint32_t bfSize;
-    uint16_t  bfReserved1;
-    uint16_t  bfReserved2;
-    uint32_t bfOffBits;
-}BITMAPFILEHEADER;
-
-typedef struct BITMAPINFOHEADER {
-    uint32_t biSize;
-    long  biWidth;
-    long  biHeight;
-    uint16_t  biPlanes;
-    uint16_t  biBitCount;
-    uint32_t biCompression;
-    uint32_t biSizeImage;
-    long  biXPelsPerMeter;
-    long  biYPelsPerMeter;
-    uint32_t biClrUsed;
-    uint32_t biClrImportant;
-} BITMAPINFOHEADER;
-
-typedef struct tagRGBQUAD {
-    byte rgbBlue;
-    byte rgbGreen;
-    byte rgbRed;
-    byte rgbReserved;
-} RGBQUAD;
-
-typedef struct RECT {
-    long left;
-    long top;
-    long right;
-    long bottom;
-} RECT;
-#else
-#include <Windows.h>
-#endif
-
 void InitGLPalette(int red, int green, int blue)
    {
     int i;
@@ -151,7 +110,6 @@ void InitGLPalette(int red, int green, int blue)
         statpal[i].b = blue;
        }
    }
-
 
 int CreateColorMap(int red, int green, int blue)
    {
@@ -272,35 +230,8 @@ extern texture_t**	textures;
 int GL_LoadSkyTop( char *filename )
    {
     unsigned int TempTexName;
-    int fn, s, d;
-    unsigned char   *texels;
-    BITMAPFILEHEADER bmfh;
-    BITMAPINFOHEADER bmi;
-    RGBQUAD         *bmpPalette;
 
-    fn = Open(filename, O_RDONLY | O_BINARY );
-
-    Read(fn, &bmfh, sizeof(BITMAPFILEHEADER));
-    Read(fn, &bmi, sizeof(BITMAPINFOHEADER));
-
-    TexWide = bmi.biWidth;
-    TexHigh = bmi.biHeight;
-
-    bmpPalette = (RGBQUAD *)malloc(sizeof(RGBQUAD)*256);
-    Read(fn, bmpPalette, (sizeof(RGBQUAD)*256));
-
-    texels = (unsigned char *)malloc(TexWide*TexHigh);
-    LSeek(fn, bmfh.bfOffBits, SEEK_SET);
-    Read(fn, texels, (TexWide*TexHigh));
-    Close(fn);
-
-    TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
-    for (s = 0, d = 0; s < (TexWide*TexHigh); s++)
-       {
-        TexRGB[d++] = bmpPalette[texels[s]].rgbRed;
-        TexRGB[d++] = bmpPalette[texels[s]].rgbGreen;
-        TexRGB[d++] = bmpPalette[texels[s]].rgbBlue;
-       }
+    D_LoadBmp(TexRGB, filename, TexWide, TexHigh);
 
     glGenTextures(1, &TempTexName);
     glBindTexture(GL_TEXTURE_2D, TempTexName);
@@ -320,8 +251,6 @@ int GL_LoadSkyTop( char *filename )
 
     glBindTexture(GL_TEXTURE_2D, 0);
     free(TexRGB);
-    free(texels);
-    free(bmpPalette);
     return(TempTexName);
    }
 
@@ -1115,10 +1044,10 @@ void ConvertToRawTexture(int x, int y, unsigned char* buff, patch_t* patch)
     short            pwidth;
     column_t* column;
     int* columnofs;
-    byte* desttop;
-    byte* dest;
-    byte* source;
-    byte* txp, * draw;
+    dbyte* desttop;
+    dbyte* dest;
+    dbyte* source;
+    dbyte* txp, * draw;
     int		         w;
 
     desttop = buff;
@@ -1135,12 +1064,12 @@ void ConvertToRawTexture(int x, int y, unsigned char* buff, patch_t* patch)
 
     for (col = 0; col < pwidth; col++, desttop++, txp++)
     {
-        column = (column_t*)((byte*)patch + columnofs[col]);
+        column = (column_t*)((dbyte*)patch + columnofs[col]);
 
         // step through the posts in a column 
         while (column->topdelta != 0xff)
         {
-            source = (byte*)column + 3;
+            source = (dbyte*)column + 3;
 
             dest = desttop + column->topdelta * pwidth;
             draw = txp + column->topdelta * pwidth;
@@ -1153,7 +1082,7 @@ void ConvertToRawTexture(int x, int y, unsigned char* buff, patch_t* patch)
                 dest += pwidth;
                 draw += pwidth;
             }
-            column = (column_t*)((byte*)column + column->length + 4);
+            column = (column_t*)((dbyte*)column + column->length + 4);
         }
     }
 }
@@ -1163,10 +1092,10 @@ void ConvertToRawTextureOffset(int x, int y, unsigned char* buff, int bx, int by
     int	      count;
     int	      col;
     column_t* column;
-    byte* desttop;
-    byte* dest;
-    byte* source;
-    byte* txp, * draw;
+    dbyte* desttop;
+    dbyte* dest;
+    dbyte* source;
+    dbyte* txp, * draw;
     int       w, h, offset, buffsize;
     unsigned char* bend;
     patch_t* patch;
@@ -1185,12 +1114,12 @@ void ConvertToRawTextureOffset(int x, int y, unsigned char* buff, int bx, int by
 
     for (col = 0; ((col < w) && (x < bx)); x++, col++, desttop++, txp++)
     {
-        column = (column_t*)((byte*)patch + patch->columnofs[col]);
+        column = (column_t*)((dbyte*)patch + patch->columnofs[col]);
 
         // step through the posts in a column 
         while (column->topdelta != 0xff)
         {
-            source = (byte*)column + 3;
+            source = (dbyte*)column + 3;
             offset = ((y * bx) + x) + (column->topdelta * bx);
             dest = desttop + (column->topdelta * bx);
             draw = txp + (column->topdelta * bx);
@@ -1210,7 +1139,7 @@ void ConvertToRawTextureOffset(int x, int y, unsigned char* buff, int bx, int by
                 dest += bx;
                 draw += bx;
             }
-            column = (column_t*)((byte*)column + column->length + 4);
+            column = (column_t*)((dbyte*)column + column->length + 4);
         }
     }
 }

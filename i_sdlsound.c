@@ -72,7 +72,7 @@ static Uint16 mixer_format;
 static int mixer_channels;
 static dboolean use_sfx_prefix;
 static dboolean(*ExpandSoundData)(sfxinfo_t* sfxinfo,
-    byte* data,
+    dbyte* data,
     int samplerate,
     int length) = NULL;
 
@@ -220,7 +220,7 @@ static allocated_sound_t* AllocateSound(sfxinfo_t* sfxinfo, size_t len)
 
     // Skip past the chunk structure for the audio buffer
 
-    snd->chunk.abuf = (byte*)(snd + 1);
+    snd->chunk.abuf = (dbyte*)(snd + 1);
     snd->chunk.alen = (Uint32)len;
     snd->chunk.allocated = 1;
     snd->chunk.volume = MIX_MAX_VOLUME;
@@ -391,7 +391,7 @@ static dboolean ConvertibleRatio(int freq1, int freq2)
 // Returns number of clipped samples (always 0).
 
 static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
-    byte* data,
+    dbyte* data,
     int samplerate,
     int length)
 {
@@ -513,7 +513,7 @@ static dboolean CacheSFX(sfxinfo_t* sfxinfo)
     unsigned int lumplen;
     int samplerate;
     unsigned int length;
-    byte* data;
+    dbyte* data;
 
     // need to load the sound
 

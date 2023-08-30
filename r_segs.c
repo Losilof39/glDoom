@@ -174,7 +174,7 @@ R_RenderMaskedSegRange
 	    
 	    // draw the texture
 	    col = (column_t *)( 
-		(byte *)R_GetColumn(texnum,maskedtexturecol[dc_x]) -3);
+		(dbyte *)R_GetColumn(texnum,maskedtexturecol[dc_x]) -3);
 			
 	    R_DrawMaskedColumn (col);
 	    maskedtexturecol[dc_x] = DMAXSHORT;
@@ -358,7 +358,7 @@ void R_RenderSegLoop (void)
     }
 }
 
-extern byte *DrawFlat;
+extern dbyte *DrawFlat;
 extern drawside_t *DrawSide;
 static char   *MsgText[2048];
 
