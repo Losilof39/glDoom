@@ -77,7 +77,7 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
     fU2 = (float)video.width / (float)total_w;
     fV2 = 0.0f;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, wipe_scr_end_tex);
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -94,7 +94,7 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
     glBindTexture(GL_TEXTURE_2D, wipe_scr_start_tex);
     glColor3f(1.0f, 1.0f, 1.0f);
 
-    glBegin(GL_QUAD_STRIP);
+    glBegin(GL_QUAD_STRIP);*/
 
     for (i = 0; i <= video.width; i++)
     {
@@ -104,11 +104,11 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
         float sx = (float)i;
         float sy = (float)yoffs;
 
-        glTexCoord2f(tx, fV1); glVertex2f(sx, sy);
-        glTexCoord2f(tx, fV2); glVertex2f(sx, sy + (float)video.height);
+        /*glTexCoord2f(tx, fV1); glVertex2f(sx, sy);
+        glTexCoord2f(tx, fV2); glVertex2f(sx, sy + (float)video.height);*/
     }
 
-    glEnd();
+    //glEnd();
 
     return 0;
 }
@@ -138,7 +138,7 @@ int gld_wipe_StartScreen(void)
 
 int gld_wipe_EndScreen(void)
 {
-    glFlush();
+    //glFlush();
     wipe_scr_end_tex = CaptureScreenAsTexID();
 
     return 0;

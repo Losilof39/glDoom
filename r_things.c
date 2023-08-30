@@ -1061,7 +1061,7 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
 */
     if (SprData[lump].TexName != 0)
        {
-        glEnable(GL_TEXTURE_2D);
+        /*glEnable(GL_TEXTURE_2D);
         glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, 0.0f);
         glEnable(GL_BLEND);
@@ -1072,30 +1072,30 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
         else
            {
             glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-           }
+           }*/
         if (invisible == true)
            {// FIXME - not coming out transparent...
             //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-            glBlendFunc( GL_ONE, GL_ONE );
+            //glBlendFunc( GL_ONE, GL_ONE );
            }
         else
         if ((SprData[lump].Translucent != 255) && (sptype == 1))
            {
 //            glEnable(GL_BLEND);
-            glBlendFunc( GL_ONE, GL_ONE );
+            //glBlendFunc( GL_ONE, GL_ONE );
 //            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
            }
-        glBindTexture(GL_TEXTURE_2D, SprData[lump].TexName);
+        //glBindTexture(GL_TEXTURE_2D, SprData[lump].TexName);
         if ((psp->state->frame & FF_FULLBRIGHT) || (players[consoleplayer].powers[pw_infrared] > 0))
            {
             // full bright
-            glColor3f( 1.0f, 1.0f, 1.0f );
+            //glColor3f( 1.0f, 1.0f, 1.0f );
            }
         else
            {
             // local light
             fLight = ((float)(iLight * 16) / 255.0f);
-            glColor3f( fLight, fLight, fLight );
+            //glColor3f( fLight, fLight, fLight );
            }
         if (tLight != iLight)
            {
@@ -1105,23 +1105,23 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
            {
             sy -= 30.0f;
            }
-        glBegin(GL_QUADS);
-           glTexCoord2f( 0.0f,  1.0f );
-           glVertex3f( sx,  sy, SetBack );
-           glTexCoord2f( 0.0f,  SprData[lump].YDisp );
-           glVertex3f( sx, sy-(SprData[lump].Height*1.2f), SetBack );
-           glTexCoord2f( SprData[lump].XDisp,  SprData[lump].YDisp );
-           glVertex3f(  SprData[lump].Width+sx, sy-(SprData[lump].Height*1.2f), SetBack );
-           glTexCoord2f( SprData[lump].XDisp,  1.0f );
-           glVertex3f(  SprData[lump].Width+sx,  sy, SetBack );
-        glEnd();
-        glBindTexture(GL_TEXTURE_2D, 0);
-        glDisable(GL_ALPHA_TEST);
-//        if (((SprData[lump].Translucent != 255) && (sptype == 1)) || (invisible == true))
-//           {
-            glDisable(GL_BLEND);
-//           }
-        glDisable(GL_TEXTURE_2D);
+//        glBegin(GL_QUADS);
+//           glTexCoord2f( 0.0f,  1.0f );
+//           glVertex3f( sx,  sy, SetBack );
+//           glTexCoord2f( 0.0f,  SprData[lump].YDisp );
+//           glVertex3f( sx, sy-(SprData[lump].Height*1.2f), SetBack );
+//           glTexCoord2f( SprData[lump].XDisp,  SprData[lump].YDisp );
+//           glVertex3f(  SprData[lump].Width+sx, sy-(SprData[lump].Height*1.2f), SetBack );
+//           glTexCoord2f( SprData[lump].XDisp,  1.0f );
+//           glVertex3f(  SprData[lump].Width+sx,  sy, SetBack );
+//        glEnd();
+//        glBindTexture(GL_TEXTURE_2D, 0);
+//        glDisable(GL_ALPHA_TEST);
+////        if (((SprData[lump].Translucent != 255) && (sptype == 1)) || (invisible == true))
+////           {
+//            glDisable(GL_BLEND);
+////           }
+//        glDisable(GL_TEXTURE_2D);
        }
    }
 
@@ -1449,11 +1449,11 @@ void GL_DrawThings(void)
 //    vis->gzt = thing->z + spritetopoffset[lump];
                 sz = 0.0f - ((float)spr->gy * (float)pfactor);
 
-                glPushMatrix();
-                //glLoadIdentity();
+                //glPushMatrix();
+                ////glLoadIdentity();
 
-                glTranslatef( sx, sy, sz );
-                glRotatef(Orient, 0.0f, 1.0f, 0.0f );
+                //glTranslatef( sx, sy, sz );
+                //glRotatef(Orient, 0.0f, 1.0f, 0.0f );
 
                 if ((spr->xiscale >> FRACBITS) < 0)
                    {
@@ -1466,12 +1466,12 @@ void GL_DrawThings(void)
                     x2 = 0.0f;
                    }
 
-                glEnable(GL_ALPHA_TEST);
+                /*glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
-                glBindTexture(GL_TEXTURE_2D, SprData[lump].TexName);
+                glBindTexture(GL_TEXTURE_2D, SprData[lump].TexName);*/
                 // local light
                 fLight = ((float)(spr->light * 16) / 255.0f);
-                glEnable(GL_BLEND);
+                /*glEnable(GL_BLEND);
                 if (gl_premalpha)
                    {
                     glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
@@ -1480,22 +1480,22 @@ void GL_DrawThings(void)
                    {
                     glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
                    }
-                glColor4f( fLight, fLight, fLight, 1.0f);
+                glColor4f( fLight, fLight, fLight, 1.0f);*/
                 if ((fLight <= 0.0f) && (SprData[lump].Translucent > 255))
                    {
                     if (gl_alphatest)
                        {
                         fLight = 1.0f - fLight;
-                        glColor4f( fLight, fLight, fLight, fLight);
-                        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                        /*glColor4f( fLight, fLight, fLight, fLight);
+                        glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );*/
                        }
                     else
                        {
                         fLight = 0.25f;
                         //glColor4f( fLight, fLight, fLight, (SprData[lump].Translucent - 255)/255.0f);
-                        glEnable(GL_BLEND);
+                        /*glEnable(GL_BLEND);
                         glBlendFunc( GL_ONE, GL_ONE_MINUS_SRC_ALPHA );
-                        glColor4f( fLight, fLight, fLight, 0.2f);
+                        glColor4f( fLight, fLight, fLight, 0.2f);*/
                        }
                    }
                 else
@@ -1504,8 +1504,8 @@ void GL_DrawThings(void)
                        {
                         if (SprData[lump].Intensity == 0)
                            {
-                            glColor4f( fLight, fLight, fLight, (float)SprData[lump].Translucent/255.0f);
-                            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
+                            /*glColor4f( fLight, fLight, fLight, (float)SprData[lump].Translucent/255.0f);
+                            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );*/
                            }
                         else
                            {
@@ -1521,15 +1521,15 @@ void GL_DrawThings(void)
                                     fLight = tLight;
                                    }
                                }
-                            glColor4f( fLight, fLight, fLight, 1.0f);
-                            glBlendFunc( GL_ONE, GL_ONE );
+                            /*glColor4f( fLight, fLight, fLight, 1.0f);
+                            glBlendFunc( GL_ONE, GL_ONE );*/
                            }
                        }
                    }
                 //glColor3f( fLight, fLight, fLight );
                 if ((fLight >= foglight) && (gl_fog == 1))
                    {
-                    glDisable(GL_FOG);
+                    //glDisable(GL_FOG);
                    }
                 if (SprData[lump].Height != SprData[lump].TopOff)
                    {
@@ -1543,7 +1543,7 @@ void GL_DrawThings(void)
                 fTop = SprData[lump].Height - fOffset;
                 fBottom = fTop - SprData[lump].Height;
                 //glColor3f( 1.0f, 1.0f, 1.0f );
-                glBegin(GL_QUADS);
+                //glBegin(GL_QUADS);
 /*
                    glTexCoord2f( x1,  1.0f );
                    glVertex3f( sx-(SprData[lump].Width/2.0f),  sy+SprData[lump].Height, sz );
@@ -1554,7 +1554,7 @@ void GL_DrawThings(void)
                    glTexCoord2f( x2,  1.0f );
                    glVertex3f(  sx+(SprData[lump].Width/2.0f),  sy+SprData[lump].Height, sz );
 */
-                   glTexCoord2f( x1,  1.0f );
+                   /*glTexCoord2f( x1,  1.0f );
                    glVertex3f( 0.0f-(SprData[lump].Width/2.0f),  fTop, 0.0f );
                    glTexCoord2f( x1,  SprData[lump].YDisp );
                    glVertex3f( 0.0f-(SprData[lump].Width/2.0f), fBottom, 0.0f );
@@ -1563,8 +1563,8 @@ void GL_DrawThings(void)
                    glTexCoord2f( x2,  1.0f );
                    glVertex3f(  0.0f+(SprData[lump].Width/2.0f),  fTop, 0.0f );
 
-                glEnd();
-                if ((fLight >= foglight) && (gl_fog == 1))
+                glEnd();*/
+                /*if ((fLight >= foglight) && (gl_fog == 1))
                    {
                     glEnable(GL_FOG);
                    }
@@ -1572,7 +1572,7 @@ void GL_DrawThings(void)
                 glDisable(GL_ALPHA_TEST);
                 glDisable(GL_BLEND);
 
-                glPopMatrix();
+                glPopMatrix();*/
                }
            }
        }

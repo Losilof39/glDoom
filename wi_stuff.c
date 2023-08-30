@@ -454,7 +454,7 @@ void GL_DrawPatch(GLTexData *Tex, float x, float y)
    {
     float       Left, Bottom, Right, Top;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
@@ -465,7 +465,7 @@ void GL_DrawPatch(GLTexData *Tex, float x, float y)
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     Left = -160.0f+x;
     Right = Left+(Tex->Width*Scale);
@@ -473,7 +473,7 @@ void GL_DrawPatch(GLTexData *Tex, float x, float y)
     Bottom = Top-((Tex->Height*Scale)*1.2f);
 
     // draw animation frame
-    glBindTexture(GL_TEXTURE_2D, Tex->TexName);
+    /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
     glBegin(GL_QUADS);
        glTexCoord2f( 0.0f, 1.0f);
        glVertex3f( Left, Top, SetBack);
@@ -486,7 +486,7 @@ void GL_DrawPatch(GLTexData *Tex, float x, float y)
     glEnd();
 
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    glDisable(GL_BLEND);*/
    }
 
 // Draws "<Levelname> Finished!"
@@ -502,31 +502,31 @@ void GL_WI_drawLF(void)
     Top = 120.0f-(2.0f*1.2f);
     Bottom = Top-(Tex->Height*1.2f);
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+    //glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GREATER, 0.0f);
+    //glEnable(GL_BLEND);
+    //if (gl_premalpha)
+    //   {
+    //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    //   }
+    //else
+    //   {
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //   }
 
-    // draw <LevelName> 
-    glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f( 0.0f, 1.0f);
-       glVertex3f( Left, Top, SetBack);
-       glTexCoord2f( 0.0f, Tex->YDisp);
-       glVertex3f( Left, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, Tex->YDisp);
-       glVertex3f( Right, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, 1.0f);
-       glVertex3f( Right, Top, SetBack);
-    glEnd();
+    //// draw <LevelName> 
+    //glBindTexture(GL_TEXTURE_2D, Tex->TexName);
+    //glBegin(GL_QUADS);
+    //   glTexCoord2f( 0.0f, 1.0f);
+    //   glVertex3f( Left, Top, SetBack);
+    //   glTexCoord2f( 0.0f, Tex->YDisp);
+    //   glVertex3f( Left, Bottom, SetBack);
+    //   glTexCoord2f( Tex->XDisp, Tex->YDisp);
+    //   glVertex3f( Right, Bottom, SetBack);
+    //   glTexCoord2f( Tex->XDisp, 1.0f);
+    //   glVertex3f( Right, Top, SetBack);
+    //glEnd();
 
     Top -= (5*(Tex->Height*1.2f))/4;
 
@@ -537,7 +537,7 @@ void GL_WI_drawLF(void)
     Bottom = Top-(Tex->Height*1.2f);
 
     // draw "Finished!"
-    glBindTexture(GL_TEXTURE_2D, Tex->TexName);
+    /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
     glBegin(GL_QUADS);
        glTexCoord2f( 0.0f, 1.0f);
        glVertex3f( Left, Top, SetBack);
@@ -550,7 +550,7 @@ void GL_WI_drawLF(void)
     glEnd();
 
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    glDisable(GL_BLEND);*/
    }
 
 // Draws "<Levelname> Finished!"
@@ -584,31 +584,31 @@ void GL_WI_drawEL(void)
     Top = 120.0f-(2.0f*1.2f);
     Bottom = Top-(Tex->Height*1.2f);
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+    //glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GREATER, 0.0f);
+    //glEnable(GL_BLEND);
+    //if (gl_premalpha)
+    //   {
+    //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
+    //   }
+    //else
+    //   {
+    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //   }
 
-    // draw "Entering"
-    glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f( 0.0f, 1.0f);
-       glVertex3f( Left, Top, SetBack);
-       glTexCoord2f( 0.0f, Tex->YDisp);
-       glVertex3f( Left, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, Tex->YDisp);
-       glVertex3f( Right, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, 1.0f);
-       glVertex3f( Right, Top, SetBack);
-    glEnd();
+    //// draw "Entering"
+    //glBindTexture(GL_TEXTURE_2D, Tex->TexName);
+    //glBegin(GL_QUADS);
+    //   glTexCoord2f( 0.0f, 1.0f);
+    //   glVertex3f( Left, Top, SetBack);
+    //   glTexCoord2f( 0.0f, Tex->YDisp);
+    //   glVertex3f( Left, Bottom, SetBack);
+    //   glTexCoord2f( Tex->XDisp, Tex->YDisp);
+    //   glVertex3f( Right, Bottom, SetBack);
+    //   glTexCoord2f( Tex->XDisp, 1.0f);
+    //   glVertex3f( Right, Top, SetBack);
+    //glEnd();
 
     Top -= (5*(Tex->Height*1.2f))/4;
 
@@ -619,7 +619,7 @@ void GL_WI_drawEL(void)
     Bottom = Top-(Tex->Height*1.2f);
 
     // draw <LevelName>
-    glBindTexture(GL_TEXTURE_2D, Tex->TexName);
+    /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
     glBegin(GL_QUADS);
        glTexCoord2f( 0.0f, 1.0f);
        glVertex3f( Left, Top, SetBack);
@@ -632,7 +632,7 @@ void GL_WI_drawEL(void)
     glEnd();
 
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    glDisable(GL_BLEND);*/
    }
 
 // Draws "Entering <LevelName>"
@@ -686,24 +686,24 @@ void GL_WI_drawOnLnode( int n, GLTexData *Tex)
         Top = 120.0f-((lnodes[wbs->epsd][n].y-Tex[i].TopOff)*1.2f);
         Bottom = Top-(Tex[i].Height*1.2f);
 
-        glEnable(GL_TEXTURE_2D);
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, 0.0f);
-        glEnable(GL_BLEND);
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        //glEnable(GL_TEXTURE_2D);
+        //glEnable(GL_ALPHA_TEST);
+        //glAlphaFunc(GL_GREATER, 0.0f);
+        //glEnable(GL_BLEND);
+        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-        // draw "You Are Here"
-        glBindTexture(GL_TEXTURE_2D, Tex[i].TexName);
-        glBegin(GL_QUADS);
-           glTexCoord2f( 0.0f, 1.0f);
-           glVertex3f( Left, Top, SetBack);
-           glTexCoord2f( 0.0f, Tex[i].YDisp);
-           glVertex3f( Left, Bottom, SetBack);
-           glTexCoord2f( Tex[i].XDisp, Tex[i].YDisp);
-           glVertex3f( Right, Bottom, SetBack);
-           glTexCoord2f( Tex[i].XDisp, 1.0f);
-           glVertex3f( Right, Top, SetBack);
-        glEnd();
+        //// draw "You Are Here"
+        //glBindTexture(GL_TEXTURE_2D, Tex[i].TexName);
+        //glBegin(GL_QUADS);
+        //   glTexCoord2f( 0.0f, 1.0f);
+        //   glVertex3f( Left, Top, SetBack);
+        //   glTexCoord2f( 0.0f, Tex[i].YDisp);
+        //   glVertex3f( Left, Bottom, SetBack);
+        //   glTexCoord2f( Tex[i].XDisp, Tex[i].YDisp);
+        //   glVertex3f( Right, Bottom, SetBack);
+        //   glTexCoord2f( Tex[i].XDisp, 1.0f);
+        //   glVertex3f( Right, Top, SetBack);
+        //glEnd();
        }
     else
        {
@@ -854,7 +854,7 @@ void GL_WI_drawAnimatedBack(void)
     if (wbs->epsd > 2)
         return;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
@@ -865,7 +865,7 @@ void GL_WI_drawAnimatedBack(void)
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     for (i = 0; i < NUMANIMS[wbs->epsd]; i++)
        {
@@ -883,7 +883,7 @@ void GL_WI_drawAnimatedBack(void)
             Bottom = Top-(Tex->Height*1.2f);
 
             // draw animation frame
-            glBindTexture(GL_TEXTURE_2D, Tex->TexName);
+            /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
             glBegin(GL_QUADS);
                glTexCoord2f( 0.0f, 1.0f);
                glVertex3f( Left, Top, SetBack);
@@ -893,12 +893,12 @@ void GL_WI_drawAnimatedBack(void)
                glVertex3f( Right, Bottom, SetBack);
                glTexCoord2f( Tex->XDisp, 1.0f);
                glVertex3f( Right, Top, SetBack);
-            glEnd();
+            glEnd();*/
 
            }
        }
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 void WI_drawAnimatedBack(void)

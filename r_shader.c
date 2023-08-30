@@ -59,24 +59,6 @@ Shader Shader_Create(const char* name, const char* pVertPath, const char* pFragP
     glDeleteShader(mVertShader);
     glDeleteShader(mFragShader);
 
-    // check for compiler errors in vertex shader
-    glGetShaderiv(mVertShader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
-    {
-        glGetShaderInfoLog(mVertShader, 512, NULL, InfoLog);
-        printf("[ERROR] Failed to compile in vertex shader in %s: \n%s\n", pVertPath, InfoLog);
-    }
-
-    // check for compiler errors in fragment shader
-    glGetShaderiv(mFragShader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
-    {
-        glGetShaderInfoLog(mFragShader, 512, NULL, InfoLog);
-        printf("[ERROR] Failed to compile fragment shader in %s: \n%s\n", pFragPath, InfoLog);
-    }
-
     // check for compiler errors in compiling shaders
     glGetShaderiv(shader.programID, GL_COMPILE_STATUS, &success);
 

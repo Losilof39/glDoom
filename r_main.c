@@ -931,8 +931,8 @@ void GL_DrawSky(float compass)
     if (fSkyBottom < 0.5f)
         fSkyBottom = 0.5f;
 
-    glPushMatrix();
-    glColor3f( 1.0f, 1.0f, 1.0f );
+    /*glPushMatrix();
+    glColor3f( 1.0f, 1.0f, 1.0f );*/
 
     lcomp = compass - 45.0f;
     if (lcomp < 0.0f)
@@ -951,7 +951,7 @@ void GL_DrawSky(float compass)
 
     if (bquad == equad)
     {
-        glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
+        /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
         glBegin( GL_QUADS );
            glTexCoord2f(1.0f, fSkyTop);
            glVertex3f(glLeft, glTop, SetBack);
@@ -961,7 +961,7 @@ void GL_DrawSky(float compass)
            glVertex3f(glRight, glBottom, SetBack);
            glTexCoord2f(0.0f, fSkyTop);
            glVertex3f(glRight, glTop, SetBack);
-        glEnd();
+        glEnd();*/
     }
     else
     {
@@ -970,7 +970,7 @@ void GL_DrawSky(float compass)
         middle =  glRight - ((glRight - glLeft) * tseam);
         tseam = 1.0f - tseam;
 
-        glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
+        /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
         glBegin( GL_QUADS );
            glTexCoord2f(tseam, fSkyTop);
            glVertex3f(glLeft, glTop, SetBack);
@@ -991,10 +991,10 @@ void GL_DrawSky(float compass)
            glVertex3f(glRight, glBottom, SetBack);
            glTexCoord2f( tseam, fSkyTop);
            glVertex3f(glRight, glTop ,SetBack);
-        glEnd();
+        glEnd();*/
     }
 
-    glPopMatrix();
+    //glPopMatrix();
 }
 
 
@@ -1132,25 +1132,25 @@ void DrawAmmoBox(void)
     double       now;
     float        rotation;
 
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    /*glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
 
     glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, AmmoBoxSkin.TexName);
 
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
+    glAlphaFunc(GL_GREATER, 0.0f);*/
     //glEnable(GL_BLEND);
     //glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
 
-    glPushMatrix();
+    /*glPushMatrix();
 
-    glTranslatef( 1056.0f, -16.0f, 3232.0f );
+    glTranslatef( 1056.0f, -16.0f, 3232.0f );*/
     now = (double)(GetTicks() % 5000)*RFactor;
     rotation = (float)now;
-    glRotatef(rotation, 0.0f, 1.0f, 0.0f );
+    //glRotatef(rotation, 0.0f, 1.0f, 0.0f );
 
     // Ammo box front
-    glBegin(GL_QUADS);
+    /*glBegin(GL_QUADS);
        glTexCoord2f(0.21875f, 0.5625f );
        glVertex3f(  14.0f, 14.0f, -7.0f);
        glTexCoord2f(0.21875f, 0.359375f );
@@ -1159,10 +1159,10 @@ void DrawAmmoBox(void)
        glVertex3f( -14.0f,  0.0f, -7.0f);
        glTexCoord2f(0.65625f, 0.5625f );
        glVertex3f( -14.0f, 14.0f, -7.0f);
-    glEnd();
+    glEnd();*/
 
     // Ammo box top
-    glBegin(GL_QUADS);
+    /*glBegin(GL_QUADS);
        glTexCoord2f(0.22222f, 0.78125f );
        glVertex3f(  14.0f, 14.0f,  7.0f);
        glTexCoord2f(0.22222f, 0.578125f );
@@ -1171,10 +1171,10 @@ void DrawAmmoBox(void)
        glVertex3f( -14.0f, 14.0f, -7.0f);
        glTexCoord2f(0.65079f, 0.78125f );
        glVertex3f( -14.0f, 14.0f,  7.0f);
-    glEnd();
+    glEnd();*/
 
     // Ammo box left side
-    glBegin(GL_QUADS);
+    /*glBegin(GL_QUADS);
        glTexCoord2f(0.0f, 0.5546875f );
        glVertex3f(  14.0f, 14.0f,  7.0f);
        glTexCoord2f(0.0f, 0.359375f );
@@ -1183,10 +1183,10 @@ void DrawAmmoBox(void)
        glVertex3f(  14.0f,  0.0f, -7.0f);
        glTexCoord2f(0.21875f, 0.5546875f );
        glVertex3f(  14.0f, 14.0f, -7.0f);
-    glEnd();
+    glEnd();*/
 
     // Ammo box right side
-    glBegin(GL_QUADS);
+    /*glBegin(GL_QUADS);
        glTexCoord2f(0.65625f, 0.5546875f );
        glVertex3f( -14.0f, 14.0f, -7.0f);
        glTexCoord2f(0.65625f, 0.359375f );
@@ -1195,10 +1195,10 @@ void DrawAmmoBox(void)
        glVertex3f( -14.0f,  0.0f,  7.0f);
        glTexCoord2f(0.859375f, 0.5546875f );
        glVertex3f( -14.0f, 14.0f,  7.0f);
-    glEnd();
+    glEnd();*/
 
     // Ammo box back
-    glBegin(GL_QUADS);
+    /*glBegin(GL_QUADS);
        glTexCoord2f(0.22222f, 0.796875f );
        glVertex3f( -14.0f, 14.0f,  7.0f);
        glTexCoord2f(0.22222f, 1.0f );
@@ -1209,7 +1209,7 @@ void DrawAmmoBox(void)
        glVertex3f(  14.0f, 14.0f,  7.0f);
     glEnd();
 
-    glPopMatrix();
+    glPopMatrix();*/
    }
 
 extern int       gl_poffsetf, gl_poffsetu;
@@ -1704,7 +1704,7 @@ void GL_RenderPlayerView(player_t* player)
     sector_t*       psector;
     sector_plane_t* pplane;
 
-    glPushMatrix();
+    //glPushMatrix();
 
     fview = (float)(viewangle*pfactor);
 
@@ -1728,31 +1728,31 @@ void GL_RenderPlayerView(player_t* player)
 
     R_BuildRenderQueue();
 
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
 
-    glRotatef(fXAngle, 1.0f, 0.0f, 0.0f );
+    //glRotatef(fXAngle, 1.0f, 0.0f, 0.0f );
 
     GL_DrawSky(yangle);
 
-    glRotatef(yangle, 0.0f, 1.0f, 0.0f );
+    //glRotatef(yangle, 0.0f, 1.0f, 0.0f );
 
     //glEnable(GL_CULL_FACE);
     //glFrontFace(GL_CCW);
     //glCullFace(GL_BACK);
 
-    glEnable(GL_DEPTH_TEST);
-    glDepthFunc( GL_LEQUAL );
+    //glEnable(GL_DEPTH_TEST);
+    //glDepthFunc( GL_LEQUAL );
 
     if (gl_fog == 1)
        {
-        glEnable(GL_FOG);
+        /*glEnable(GL_FOG);
         glFogi(GL_FOG_MODE, GL_LINEAR);
         glFogf(GL_FOG_START, 128.0f);
         glFogf(GL_FOG_END, 2048.0f);
-        glFogfv(GL_FOG_COLOR, fogcolor);
+        glFogfv(GL_FOG_COLOR, fogcolor);*/
        }
 
-    glTranslatef((GLfloat)ViewPosition[0], (GLfloat)ViewPosition[1], (GLfloat)ViewPosition[2]);
+    //glTranslatef((GLfloat)ViewPosition[0], (GLfloat)ViewPosition[1], (GLfloat)ViewPosition[2]);
 
     for (wall = 0; wall < sorted_walls_count; wall++)
     {
@@ -1769,9 +1769,9 @@ void GL_RenderPlayerView(player_t* player)
                     if (WhiteBias == true)
                         lightv = 1.0f;
 
-                    glColor4f(lightv, lightv, lightv, 1.0f);
-                    if ((lightv >= foglight) && (gl_fog == 1))
-                        glDisable(GL_FOG);
+                    //glColor4f(lightv, lightv, lightv, 1.0f);
+                    //if ((lightv >= foglight) && (gl_fog == 1))
+                        //glDisable(GL_FOG);
 
                     switch (TempPoly->Position)
                     {
@@ -1787,15 +1787,15 @@ void GL_RenderPlayerView(player_t* player)
                     }
 
 
-                    glBindTexture(GL_TEXTURE_2D, TexList[translate[texturetranslation[texnumb]]].glTexture);
+                    //glBindTexture(GL_TEXTURE_2D, TexList[translate[texturetranslation[texnumb]]].glTexture);
 
                     if (TexList[TempPoly->Texture[0]].Transparent == true)
                     {
-                        glEnable(GL_ALPHA_TEST);
-                        glAlphaFunc(GL_GREATER, 0.0f);
+                        /*glEnable(GL_ALPHA_TEST);
+                        glAlphaFunc(GL_GREATER, 0.0f);*/
                     }
 
-                    glBegin(GL_QUADS);
+                    /*glBegin(GL_QUADS);
                     glTexCoord2f(TempPoly->Point[0].tu, TempPoly->Point[0].tv);
                     glVertex3fv(TempPoly->Point[0].v);
                     glTexCoord2f(TempPoly->Point[1].tu, TempPoly->Point[1].tv);
@@ -1804,26 +1804,26 @@ void GL_RenderPlayerView(player_t* player)
                     glVertex3fv(TempPoly->Point[2].v);
                     glTexCoord2f(TempPoly->Point[3].tu, TempPoly->Point[3].tv);
                     glVertex3fv(TempPoly->Point[3].v);
-                    glEnd();
+                    glEnd();*/
 
-                    if (TexList[TempPoly->Texture[0]].Transparent == true)
-                        glDisable(GL_ALPHA_TEST);
+                    //if (TexList[TempPoly->Texture[0]].Transparent == true)
+                        //glDisable(GL_ALPHA_TEST);
 
 
-                    if ((lightv >= foglight) && (gl_fog == 1))
-                        glEnable(GL_FOG);
+                    //if ((lightv >= foglight) && (gl_fog == 1))
+                        //glEnable(GL_FOG);
 
                 }
                 else
                 {
-                    if (gl_fog == 1)
-                        glDisable(GL_FOG);
+                    //if (gl_fog == 1)
+                        //glDisable(GL_FOG);
 
-                    glDisable(GL_TEXTURE_2D);
+                    /*glDisable(GL_TEXTURE_2D);
                     glEnable(GL_BLEND);
-                    glBlendFunc(GL_ZERO, GL_ONE);
+                    glBlendFunc(GL_ZERO, GL_ONE);*/
 
-                    glColor4f(0.0f, 0.0, 0.0, 0.0f);
+                    /*glColor4f(0.0f, 0.0, 0.0, 0.0f);
 
                     glBegin(GL_QUADS);
                     glVertex3fv(TempPoly->Point[0].v);
@@ -1833,11 +1833,11 @@ void GL_RenderPlayerView(player_t* player)
                     glEnd();
 
                     glEnable(GL_TEXTURE_2D);
-                    glDisable(GL_BLEND);
+                    glDisable(GL_BLEND);*/
 
 
-                    if (gl_fog == 1)
-                        glEnable(GL_FOG);
+                    //if (gl_fog == 1)
+                        //glEnable(GL_FOG);
                 }
 
             }
@@ -1845,10 +1845,10 @@ void GL_RenderPlayerView(player_t* player)
         }
     }
 
-    glDisable(GL_CULL_FACE);
+    /*glDisable(GL_CULL_FACE);
 
     glBindTexture(GL_TEXTURE_2D, 0);
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );*/
 
     offsetf = (double)gl_poffsetf * div255;
     offsetu = (double)gl_poffsetu * div255;
@@ -1861,7 +1861,7 @@ void GL_RenderPlayerView(player_t* player)
 
         if (psector->floorheight != psector->ceilingheight)
         {
-            glPolygonOffset((float)offsetf,(float)offsetu);
+            //glPolygonOffset((float)offsetf,(float)offsetu);
 
             if (player->viewz > psector->floorheight)
             {
@@ -1869,15 +1869,15 @@ void GL_RenderPlayerView(player_t* player)
                 lightv    = psector->lightlevel;
                 lightv   /= 255.0f;
 
-                if ((lightv >= foglight)  && (gl_fog == 1))
-                    glDisable(GL_FOG);
+                /*if ((lightv >= foglight)  && (gl_fog == 1))
+                    glDisable(GL_FOG);*/
 
-                if (WhiteBias == true)
+                /*if (WhiteBias == true)
                     glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
                 else
-                    glColor4f( lightv, lightv, lightv, 1.0f );
+                    glColor4f( lightv, lightv, lightv, 1.0f );*/
        
-                glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
+                //glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
                 for (subsector = 0; subsector < pplane->ss_count; subsector++)
                 {
                     psubsector = pplane->subsectors[subsector];
@@ -1885,36 +1885,36 @@ void GL_RenderPlayerView(player_t* player)
                     if (psector->floorpic == skyflatnum)
                         continue;
 
-                    if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
-                        glEnable(GL_POLYGON_OFFSET_FILL);
+                    /*if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
+                        glEnable(GL_POLYGON_OFFSET_FILL);*/
         
-                    glBegin(GL_POLYGON);
+                    //glBegin(GL_POLYGON);
                     for (i = 0; i < psubsector->PCount; i++)
                     {
-                        glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
+                        //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
                         psubsector->Point[i].v[1] = flathigh;
-                        glVertex3fv(psubsector->Point[i].v);
+                        //glVertex3fv(psubsector->Point[i].v);
                     }
-                    glEnd();
+                    //glEnd();
 
                     if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
                     {
-                        glDisable(GL_POLYGON_OFFSET_FILL);
+                        /*glDisable(GL_POLYGON_OFFSET_FILL);
                         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                        glBegin(GL_POLYGON);
+                        glBegin(GL_POLYGON);*/
                         for (i = 0; i < psubsector->PCount; i++)
                         {
-                            glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
+                            //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
                             psubsector->Point[i].v[1] = flathigh;
-                            glVertex3fv(psubsector->Point[i].v);
+                            //glVertex3fv(psubsector->Point[i].v);
                         }
-                        glEnd();
-                        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                        /*glEnd();
+                        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
                     }
                 }
 
-                if ((lightv >= foglight) && (gl_fog == 1))
-                    glEnable(GL_FOG);
+                /*if ((lightv >= foglight) && (gl_fog == 1))
+                    glEnable(GL_FOG);*/
             }
 
             if (player->viewz < psector->ceilingheight)
@@ -1923,7 +1923,7 @@ void GL_RenderPlayerView(player_t* player)
                 lightv    = psector->lightlevel;
                 lightv   /= 255.0f;
 
-                if ((lightv >= foglight) && (gl_fog == 1))
+                /*if ((lightv >= foglight) && (gl_fog == 1))
                     glDisable(GL_FOG);
 
                 if (WhiteBias == true)
@@ -1931,7 +1931,7 @@ void GL_RenderPlayerView(player_t* player)
                 else
                     glColor4f(lightv, lightv, lightv, 1.0f);
            
-                glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture);
+                glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture);*/
                 for (subsector = 0; subsector < pplane->ss_count; subsector++)
                 {
                     psubsector = pplane->subsectors[subsector];
@@ -1939,36 +1939,36 @@ void GL_RenderPlayerView(player_t* player)
                     if (psector->ceilingpic == skyflatnum)
                         continue;
 
-                    if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
-                        glEnable(GL_POLYGON_OFFSET_FILL);
+                    /*if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
+                        glEnable(GL_POLYGON_OFFSET_FILL);*/
 
-                    glBegin(GL_POLYGON);
+                    //glBegin(GL_POLYGON);
                     for (i = 0; i < psubsector->PCount; i++)
                     {
-                        glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
+                        //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
                         psubsector->Point[i].v[1] = flathigh;
-                        glVertex3fv(psubsector->Point[i].v);
+                        //glVertex3fv(psubsector->Point[i].v);
                     }
-                    glEnd();
+                    //glEnd();
 
                     if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
                     {
-                        glDisable(GL_POLYGON_OFFSET_FILL);
+                        /*glDisable(GL_POLYGON_OFFSET_FILL);
                         glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                        glBegin(GL_POLYGON);
+                        glBegin(GL_POLYGON);*/
                         for (i = 0; i < psubsector->PCount; i++)
                         {
-                            glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
+                            //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
                             psubsector->Point[i].v[1] = flathigh;
-                            glVertex3fv(psubsector->Point[i].v);
+                            //glVertex3fv(psubsector->Point[i].v);
                         }
-                        glEnd();
-                        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+                        /*glEnd();
+                        glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
                     }
                 }
 
-                if ((lightv >= foglight) && (gl_fog == 1))
-                    glEnable(GL_FOG);
+                /*if ((lightv >= foglight) && (gl_fog == 1))
+                    glEnable(GL_FOG);*/
  
             }
         }
@@ -1982,7 +1982,7 @@ void GL_RenderPlayerView(player_t* player)
 
     GL_DrawThings();
 
-    glDisable(GL_TEXTURE_2D);
+    /*glDisable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, 0);
 
     glDisable(GL_DEPTH_TEST);
@@ -1994,11 +1994,11 @@ void GL_RenderPlayerView(player_t* player)
 
     glPopMatrix();
 
-    glPushMatrix();
+    glPushMatrix();*/
 
     GL_DrawPlayerSprites();
 
-    if (RedBias == true)
+    /*if (RedBias == true)
        {
         glColor4f( 1.0f, 0.0f, 0.0f, 0.2f );
        }
@@ -2022,7 +2022,7 @@ void GL_RenderPlayerView(player_t* player)
         glDisable(GL_BLEND);
     }
 
-    glPopMatrix();
+    glPopMatrix();*/
 }
 
 /*

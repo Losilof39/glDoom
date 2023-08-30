@@ -363,7 +363,7 @@ void GL_TileBackground(DW_TexList *tex)
     rtc = 320.0f/64.0f;
     ttc = 240.0f/64.0f;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, tex->glTexture);
     glBegin(GL_QUADS);
@@ -377,7 +377,7 @@ void GL_TileBackground(DW_TexList *tex)
        glVertex3f(  160.0f, 120.0f, SetBack);
     glEnd();
 
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 void GL_F_TextWrite (void)
@@ -392,12 +392,12 @@ void GL_F_TextWrite (void)
 
     GL_TileBackground( glFinaleFlat );
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
 
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 
     x = 10.0f;
     y = 10.0f;
@@ -440,7 +440,7 @@ void GL_F_TextWrite (void)
         Left = (-160.0f+cx);
         Right = Left + GLHudFont[c].Width;
 
-        glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
+        /*glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
         glBegin(GL_QUADS);
           glTexCoord2f( 0.0f, 1.0f);
           glVertex3f( Left, Top, SetBack);
@@ -450,11 +450,11 @@ void GL_F_TextWrite (void)
           glVertex3f( Right, Bottom, SetBack);
           glTexCoord2f( GLHudFont[c].XDisp, 1.0f);
           glVertex3f( Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
 
         cx += GLHudFont[c].Width;
        }
-    glDisable(GL_TEXTURE_2D);
+    //glDisable(GL_TEXTURE_2D);
    }
 
 void F_TextWrite (void)
@@ -807,13 +807,13 @@ void GL_F_CastDrawer (void)
     lump = sprframe->lump[0];
     flip = sprframe->flip[0];
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    glBindTexture(GL_TEXTURE_2D, SprData[lump].TexName);
+    glBindTexture(GL_TEXTURE_2D, SprData[lump].TexName);*/
 
     if (SprData[lump].Height != SprData[lump].TopOff)
        {
@@ -835,7 +835,7 @@ void GL_F_CastDrawer (void)
         x1 = 0.0f;
         x2 = SprData[lump].XDisp;
        }
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
+    /*glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
     glBegin(GL_QUADS);
        glTexCoord2f( x1,  1.0f );
        glVertex3f( 0.0f-(SprData[lump].Width/2.0f),  fTop, -160.0f );
@@ -845,7 +845,7 @@ void GL_F_CastDrawer (void)
        glVertex3f(  0.0f+(SprData[lump].Width/2.0f), fBottom, -160.0f );
        glTexCoord2f( x2,  1.0f );
        glVertex3f(  0.0f+(SprData[lump].Width/2.0f),  fTop, -160.0f );
-    glEnd();
+    glEnd();*/
 }
 
 //
@@ -930,11 +930,11 @@ void GL_F_BunnyScroll (void)
     Top = 120.0f;
     Bottom = -120.0f;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
 
     //p1 = W_CacheLumpName ("PFUB2", PU_LEVEL);
     //p2 = W_CacheLumpName ("PFUB1", PU_LEVEL);
@@ -960,7 +960,7 @@ void GL_F_BunnyScroll (void)
         ltc = scrolled / 255.0f;
         rtc = 1.0f;
 
-        glBindTexture(GL_TEXTURE_2D, glPFub2[0].TexName);
+        /*glBindTexture(GL_TEXTURE_2D, glPFub2[0].TexName);
 
         glBegin(GL_QUADS);
            glTexCoord2f(ltc, 1.0f);
@@ -974,7 +974,7 @@ void GL_F_BunnyScroll (void)
 
            glTexCoord2f(rtc, 1.0f);
            glVertex3f(Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
        }
     if (scrolled < 320)
        {
@@ -986,7 +986,7 @@ void GL_F_BunnyScroll (void)
         ltc = 1.0f-((Right-Left)/64.0f);
         rtc = 1.0f;
 
-        glBindTexture(GL_TEXTURE_2D, glPFub2[1].TexName);
+        /*glBindTexture(GL_TEXTURE_2D, glPFub2[1].TexName);
 
         glBegin(GL_QUADS);
            glTexCoord2f(ltc, 1.0f);
@@ -1000,7 +1000,7 @@ void GL_F_BunnyScroll (void)
 
            glTexCoord2f(rtc, 1.0f);
            glVertex3f(Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
        }
     if (scrolled > 1)
        {
@@ -1014,7 +1014,7 @@ void GL_F_BunnyScroll (void)
         ltc = 0.0f;
         rtc = (Right-Left)/256.0f;
 
-        glBindTexture(GL_TEXTURE_2D, glPFub1[0].TexName);
+        /*glBindTexture(GL_TEXTURE_2D, glPFub1[0].TexName);
 
         glBegin(GL_QUADS);
            glTexCoord2f(ltc, 1.0f);
@@ -1028,7 +1028,7 @@ void GL_F_BunnyScroll (void)
 
            glTexCoord2f(rtc, 1.0f);
            glVertex3f(Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
        }
     if (scrolled > 256)
        {
@@ -1041,7 +1041,7 @@ void GL_F_BunnyScroll (void)
 
         ltc = 0.0f;
         rtc = (Right-Left)/64.0f;
-        glBindTexture(GL_TEXTURE_2D, glPFub1[1].TexName);
+        /*glBindTexture(GL_TEXTURE_2D, glPFub1[1].TexName);
 
         glBegin(GL_QUADS);
            glTexCoord2f(ltc, 1.0f);
@@ -1055,7 +1055,7 @@ void GL_F_BunnyScroll (void)
 
            glTexCoord2f(rtc, 1.0f);
            glVertex3f(Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
        }
 
 /*

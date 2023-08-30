@@ -1248,12 +1248,12 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
     Left = -160.0f + x;
     Right = Left + 14.0f;
 
-    glNormal3f( 0.0f, 0.0f, 1.0f);
+    //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < 3; digit++)
        {
         if (numstr[digit] != ' ')
            {
-            glBindTexture(GL_TEXTURE_2D, TallNums[numstr[digit]].TexName);
+            /*glBindTexture(GL_TEXTURE_2D, TallNums[numstr[digit]].TexName);
             glBegin( GL_QUADS );
                glTexCoord2f( 0.0f, 1.0f );
                glVertex3f( Left,  Top, SetBack);
@@ -1263,7 +1263,7 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
                glVertex3f( Right, Bottom, SetBack);
                glTexCoord2f( 0.875f, 1.0f );
                glVertex3f( Right, Top, SetBack);
-            glEnd();
+            glEnd();*/
            }
         Left += 14.0f;
         Right += 14.0f;
@@ -1271,7 +1271,7 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
 
     if (percent == true)
        {
-        glBindTexture(GL_TEXTURE_2D, TallPerc.TexName);
+        /*glBindTexture(GL_TEXTURE_2D, TallPerc.TexName);
         glBegin( GL_QUADS );
             glTexCoord2f( 0.0f, 1.0f );
             glVertex3f( Left,  Top, SetBack);
@@ -1281,7 +1281,7 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
             glVertex3f( Right, Bottom, SetBack);
             glTexCoord2f( 0.875f, 1.0f );
             glVertex3f( Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
        }
    }
 
@@ -1320,12 +1320,12 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
     Left = -160.0f + x;
     Right = Left + 4.0f;
 
-    glNormal3f( 0.0f, 0.0f, 1.0f);
+    //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < digits; digit++)
        {
         if (numstr[digit] != ' ')
            {
-            if (yellow == true)
+            /*if (yellow == true)
                {
                 glBindTexture(GL_TEXTURE_2D, ShortNums[1][numstr[digit]].TexName);
                }
@@ -1342,7 +1342,7 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
                glVertex3f( Right, Bottom, SetBack);
                glTexCoord2f( 0.875f, 1.0f );
                glVertex3f( Right, Top, SetBack);
-            glEnd();
+            glEnd();*/
            }
         Left += 4.0f;
         Right += 4.0f;
@@ -1358,7 +1358,7 @@ void GL_DrawStatusBar0()
     int           atype, weapon, card;
     int          *num;
 
-    glDisable(GL_ALPHA_TEST);
+    /*glDisable(GL_ALPHA_TEST);
     glEnable(GL_TEXTURE_2D);
 
     glColor3f( 1.0f, 1.0f, 1.0f );
@@ -1399,7 +1399,7 @@ void GL_DrawStatusBar0()
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
@@ -1448,7 +1448,7 @@ void GL_DrawStatusBar0()
            }
        }
 
-    glEnable(GL_ALPHA_TEST);
+    /*glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
     if (gl_premalpha)
@@ -1458,7 +1458,7 @@ void GL_DrawStatusBar0()
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     if (deathmatch == 0)
        {
@@ -1486,7 +1486,7 @@ void GL_DrawStatusBar0()
        }
 
     // Draw the "Doom Guy's" face at the bottom
-    glBindTexture(GL_TEXTURE_2D, FaceTex[st_faceindex].TexName);
+    /*glBindTexture(GL_TEXTURE_2D, FaceTex[st_faceindex].TexName);
     glBegin( GL_QUADS );
       glNormal3f( 0.0f, 0.0f, 1.0f);
       glTexCoord2f( 0.0f, 0.97f );
@@ -1501,18 +1501,18 @@ void GL_DrawStatusBar0()
 
     glDisable(GL_ALPHA_TEST);
     glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 void GL_DrawStatusBar1()
    {
     int card;
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     GL_DrawPatch( &glStimPak, 3.0f, 180.0f );
 
-    glEnable(GL_ALPHA_TEST);
+    /*glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
     if (gl_premalpha)
@@ -1522,7 +1522,7 @@ void GL_DrawStatusBar1()
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     // Draw current health percentage (up to 200)
     if (w_health.n.num != NULL)
@@ -1539,7 +1539,7 @@ void GL_DrawStatusBar1()
         GL_DrawPatch( &glPlayFrag, 116.0f, 3.0f );
         Scale = scaleh;
 
-        glEnable(GL_ALPHA_TEST);
+        /*glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, 0.0f);
         glEnable(GL_BLEND);
         if (gl_premalpha)
@@ -1549,7 +1549,7 @@ void GL_DrawStatusBar1()
         else
            {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-           }
+           }*/
 
         GL_DrawLargeNum(146, 6, *w_frags.num, false);
        }
@@ -1573,7 +1573,7 @@ void GL_DrawStatusBar1()
              break;
        }
 
-    glEnable(GL_ALPHA_TEST);
+    /*glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
     if (gl_premalpha)
@@ -1583,7 +1583,7 @@ void GL_DrawStatusBar1()
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
@@ -1608,7 +1608,7 @@ void GL_DrawStatusBar1()
                 GL_DrawPatch( &glBArmor[0], 262.0f-glBArmor[0].Width, 11.0f-(glBArmor[0].Height/2.0f));
                }
 
-            glEnable(GL_ALPHA_TEST);
+            /*glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
             glEnable(GL_BLEND);
             if (gl_premalpha)
@@ -1618,7 +1618,7 @@ void GL_DrawStatusBar1()
             else
                {
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-               }
+               }*/
 
             GL_DrawLargeNum( 262, 4, *w_armor.n.num, true);
            }
@@ -1648,20 +1648,20 @@ void GL_DrawStatusBar1()
       glVertex3f(  14.0f, -84.0f, SetBack);
     glEnd();
 */
-    glDisable(GL_ALPHA_TEST);
+    /*glDisable(GL_ALPHA_TEST);
     glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 void GL_DrawStatusBar2()
    {
     int card;
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     GL_DrawPatch( &glStimPak, 3.0f, 180.0f );
 
-    glEnable(GL_ALPHA_TEST);
+    /*glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
     if (gl_premalpha)
@@ -1671,7 +1671,7 @@ void GL_DrawStatusBar2()
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     // Draw current health percentage (up to 200)
     if (w_health.n.num != NULL)
@@ -1688,7 +1688,7 @@ void GL_DrawStatusBar2()
         GL_DrawPatch( &glPlayFrag, 116.0f, 3.0f );
         Scale = scaleh;
 
-        glEnable(GL_ALPHA_TEST);
+        /*glEnable(GL_ALPHA_TEST);
         glAlphaFunc(GL_GREATER, 0.0f);
         glEnable(GL_BLEND);
         if (gl_premalpha)
@@ -1698,7 +1698,7 @@ void GL_DrawStatusBar2()
         else
            {
             glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-           }
+           }*/
 
         GL_DrawLargeNum(146, 6, *w_frags.num, false);
        }
@@ -1722,7 +1722,7 @@ void GL_DrawStatusBar2()
              break;
        }
 
-    glEnable(GL_ALPHA_TEST);
+    /*glEnable(GL_ALPHA_TEST);
     glAlphaFunc(GL_GREATER, 0.0f);
     glEnable(GL_BLEND);
     if (gl_premalpha)
@@ -1732,7 +1732,7 @@ void GL_DrawStatusBar2()
     else
        {
         glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+       }*/
 
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
@@ -1757,7 +1757,7 @@ void GL_DrawStatusBar2()
                 GL_DrawPatch( &glBArmor[0], 262.0f-glBArmor[0].Width, 189.0f-(glBArmor[0].Height/2.0f));
                }
 
-            glEnable(GL_ALPHA_TEST);
+            /*glEnable(GL_ALPHA_TEST);
             glAlphaFunc(GL_GREATER, 0.0f);
             glEnable(GL_BLEND);
             if (gl_premalpha)
@@ -1767,7 +1767,7 @@ void GL_DrawStatusBar2()
             else
                {
                 glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-               }
+               }*/
 
             GL_DrawLargeNum( 262, 182, *w_armor.n.num, true);
            }
@@ -1797,9 +1797,9 @@ void GL_DrawStatusBar2()
       glVertex3f(  14.0f, -84.0f, SetBack);
     glEnd();
 */
-    glDisable(GL_ALPHA_TEST);
+    /*glDisable(GL_ALPHA_TEST);
     glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 int hudmode;

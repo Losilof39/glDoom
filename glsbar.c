@@ -165,10 +165,10 @@ void GL_RGBStatArms(patch_t *armsbg)
 
 void GL_StatArmsOvl(MY_RGBA *RGBData)
    {
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, SBarTexture[0]);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 104, 0, 40, 32, GL_RGBA, GL_UNSIGNED_BYTE, RGBData );
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 void GL_RGBStatBack(patch_t *statback, int player)

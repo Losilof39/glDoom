@@ -364,7 +364,7 @@ void D_Display (void)
         GL_DrawStatusBar(hudmode);
        }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     if (gamestate == GS_LEVEL && gametic)
        {
@@ -472,15 +472,15 @@ void GL_DrawPausePic()
    {
     float PauseLeft, PauseRight, PauseBottom;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
+    glAlphaFunc(GL_GREATER, 0.0f);*/
 
     PauseLeft = PauseTexData.Width / -2.0f;
     PauseRight = PauseTexData.Width / 2.0f;
     PauseBottom = 116.0f - PauseTexData.Height;
 
-    glColor3f( 1.0f, 1.0f, 1.0f );
+    /*glColor3f( 1.0f, 1.0f, 1.0f );
     glBindTexture(GL_TEXTURE_2D, PauseTexData.TexName);
     glBegin( GL_QUADS );
       glNormal3f( 0.0f, 0.0f, 1.0f);
@@ -495,7 +495,7 @@ void GL_DrawPausePic()
     glEnd();
 
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 //

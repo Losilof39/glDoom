@@ -145,7 +145,7 @@ int M_GLDrawText( int x, int y, char *string )
         Top = 120.0f-(y-GLHudFont[c].TopOff);
         Bottom = Top - GLHudFont[c].Height;
 
-        glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
+        /*glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
         glBegin( GL_QUADS );
            glNormal3f(  0.0f, 0.0f, 1.0f);
            glTexCoord2f( 0.0f, 1.0f );
@@ -156,7 +156,7 @@ int M_GLDrawText( int x, int y, char *string )
            glVertex3f( Right, Bottom, SetBack);
            glTexCoord2f( GLHudFont[c].XDisp, 1.0f );
            glVertex3f( Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
 
         if (fx + GLHudFont[c].Width > 320.0f)
             break;
