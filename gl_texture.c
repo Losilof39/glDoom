@@ -99,6 +99,47 @@ typedef struct
     
 } texture_t;
 
+#ifndef _MSC_VER
+// win32 structs manually defined to be more portable
+typedef struct BITMAPFILEHEADER {
+    uint16_t  bfType;
+    uint32_t bfSize;
+    uint16_t  bfReserved1;
+    uint16_t  bfReserved2;
+    uint32_t bfOffBits;
+}BITMAPFILEHEADER;
+
+typedef struct BITMAPINFOHEADER {
+    uint32_t biSize;
+    long  biWidth;
+    long  biHeight;
+    uint16_t  biPlanes;
+    uint16_t  biBitCount;
+    uint32_t biCompression;
+    uint32_t biSizeImage;
+    long  biXPelsPerMeter;
+    long  biYPelsPerMeter;
+    uint32_t biClrUsed;
+    uint32_t biClrImportant;
+} BITMAPINFOHEADER;
+
+typedef struct tagRGBQUAD {
+    byte rgbBlue;
+    byte rgbGreen;
+    byte rgbRed;
+    byte rgbReserved;
+} RGBQUAD;
+
+typedef struct RECT {
+    long left;
+    long top;
+    long right;
+    long bottom;
+} RECT;
+#else
+#include <Windows.h>
+#endif
+
 void InitGLPalette(int red, int green, int blue)
    {
     int i;
