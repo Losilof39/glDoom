@@ -83,7 +83,7 @@ void GL_CreateStatusBar(patch_t *sbar)
         patchbuff[x] = 0;
        }
 
-    V_DrawPatchBuff( 0, 0, patchbuff, sbar);
+    ConvertToRawTexture( 0, 0, patchbuff, sbar);
     for (y = 0, d = 0; y < 32; y++)
        {
         yoff = y * 320;
@@ -129,7 +129,7 @@ void GL_RGBStatFrag(patch_t *sbar)
    {
     int            x, y, z, i, yoff;
 
-    V_DrawPatchBuff( 0, 0, platebuff, sbar);
+    ConvertToRawTexture( 0, 0, platebuff, sbar);
     for (y = 0, i = 0; y < 32; y++)
        {
         yoff = (31-y) * 104;
@@ -147,7 +147,7 @@ void GL_RGBStatArms(patch_t *armsbg)
    {
     int            x, y, i, yoff;
 
-    V_DrawPatchBuff( 0, 0, platebuff, armsbg);
+    ConvertToRawTexture( 0, 0, platebuff, armsbg);
 
     yoff = 31*40;
     for (y = 0, i = 0; y < 32; y++)
@@ -175,7 +175,7 @@ void GL_RGBStatBack(patch_t *statback, int player)
    {
     int            x, y, z, i, yoff;
 
-    V_DrawPatchBuff( 0, 0, patchbuff, statback);
+    ConvertToRawTexture( 0, 0, patchbuff, statback);
     
     for (y = 0, i = 0; y < statback->height; y++)
        {
