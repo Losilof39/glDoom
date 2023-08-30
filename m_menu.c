@@ -1245,7 +1245,7 @@ void GL_DrawLoad(void)
         GL_WriteText(LoadDef.x,LoadDef.y+(LINEHEIGHT*i),savegamestrings[i]);
        }
 
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
    }
 
 
@@ -1396,8 +1396,8 @@ void GL_DrawSave(void)
         GL_WriteText(LoadDef.x+i,LoadDef.y+LINEHEIGHT*saveSlot,"_");
        }
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
 }
 
 //
@@ -1664,8 +1664,8 @@ void GL_DrawGame(void)
    {
     GL_DrawTitle(28, &glMainMenu[0]);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1720,8 +1720,8 @@ void GL_DrawJoinGame(void)
     GL_WriteTextN(245,100, "30",              tc_grey);
     GL_WriteTextN(285,100, "NONE",            tc_grey);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1799,8 +1799,8 @@ void GL_DrawStartGame(void)
        }
     GL_WriteTextN(164, StartGameDef.y+(10*5)+8, msgstr, tc_grey);
     
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1868,8 +1868,8 @@ void GL_DrawMPlayer(void)
    {
     GL_DrawTitle(28, &glMPlayerTitle);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1913,8 +1913,8 @@ void GL_DrawMusic(void)
     GL_WriteTextN(164, MusicDef.y+(10*1)+8, "ORIGINAL CODING", tc_grey);
     GL_WriteTextN(164, MusicDef.y+(10*2)+8, "LOOP SONG", tc_grey);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1928,8 +1928,8 @@ void GL_DrawSound(void)
 
     GL_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(music_vol+1),16,snd_MusicVolume);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+   /* glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 void M_Setup(int choice)
@@ -1993,8 +1993,8 @@ void GL_DrawMainMenu()
    {
     GL_DrawTitle(2, &GameLogo);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 
@@ -2067,8 +2067,8 @@ void GL_DrawEpisode(void)
    {
     GL_DrawTitle(38, &glEpisodeTitle);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 void M_VerifyNightmare(int ch)
