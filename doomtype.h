@@ -106,6 +106,8 @@ typedef int dboolean;
 #if defined(_MSC_VER) && !defined(ANSI_C)
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
+#define strupr _strupr
+#define strlwr _strlwr
 #endif
 
 #if defined(_MSC_VER)

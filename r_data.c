@@ -706,7 +706,7 @@ int	R_CheckTextureNumForName(char* name)
 
     strncpy(tname, name, 8);
     tname[8] = 0;
-    D_strupper(tname);
+    strupr(tname);
 
     for (i = 0; i < numtextures; i++)
         if (!strncasecmp(textures[i]->name, tname, 8))

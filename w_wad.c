@@ -354,7 +354,7 @@ int W_CheckNumForName(char* name)
     name8.s[8] = 0;
 
     // case insensitive
-    D_strupper(name8.s);		
+    strupr(name8.s);		
 
     v1 = name8.x[0];
     v2 = name8.x[1];
