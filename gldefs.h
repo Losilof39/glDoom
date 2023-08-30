@@ -20,6 +20,7 @@ typedef struct
     GLuint vertVBO;
     GLuint texVBO;  // if passed in GL_MakeScreenTexture, its the VBO of the first tex in the bi-array
     GLuint texVBO2; // if passed in GL_MakeScreenTexture, its the VBO of the second tex in the bi-array. Otherwise its not used
+    int bLoaded;    // texture already precached?
     float Width;    // Actual texture width
     float Height;   // Actual texture height
     float XDisp;    // Texture coordinate displacement from right side

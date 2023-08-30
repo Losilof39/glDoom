@@ -190,16 +190,10 @@ void OGL_Error( int GL_Code, char *msg )
 //  StartUpOpenGL sets the pixel format and a rendering context then returns true/false
 dboolean StartUpOpenGL()
    {
-    int rendertype = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
-
-    if (M_CheckParm("-core"))
-    {
-        rendertype = SDL_GL_CONTEXT_PROFILE_CORE;
-    }
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
-    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, rendertype);
+    SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
     glContext = SDL_GL_CreateContext(pWindow);
 
@@ -217,16 +211,9 @@ dboolean StartUpOpenGL()
         I_Quit();
     }
 
-    if (M_CheckParm("-core"))
-    {
-        InitRendererCore(&renderer);
-        gl_core = 1;
-    }
-    else 
-    {
-        InitRendererFixed(&renderer);
-        gl_core = 0;
-    }
+
+    InitRendererCore(&renderer);
+    gl_core = 1;
 
     renderer.Setup();
 
@@ -246,8 +233,8 @@ void I_InitGraphics(void)
 
 void GetGLInfo()
    {
-    if (gl_core)
-        return;
+    /*if (gl_core)
+        */return;
 
     char *szu, *tempstr;
     const GLubyte *szt;

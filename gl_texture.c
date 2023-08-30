@@ -543,12 +543,13 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
 
-    if (gl_core)
+    if (!Tex->bLoaded)
     {
         glGenBuffers(1, &Tex->texVBO);
         glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        Tex->bLoaded = 1;
     }
    }
 
@@ -663,12 +664,13 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
 
     float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
 
-    if (gl_core)
+    if (!Tex->bLoaded)
     {
         glGenBuffers(1, &Tex->texVBO);
         glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        Tex->bLoaded = 1;
     }
    }
 
@@ -947,12 +949,13 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
 
     float coords[] = { 0.0f, 1.0f, 0.0f, Tex[0].YDisp, Tex[0].XDisp, Tex[0].YDisp, Tex[0].XDisp, 1.0f };
 
-    if (gl_core)
+    if (!Tex->bLoaded)
     {
         glGenBuffers(1, &Tex->texVBO);
         glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        Tex->bLoaded = 1;
     }
 
     memset(TexRaw, 0, 64*200);
@@ -982,12 +985,13 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     coords[5] = Tex[1].YDisp;
     coords[6] = Tex[1].XDisp;
 
-    if (gl_core)
+    if (!Tex->bLoaded)
     {
         glGenBuffers(1, &Tex->texVBO2);
         glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO2);
         glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
         glBindBuffer(GL_ARRAY_BUFFER, 0);
+        Tex->bLoaded = 1;
     }
 
    }
