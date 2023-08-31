@@ -177,7 +177,7 @@ void W_AddFile (char *filename)
 
 	    fileinfo = &singleinfo;
 	    singleinfo.filepos = 0;
-	    singleinfo.size = DLONG((long)st.st_size);
+	    singleinfo.size = DLONG(st.st_size);
 	    ExtractFileBase (filename, singleinfo.name);
 	    numlumps++;
     }

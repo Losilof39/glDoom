@@ -23,14 +23,28 @@
 #ifndef __M_SWAP__
 #define __M_SWAP__
 
-
 #ifdef __GNUG__
 #pragma interface
 #endif
 
+#include <SDL_endian.h> /* Header for handle the endian swapping */
 
 // Endianess handling.
 // WAD files are stored little endian.
+
+/* 
+** André:
+** Taken from Doom64EX+: 
+** Defines for checking the endianness of the system. 
+*/
+
+#if SDL_BYTEORDER == SDL_LIL_ENDIAN
+#define SYS_LITTLE_ENDIAN
+#elif SDL_BYTEORDER == SDL_BIG_ENDIAN
+#define SYS_BIG_ENDIAN
+#endif
+
+#if 0 /* André: Unused now, Now uses the SDL_Swap api for handling the endian support. */
 #ifdef __BIG_ENDIAN__
 short	SwapSHORT(short);
 long long	SwapLONG(long long);
@@ -40,8 +54,15 @@ long long	SwapLONG(long long);
 #define DSHORT(x)	(x)
 #define DLONG(x)         (x)
 #endif
-
-
+#else
+#if SYS_BIG_ENDIAN
+#define DSHORT(x)	((short)SDL_SwapLE64((unsigned short) (x)))
+#define DLONG(x)         ((long long)SDL_SwapLE64((unsigned long long) (x)))
+#elif SDL_LIL_ENDIAN
+#define DSHORT (short)SDL_SwapLE16
+#define DLONG (signed long)SDL_SwapLE32
+#endif
+#endif
 
 
 #endif
