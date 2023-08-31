@@ -130,7 +130,7 @@ int        framecnt = 0;
 //
 // I_ReadScreen
 //
-void I_ReadScreen (byte* scr)
+void I_ReadScreen (dbyte* scr)
 {
     memcpy (scr, screens[0], SCREENWIDTH*SCREENHEIGHT);
 }
@@ -159,7 +159,7 @@ void CreateGLPalette()
 //
 // I_SetPalette
 //
-void I_SetPalette(byte* palette)
+void I_SetPalette(dbyte* palette)
    {
     int i;
 

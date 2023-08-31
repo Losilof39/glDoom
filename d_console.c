@@ -32,7 +32,7 @@
 #define ST_MSGWIDTH        256
 #define CMDLENGTH         1024
 
-extern byte *screens[5];
+extern dbyte *screens[5];
 extern patch_t*		hu_font[HU_FONTSIZE];
 
 extern cheatseq_t	cheat_mus;
@@ -94,9 +94,9 @@ GLTexData ConsBack, ConsBord, ConsLogo;
 int iConsBack, iConsBord, iConsLogo;
 
 // Console background;
-byte                  consback[64*64];
-byte                  consbord[64*64];
-byte                 *pconstex;
+dbyte                  consback[64*64];
+dbyte                  consbord[64*64];
+dbyte                 *pconstex;
 static patch_t       *consname;
 
 static player_t      *plyr; 
@@ -1565,7 +1565,7 @@ void CO_Init()
     iConsoleMax = SCREENHEIGHT/2;
 
     // Load the main console background "flat"
-    pconstex = (byte *)W_CacheLumpName(CONSOLE_FLAT, PU_CACHE);
+    pconstex = (dbyte *)W_CacheLumpName(CONSOLE_FLAT, PU_CACHE);
     memcpy(consback, pconstex, 64*64);
 
     memcpy(TexRaw, consback, 64*64);
@@ -1581,7 +1581,7 @@ void CO_Init()
     ConsBack.YDisp = 0.0f;
 
     // Load the console border "flat"
-    pconstex = (byte *)W_CacheLumpName(CONSOLE_BORD, PU_CACHE);
+    pconstex = (dbyte *)W_CacheLumpName(CONSOLE_BORD, PU_CACHE);
     memcpy(consbord, pconstex, 64*64);
     memcpy(TexRaw, consbord, 64*64);
     for (i = 0; i < (64*64); i++)

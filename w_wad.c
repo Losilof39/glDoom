@@ -110,7 +110,7 @@ ExtractFileBase
 	if (++length == 9)
 	    I_Error ("Filename base of %s >8 chars",path);
 
-	*dest++ = toupper((int)*src++);
+	*dest++ = strupr((int)*src++);
     }
 }
 
@@ -354,7 +354,7 @@ int W_CheckNumForName(char* name)
     name8.s[8] = 0;
 
     // case insensitive
-    D_strupper(name8.s);		
+    strupr(name8.s);		
 
     v1 = name8.x[0];
     v2 = name8.x[1];
@@ -454,7 +454,7 @@ W_CacheLumpNum
 (int		lump,
  int		tag)
 {
-    byte* ptr;
+    dbyte* ptr;
 
     if ((unsigned)lump >= (unsigned)numlumps)
         I_Error("W_CacheLumpNum: %i >= numlumps", lump);
@@ -513,7 +513,7 @@ void W_Profile (void)
         }
         else
         {
-            block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+            block = (memblock_t*)((dbyte*)ptr - sizeof(memblock_t));
             if (block->tag < PU_PURGELEVEL)
                 ch = 'S';
             else

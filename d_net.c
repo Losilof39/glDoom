@@ -177,7 +177,7 @@ void HSendPacket(int node, int flags )
 	
         for (i = 0; i < doomcom->datalength; i++)
            {
-            lfprintf("%i ",((byte *)netbuffer)[i]);
+            lfprintf("%i ",((dbyte *)netbuffer)[i]);
            }
         lfprintf("\n");
        }
@@ -243,7 +243,7 @@ dboolean HGetPacket (void)
 		            ExpandTics(netbuffer->starttic), netbuffer->numtics, realretrans, doomcom->datalength);
 
             for (i = 0; i < doomcom->datalength; i++)
-                 fprintf (debugfile,"%i ",((byte *)netbuffer)[i]);
+                 fprintf (debugfile,"%i ",((dbyte *)netbuffer)[i]);
             fprintf (debugfile,"\n");
            }
        }

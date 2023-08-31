@@ -264,6 +264,9 @@
     <ClCompile Include="rendererCore.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
+    <ClCompile Include="d_bitmap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
@@ -505,6 +508,9 @@
     </ClInclude>
     <ClInclude Include="rendererCore.h">
       <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="d_bitmap.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
