@@ -74,8 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Debug\</OutDir>
-    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);$(SolutionDir)\thirdparty\cglm\include</IncludePath>
-    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64</LibraryPath>
+    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);$(SolutionDir)\thirdparty\cglm\include;$(SolutionDir)\thirdparty\cimgui\include</IncludePath>
+    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64;$(SolutionDir)\thirdparty\cimgui\bin</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -84,8 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm;$(SolutionDir)\thirdparty\cimgui\bin</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm;$(SolutionDir)\thirdparty\cimgui\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
