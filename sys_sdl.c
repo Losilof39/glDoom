@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////
-// Windows and Linux Includes...
+// Windows, Linux and Cimgui Includes...
 /////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,6 +11,8 @@
 #include <time.h>
 #include <glad/glad.h>
 #include <SDL.h>
+#include <cimgui.h>
+#include <cimgui_impl.h>
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Application Includes...
@@ -492,6 +494,7 @@ void glDoomExit()
 
     I_ShutdownGraphics();
     SDL_DestroyWindow(pWindow);
+    ImGui_ImplSDL2_Shutdown();
    };
 
 extern dboolean paused;

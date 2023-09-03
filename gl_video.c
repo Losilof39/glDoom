@@ -26,10 +26,6 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include <helper.h>
-#include <cimgui.h>
-
-
 #include "doomtype.h"
 #include "sys_sdl.h"
 #include "gl_video.h"
