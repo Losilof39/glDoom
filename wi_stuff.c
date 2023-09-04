@@ -974,7 +974,7 @@ int GL_WI_drawNum( int x, int y, int n, int digits )
     // draw a minus sign if necessary
     if (neg)
        {
-        GL_DrawPatch(&WiMinus, (float)x-=8, (float)y);
+        GL_DrawPatch(&WiMinus, (float)x, (float)y);
        }
 
     return x;
@@ -2367,6 +2367,10 @@ void WI_loadData(void)
 	strcpy(name, "INTERPIC");
         glBackGround = Interpic;
        }
+    else if (haved1e5 && wbs->epsd == 4 && W_CheckNumForName("SIGILINT") != -1) // [crispy] Sigil
+    {
+        glBackGround = Interpic;
+    }
     else 
        {
 	    sprintf(name, "WIMAP%d", wbs->epsd);

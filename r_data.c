@@ -145,7 +145,7 @@ fixed_t*		textureheight;
 int*			texturecompositesize;
 short**			texturecolumnlump;
 unsigned short**	texturecolumnofs;
-dbyte**			texturecomposite;
+byte**			texturecomposite;
 
 // for global animation
 int*		flattranslation;
@@ -181,20 +181,20 @@ lighttable_t	*colormaps;
 void
 R_DrawColumnInCache
 ( column_t*	patch,
-  dbyte*		cache,
+  byte*		cache,
   int		originy,
   int		cacheheight )
 {
     int		count;
     int		position;
-    dbyte*	source;
-    dbyte*	dest;
+    byte*	source;
+    byte*	dest;
 	
-    dest = (dbyte *)cache + 3;
+    dest = (byte *)cache + 3;
 	
     while (patch->topdelta != 0xff)
     {
-	source = (dbyte *)patch + 3;
+	source = (byte *)patch + 3;
 	count = patch->length;
 	position = originy + patch->topdelta;
 
@@ -210,7 +210,7 @@ R_DrawColumnInCache
 	if (count > 0)
 	    memcpy (cache + position, source, count);
 		
-	patch = (column_t *)(  (dbyte *)patch + patch->length + 4); 
+	patch = (column_t *)(  (byte *)patch + patch->length + 4); 
     }
 }
 
@@ -224,7 +224,7 @@ R_DrawColumnInCache
 //
 void R_GenerateComposite (int texnum)
 {
-    dbyte*		block;
+    byte*		block;
     texture_t*		texture;
     texpatch_t*		patch;	
     patch_t*		realpatch;
@@ -268,7 +268,7 @@ void R_GenerateComposite (int texnum)
             if (collump[x] >= 0)
             continue;
             
-            patchcol = (column_t *)((dbyte *)realpatch
+            patchcol = (column_t *)((byte *)realpatch
                         + DLONG(realpatch->columnofs[x-x1]));
             R_DrawColumnInCache (patchcol,
                     block + colofs[x],
@@ -291,7 +291,7 @@ void R_GenerateComposite (int texnum)
 void R_GenerateLookup (int texnum)
 {
     texture_t*		texture;
-    dbyte*		patchcount;	// patchcount[texture->width]
+    byte*		patchcount;	// patchcount[texture->width]
     texpatch_t*		patch;	
     patch_t*		realpatch;
     int			x;
@@ -314,7 +314,7 @@ void R_GenerateLookup (int texnum)
     //  that are covered by more than one patch.
     // Fill in the lump / offset, so columns
     //  with only a single patch are all done.
-    patchcount = (dbyte *)Z_Malloc(texture->width, PU_STATIC, 0);
+    patchcount = (byte *)Z_Malloc(texture->width, PU_STATIC, 0);
     memset (patchcount, 0, texture->width);
     patch = texture->patches;
 		
@@ -372,7 +372,7 @@ void R_GenerateLookup (int texnum)
 //
 // R_GetColumn
 //
-dbyte*
+byte*
 R_GetColumn
 ( int		tex,
   int		col )
@@ -385,7 +385,7 @@ R_GetColumn
     ofs = texturecolumnofs[tex][col];
     
     if (lump > 0)
-	return (dbyte *)W_CacheLumpNum(lump,PU_CACHE)+ofs;
+	return (byte *)W_CacheLumpNum(lump,PU_CACHE)+ofs;
 
     if (!texturecomposite[tex])
 	R_GenerateComposite (tex);
@@ -513,7 +513,7 @@ void R_InitTextures (void)
         if (offset > maxoff)
             I_Error ("R_InitTextures: bad texture directory");
         
-        mtexture = (maptexture_t *) ( (dbyte *)maptex + offset);
+        mtexture = (maptexture_t *) ( (byte *)maptex + offset);
 
         texture = textures[i] =
             Z_Malloc (sizeof(texture_t)
@@ -638,7 +638,7 @@ void R_InitColormaps (void)
     lump = W_GetNumForName("COLORMAP"); 
     length = W_LumpLength (lump) + 255; 
     colormaps = Z_Malloc (length, PU_STATIC, 0); 
-    colormaps = (dbyte *)( ((intptr_t)colormaps + 255)&~0xff); 
+    colormaps = (byte *)( ((intptr_t)colormaps + 255)&~0xff); 
     W_ReadLump (lump,colormaps); 
 }
 
@@ -706,7 +706,7 @@ int	R_CheckTextureNumForName(char* name)
 
     strncpy(tname, name, 8);
     tname[8] = 0;
-    strupr(tname);
+    D_strupper(tname);
 
     for (i = 0; i < numtextures; i++)
         if (!strncasecmp(textures[i]->name, tname, 8))

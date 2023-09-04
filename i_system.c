@@ -126,7 +126,7 @@ void I_Init (void)
 //
 // I_Quit
 //
-void glDoomExit(void);
+extern void glDoomExit(void);
 extern int GameMode;
 
 #define GAME_QUIT   5
@@ -153,15 +153,7 @@ void I_WaitVBL(int count)
     SDL_Delay(count * 10 );                                
 }
 
-void I_BeginRead(void)
-{
-}
-
-void I_EndRead(void)
-{
-}
-
-dbyte*	I_AllocLow(size_t length)
+byte*	I_AllocLow(size_t length)
 {
     dbyte*	mem;
    

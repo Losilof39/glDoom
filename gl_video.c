@@ -42,7 +42,7 @@
 #include "d_main.h"
 #include "w_wad.h"
 #include "z_zone.h"
-
+#include "gldefs.h"
 #include "doomdef.h"
 #include "doomlib.h"
 
@@ -134,13 +134,6 @@ void I_ReadScreen (dbyte* scr)
 {
     memcpy (scr, screens[0], SCREENWIDTH*SCREENHEIGHT);
 }
-
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
 
 MY_PAL  gamepal[256];
 extern MY_PAL  statpal[256];
@@ -253,14 +246,14 @@ void GetGLInfo()
     const GLubyte *szt;
 
     szt = glGetString(GL_VENDOR);
-    GL_Vendor = (char *)malloc(strlen(szt)+1);
+    GL_Vendor = (char *)malloc(strlen((const char*)szt)+1);
     strcpy(GL_Vendor, szt);
     printf("OpenGL Vendor   : %s\n", GL_Vendor);
     if (strcasecmp(GL_Vendor, "3DLABS") == 0)
        GL_3Dlabs = true;
 
     szt = glGetString(GL_RENDERER);
-    GL_Renderer = (char *)malloc(strlen(szt)+1);
+    GL_Renderer = (char *)malloc(strlen((const char*)szt)+1);
     strcpy(GL_Renderer, szt);
     printf("OpenGL Renderer : %s\n", GL_Renderer);
 
@@ -273,21 +266,21 @@ void GetGLInfo()
     //   }
 
     szt = glGetString(GL_VERSION);
-    GL_Version = (char *)malloc(strlen(szt)+1);
+    GL_Version = (char *)malloc(strlen((const char*)szt)+1);
     strcpy(GL_Version, szt);
     printf("OpenGL Version  : %s\n", GL_Version);
 
     szt = glGetString(GL_EXTENSIONS);
-    tempstr = (char *)malloc(strlen(szt)+2);
-    strcpy(tempstr, szt);
+    tempstr = (char *)malloc(strlen((const char*)szt)+2);
+    strcpy(tempstr, (const char*)szt);
     if (tempstr != NULL)
        {
         szu = strtok( (char *)tempstr, " " );
         GL_EXT_Count = 0;
         while (( szu != NULL ) && (GL_EXT_Count < GL_MAX_EXT))
            {
-            GL_EXT_List[GL_EXT_Count] = (char *)malloc(strlen(szu)+1);
-            strcpy(GL_EXT_List[GL_EXT_Count], szu);
+            GL_EXT_List[GL_EXT_Count] = (char *)malloc(strlen((const char*)szu)+1);
+            strcpy(GL_EXT_List[GL_EXT_Count], (const char*)szu);
             printf("OpenGL Extension : %s\n", GL_EXT_List[GL_EXT_Count]);
             szu = strtok( NULL, " " );
             GL_EXT_Count++;

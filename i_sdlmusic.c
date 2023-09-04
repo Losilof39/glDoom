@@ -40,12 +40,12 @@
 
 #define MAXMIDLENGTH (96 * 1024)
 
-static dboolean music_initialized = false;
+static dboolean music_initialized = true;
 
 // If this is true, this module initialized SDL sound and has the
 // responsibility to shut it down
 
-static dboolean sdl_was_initialized = false;
+static dboolean sdl_was_initialized = true;
 
 static dboolean musicpaused = false;
 static int current_music_volume;

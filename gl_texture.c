@@ -22,6 +22,7 @@ void lfprintf(char *message, ... );
 unsigned int MakeRGBTexture(int dw, int dh);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
+void V_DrawPatchBuff(int, int, unsigned char *, patch_t *);
 
 unsigned char  PointPattern[16*16] = {   0,  0,  0,  0,  0,  0,  0, 31, 31,  0,  0,  0,  0,  0,  0,  0,
                                          0,  0,  0,  0,  0,  0, 31, 63, 63, 31,  0,  0,  0,  0,  0,  0,
@@ -53,12 +54,6 @@ GLubyte              *TexRGB, *MipMaps[16][32768];
 dboolean              TexTransparent = false;
 extern dboolean       GL_3Dlabs;
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
 
 extern MY_PAL  gamepal[256];
 MY_PAL         statpal[256];
@@ -67,7 +62,6 @@ DW_TexList     TexList[1024];
 
 extern int gl_alphatest;
 extern int gl_widetex;
-extern int gl_core;
 
 // A single patch from a texture definition,
 //  basically a rectangular area within
@@ -247,7 +241,7 @@ int GL_LoadSkyTop( char *filename )
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TexWide, TexHigh, 0, GL_RGB, GL_UNSIGNED_BYTE, TexRGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, TexWide, TexHigh, 0, GL_RGB, GL_UNSIGNED_BYTE, TexRGB);
 
     glBindTexture(GL_TEXTURE_2D, 0);
     free(TexRGB);
@@ -300,7 +294,7 @@ int GL_LoadTexture(int TexNumb)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        ConvertToRawTextureOffset( px,py, TexRaw,
+        V_DrawPatchOffsetBuff( px,py, TexRaw,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
        }
@@ -369,7 +363,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        ConvertToRawTextureOffset( px,py, SkyRaw,
+        V_DrawPatchOffsetBuff( px,py, SkyRaw,
                                //TexList[TexNumb].DWide, TexList[TexNumb].DHigh,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
@@ -430,7 +424,7 @@ int Translucent = false;
 // GL_MakeGreyFontTexture
 // Masks a column based masked pic into an OpenGL texture
 //
-void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
+int GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
    {
     static int      x, ixsize, iysize;
     unsigned short *tshort;
@@ -440,8 +434,6 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
 
     int            TempTexNumb;
     int            iGLWide, iGLHigh;
-
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
 
     tshort = (unsigned short *)Sprite;
     ixsize = *tshort;
@@ -473,7 +465,7 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    ConvertToRawTexture(0, 0, RawBuff, Sprite);
+    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -512,21 +504,14 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+    return TempTexNumb;
    }
 
 //
 // GL_MakeSpriteTexture
 // Masks a column based masked pic into an OpenGL texture
 //
-void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
+int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
    {
     static int      x, ixsize, iysize, cwidth;
     unsigned short *tshort;
@@ -579,7 +564,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    ConvertToRawTexture(0, 0, RawBuff, Sprite);
+    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -630,16 +615,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
+    return TempTexNumb;
    }
 
 // GL_MakeWideSpriteTexture
@@ -671,7 +647,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     TexWide = 256;
 
     memset(RawBuff, 0, ixsize*iysize);
-    ConvertToRawTexture(0, 0, RawBuff, Screen);
+    V_DrawPatchBuff(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*iysize);
     memset(TexRaw, GLD_TRANSPARENT, 256*iysize);
     for (i = 0, d = 0, s = 0; i < iysize; i++)
@@ -740,16 +716,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     return TempTexNumb;
    }
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
-   }rgba_t;
-
-
-void AntiAlias(rgba_t *inbuff, rgba_t *outbuff, int w, int h)
+void AntiAlias(GLPixelRGBA *inbuff, GLPixelRGBA *outbuff, int w, int h)
    {
     int     x, y, s, d, n;
     short   mr, mg, mb;
@@ -873,7 +840,7 @@ void AntiAlias(rgba_t *inbuff, rgba_t *outbuff, int w, int h)
 // GL_MakeScreenTexture
 // Draws a column based full-screen pic into OpenGL textures
 //
-void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
+int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
    {
     static int     x, ixsize, iysize;
     unsigned short *tshort;
@@ -892,7 +859,7 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
        }
 
     memset(RawBuff, 0, ixsize*iysize);
-    ConvertToRawTexture(0, 0, RawBuff, Screen);
+    V_DrawPatchBuff(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*200);
     for (i = 0, d = 0, s = 0; i < 200; i++)
        {
@@ -915,16 +882,6 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[0].glWidth = 256.0f;
     Tex[0].glHeight = 256.0f;
 
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex[0].YDisp, Tex[0].XDisp, Tex[0].YDisp, Tex[0].XDisp, 1.0f };
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
     memset(TexRaw, 0, 64*200);
     for (i = 0, d = 0, s = 256; i < 200; i++)
        {
@@ -946,20 +903,8 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[1].TopOff = 0.0f;
     Tex[1].glWidth = 64.0f;
     Tex[1].glHeight = 256.0f;
-    
-    coords[3] = Tex[1].YDisp;
-    coords[4] = Tex[1].XDisp;
-    coords[5] = Tex[1].YDisp;
-    coords[6] = Tex[1].XDisp;
 
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO2);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO2);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
+    return TempTexNumb;
    }
 
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
@@ -1007,7 +952,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
         for (r = 0; r < (TexWide*TexHigh*4); r++)
            TexAa[r] = TexRGB[r];
-        AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
+        AntiAlias( (GLPixelRGBA*)TexAa, (GLPixelRGBA*)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
     if (clamp == true)
@@ -1193,13 +1138,12 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
 
     glGenTextures(1, &TempTexName);
     glBindTexture(GL_TEXTURE_2D, TempTexName);
-
     if ((smooth == true) && (TexTransparent == true))
        {
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
         for (r = 0; r < (TexWide*TexHigh*4); r++)
            TexAa[r] = TexRGB[r];
-        AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
+        AntiAlias( (GLPixelRGBA *)TexAa, (GLPixelRGBA *)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
     if (clamp == true)
@@ -1263,7 +1207,7 @@ unsigned int MakeRGBTexture(int dw, int dh)
     glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
     glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
 
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TexWide, TexHigh, 0, GL_RGB, GL_UNSIGNED_BYTE, TexRGB);
+    glTexImage2D(GL_TEXTURE_2D, 0, 3, TexWide, TexHigh, 0, GL_RGB, GL_UNSIGNED_BYTE, TexRGB);
 
     glBindTexture(GL_TEXTURE_2D, 0);
     free(TexRGB);

@@ -47,7 +47,7 @@ extern sRenderer renderer;
 
 //#include <direct.h>
 #include <malloc.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #include <direct.h>
 #else
@@ -1824,6 +1824,17 @@ void D_DoomMain (void)
        }
 
     CreateGLPalette();
+
+    // check for NRFTL
+    havenerve = (gamemode == commercial) &&
+        (W_CheckNumForName("DMAPINFO") != -1);
+
+
+    // [crispy] check for presence of a 5th episode
+    haved1e5 = (gamemode != commercial) &&
+        (W_CheckNumForName("m_epi5") != -1) &&
+        (W_CheckNumForName("e5m1") != -1) &&
+        (W_CheckNumForName("wilv40") != -1);
 
     //printf ("M_Init: Init miscellaneous info.\n");
     printf("M_Init: Init miscellaneous info.\n");
