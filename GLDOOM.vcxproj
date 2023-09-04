@@ -75,7 +75,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Debug\</OutDir>
     <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);$(SolutionDir)\thirdparty\cglm\include;$(SolutionDir)\thirdparty\cimgui\include</IncludePath>
-    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64;$(SolutionDir)\thirdparty\cimgui\bin</LibraryPath>
+    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64;$(SolutionDir)\thirdparty\cimgui\lib\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -144,7 +144,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>INITGUID;_DEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INITGUID;_DEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;CIMGUI_DEFINE_ENUMS_AND_STRUCTS;CIMGUI_USE_OPENGL3;CIMGUI_USE_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
@@ -164,7 +164,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cglm.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cimgui.lib;cimgui_base.lib;cimgui_sdl.lib;cglm.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
