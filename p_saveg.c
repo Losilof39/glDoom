@@ -32,7 +32,7 @@ rcsid[] = "$Id: p_tick.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 #include "doomstat.h"
 #include "r_state.h"
 
-byte*		save_p;
+dbyte*		save_p;
 
 
 // Pads save_p to a 4-byte boundary
@@ -156,7 +156,7 @@ void P_ArchiveWorld (void)
 	}
     }
 	
-    save_p = (byte *)put;
+    save_p = (dbyte *)put;
 }
 
 
@@ -207,7 +207,7 @@ void P_UnArchiveWorld (void)
 	    si->midtexture = *get++;
 	}
     }
-    save_p = (byte *)get;	
+    save_p = (dbyte *)get;	
 }
 
 
@@ -265,7 +265,7 @@ void P_ArchiveThinkers (void)
 //
 void P_UnArchiveThinkers (void)
 {
-    byte		tclass;
+    dbyte		tclass;
     thinker_t*		currentthinker;
     thinker_t*		next;
     mobj_t*		mobj;
@@ -474,7 +474,7 @@ void P_ArchiveSpecials (void)
 //
 void P_UnArchiveSpecials (void)
 {
-    byte		tclass;
+    dbyte		tclass;
     ceiling_t*		ceiling;
     vldoor_t*		door;
     floormove_t*	floor;

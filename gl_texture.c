@@ -12,7 +12,8 @@
 #include "v_video.h"
 #include "w_wad.h"
 #include "z_zone.h"
-
+#include "gl_texture.h"
+#include "d_bitmap.h" /* The bitmap loader */
 #define GLD_TRANSPARENT 0
 #define GLD_COLORED     1
 
@@ -104,7 +105,6 @@ void InitGLPalette(int red, int green, int blue)
        }
    }
 
-
 int CreateColorMap(int red, int green, int blue)
    {
     int             TempTexName;
@@ -120,8 +120,8 @@ int CreateColorMap(int red, int green, int blue)
 
     glGenTextures(1, &TempTexName);
     glBindTexture(GL_TEXTURE_2D, TempTexName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -177,8 +177,8 @@ int CreatePointLightMap(int red, int green, int blue, dboolean alphaonly)
 
     glGenTextures(1, &TempTexName);
     glBindTexture(GL_TEXTURE_2D, TempTexName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -224,41 +224,14 @@ extern texture_t**	textures;
 int GL_LoadSkyTop( char *filename )
    {
     unsigned int TempTexName;
-    int fn, s, d;
-    unsigned char   *texels;
-    BITMAPFILEHEADER bmfh;
-    BITMAPINFOHEADER bmi;
-    RGBQUAD         *bmpPalette;
 
-    fn = Open(filename, O_RDONLY | O_BINARY );
-
-    Read(fn, &bmfh, sizeof(BITMAPFILEHEADER));
-    Read(fn, &bmi, sizeof(BITMAPINFOHEADER));
-
-    TexWide = bmi.biWidth;
-    TexHigh = bmi.biHeight;
-
-    bmpPalette = (RGBQUAD *)malloc(sizeof(RGBQUAD)*256);
-    Read(fn, bmpPalette, (sizeof(RGBQUAD)*256));
-
-    texels = (unsigned char *)malloc(TexWide*TexHigh);
-    LSeek(fn, bmfh.bfOffBits, SEEK_SET);
-    Read(fn, texels, (TexWide*TexHigh));
-    Close(fn);
-
-    TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
-    for (s = 0, d = 0; s < (TexWide*TexHigh); s++)
-       {
-        TexRGB[d++] = bmpPalette[texels[s]].rgbRed;
-        TexRGB[d++] = bmpPalette[texels[s]].rgbGreen;
-        TexRGB[d++] = bmpPalette[texels[s]].rgbBlue;
-       }
+    D_LoadBmp(TexRGB, filename, TexWide, TexHigh);
 
     glGenTextures(1, &TempTexName);
     glBindTexture(GL_TEXTURE_2D, TempTexName);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
@@ -272,8 +245,6 @@ int GL_LoadSkyTop( char *filename )
 
     glBindTexture(GL_TEXTURE_2D, 0);
     free(TexRGB);
-    free(texels);
-    free(bmpPalette);
     return(TempTexName);
    }
 
@@ -986,8 +957,8 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
        }
     if (clamp == true)
        {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
        }
     else
        {
@@ -1009,6 +980,114 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
     free(TexRGB);
     return(TempTexName);
    }
+
+void ConvertToRawTexture(int x, int y, unsigned char* buff, patch_t* patch)
+{
+    int		         count;
+    int		         col;
+    unsigned short* tshort;
+    short            pwidth;
+    column_t* column;
+    int* columnofs;
+    dbyte* desttop;
+    dbyte* dest;
+    dbyte* source;
+    dbyte* txp, * draw;
+    int		         w;
+
+    desttop = buff;
+    txp = Transparent;
+
+    tshort = (unsigned short*)patch;
+    w = *tshort;
+    pwidth = *tshort;
+    tshort++;
+    tshort++;
+    tshort++;
+    tshort++;
+    columnofs = (int*)tshort;
+
+    for (col = 0; col < pwidth; col++, desttop++, txp++)
+    {
+        column = (column_t*)((dbyte*)patch + columnofs[col]);
+
+        // step through the posts in a column 
+        while (column->topdelta != 0xff)
+        {
+            source = (dbyte*)column + 3;
+
+            dest = desttop + column->topdelta * pwidth;
+            draw = txp + column->topdelta * pwidth;
+            count = column->length;
+
+            while (count--)
+            {
+                *dest = *source++;
+                *draw = GLD_COLORED;
+                dest += pwidth;
+                draw += pwidth;
+            }
+            column = (column_t*)((dbyte*)column + column->length + 4);
+        }
+    }
+}
+
+void ConvertToRawTextureOffset(int x, int y, unsigned char* buff, int bx, int by, int patchnum)
+{
+    int	      count;
+    int	      col;
+    column_t* column;
+    dbyte* desttop;
+    dbyte* dest;
+    dbyte* source;
+    dbyte* txp, * draw;
+    int       w, h, offset, buffsize;
+    unsigned char* bend;
+    patch_t* patch;
+
+    patch = (patch_t*)W_CacheLumpNum(patchnum, PU_CACHE);
+
+    bend = buff + (bx * by);
+    buffsize = bx * by;
+
+    offset = (y * bx) + x;
+    desttop = buff + (y * bx) + x;
+    txp = Transparent + (y * bx) + x;
+
+    h = patch->height;
+    w = patch->width ;
+
+    for (col = 0; ((col < w) && (x < bx)); x++, col++, desttop++, txp++)
+    {
+        column = (column_t*)((dbyte*)patch + patch->columnofs[col]);
+
+        // step through the posts in a column 
+        while (column->topdelta != 0xff)
+        {
+            source = (dbyte*)column + 3;
+            offset = ((y * bx) + x) + (column->topdelta * bx);
+            dest = desttop + (column->topdelta * bx);
+            draw = txp + (column->topdelta * bx);
+            count = column->length;
+
+            while (count--)
+            {
+                if ((offset >= 0) && (offset < buffsize))
+                {
+                    buff[offset] = *source++;
+                    Transparent[offset] = GLD_COLORED;
+
+                }
+                else
+                    source++;
+                offset += bx;
+                dest += bx;
+                draw += bx;
+            }
+            column = (column_t*)((dbyte*)column + column->length + 4);
+        }
+    }
+}
 
 unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
@@ -1069,8 +1148,8 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
        }
     if (clamp == true)
        {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
        }
     else
        {
@@ -1117,7 +1196,7 @@ unsigned int MakeRGBTexture(int dw, int dh)
 
     glGenTextures(1, &TempTexName);
     glBindTexture(GL_TEXTURE_2D, TempTexName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);

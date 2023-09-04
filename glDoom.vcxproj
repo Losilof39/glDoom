@@ -74,8 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Debug\</OutDir>
-    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm</IncludePath>
-    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm</LibraryPath>
+    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);$(SolutionDir)\thirdparty\cglm\include</IncludePath>
+    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -164,7 +164,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies);cglm.lib</AdditionalDependencies>
+      <AdditionalDependencies>cglm.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -281,6 +281,7 @@
     <ClCompile Include="doomlib.c" />
     <ClCompile Include="doomstat.c" />
     <ClCompile Include="dstrings.c" />
+    <ClCompile Include="d_bitmap.c" />
     <ClCompile Include="d_console.c" />
     <ClCompile Include="d_items.c" />
     <ClCompile Include="d_main.c" />
@@ -366,6 +367,7 @@
     <ClInclude Include="doomstat.h" />
     <ClInclude Include="doomtype.h" />
     <ClInclude Include="dstrings.h" />
+    <ClInclude Include="d_bitmap.h" />
     <ClInclude Include="d_console.h" />
     <ClInclude Include="d_englsh.h" />
     <ClInclude Include="d_event.h" />

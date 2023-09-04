@@ -10,7 +10,7 @@ extern glmode_t glmode;
 extern int gl_premalpha;
 extern float glTop, glBottom, glRight, glLeft, SetBack;
 
-GLuint indices[6] = {0, 1, 2, 0, 2, 3};
+GLuint indices[6] = { 2, 1, 0, 3, 2, 0 };//{0, 1, 2, 0, 2, 3};
 GLuint EBO;
 
 Shader shader;
@@ -142,6 +142,8 @@ void cGetColorBuffer(GLubyte* data)
 void cRenderSprite(float* v, GLTexData* tex)
 {
 	float verts[] = { v[0], v[2], SetBack, v[0], v[3], SetBack, v[1], v[3], SetBack, v[1], v[2], SetBack };
+
+	//glFrontFace(GL_CW);
 
 	if (!tex->vertVBO) 
 	{

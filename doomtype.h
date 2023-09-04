@@ -36,59 +36,13 @@
 #endif
 #include <inttypes.h>
 #include <fcntl.h>
+#include <limits.h>
 
 #ifndef MAX
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
-#ifdef _MSC_VER
-#include <rpc.h>
-#include <rpcndr.h>
-#endif
-
-#ifndef _MSC_VER
-typedef unsigned char byte;
-typedef short        SHORT;
-typedef long          LONG;
-typedef unsigned short WORD;
-
-// win32 structs manually defined to be more portable
-typedef struct BITMAPFILEHEADER {
-    uint16_t  bfType;
-    uint32_t bfSize;
-    uint16_t  bfReserved1;
-    uint16_t  bfReserved2;
-    uint32_t bfOffBits;
-}BITMAPFILEHEADER;
-
-typedef struct BITMAPINFOHEADER {
-    uint32_t biSize;
-    long  biWidth;
-    long  biHeight;
-    uint16_t  biPlanes;
-    uint16_t  biBitCount;
-    uint32_t biCompression;
-    uint32_t biSizeImage;
-    long  biXPelsPerMeter;
-    long  biYPelsPerMeter;
-    uint32_t biClrUsed;
-    uint32_t biClrImportant;
-} BITMAPINFOHEADER;
-
-typedef struct tagRGBQUAD {
-    byte rgbBlue;
-    byte rgbGreen;
-    byte rgbRed;
-    byte rgbReserved;
-} RGBQUAD;
-
-typedef struct RECT {
-    long left;
-    long top;
-    long right;
-    long bottom;
-} RECT;
-#endif
+typedef unsigned char dbyte;
 
 #ifndef O_BINARY 
 #define O_BINARY 0
@@ -106,26 +60,28 @@ typedef int dboolean;
 #if defined(_MSC_VER) && !defined(ANSI_C)
 #define strncasecmp _strnicmp
 #define strcasecmp _stricmp
+#define strupr _strupr
+#define strlwr _strlwr
 #endif
 
 #if defined(_MSC_VER)
-#define Open(filename, openflag, ...) _open(filename, openflag)
-#define Close(filehandle) _close(filehandle)
-#define Read(filehandle, dstbuf, maxcharcount) _read(filehandle, dstbuf, maxcharcount)
-#define LSeek(filehandle, offset, origin) _lseek(filehandle, offset, origin)
-#define Write(filehandle, buf, maxcharcount) _write(filehandle, buf, maxcharcount)
-#define Access(filename, accessmode) _access(filename, accessmode)
-#define Getcwd(dstbuf, size_in_bytes) _getcwd(dstbuf, size_in_bytes)
-#define Tell(FileHandle) _tell(FileHandle)
+#define Open _open
+#define Close _close
+#define Read _read
+#define LSeek _lseek
+#define Write _write
+#define Access _access
+#define Getcwd _getcwd
+#define Tell _tell
 #else
-#define Open(filename, openflag, ...) open(filename, openflag)
-#define Close(filehandle) close(filehandle)
-#define Read(filehandle, dstbuf, maxcharcount) read(filehandle, dstbuf, maxcharcount)
-#define LSeek(filehandle, offset, origin) lseek(filehandle, offset, origin)
-#define Write(filehandle, buf, maxcharcount) write(filehandle, buf, maxcharcount)
-#define Access(filename, accessmode) access(filename, accessmode)
-#define Getcwd(dstbuf, size_in_bytes) getcwd(dstbuf, size_in_bytes)
-#define Tell(FileHandle) tell(FileHandle)
+#define Open open
+#define Close close
+#define Read read
+#define LSeek lseek
+#define Write write
+#define Access access
+#define Getcwd getcwd
+#define Tell tell
 #endif
 
 #ifdef _WIN64

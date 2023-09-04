@@ -138,9 +138,9 @@ int             demotype;
 dboolean         demorecording; 
 dboolean         demoplayback; 
 dboolean		netdemo; 
-byte*		demobuffer;
-byte*		demo_p;
-byte*		demoend; 
+dbyte*		demobuffer;
+dbyte*		demo_p;
+dbyte*		demoend; 
 dboolean         singledemo;            	// quit after playing a demo from cmdline 
  
 dboolean         precache = true;        // if true, load all graphics at start 
@@ -149,7 +149,7 @@ wbstartstruct_t wminfo;               	// parms for world map / intermission
  
 short		consistancy[MAXPLAYERS][BACKUPTICS]; 
  
-byte*		savebuffer;
+dbyte*		savebuffer;
 
 extern const char  playername[18];
 extern const char  playerskin[18];

@@ -73,10 +73,10 @@ int  I_GetHeapSize (void)
     return mb_used*1024*1024;
 }
 
-byte* I_ZoneBase (int*	size)
+dbyte* I_ZoneBase (int*	size)
 {
     *size = mb_used*1024*1024;
-    return (byte *) malloc (*size);
+    return (dbyte *) malloc (*size);
 }
 
 int I_TickElapsedTime(void)
@@ -155,9 +155,9 @@ void I_WaitVBL(int count)
 
 byte*	I_AllocLow(size_t length)
 {
-    byte*	mem;
+    dbyte*	mem;
    
-    mem = (byte *)malloc (length);
+    mem = (dbyte *)malloc (length);
     memset (mem,0,length);
     return mem;
 }

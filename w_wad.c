@@ -65,18 +65,6 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #include "w_wad.h"
 
 #include "doomlib.h"
-#ifdef __GNUC__
-static long filelength_(int handle)
-{
-    long sz;
-    LSeek(handle, 0L, SEEK_END);
-    sz = Tell(handle);
-    LSeek(handle, 0L, SEEK_SET);
-    return sz;
-}
-#else
-#define filelength_ _filelength 
-#endif
 
 //
 // GLOBALS
@@ -115,7 +103,7 @@ ExtractFileBase
 	if (++length == 9)
 	    I_Error ("Filename base of %s >8 chars",path);
 
-	*dest++ = toupper((int)*src++);
+	*dest++ = strupr((int)*src++);
     }
 }
 
@@ -150,7 +138,7 @@ void W_AddFile (char *filename)
     filelump_t*     fileinfo;
     filelump_t		singleinfo;
     int			    storehandle;
-    
+
     // open the file and add to directory
 
     // handle reload indicator.
@@ -172,10 +160,17 @@ void W_AddFile (char *filename)
 	
     if (strcasecmp(filename + strlen(filename) -3 ,"wad"))
     {
+        struct stat st;
+
 	    // single lump file
+        if (fstat(handle, &st))
+        {
+            return -1; /* Detects if the file is not accessible or does not exist. */
+        }
+
 	    fileinfo = &singleinfo;
 	    singleinfo.filepos = 0;
-	    singleinfo.size = DLONG(filelength_(handle));
+	    singleinfo.size = DLONG(st.st_size);
 	    ExtractFileBase (filename, singleinfo.name);
 	    numlumps++;
     }
@@ -352,7 +347,7 @@ int W_CheckNumForName(char* name)
     name8.s[8] = 0;
 
     // case insensitive
-    D_strupper(name8.s);		
+    strupr(name8.s);		
 
     v1 = name8.x[0];
     v2 = name8.x[1];
@@ -449,7 +444,7 @@ W_CacheLumpNum
 (int		lump,
  int		tag)
 {
-    byte* ptr;
+    dbyte* ptr;
 
     if ((unsigned)lump >= (unsigned)numlumps)
         I_Error("W_CacheLumpNum: %i >= numlumps", lump);
@@ -508,7 +503,7 @@ void W_Profile (void)
         }
         else
         {
-            block = (memblock_t*)((byte*)ptr - sizeof(memblock_t));
+            block = (memblock_t*)((dbyte*)ptr - sizeof(memblock_t));
             if (block->tag < PU_PURGELEVEL)
                 ch = 'S';
             else

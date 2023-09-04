@@ -344,49 +344,6 @@ text_color_t  tc[] = { 1.0f, 1.0f, 1.0f,
 
 void GL_DrawSetupText(int x, int y, char *text, int color)
    {
-    /*int c, ch;
-    float left, right, top, bottom;
-
-    left = x - 160.0f;
-    top = 120.0f - y;
-    bottom = top - gl_fheight;
-
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
-
-    glColor3f( tc[color].red, tc[color].green, tc[color].blue );
-
-    for (c = 0; text[c] != '\0'; c++)
-       {
-        right = left + gl_fwidth;
-        if (text[c] != ' ')
-           {
-            ch = text[c] - 33;
-            glBindTexture(GL_TEXTURE_2D, ConFont[0][ch]);
-            glBegin(GL_QUADS);
-               glTexCoord2f(0.0f, 1.0f);
-               glVertex3f(left, top, SetBack);
-               glTexCoord2f(0.0f, 0.0f);
-               glVertex3f(left, bottom, SetBack);
-               glTexCoord2f(1.0f, 0.0f);
-               glVertex3f(right, bottom, SetBack);
-               glTexCoord2f(1.0f, 1.0f);
-               glVertex3f(right, top, SetBack);
-            glEnd();
-           }
-        left += gl_fwidth;
-       }
-    glColor3f( 1.0f, 1.0f, 1.0f );*/
    }
 
 //
@@ -1322,8 +1279,6 @@ void GL_DrawSaveLoadBorder(int x,int y)
     float    Left, Bottom, Top, Right;
     int      xo, i;
 	
-    glEnable(GL_TEXTURE_2D);
-
     xo = x;
 
     Left = (-160.0f+(float)(xo-LSLeft.Width));
@@ -1331,66 +1286,36 @@ void GL_DrawSaveLoadBorder(int x,int y)
     Top = 120.0f-((y+8)*1.2f);
     Bottom = Top+(LSLeft.Height*1.2f);
 
-    glBindTexture(GL_TEXTURE_2D, LSLeft.TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    float vertices[] = { Left, Right, Top, Bottom };
 
-       glTexCoord2f(0.0f, LSLeft.YDisp);
-       glVertex3f(Left, Bottom, SetBack);
+    renderer.SetTexture(LSLeft.TexName);
+    renderer.RenderSprite(vertices, &LSLeft);
 
-       glTexCoord2f(LSLeft.XDisp, LSLeft.YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(LSLeft.XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-
-
-    glBindTexture(GL_TEXTURE_2D, LSCenter.TexName);
+    renderer.SetTexture(LSCenter.TexName);
 
     for (i = 0;i < 24;i++)
        {
-        Left = (-160.0f+(float)xo);
+        Left =  (-160.0f+(float)xo);
         Right = (-160.0f+(float)xo+LSCenter.Width);
 
-        glBegin(GL_QUADS);
-           glTexCoord2f(0.0f, 1.0f);
-           glVertex3f(Left, Top, SetBack);
-
-           glTexCoord2f(0.0f, LSLeft.YDisp);
-           glVertex3f(Left, Bottom, SetBack);
-
-           glTexCoord2f(LSLeft.XDisp, LSLeft.YDisp);
-           glVertex3f(Right, Bottom, SetBack);
-
-           glTexCoord2f(LSLeft.XDisp, 1.0f);
-           glVertex3f(Right, Top, SetBack);
-        glEnd();
+        vertices[0] = Left;
+        vertices[1] = Right;
+        renderer.RenderSprite(vertices, &LSCenter);
 
         x += 8;
         xo += (int)LSCenter.Width;
        }
 
-    glBindTexture(GL_TEXTURE_2D, LSRight.TexName);
+    renderer.SetTexture(LSRight.TexName);
+
     Left = (-160.0f+(float)xo);
     Right = (-160.0f+(float)xo+LSRight.Width);
 
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    vertices[0] = Left;
+    vertices[1] = Right;
 
-       glTexCoord2f(0.0f, LSRight.YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(LSRight.XDisp, LSRight.YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(LSRight.XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-
-    glDisable(GL_TEXTURE_2D);
+    renderer.RenderSprite(vertices, &LSRight);
+    renderer.SetTexture(0);
    }
 
 //
@@ -1624,50 +1549,28 @@ void GL_DrawFullScreen(GLTexData *Image)
    {
     float      Top, Left, Right, Bottom;
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-
     Top = 120.0f;
     Bottom = -120.0f;
 
     Left = -160.0f;
     Right = 96.0f;
 
-    glBindTexture(GL_TEXTURE_2D, Image[0].TexName);
+    float vertices[] = { Left, Right, Top, Bottom };
 
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    renderer.SetTexture(Image[0].TexName);
+    renderer.RenderSprite(vertices, &Image[0]);
+    renderer.SetTexture(0);
 
-       glTexCoord2f(0.0f, Image[0].YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(Image[0].XDisp, Image[0].YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(Image[0].XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-
-    Left = 96.0f;
+    Left =  96.0f;
     Right = 160.0f;
 
-    glBindTexture(GL_TEXTURE_2D, Image[1].TexName);
+    vertices[0] = 96.0f;
+    vertices[1] = 160.0f;
 
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    renderer.SetTexture(Image[1].TexName);
+    renderer.RenderSprite(vertices, &Image[1]);
+    renderer.SetTexture(0);
 
-       glTexCoord2f(0.0f, Image[1].YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(Image[1].XDisp, Image[1].YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(Image[1].XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
    }
 
 void GL_DrawReadThis1(void)
@@ -2116,31 +2019,23 @@ void M_DrawNewGame(void)
 void GL_DrawNewGame(void)
    {
     float   Left, Right, Top, Bottom;
+    float vertices[4] = { 0 };
 
     GL_DrawTitle(14, &glNewGameTitle);
 
-    Left = (0.0f-(glSkillTitle.Width/2.0f));
-    Right = Left+glSkillTitle.Width;
-    Top = 120.0f-(38*1.2f);
+    Left   = (0.0f-(glSkillTitle.Width/2.0f));
+    Right  = Left+glSkillTitle.Width;
+    Top    = 120.0f-(38*1.2f);
     Bottom = Top-(glSkillTitle.Height*1.2f);
 
-    glBindTexture(GL_TEXTURE_2D, glSkillTitle.TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    vertices[0] = Left;
+    vertices[1] = Right;
+    vertices[2] = Top;
+    vertices[3] = Bottom;
 
-       glTexCoord2f(0.0f, glSkillTitle.YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(glSkillTitle.XDisp, glSkillTitle.YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(glSkillTitle.XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    renderer.SetTexture(glSkillTitle.TexName);
+    renderer.RenderSprite(vertices, &glSkillTitle);
+    renderer.SetTexture(0);
    }
 
 void M_NewGame(int choice)
@@ -2225,8 +2120,8 @@ void M_DrawBackground(char* patchname)
 
   {
   int     x,y;
-  byte*   back_src;
-  byte*   back_dest;
+  dbyte*   back_src;
+  dbyte*   back_dest;
 
   // killough 4/17/98: 
   back_src = W_CacheLumpNum(firstflat+R_FlatNumForName(patchname),PU_CACHE);
@@ -2402,57 +2297,24 @@ void M_DrawOptions(void)
 void GL_DrawOptions(void)
    {
     float   Left, Right, Top, Bottom;
+    float vertices[4] = { 0 };
 
     GL_DrawTitle(15, &glOptionTitle);
 
-/*  Detail level is antiquated
-
-    Left = (-160.0f+OptionsDef.x+175);
-    Right = Left+glDtlName[detailLevel].Width;
-    Top = 120.0f-((OptionsDef.y+(LINEHEIGHT*detail)+3)*1.2f);
-    Bottom = Top-(glDtlName[detailLevel].Height*1.2f);
-
-    glBindTexture(GL_TEXTURE_2D, glDtlName[detailLevel].TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
-
-       glTexCoord2f(0.0f, glDtlName[detailLevel].YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(glDtlName[detailLevel].XDisp, glDtlName[detailLevel].YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(glDtlName[detailLevel].XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-*/
-    Left = (-160.0f+OptionsDef.x+120);
+    Left  = (-160.0f+OptionsDef.x+120);
     Right = Left+glMsgName[showMessages].Width;
-    Top = 120.0f-((OptionsDef.y+(LINEHEIGHT*messages)+3)*1.2f);
+    Top    = 120.0f-((OptionsDef.y+(LINEHEIGHT*messages)+3)*1.2f);
     Bottom = Top-(glMsgName[showMessages].Height*1.2f);
 
-    glBindTexture(GL_TEXTURE_2D, glMsgName[showMessages].TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    vertices[0] = Left;
+    vertices[1] = Right;
+    vertices[2] = Top;
+    vertices[3] = Bottom;
 
-       glTexCoord2f(0.0f, glMsgName[showMessages].YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(glMsgName[showMessages].XDisp, glMsgName[showMessages].YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(glMsgName[showMessages].XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-
-//    GL_DrawThermo(OptionsDef.x,OptionsDef.y+(LINEHEIGHT*(scrnsize+1))+1,9,screenSize);
-
-//    GL_DrawThermo(OptionsDef.x,OptionsDef.y+(LINEHEIGHT*(mousesens+1))+1,10,mouseSensitivity);
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    renderer.SetTexture(glMsgName[showMessages].TexName);
+    renderer.RenderSprite(vertices, &glMsgName[showMessages]);
+    renderer.SetTexture(0);
+    
    }
 
 void M_Options(int choice)
@@ -2743,96 +2605,59 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     float   xx;
     int		i;
 
+    float vertices[4] = { 0 };
+
     xx = (float)x;
 
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
-
-    Left = (-160.0f+xx);
+    Left  = (-160.0f+xx);
     Right = Left+glThermL.Width;
-    Top = 120.0f-(y*1.2f);
+    Top    = 120.0f-(y*1.2f);
     Bottom = Top-(glThermL.Height*1.2f);
 
-    glBindTexture(GL_TEXTURE_2D, glThermL.TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    vertices[0] = Left;
+    vertices[1] = Right;
+    vertices[2] = Top;
+    vertices[3] = Bottom;
 
-       glTexCoord2f(0.0f, glThermL.YDisp);
-       glVertex3f(Left, Bottom, SetBack);
+    renderer.SetTexture(glThermL.TexName);
+    renderer.RenderSprite(vertices, &glThermL);
 
-       glTexCoord2f(glThermL.XDisp, glThermL.YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(glThermL.XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
-
-    glBindTexture(GL_TEXTURE_2D, glThermM.TexName);
+    renderer.SetTexture(glThermM.TexName);
     Left += glThermL.Width;
     Right = Left+9.0f;
 
+    vertices[0] = Left;
+    vertices[1] = Right;
+
     for (i = 0;i < thermWidth; i++)
        {
-        glBegin(GL_QUADS);
-           glTexCoord2f(0.0f, 1.0f);
-           glVertex3f(Left, Top, SetBack);
 
-           glTexCoord2f(0.0f, glThermM.YDisp);
-           glVertex3f(Left, Bottom, SetBack);
+        renderer.RenderSprite(vertices, &glThermM);
 
-           glTexCoord2f(glThermM.XDisp, glThermM.YDisp);
-           glVertex3f(Right, Bottom, SetBack);
-
-           glTexCoord2f(glThermM.XDisp, 1.0f);
-           glVertex3f(Right, Top, SetBack);
-        glEnd();
-
-        Left += 8.0f;
+        Left  += 8.0f;
         Right += 8.0f;
+
+        vertices[0] = Left;
+        vertices[1] = Right;
        }
 
     Right = Left+glThermR.Width;
-    glBindTexture(GL_TEXTURE_2D, glThermR.TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
-       glTexCoord2f(0.0f, glThermR.YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-       glTexCoord2f(glThermR.XDisp, glThermR.YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-       glTexCoord2f(glThermR.XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
+    vertices[1] = Right;
 
-    Left = (-160.0f+(x+glThermL.Width)+(thermDot*8));
-    Right = Left+glThermO.Width;
+    renderer.SetTexture(glThermR.TexName);
+    renderer.RenderSprite(vertices, &glThermR);
+
+    Left   = (-160.0f+(x+glThermL.Width)+(thermDot*8));
+    Right  = Left+glThermO.Width;
     Bottom = Top-(glThermO.Height*1.2f);
 
-    glBindTexture(GL_TEXTURE_2D, glThermO.TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f(0.0f, 1.0f);
-       glVertex3f(Left, Top, SetBack);
+    vertices[0] = Left;
+    vertices[1] = Right;
+    vertices[3] = Bottom;
 
-       glTexCoord2f(0.0f, glThermO.YDisp);
-       glVertex3f(Left, Bottom, SetBack);
-
-       glTexCoord2f(glThermO.XDisp, glThermO.YDisp);
-       glVertex3f(Right, Bottom, SetBack);
-
-       glTexCoord2f(glThermO.XDisp, 1.0f);
-       glVertex3f(Right, Top, SetBack);
-    glEnd();
+    renderer.SetTexture(glThermO.TexName);
+    renderer.RenderSprite(vertices, &glThermO);
+    renderer.SetTexture(0);
    }
 
 
@@ -2977,25 +2802,13 @@ void GL_WriteTextN( int x, int y, char *string, int color)
     int		c;
     int		cx;
     int		cy;
-		
+    float vertices[4] = { 0 };
     ch = string;
     cx = x;
     cy = y;
-	
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
 
-    glColor3f( tc[color].red, tc[color].green, tc[color].blue );
+    renderer.SetColor(tc[color].red, tc[color].green, tc[color].blue);
+
     while(1)
        {
         c = *ch++;
@@ -3019,30 +2832,23 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (cx+GLGreyFont[c].Width > SCREENWIDTH)
             break;
 
-        Top = (120.0f-(((cy-GLGreyFont[c].TopOff)-3)*1.2f));
+        Top    = (120.0f-(((cy-GLGreyFont[c].TopOff)-3)*1.2f));
         Bottom = Top-(GLGreyFont[c].Height*1.2f);
+        Left   = (-160.0f+cx);
+        Right  = Left + GLGreyFont[c].Width;
 
-        Left = (-160.0f+cx);
-        Right = Left + GLGreyFont[c].Width;
+        vertices[0] = Left;
+        vertices[1] = Right;
+        vertices[2] = Top;
+        vertices[3] = Bottom;
 
-        glBindTexture(GL_TEXTURE_2D, GLGreyFont[c].TexName);
-        glBegin(GL_QUADS);
-          glTexCoord2f( 0.0f, 1.0f);
-          glVertex3f( Left, Top, SetBack);
-          glTexCoord2f( 0.0f, GLGreyFont[c].YDisp);
-          glVertex3f( Left, Bottom, SetBack);
-          glTexCoord2f( GLGreyFont[c].XDisp, GLGreyFont[c].YDisp);
-          glVertex3f( Right, Bottom, SetBack);
-          glTexCoord2f( GLGreyFont[c].XDisp, 1.0f);
-          glVertex3f( Right, Top, SetBack);
-        glEnd();
+        renderer.SetTexture(GLGreyFont[c].TexName);
+        renderer.RenderSprite(vertices, &GLGreyFont[c]);
 
         cx += (int)(GLGreyFont[c].Width-1);
        }
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
-    glColor3f( 1.0f, 1.0f, 1.0f );
+
+    renderer.SetColor(1.0f, 1.0f, 1.0f);
    }
 
 //
@@ -3056,23 +2862,11 @@ void GL_WriteText( int x, int y, char *string)
     int		c;
     int		cx;
     int		cy;
-		
+    float vertices[4] = { 0 };
+
     ch = string;
     cx = x;
     cy = y;
-	
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
 
     while(1)
        {
@@ -3097,29 +2891,22 @@ void GL_WriteText( int x, int y, char *string)
         if (cx+GLHudFont[c].Width > SCREENWIDTH)
             break;
 
-        Top = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
+        Top    = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
         Bottom = Top-(GLHudFont[c].Height*1.2f);
 
         Left = (-160.0f+cx);
         Right = Left + GLHudFont[c].Width;
 
-        glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
-        glBegin(GL_QUADS);
-          glTexCoord2f( 0.0f, 1.0f);
-          glVertex3f( Left, Top, SetBack);
-          glTexCoord2f( 0.0f, GLHudFont[c].YDisp);
-          glVertex3f( Left, Bottom, SetBack);
-          glTexCoord2f( GLHudFont[c].XDisp, GLHudFont[c].YDisp);
-          glVertex3f( Right, Bottom, SetBack);
-          glTexCoord2f( GLHudFont[c].XDisp, 1.0f);
-          glVertex3f( Right, Top, SetBack);
-        glEnd();
+        vertices[0] = Left;
+        vertices[1] = Right;
+        vertices[2] = Top;
+        vertices[3] = Bottom;
+
+        renderer.SetTexture(GLHudFont[c].TexName);
+        renderer.RenderSprite(vertices, &GLHudFont[c]);
 
         cx += (int)GLHudFont[c].Width;
        }
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
    }
 
 
@@ -3793,7 +3580,7 @@ void M_DrawInstructions()
 #define PAL_BLACK   0
 #define PAL_WHITE   4
 
-static byte colorblock[(CHIP_SIZE+4)*(CHIP_SIZE+4)];
+static dbyte colorblock[(CHIP_SIZE+4)*(CHIP_SIZE+4)];
 
 // Data used by the Chat String editing code
 
@@ -3818,7 +3605,7 @@ char* chat_string_buffer; // points to new chat strings while editing
 
 void M_DrawDefVerify()
   {
-  byte block[188];
+  dbyte block[188];
   int i;
 
   for (i = 0 ; i < 181 ; i++)
@@ -4325,7 +4112,7 @@ void M_DrawSetting(setup_menu_t* s)
    int*  key;
    int   weapon,flags,i,cursor_start,char_width,x,y,color;
    size_t len;
-   byte  ch,*ptr;
+   dbyte  ch,*ptr;
    char* text;
    char  c[2];
    
@@ -4430,7 +4217,7 @@ void M_DrawSetting(setup_menu_t* s)
       
       // draw the paint chip
       
-      ch = (byte) *(s->m_var1);
+      ch = (dbyte) *(s->m_var1);
       if (ch == 0) // don't show this item in automap mode
          V_DrawPatchDirect (x+1,y,0,W_CacheLumpName("M_PALNO",PU_CACHE));
       else
@@ -4577,6 +4364,7 @@ void M_KeyBindings(int choice)
 void GL_DrawKeybnd(void)
   {
   float   Left, Right, Top, Bottom;
+  float v[4] = { 0 };
 
   inhelpscreens = true;    // killough 4/6/98: Force status bar redraw
 
@@ -4584,38 +4372,20 @@ void GL_DrawKeybnd(void)
 
   GL_DrawBackground("FLOOR4_6"); // Draw background
 
-  glEnable(GL_TEXTURE_2D);
-  glEnable(GL_ALPHA_TEST);
-  glAlphaFunc(GL_GREATER, 0.0f);
-  glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
-
-  Left = (0.0f-(glSetupMenu[0].Width/2.0f));
-  Right = Left+glSetupMenu[0].Width;
-  Top = 120.0f-(1*1.2f);
+  Left   = (0.0f-(glSetupMenu[0].Width/2.0f));
+  Right  = Left+glSetupMenu[0].Width;
+  Top    = 120.0f-(1*1.2f);
   Bottom = Top-(glSetupMenu[0].Height*1.2f);
 
-  glBindTexture(GL_TEXTURE_2D, glSetupMenu[0].TexName);
-  glBegin(GL_QUADS);
-     glTexCoord2f(0.0f, 1.0f);
-     glVertex3f(Left, Top, SetBack);
+  v[0] = Left;
+  v[1] = Right;
+  v[2] = Top;
+  v[3] = Bottom;
 
-     glTexCoord2f(0.0f, glSetupMenu[0].YDisp);
-     glVertex3f(Left, Bottom, SetBack);
+  renderer.SetTexture(glSetupMenu[0].TexName);
+  renderer.RenderSprite(v, &glSetupMenu[0]);
 
-     glTexCoord2f(glSetupMenu[0].XDisp, glSetupMenu[0].YDisp);
-     glVertex3f(Right, Bottom, SetBack);
-
-     glTexCoord2f(glSetupMenu[0].XDisp, 1.0f);
-     glVertex3f(Right, Top, SetBack);
-  glEnd();
+  renderer.SetTexture(0);
 
   GL_DrawInstructions();
   GL_DrawScreenItems(current_setup_menu);
@@ -4702,7 +4472,7 @@ setup_menu_t weap_settings1[] =  // Weapons Settings screen
 
 int color_palette_x; // X position of the cursor on the color palette
 int color_palette_y; // Y position of the cursor on the color palette
-byte palette_background[16*(CHIP_SIZE+1)+8];
+dbyte palette_background[16*(CHIP_SIZE+1)+8];
 
 static dboolean shiftdown = false; // phares 4/10/98: SHIFT key down or not
 
@@ -6197,73 +5967,59 @@ void GL_DrawMenu()
         GLTex = glNewGame;
        }
 
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-    glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE,GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }
+    float v[4] = { 0 };
+    renderer.SetColor(1.0f, 1.0f, 1.0f);
+
 
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
-        Left = -160.0f + (currentMenu->x+SKULLXOFF);
-        Right = Left + (MenuSkull[whichSkull].Width);
-        Top = (120.0f - (float)(((currentMenu->y-5) + (itemOn*LINEHEIGHT)) * 1.2f));
+        Left   = -160.0f + (currentMenu->x+SKULLXOFF);
+        Right  = Left + (MenuSkull[whichSkull].Width);
+        Top    = (120.0f - (float)(((currentMenu->y-5) + (itemOn*LINEHEIGHT)) * 1.2f));
         Bottom = Top - (MenuSkull[whichSkull].Height * 1.2f);
+
+        v[0] = Left;
+        v[1] = Right;
+        v[2] = Top;
+        v[3] = Bottom;
 
         max = currentMenu->numitems;
 
-        glBindTexture(GL_TEXTURE_2D, MenuSkull[whichSkull].TexName);
-        glBegin(GL_QUADS);
-           glTexCoord2f( 0.0f, 1.0f);
-           glVertex3f( Left, Top, SetBack);
-           glTexCoord2f( 0.0f, MenuSkull[whichSkull].YDisp);
-           glVertex3f( Left, Bottom, SetBack);
-           glTexCoord2f( MenuSkull[whichSkull].XDisp, MenuSkull[whichSkull].YDisp);
-           glVertex3f( Right, Bottom, SetBack);
-           glTexCoord2f( MenuSkull[whichSkull].XDisp, 1.0f);
-           glVertex3f( Right, Top, SetBack);
-        glEnd();
+        renderer.SetTexture(MenuSkull[whichSkull].TexName);
+        renderer.RenderSprite(v, &MenuSkull[whichSkull]);
+
        }
 
     if (GLTex == 0)
        return;
 
-    Top = 120.0f - ((float)currentMenu->y * 1.2f);
-    Left = -160+(float)currentMenu->x;
+    Top    = 120.0f - ((float)currentMenu->y * 1.2f);
+    Left   = -160+(float)currentMenu->x;
     Bottom = Top - (GLTex[0].Height*1.2f);
     lh = ((float)LINEHEIGHT*1.2f);
+
+    v[2] = Top;
+    v[0] = Left;
+    v[3] = Bottom;
 
     for (i = 0; i < currentMenu->numitems; i++)
        {
         if (currentMenu->menuitems[i].name[0])
            {
             Right = Left + GLTex[i].Width;
-            glBindTexture(GL_TEXTURE_2D, GLTex[i].TexName);
-            glBegin(GL_QUADS);
-               glTexCoord2f( 0.0f, 1.0f);
-               glVertex3f( Left, Top, SetBack);
-               glTexCoord2f( 0.0f, GLTex[i].YDisp);
-               glVertex3f( Left, Bottom, SetBack);
-               glTexCoord2f( GLTex[i].XDisp, GLTex[i].YDisp);
-               glVertex3f( Right, Bottom, SetBack);
-               glTexCoord2f( GLTex[i].XDisp, 1.0f);
-               glVertex3f( Right, Top, SetBack);
-            glEnd();
+            v[1] = Right;
+            renderer.SetTexture(GLTex[i].TexName);
+            renderer.RenderSprite(v, &GLTex[i]);
+
            }
-        Top -= lh;
+        Top    -= lh;
         Bottom -= lh;
+        v[2] = Top;
+        v[3] = Bottom;
        }
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);
-    glDisable(GL_BLEND);
+    
+    renderer.SetTexture(0);
+
    }
 
 //

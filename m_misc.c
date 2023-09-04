@@ -248,11 +248,11 @@ dboolean M_AppendFile(char const *name, void *source, int length )
 int
 M_ReadFile
 ( char const*	name,
-  byte**	buffer )
+  dbyte**	buffer )
 {
     int	handle, count, length;
     struct stat	fileinfo;
-    byte		*buf;
+    dbyte		*buf;
 	
     handle = Open (name, O_RDONLY | O_BINARY, 0666);
     if (handle == -1)
@@ -647,7 +647,7 @@ void M_SaveDefaults (void)
 //
 // M_LoadDefaults
 //
-extern byte	scantokey[128];
+extern dbyte	scantokey[128];
 
 void GetCfgName()
    {
@@ -817,15 +817,15 @@ typedef struct
 void
 WritePCXfile
 ( char*		filename,
-  byte*		data,
+  dbyte*		data,
   int		width,
   int		height,
-  byte*		palette )
+  dbyte*		palette )
 {
     int		i;
     int		length;
     pcx_t*	pcx;
-    byte*	pack;
+    dbyte*	pack;
 	
     pcx = Z_Malloc (width*height*2+1000, PU_STATIC, NULL);
 
@@ -866,7 +866,7 @@ WritePCXfile
 	*pack++ = gammatable[usegamma][*palette++];
     
     // write output file
-    length = pack - (byte *)pcx;
+    length = pack - (dbyte *)pcx;
     M_WriteFile (filename, pcx, length);
 
     Z_Free (pcx);

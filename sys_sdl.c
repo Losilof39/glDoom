@@ -88,7 +88,7 @@ int     GameMode = GAME_START;
 extern  int  version;
 extern  char revision;
 
-extern byte *screens[5];
+extern dbyte *screens[5];
 extern GameMode_t gamemode;
 
 char         szMsgText[2048];

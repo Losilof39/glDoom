@@ -130,7 +130,7 @@ int        framecnt = 0;
 //
 // I_ReadScreen
 //
-void I_ReadScreen (byte* scr)
+void I_ReadScreen (dbyte* scr)
 {
     memcpy (scr, screens[0], SCREENWIDTH*SCREENHEIGHT);
 }
@@ -152,7 +152,7 @@ void CreateGLPalette()
 //
 // I_SetPalette
 //
-void I_SetPalette(byte* palette)
+void I_SetPalette(dbyte* palette)
    {
     int i;
 
@@ -185,10 +185,10 @@ dboolean StartUpOpenGL()
    {
     int rendertype = SDL_GL_CONTEXT_PROFILE_COMPATIBILITY;
 
-    if (M_CheckParm("-core"))
+    /*if (M_CheckParm("-core"))
     {
         rendertype = SDL_GL_CONTEXT_PROFILE_CORE;
-    }
+    }*/
 
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 3);
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, 3);
