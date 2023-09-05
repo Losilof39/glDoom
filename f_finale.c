@@ -459,8 +459,8 @@ void GL_F_TextWrite (void)
 
 void F_TextWrite (void)
    {
-    byte*	src;
-    byte*	dest;
+    dbyte*	src;
+    dbyte*	dest;
     
     int		x,y,w;
     int		count;
@@ -775,7 +775,7 @@ void GL_F_CastDrawer (void)
     spritedef_t*	sprdef;
     spriteframe_t*	sprframe;
     int			lump, ch;
-    byte 		flip;
+    dbyte 		flip;
     int       TextWidth;
     char        c;
     float       fTop, fBottom, fOffset, x1, x2;
@@ -858,7 +858,7 @@ void F_CastDrawer (void)
     spritedef_t*	sprdef;
     spriteframe_t*	sprframe;
     int			lump;
-    byte		flip;
+    dbyte		flip;
     patch_t*		patch;
     
     // erase the entire screen to a background
@@ -890,18 +890,18 @@ F_DrawPatchCol
   int		col )
 {
     column_t*	column;
-    byte*	source;
-    byte*	dest;
-    byte*	desttop;
+    dbyte*	source;
+    dbyte*	dest;
+    dbyte*	desttop;
     int		count;
 	
-    column = (column_t *)((byte *)patch + DLONG(patch->columnofs[col]));
+    column = (column_t *)((dbyte *)patch + DLONG(patch->columnofs[col]));
     desttop = screens[0]+x+(((SCREENHEIGHT-200)/2)*(SCREENWIDTH));
 
     // step through the posts in a column
     while (column->topdelta != 0xff )
     {
-	source = (byte *)column + 3;
+	source = (dbyte *)column + 3;
 	dest = desttop + column->topdelta*SCREENWIDTH;
 	count = column->length;
 		
@@ -910,7 +910,7 @@ F_DrawPatchCol
 	    *dest = *source++;
 	    dest += SCREENWIDTH;
 	}
-	column = (column_t *)(  (byte *)column + column->length + 4 );
+	column = (column_t *)(  (dbyte *)column + column->length + 4 );
     }
 }
 
