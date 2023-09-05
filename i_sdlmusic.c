@@ -22,8 +22,8 @@
 #include <string.h>
 #include <ctype.h>
 
-#include "thirdparty/SDL2/include/SDL.h"
-#include "thirdparty/SDL2/include/SDL_mixer.h"
+#include <SDL.h>
+#include <SDL_mixer.h>
 
 #include "doomtype.h"
 #include "mmus2mid.h"
@@ -93,7 +93,11 @@ static dboolean I_SDL_InitMusic(void)
         {
             fprintf(stderr, "Unable to set up sound.\n");
         }
+#if SDL_MAJOR_VERSION == 3
+        else if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16SYS, 2, 1024, NULL, 0x00000001) < 0) /* todo: figure out a replacement of the frequency change */
+#else
         else if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
+#endif
         {
             fprintf(stderr, "Error initializing SDL_mixer: %s\n",
                 Mix_GetError());
@@ -101,8 +105,11 @@ static dboolean I_SDL_InitMusic(void)
         }
         else
         {
+#if SDL_MAJOR_VERSION == 3
+            SDL_PauseAudioDevice(0);
+#else
             SDL_PauseAudio(0);
-
+#endif   
             sdl_was_initialized = true;
             music_initialized = true;
         }

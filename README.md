@@ -30,6 +30,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 * Replaced `_filelength` function to `fstat`  
 * Created a bitmap loader based on windows api
 * Ported Win32 api to posix
+* Added SDL3 api support until SDL2 gets no releases 
 
 ### Current Problems
 * No vertical mouse movement

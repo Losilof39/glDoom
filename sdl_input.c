@@ -4,7 +4,7 @@
 // keyboard, mouse and joystick inputs.
 // This module is for Win32
 
-#include "thirdparty/SDL2/include/SDL.h"
+#include <SDL.h>
 
 #include "d_main.h"
 #include "sys_sdl.h"
@@ -68,14 +68,21 @@ void I_CheckInputs(void)
     {
         switch (ev.type)
         {
+#if SDL_MAJOR_VERSION == 3
+        case SDL_EVENT_QUIT:
+#else
         case SDL_QUIT:
+#endif
         {
             bQuit = false;
             break;
         }break;
 
-
+#if SDL_MAJOR_VERSION == 3
+        case SDL_EVENT_KEY_DOWN:
+#else
         case SDL_KEYDOWN:
+#endif
         {
             // catch first these 4 keys
             switch (ev.key.keysym.scancode)
@@ -116,8 +123,11 @@ void I_CheckInputs(void)
             // catch the other keys
             keystates[ev.key.keysym.scancode] = true;
         }break;
-
+#if SDL_MAJOR_VERSION == 3
+        case SDL_EVENT_KEY_UP:
+#else
         case SDL_KEYUP:
+#endif
         {
             // catch first these 4 keys
             switch (ev.key.keysym.scancode)
@@ -158,8 +168,11 @@ void I_CheckInputs(void)
         }break;
 
         if ((usemouse) && (mouseavail)) {
-
+#if SDL_MAJOR_VERSION == 3
+        case SDL_EVENT_MOUSE_WHEEL:
+#else
         case SDL_MOUSEWHEEL:
+#endif
         {
             if (ev.wheel.y > 0)
             {
@@ -176,9 +189,13 @@ void I_CheckInputs(void)
                 D_PostEvent(&event);
             }
         }break;
-
+#if SDL_MAJOR_VERSION == 3
+        case SDL_EVENT_MOUSE_BUTTON_DOWN:
+        case SDL_EVENT_MOUSE_BUTTON_UP:
+#else
         case SDL_MOUSEBUTTONDOWN:
         case SDL_MOUSEBUTTONUP:
+#endif
             event.type = ev_mouse;
             event.data1 = I_SDLtoDoomMouseState(SDL_GetMouseState(NULL, NULL));
             event.data2 = event.data3 = 0;
@@ -186,8 +203,11 @@ void I_CheckInputs(void)
 
             break;
         }
-
+#if SDL_MAJOR_VERSION == 3
+        case SDL_EVENT_MOUSE_MOTION:
+#else
         case SDL_MOUSEMOTION:
+#endif
         {
             if (ev.motion.xrel != 0 || ev.motion.yrel != 0)
             {

@@ -84,12 +84,15 @@ typedef int dboolean;
 #define Tell tell
 #endif
 
-#ifdef _WIN64
+#if SDL_MAJOR_VERSION == 3
+#define GetTicks SDL_GetTicks
+#else
+#if defined(_WIN64) 
 #define GetTicks SDL_GetTicks64
 #else
 #define GetTicks SDL_GetTicks
 #endif
-
+#endif
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
 // Predefined with some OS.

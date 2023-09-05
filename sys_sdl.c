@@ -304,9 +304,11 @@ void Cleanup()
     int  i;
 //    char DoomDir[_MAX_PATH];
 //    char tstr[16];
-
+#if SDL_MAJOR_VERSION == 3
+    SDL_ShowCursor();
+#else
     SDL_ShowCursor(SDL_ENABLE);
-
+#endif
     for (i = 4; i >= 0; i--)
         free(screens[i]);
     M_FreeParms();
@@ -322,10 +324,13 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 #else
     sprintf((char* const)window_title, "GLDOOM-RE");
 #endif
-
+#if SDL_MAJOR_VERSION == 3
+    pWindow = SDL_CreateWindowWithPosition((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL 
+    | (fullscreen ? true : false) | SDL_WINDOW_MOUSE_GRABBED | SDL_WINDOW_HIGH_PIXEL_DENSITY);
+#else
     pWindow = SDL_CreateWindow((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height, SDL_WINDOW_OPENGL | (fullscreen ? true : false) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
-  
+#endif  
     SDL_SetRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
 
@@ -340,8 +345,11 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
 
     printf("glDoom Re Version %d.%d%c\n", version/100, version%100, revision);
     printf("Starting OpenGL...\n");
+#if SDL_MAJOR_VERSION == 3
+    SDL_ShowCursor();
+#else
     SDL_ShowCursor(SDL_DISABLE);
-
+#endif
     if (StartUpOpenGL() == false)
     {        
         return false;

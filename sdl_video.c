@@ -22,8 +22,11 @@ void GetVideoInfo()
     SDL_DisplayMode         mode;
     static int              display_in_use = 0;
     Uint32                  f;
-
+#if SDL_MAJOR_VERSION == 3
+    SDL_GetCurrentDisplayMode(display_in_use);
+#else
     SDL_GetCurrentDisplayMode(display_in_use, &mode);
+#endif
     f = mode.format;
 
     DevInfo.width = mode.w;
@@ -41,8 +44,11 @@ void GetModeList(char *dbgname)
     Uint32                  f;
     
     fn = fopen(dbgname, "a+");
-
+#if SDL_MAJOR_VERSION == 3
+    display_mode_count = SDL_GetFullscreenDisplayModes(display_in_use, 1);
+#else
     display_mode_count = SDL_GetNumDisplayModes(display_in_use);
+#endif
     if (display_mode_count < 1) {
         I_Error("SDL_GetNumDisplayModes failed: %s", SDL_GetError());
     }
@@ -52,7 +58,11 @@ void GetModeList(char *dbgname)
 
     for (i = 0; i < display_mode_count; ++i) 
     {
+#if SDL_MAJOR_VERSION == 3
+        if ((SDL_GetCurrentDisplayMode(display_in_use)) != 0) {
+#else
         if (SDL_GetDisplayMode(display_in_use, i, &mode) != 0) {
+#endif
             I_Error("SDL_GetDisplayMode failed: %s", SDL_GetError());
             
         }
@@ -75,8 +85,11 @@ dboolean SetVideoMode()
    {
     SDL_DisplayMode mode;
     dboolean success = true;
-
+#if SDL_MAJOR_VERSION == 3
+    video.fullscreen = SDL_SetWindowFullscreenMode(pWindow, &mode);
+#else
     video.fullscreen = SDL_SetWindowDisplayMode(pWindow, &mode);
+#endif
     if (!video.fullscreen)
     {
         printf("Failed to load into fullscreen mode");

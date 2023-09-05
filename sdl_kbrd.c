@@ -5,7 +5,7 @@
 // and shutting down the keyboard interface and DirectInput.
 
 #include <stdio.h>
-#include "thirdparty/SDL2/include/SDL.h"
+#include <SDL.h>
 
 #include "doomtype.h"
 #include "d_main.h"
@@ -29,7 +29,11 @@ void I_SetupKeyboard()
     int k;
     // Set the keyboard buffer to "all keys up"
     for (k = 0; k < 256; k++)
+#if SDL_MAJOR_VERSION == 3
+        si_Kbd[k] = SDL_EVENT_KEY_UP;
+#else
         si_Kbd[k] = SDL_KEYUP;
+#endif
 }
 
 void I_CheckKeyboard()
@@ -38,22 +42,39 @@ void I_CheckKeyboard()
     int i;
     for (i = 1; i < 256; i++)
     {
+#if SDL_MAJOR_VERSION == 3
+        // key released
+        if (!keystates[i] && (si_Kbd[i] == SDL_EVENT_KEY_DOWN))
+#else
         // key released
         if (!keystates[i] && (si_Kbd[i] == SDL_KEYDOWN))
+#endif
         {
             event[i].type = ev_keyup;
             event[i].data1 = i;
             D_PostEvent(&event[i]);
+#if SDL_MAJOR_VERSION == 3
+            si_Kbd[i] = SDL_EVENT_KEY_UP;
+#else
             si_Kbd[i] = SDL_KEYUP;
+#endif
         }
-
+#if SDL_MAJOR_VERSION == 3
+        // key pressed
+        if (keystates[i] && (si_Kbd[i] == SDL_EVENT_KEY_UP))
+#else
         // key pressed
         if (keystates[i] && (si_Kbd[i] == SDL_KEYUP))
+#endif
         {
             event[i].type = ev_keydown;
             event[i].data1 = i;
             D_PostEvent(&event[i]);
+#if SDL_MAJOR_VERSION == 3
+            si_Kbd[i] = SDL_EVENT_KEY_DOWN;
+#else
             si_Kbd[i] = SDL_KEYDOWN;
+#endif
         }
     }
 }
