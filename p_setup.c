@@ -117,7 +117,7 @@ mobj_t**	blocklinks;
 // Without special effect, this could be
 //  used as a PVS lookup as well.
 //
-byte*		rejectmatrix;
+dbyte*		rejectmatrix;
 
 // Maintain single and multi player starting spots.
 #define MAX_DEATHMATCH_STARTS 10
@@ -133,7 +133,7 @@ dboolean    SpritePresent[NUMMOBJTYPES];
 //
 void P_LoadVertexes(int lump)
 {
-    byte*		    data;
+    dbyte*		    data;
     int			    i;
     mapvertex_t*	ml;
     vertex_t*		li;
@@ -168,7 +168,7 @@ void P_LoadVertexes(int lump)
 //
 void P_LoadSegs(int lump)
 {
-    byte*		data;
+    dbyte*		data;
     int			i;
     mapseg_t*	ml;
     seg_t*		li;
@@ -211,7 +211,7 @@ void P_LoadSegs(int lump)
 //
 void P_LoadSubsectors(int lump)
 {
-    byte*		    data;
+    dbyte*		    data;
     int			    i;
     mapsubsector_t*	ms;
     subsector_t*	ss;
@@ -238,7 +238,7 @@ void P_LoadSubsectors(int lump)
 //
 void P_LoadSectors(int lump)
 {
-    byte*		    data;
+    dbyte*		    data;
     int			    i;
     mapsector_t*	ms;
     sector_t*		ss;
@@ -270,7 +270,7 @@ void P_LoadSectors(int lump)
 //
 void P_LoadNodes(int lump)
 {
-    byte*	    data;
+    dbyte*	    data;
     int		    i;
     int		    j;
     int		    k;
@@ -306,7 +306,7 @@ void P_LoadNodes(int lump)
 //
 void P_LoadThings(int lump)
    {
-    byte*		    data;
+    dbyte*		    data;
     int			    i;
     mapthing_t*		mt;
     int			    numthings;
@@ -365,7 +365,7 @@ void P_LoadThings(int lump)
 //
 void P_LoadLineDefs(int lump)
 {
-    byte*		data;
+    dbyte*		data;
     int			i;
     maplinedef_t*	mld;
     line_t*		ld;
@@ -445,7 +445,7 @@ void P_LoadLineDefs(int lump)
 //
 void P_LoadSideDefs(int lump)
 {
-    byte*		data;
+    dbyte*		data;
     int			i;
     mapsidedef_t*	msd;
     side_t*		sd;
@@ -722,14 +722,22 @@ void P_Init(void)
 // Polygon Creation
 ////////////////////////////////////////////////////////////////////
 
+typedef struct
+{
+    long    left;
+    long    top;
+    long    right;
+    long    bottom;
+} rec_t;
+
 void  NormalVector(float, float, float, float, int);
 float InnerProduct(float *f, float *m, float *e);
 
-RECT              *SectorBBox = 0;
+rec_t* SectorBBox = 0;
 
 // keeps track which walls (side) or flats are visible
 drawside_t        *DrawSide           = NULL;
-byte          *DrawFlat           = NULL;
+dbyte          *DrawFlat           = NULL;
 sector_plane_t   **sorted_flats       = NULL;
 int                sorted_flats_count = 0;
 
@@ -2523,14 +2531,12 @@ void CreateNewFlats()
     static sector_t       *psector;
     static line_t         *pline;
     static side_t         *pside1, *pside2;
-    static RECT           *pbbox;
+    static rec_t          *pbbox;
     static int             ss_count, ss, ssid, lineid;
     int                    v1x, v2x, v1y, v2y;
 
-
     polygon_t  poly;
     fixed_t    rootbbox[4];
-
 
     // Free up what we allocated for the previous level...
     if (planes != NULL)
@@ -2650,7 +2656,7 @@ void CreateNewFlats()
 
     ZFREE(DrawFlat);
 
-    DrawFlat = (byte *)malloc(sizeof(byte *) * numsectors);
+    DrawFlat = (dbyte *)malloc(sizeof(dbyte *) * numsectors);
     for (sector = 0; sector < numsectors; sector++)
         DrawFlat[sector] = false;
 
@@ -2668,7 +2674,7 @@ void Build3DLevel()
 
     CreateNewWalls();
    
-    SectorBBox = (RECT *)alloca(sizeof(RECT)*numsectors);
+    SectorBBox = (rec_t *)alloca(sizeof(rec_t)*numsectors);
 
     CreateNewFlats();
 

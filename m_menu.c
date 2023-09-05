@@ -2128,8 +2128,8 @@ void M_DrawBackground(char* patchname)
 
   {
   int     x,y;
-  byte*   back_src;
-  byte*   back_dest;
+  dbyte*   back_src;
+  dbyte*   back_dest;
 
   // killough 4/17/98: 
   back_src = W_CacheLumpNum(firstflat+R_FlatNumForName(patchname),PU_CACHE);
@@ -3588,7 +3588,7 @@ void M_DrawInstructions()
 #define PAL_BLACK   0
 #define PAL_WHITE   4
 
-static byte colorblock[(CHIP_SIZE+4)*(CHIP_SIZE+4)];
+static dbyte colorblock[(CHIP_SIZE+4)*(CHIP_SIZE+4)];
 
 // Data used by the Chat String editing code
 
@@ -3613,7 +3613,7 @@ char* chat_string_buffer; // points to new chat strings while editing
 
 void M_DrawDefVerify()
   {
-  byte block[188];
+  dbyte block[188];
   int i;
 
   for (i = 0 ; i < 181 ; i++)
@@ -4120,7 +4120,7 @@ void M_DrawSetting(setup_menu_t* s)
    int*  key;
    int   weapon,flags,i,cursor_start,char_width,x,y,color;
    size_t len;
-   byte  ch,*ptr;
+   dbyte  ch,*ptr;
    char* text;
    char  c[2];
    
@@ -4225,7 +4225,7 @@ void M_DrawSetting(setup_menu_t* s)
       
       // draw the paint chip
       
-      ch = (byte) *(s->m_var1);
+      ch = (dbyte) *(s->m_var1);
       if (ch == 0) // don't show this item in automap mode
          V_DrawPatchDirect (x+1,y,0,W_CacheLumpName("M_PALNO",PU_CACHE));
       else
@@ -4480,7 +4480,7 @@ setup_menu_t weap_settings1[] =  // Weapons Settings screen
 
 int color_palette_x; // X position of the cursor on the color palette
 int color_palette_y; // Y position of the cursor on the color palette
-byte palette_background[16*(CHIP_SIZE+1)+8];
+dbyte palette_background[16*(CHIP_SIZE+1)+8];
 
 static dboolean shiftdown = false; // phares 4/10/98: SHIFT key down or not
 

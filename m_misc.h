@@ -46,7 +46,7 @@ M_AppendFile
 int
 M_ReadFile
 ( char const*	name,
-  byte**	buffer );
+  dbyte**	buffer );
 
 void M_ScreenShot (void);
 

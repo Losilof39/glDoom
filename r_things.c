@@ -126,7 +126,7 @@ void R_InstallSpriteLump( int lump, unsigned frame, unsigned rotation, dboolean 
         for (r = 0; r < 8; r++)
            {
             sprtemp[frame].lump[r] = lump - firstspritelump;
-            sprtemp[frame].flip[r] = (byte)flipped;
+            sprtemp[frame].flip[r] = (dbyte)flipped;
            }
         return;
        }
@@ -143,7 +143,7 @@ void R_InstallSpriteLump( int lump, unsigned frame, unsigned rotation, dboolean 
         I_Error ("R_InitSprites: Sprite %s : %c : %c has two lumps mapped to it", spritename, 'A'+frame, '1'+rotation);
 		
     sprtemp[frame].lump[rotation] = lump - firstspritelump;
-    sprtemp[frame].flip[rotation] = (byte)flipped;
+    sprtemp[frame].flip[rotation] = (dbyte)flipped;
    }
 
 int        NumSpriteLumps;

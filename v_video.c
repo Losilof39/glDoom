@@ -43,14 +43,14 @@ rcsid[] = "$Id: v_video.c,v 1.5 1997/02/03 22:45:13 b1 Exp $";
 extern unsigned char Transparent[512*512];
 
 // Each screen is [SCREENWIDTH*SCREENHEIGHT]; 
-byte*				screens[5];	
+dbyte*				screens[5];	
 
 int				dirtybox[4]; 
 
 
 
 // Now where did these came from?
-byte gammatable[5][256] =
+dbyte gammatable[5][256] =
 {
     {1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,
      17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,
@@ -187,10 +187,10 @@ void V_DrawPatchOffsetBuff( int x, int y, unsigned char *buff, int bx, int by, i
     int	      count;
     int	      col; 
     column_t *column; 
-    byte     *desttop;
-    byte     *dest;
-    byte     *source; 
-    byte     *txp, *draw;
+    dbyte     *desttop;
+    dbyte     *dest;
+    dbyte     *source; 
+    dbyte     *txp, *draw;
     int       w, h, offset, buffsize;
     unsigned char *bend;
     patch_t  *patch;
@@ -212,12 +212,12 @@ void V_DrawPatchOffsetBuff( int x, int y, unsigned char *buff, int bx, int by, i
 
     for (col = 0; ((col < w) && (x < bx)) ;x++, col++, desttop++, txp++)
        { 
-        column = (column_t *)((byte *)patch + DLONG(patch->columnofs[col]));
+        column = (column_t *)((dbyte *)patch + DLONG(patch->columnofs[col]));
  
         // step through the posts in a column 
         while (column->topdelta != 0xff )
            { 
-            source = (byte *)column + 3; 
+            source = (dbyte *)column + 3; 
             offset = ((y*bx)+x)+(column->topdelta*bx);
             dest = desttop + (column->topdelta*bx);
             draw = txp + (column->topdelta*bx);
@@ -239,7 +239,7 @@ void V_DrawPatchOffsetBuff( int x, int y, unsigned char *buff, int bx, int by, i
                 dest += bx;
                 draw += bx;
                } 
-            column = (column_t *)((byte *)column + column->length + 4 );
+            column = (column_t *)((dbyte *)column + column->length + 4 );
            } 
        }
    } 
@@ -256,10 +256,10 @@ void V_DrawPatchBuff ( int x, int y, unsigned char *buff, patch_t* patch )
     short            pwidth;
     column_t        *column;
     int            *columnofs;
-    byte            *desttop;
-    byte            *dest;
-    byte            *source; 
-    byte            *txp, *draw;
+    dbyte            *desttop;
+    dbyte            *dest;
+    dbyte            *source; 
+    dbyte            *txp, *draw;
     int		         w;
 	 
     //y -= SHORT(patch->topoffset);
@@ -284,12 +284,12 @@ void V_DrawPatchBuff ( int x, int y, unsigned char *buff, patch_t* patch )
 
     for (col = 0; col < pwidth ;col++, desttop++, txp++)
        { 
-        column = (column_t *)((byte *)patch + DLONG(columnofs[col]));
+        column = (column_t *)((dbyte *)patch + DLONG(columnofs[col]));
  
         // step through the posts in a column 
         while (column->topdelta != 0xff )
            { 
-            source = (byte *)column + 3; 
+            source = (dbyte *)column + 3; 
             //dest = desttop + column->topdelta*(patch->width-patch->leftoffset);
             //draw = txp + column->topdelta*(patch->width-patch->leftoffset);
 
@@ -310,7 +310,7 @@ void V_DrawPatchBuff ( int x, int y, unsigned char *buff, patch_t* patch )
                 dest += pwidth;
                 draw += pwidth;
                } 
-            column = (column_t *)((byte *)column + column->length + 4 );
+            column = (column_t *)((dbyte *)column + column->length + 4 );
            } 
        }
    } 
@@ -518,7 +518,7 @@ V_DrawBlock
   int		scrn,
   int		width,
   int		height,
-  byte*		src ) 
+  dbyte*		src ) 
 { 
     /*byte*	dest; 
 	 
@@ -554,7 +554,7 @@ V_GetBlock
   int		scrn,
   int		width,
   int		height,
-  byte*		dest ) 
+  dbyte*		dest ) 
 { 
     /*byte*	src; 
 	 
@@ -595,7 +595,7 @@ void V_Init (void)
     for (i = 0; i < 5; i++)
        {
         x = SCREENWIDTH * SCREENHEIGHT;
-        screens[i] = (byte *)malloc(x);
+        screens[i] = (dbyte *)malloc(x);
         buff = (uint32_t *)screens[i];
         x /= 4;
         for (j = 0; j < x; j++)

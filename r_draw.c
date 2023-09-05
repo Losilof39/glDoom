@@ -61,20 +61,20 @@ rcsid[] = "$Id: r_draw.c,v 1.4 1997/02/03 16:47:55 b1 Exp $";
 //
 
 
-byte *viewimage; 
+dbyte *viewimage; 
 int   viewwidth;
 int	  scaledviewwidth;
 int	  viewheight;
 int	  viewwindowx;
 int	  viewwindowy; 
-byte *ylookup[MAXHEIGHT]; 
+dbyte *ylookup[MAXHEIGHT]; 
 int   columnofs[MAXWIDTH]; 
 
 // Color tables for different players,
 //  translate a limited part to another
 //  (color ramps used for  suit colors).
 //
-byte		translations[3][256];	
+dbyte		translations[3][256];	
  
  
 
@@ -91,7 +91,7 @@ fixed_t			dc_iscale;
 fixed_t			dc_texturemid;
 
 // first pixel in a column (possibly virtual) 
-byte*			dc_source;		
+dbyte*			dc_source;		
 
 // just for profiling 
 int			dccount;
@@ -107,7 +107,7 @@ extern video_t video;
 void R_DrawColumn (void) 
 { 
 //    int			count; 
-//    byte*		dest; 
+//    dbyte*		dest; 
 //    fixed_t		frac;
 //    fixed_t		fracstep;	 
 // 
@@ -157,9 +157,9 @@ void R_DrawColumn (void)
 void R_DrawColumn (void) 
 { 
     int			count; 
-    byte*		source;
-    byte*		dest;
-    byte*		colormap;
+    dbyte*		source;
+    dbyte*		dest;
+    dbyte*		colormap;
     
     unsigned		frac;
     unsigned		fracstep;
@@ -213,8 +213,8 @@ void R_DrawColumn (void)
 void R_DrawColumnLow (void) 
 { 
 //    int			count; 
-//    byte*		dest; 
-//    byte*		dest2;
+//    dbyte*		dest; 
+//    dbyte*		dest2;
 //    fixed_t		frac;
 //    fixed_t		fracstep;	 
 // 
@@ -293,7 +293,7 @@ void R_InitFuzzTable()
 void R_DrawFuzzColumn (void) 
 { 
 //    int			count; 
-//    byte*		dest; 
+//    dbyte*		dest; 
 //    fixed_t		frac;
 //    fixed_t		fracstep;	 
 //
@@ -387,13 +387,13 @@ void R_DrawFuzzColumn (void)
 //  of the BaronOfHell, the HellKnight, uses
 //  identical sprites, kinda brightened up.
 //
-byte*	dc_translation;
-byte*	translationtables;
+dbyte*	dc_translation;
+dbyte*	translationtables;
 
 void R_DrawTranslatedColumn (void) 
 { 
 //    int			count; 
-//    byte*		dest; 
+//    dbyte*		dest; 
 //    fixed_t		frac;
 //    fixed_t		fracstep;	 
 // 
@@ -469,7 +469,7 @@ void R_InitTranslationTables(void)
     int		i;
 
     translationtables = Z_Malloc(256 * 3 + 255, PU_STATIC, 0);
-    translationtables = (byte*)(((intptr_t)translationtables + 255) & ~255);
+    translationtables = (dbyte*)(((intptr_t)translationtables + 255) & ~255);
 
     // translate just the 16 green colors
     for (i = 0; i < 256; i++)
@@ -517,7 +517,7 @@ fixed_t			ds_xstep;
 fixed_t			ds_ystep;
 
 // start of a 64*64 tile image 
-byte*			ds_source;	
+dbyte*			ds_source;	
 
 // just for profiling
 int			dscount;
@@ -529,7 +529,7 @@ void R_DrawSpan (void)
 { 
 //    fixed_t		xfrac;
 //    fixed_t		yfrac; 
-//    byte*		dest; 
+//    dbyte*		dest; 
 //    int			count;
 //    int			spot; 
 //	 
@@ -579,9 +579,9 @@ void R_DrawSpan (void)
 { 
     unsigned	position, step;
 
-    byte*	source;
-    byte*	colormap;
-    byte*	dest;
+    dbyte*	source;
+    dbyte*	colormap;
+    dbyte*	dest;
     
     unsigned	count;
     usingned	spot; 
@@ -652,7 +652,7 @@ void R_DrawSpanLow (void)
 { 
 //    fixed_t		xfrac;
 //    fixed_t		yfrac; 
-//    byte*		dest; 
+//    dbyte*		dest; 
 //    int			count;
 //    int			spot; 
 //	 
@@ -734,8 +734,8 @@ void R_InitBuffer( int width, int height )
 //
 void R_FillBackScreen (void) 
    { 
- //   byte*	src;
- //   byte*	dest; 
+ //   dbyte*	src;
+ //   dbyte*	dest; 
  //   int		x;
  //   int		y; 
  //   patch_t*	patch;

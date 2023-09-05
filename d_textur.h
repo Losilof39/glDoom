@@ -35,9 +35,9 @@
 // a pic is an unmasked block of pixels
 typedef struct
 {
-    byte		width;
-    byte		height;
-    byte		data;
+    dbyte		width;
+    dbyte		height;
+    dbyte		data;
 } pic_t;
 
 

@@ -1,12 +1,17 @@
-// doomlib.c
-//
-// This source file contains functions that are not supported by the
-// ANSI 'C' specification but which appear in some form in most
-// implementations.  These are provided to make the software more
-// portable by using only ANSI standard library functions.
+/*
+** doomlib.c
+**
+** This source file contains functions that are not supported by the
+** ANSI 'C' specification but which appear in some form in most
+** implementations.  These are provided to make the software more
+** portable by using only ANSI standard library functions.
+*/
 
+#include "doomlib.h"
 
-char *D_strupper (char *str)
+#if defined(ANSI_C) || defined(__linux__)
+
+char * strupr(char *str)
    {
     char *c, t;
 
@@ -21,7 +26,7 @@ char *D_strupper (char *str)
     return str;
    }
 
-char* D_strlower(char* str)
+char* strlwr(char* str)
 {
     char* c, t;
 
@@ -36,8 +41,7 @@ char* D_strlower(char* str)
     }
     return str;
 }
-
-#ifdef ANSI_C
+#ifndef __linux__
 int strncasecmp(char *s1, char *s2, int count)
    {
     unsigned char c1, c2, c3;
@@ -69,6 +73,8 @@ int strncasecmp(char *s1, char *s2, int count)
 
 int strcasecmp(char *s1, char *s2)
    {
-    return(D_strncasecmp(s1, s2, 99999));
+    return(strncasecmp(s1, s2, 99999));
    }
+#endif
+
 #endif

@@ -1352,7 +1352,7 @@ void D_DoomMain (void)
 #ifdef __linux__
     char*           candidate;
 #endif
-    byte           *demover;
+    dbyte           *demover;
 
     //FindResponseFile();
 	
@@ -1697,7 +1697,7 @@ void D_DoomMain (void)
 
     if (W_CheckNumForName("DEMO1") != -1)
        {
-        demover = (byte *)W_CacheLumpName("DEMO1", PU_CACHE);
+        demover = (dbyte *)W_CacheLumpName("DEMO1", PU_CACHE);
         if (*demover != 109)
            {
             printf("+---------------------------------------------------------------+\n");

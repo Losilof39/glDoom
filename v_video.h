@@ -46,11 +46,11 @@
 
 
 
-extern	byte *screens[5];
+extern	dbyte *screens[5];
 
 extern  int	dirtybox[4];
 
-extern	byte	gammatable[5][256];
+extern	dbyte	gammatable[5][256];
 extern	int	usegamma;
 
 // symbolic indices into color translation table pointer array
@@ -125,7 +125,7 @@ V_DrawBlock
   int		scrn,
   int		width,
   int		height,
-  byte*		src );
+  dbyte*		src );
 
 // Reads a linear block of pixels into the view buffer.
 void
@@ -135,7 +135,7 @@ V_GetBlock
   int		scrn,
   int		width,
   int		height,
-  byte*		dest );
+  dbyte*		dest );
 
 
 void
