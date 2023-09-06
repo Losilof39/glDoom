@@ -41,6 +41,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 * Resolution option not working
 * Only the legacy renderer works (for now!)
 * Multiple errors when switching to OpenGL core profile
+* SIGIL and NRFTL support works, but the levels doesn't show up
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
@@ -54,7 +55,7 @@ I am planning for this port, the following (in order of priority)
    - Add dynamic lights
    - Add post-processing effects
      
-3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL(60% Done)
 
 Plus more!
 
