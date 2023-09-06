@@ -1,5 +1,5 @@
 # glDoom Resurrected (again!)
-This repository contains improvements for the glDoom port by Bruce Lewis and by other authors, Including: REDPOWAR, Adam Bilbrough(aka: Gibbon) and André Guilherme(Wolf3s)
+This repository contains improvements for the glDoom port by Bruce Lewis and by other authors, Including: REDPOWAR, Adam Bilbrough(aka: Gibbon) and André Guilherme(aka: Wolf3s)
 
 ### Fixes (original from REDPOWAR)
 * new floor/ceiling generation code (similar to code from Doom Legacy port)
