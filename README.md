@@ -39,6 +39,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis
 * Resolution option not working
 * Only the legacy renderer works (for now!)
 * Multiple errors when switching to OpenGL core profile
+* When compiling SDL3 on MSVC the dll linkage doesn't work
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
@@ -53,6 +54,9 @@ I am planning for this port, the following (in order of priority)
    - Add post-processing effects
      
 3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+
+4. Support SDL3 api
+   - Find SDL2 replacements in some parts
 
 Plus more!
 
