@@ -1,5 +1,5 @@
 # glDoom Resurrected (again!)
-This repository contains improvements for the glDoom port by Bruce Lewis
+This repository contains improvements for the glDoom port by Bruce Lewis and by other authors, Including: REDPOWAR, Adam Bilbrough(aka: Gibbon) and André Guilherme(aka: Wolf3s)
 
 ### Fixes (original from REDPOWAR)
 * new floor/ceiling generation code (similar to code from Doom Legacy port)
@@ -74,4 +74,4 @@ Be sure that ```gldoom.wad ``` and your IWAD of choice (DOOM, DOOM 2, Ultimate D
 In order to hear the music in-game you should download [this](https://archive.org/download/free-soundfonts-sf2-2019-04/SC-55.sf2) soundfont, rename it to ``` soundfont.sf2``` and place it in the game directory. You could use other `.sf2` files but I would recommend to use the SC-55, which is the soundcard originally used to create the DOOM music.
 
 ### Why maintain glDoom?
-The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom, PRBoom, PRBoom+ and dsda-doom, his history and legacy it's an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39) and other contribuitors is a great way to learn how a large project like Doom is organized, coded and I'm honored to maintain this great work of art alive and bring new features to it!
+The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom, PRBoom, PRBoom+ and dsda-doom, his history and legacy it's an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39), Wolf3s and other contribuitors is a great way to learn how a large project like Doom is organized, coded and I'm honored to maintain this great work of art alive and bring new features to it!
