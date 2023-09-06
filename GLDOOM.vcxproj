@@ -175,6 +175,7 @@
       </DataExecutionPrevention>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -295,6 +296,7 @@
     <ClCompile Include="g_game.c" />
     <ClCompile Include="hu_lib.c" />
     <ClCompile Include="hu_stuff.c" />
+    <ClCompile Include="imgui_layer.c" />
     <ClCompile Include="info.c" />
     <ClCompile Include="i_net.c" />
     <ClCompile Include="i_sdlmusic.c" />
@@ -387,6 +389,7 @@
     <ClInclude Include="g_game.h" />
     <ClInclude Include="hu_lib.h" />
     <ClInclude Include="hu_stuff.h" />
+    <ClInclude Include="imgui_layer.h" />
     <ClInclude Include="info.h" />
     <ClInclude Include="i_net.h" />
     <ClInclude Include="i_sound.h" />

@@ -34,6 +34,7 @@
 #include "renderer.h"
 #include "rendererCore.h"
 #include "rendererFixed.h"
+#include "imgui_layer.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -99,6 +100,7 @@ void ShutdownOpenGL(void)
 
 void I_ShutdownGraphics(void)
    {
+    //ShutdownIMGUI();
     ShutdownOpenGL();
    }
 
@@ -215,6 +217,8 @@ dboolean StartUpOpenGL()
     gl_core = 1;
 
     renderer.Setup();
+
+    //SetupIMGUI(pWindow, glContext);
 
     glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );

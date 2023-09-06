@@ -22,6 +22,12 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{957e763d-23bb-4918-bb86-dc1a0ec495d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\imgui">
+      <UniqueIdentifier>{a1bd5693-6205-45a1-98c9-5e00f27c8abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\imgui">
+      <UniqueIdentifier>{5b2af15f-0241-492c-a643-b992c30e9689}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c">
@@ -267,6 +273,9 @@
     <ClCompile Include="d_bitmap.c">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="imgui_layer.c">
+      <Filter>Source Files\imgui</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
@@ -511,6 +520,9 @@
     </ClInclude>
     <ClInclude Include="d_bitmap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_layer.h">
+      <Filter>Header Files\imgui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
