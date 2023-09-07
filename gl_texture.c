@@ -440,8 +440,6 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     int            TempTexNumb;
     int            iGLWide, iGLHigh;
 
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
-
     tshort = (unsigned short *)Sprite;
     ixsize = *tshort;
 
@@ -511,15 +509,6 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-
-    if (!Tex->bLoaded)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        Tex->bLoaded = 1;
-    }
    }
 
 //
@@ -630,17 +619,6 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
-
-    if (!Tex->bLoaded)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        Tex->bLoaded = 1;
-    }
    }
 
 // GL_MakeWideSpriteTexture
@@ -916,17 +894,6 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[0].glWidth = 256.0f;
     Tex[0].glHeight = 256.0f;
 
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex[0].YDisp, Tex[0].XDisp, Tex[0].YDisp, Tex[0].XDisp, 1.0f };
-
-    if (!Tex->bLoaded)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        Tex->bLoaded = 1;
-    }
-
     memset(TexRaw, 0, 64*200);
     for (i = 0, d = 0, s = 256; i < 200; i++)
        {
@@ -948,20 +915,6 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[1].TopOff = 0.0f;
     Tex[1].glWidth = 64.0f;
     Tex[1].glHeight = 256.0f;
-    
-    coords[3] = Tex[1].YDisp;
-    coords[4] = Tex[1].XDisp;
-    coords[5] = Tex[1].YDisp;
-    coords[6] = Tex[1].XDisp;
-
-    if (!Tex->bLoaded)
-    {
-        glGenBuffers(1, &Tex->texVBO2);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO2);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-        Tex->bLoaded = 1;
-    }
 
    }
 

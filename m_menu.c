@@ -1219,7 +1219,9 @@ void GL_DrawTitle(int y, GLTexData *tex)
     Top = 120.0f - (y * 1.2f);
     Bottom = Top - (tex->Height * 1.2f);
 
-    float vertices[] = { Left, Right, Top, Bottom };
+    vec3 pos = { video.width/2.0f - tex->Width / 2.0f, y, 0.0f };
+
+    R2D_DrawSprite(pos, 1.0f, tex);
 
     /*renderer.SetTexture(tex->TexName);
     renderer.RenderSprite(vertices, tex);
