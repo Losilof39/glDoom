@@ -7,7 +7,6 @@
 *.ncb
 *.wad
 .svn/
-*.dll
 *.suo
 *.dbg
 .vs/

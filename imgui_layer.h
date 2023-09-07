@@ -3,7 +3,7 @@
 
 #include "cimgui.h"
 #include "cimgui_impl.h"
-#include<SDL.h>
+#include <SDL.h>
 
 void SetupIMGUI(SDL_Window* window, SDL_GLContext glcontext);
 void ShutdownIMGUI();

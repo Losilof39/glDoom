@@ -97,7 +97,7 @@ void ShutdownOpenGL(void)
 
 void I_ShutdownGraphics(void)
    {
-    //ShutdownIMGUI();
+    ShutdownIMGUI();
     ShutdownOpenGL();
    }
 
@@ -212,7 +212,7 @@ dboolean StartUpOpenGL()
 
     InitRenderer2D();
 
-    //SetupIMGUI(pWindow, glContext);
+    SetupIMGUI(pWindow, glContext);
 
     glDisable( GL_DEPTH_TEST );
 
