@@ -1219,9 +1219,9 @@ void GL_DrawTitle(int y, GLTexData *tex)
     Top = 120.0f - (y * 1.2f);
     Bottom = Top - (tex->Height * 1.2f);
 
-    vec3 pos = { video.width/2.0f - tex->Width / 2.0f, y, 0.0f };
+    //vec3 pos = { video.width/2.0f - tex->Width / 2.0f, y, 0.0f };
 
-    R2D_DrawSprite(pos, 1.0f, tex);
+    //R2D_DrawSprite(pos, 1.0f, tex);
 
     /*renderer.SetTexture(tex->TexName);
     renderer.RenderSprite(vertices, tex);
@@ -1540,27 +1540,11 @@ void M_DrawReadThis1(void)
 
 void GL_DrawFullScreen(GLTexData *Image)
    {
-    float      Top, Left, Right, Bottom;
+    vec3 pos;
+    vec2 size = { Image->glWidth * 2.0f, Image->glHeight * 2.5f};
+    glm_vec3_zero(pos);
 
-    Top = 120.0f;
-    Bottom = -120.0f;
-
-    Left = -160.0f;
-    Right = 96.0f;
-
-    float vertices[] = { Left, Right, Top, Bottom };
-
-    //renderer.RenderSprite(vertices, &Image[0]);
-
-
-    Left =  96.0f;
-    Right = 160.0f;
-
-    vertices[0] = 96.0f;
-    vertices[1] = 160.0f;
-
-    //renderer.RenderSprite(vertices, &Image[1]);
-
+    R2D_DrawSprite(pos, size, Image);
    }
 
 void GL_DrawReadThis1(void)
@@ -6128,8 +6112,9 @@ void M_Init (void)
            }
         glTitles[i].glData->TexName = GL_MakeSpriteTexture(W_CacheLumpName(glTitles[i].lumpname,PU_CACHE), glTitles[i].glData, false);
        }
-*/
-    GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
+*/  
+    GL_MakeSpriteTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic, false);
+    //GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
     GL_MakeScreenTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit);
     if (W_CheckNumForName("HELP") != -1)
        {

@@ -58,14 +58,9 @@ void R2D_RenderString(vec3* position, const char* text)
 {
 }
 
-void R2D_DrawSprite(vec3* position, float _scale, GLTexData* tex)
+void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 {
 	mat4 model, translate, scale;
-	vec3 size;
-
-	size[0] = tex->Width * _scale;
-	size[1] = tex->Height * _scale;
-	size[2] = 1.0f;
 
 	glm_mat4_identity(model);
 	glm_mat4_identity(translate);
