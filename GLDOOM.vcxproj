@@ -17,6 +17,14 @@
       <Configuration>Release</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="SDL3|Win32">
+      <Configuration>SDL3</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="SDL3|x64">
+      <Configuration>SDL3</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{96463A51-F7AC-46C4-8DF7-050C0EA3681F}</ProjectGuid>
@@ -42,6 +50,12 @@
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v143</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='SDL3|Win32'">
+    <PlatformToolset>v143</PlatformToolset>
+  </PropertyGroup>
+  <PropertyGroup Label="Configuration" Condition="'$(Configuration)|$(Platform)'=='SDL3|x64'">
+    <PlatformToolset>v143</PlatformToolset>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -84,8 +98,14 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm</IncludePath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDL3|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SDL3|Win32'">
+    <OutDir>.\Release\</OutDir>
+    <IntDir>.\Release\</IntDir>
+    <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -264,7 +284,7 @@
       <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies);cglm.lib</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(SolutionDir)$(Platform)\$(Configuration)\GLDOOM.pdb</ProgramDatabaseFile>
-      <SubSystem>Windows</SubSystem>
+      <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
@@ -272,6 +292,63 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Release/GLDOOM.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDL3|x64'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL3\include;$(SolutionDir)thirdparty\SDL3\include\SDL3;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <CompileAs>CompileAsC</CompileAs>
+      <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ModuleDependenciesFile>.\Release/</ModuleDependenciesFile>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <PrecompiledHeaderOutputFile>.\Release/GLDOOM.pch</PrecompiledHeaderOutputFile>
+    </ClCompile>
+    <Link>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL3\lib\x64;$(SolutionDir)\thirdparty\cglm\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL3.lib;SDL3_main.lib;SDL2_mixer.lib;cglm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>false</DataExecutionPrevention>
+      <ProgramDatabaseFile>$(SolutionDir)$(Platform)\$(Configuration)\GLDOOM.pdb</ProgramDatabaseFile>
+    </Link>
+    <Bscmake>
+      <OutputFile>.\Release/GLDOOM.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SDL3|Win32'">
+    <ClCompile>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL3\include;$(SolutionDir)thirdparty\SDL3\include\SDL3;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
+      <FloatingPointModel>Fast</FloatingPointModel>
+      <FloatingPointExceptions>false</FloatingPointExceptions>
+      <PrecompiledHeaderOutputFile>.\Release/GLDOOM.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
+      <ModuleDependenciesFile>.\Release/</ModuleDependenciesFile>
+      <ObjectFileName>.\Release/</ObjectFileName>
+      <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
+      <CompileAs>CompileAsC</CompileAs>
+    </ClCompile>
+    <Link>
+      <OutputFile>.\Release/GLDOOM.exe</OutputFile>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL3\lib\x86;$(SolutionDir)\thirdparty\cglm\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL3.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ProgramDatabaseFile>.\Release/GLDOOM.pdb</ProgramDatabaseFile>
+      <SubSystem>Console</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>false</DataExecutionPrevention>
+    </Link>
+    <Bscmake>
       <OutputFile>.\Release/GLDOOM.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>

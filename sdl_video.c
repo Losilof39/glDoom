@@ -45,7 +45,8 @@ void GetModeList(char *dbgname)
     
     fn = fopen(dbgname, "a+");
 #if SDL_MAJOR_VERSION == 3
-    display_mode_count = SDL_GetFullscreenDisplayModes(display_in_use, 1);
+    display_mode_count = SDL_GetPrimaryDisplay();
+    SDL_GetFullscreenDisplayModes(display_in_use, display_in_use);
 #else
     display_mode_count = SDL_GetNumDisplayModes(display_in_use);
 #endif
@@ -59,7 +60,7 @@ void GetModeList(char *dbgname)
     for (i = 0; i < display_mode_count; ++i) 
     {
 #if SDL_MAJOR_VERSION == 3
-        if ((SDL_GetCurrentDisplayMode(display_in_use)) != 0) {
+        if ((SDL_GetFullscreenDisplayModes(display_in_use, i)) != 0) {
 #else
         if (SDL_GetDisplayMode(display_in_use, i, &mode) != 0) {
 #endif

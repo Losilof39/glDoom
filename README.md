@@ -55,9 +55,6 @@ I am planning for this port, the following (in order of priority)
      
 3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
-4. Support SDL3 api
-   - Find SDL2 replacements in some parts
-
 Plus more!
 
 ## Compiling

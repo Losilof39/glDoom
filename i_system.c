@@ -81,7 +81,7 @@ dbyte* I_ZoneBase (int*	size)
 
 int I_TickElapsedTime(void)
 {
-    return (uintptr_t)I_GetTime() * TICRATE % 1000 * FRACUNIT / 1000;
+    return I_GetTime() * TICRATE % 1000 * FRACUNIT / 1000;
 }
 
 //

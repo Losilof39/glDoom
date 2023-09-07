@@ -397,7 +397,7 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
 {
 #if SDL_MAJOR_VERSION == 3
     dbyte* convertor = NULL;
-    int aud_len = 0;
+    int aud_len = length;
     const SDL_AudioSpec src_spec = { mixer_format, mixer_channels, mixer_freq };
     const SDL_AudioSpec dst_spec = { SDL_AUDIO_U8, mixer_channels, mixer_freq };
 #else
@@ -429,10 +429,14 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
 #if SDL_MAJOR_VERSION == 3
     if (samplerate <= mixer_freq
         && ConvertibleRatio(samplerate, mixer_freq)
-        && SDL_ConvertAudioSamples(&src_spec, convertor,
-            aud_len, &dst_spec, NULL, length))
+        && SDL_CreateAudioStream(&src_spec, &dst_spec))
     {
-;
+          convertor = (dbyte*)malloc(sizeof(length));
+          assert(convertor != NULL);
+          memcpy(convertor, data, length);          
+          SDL_ConvertAudioSamples(&src_spec, convertor, aud_len, &dst_spec, NULL, length);
+          memcpy(chunk->abuf, convertor, chunk->alen);
+          free(convertor);
     }
 #else
     if (samplerate <= mixer_freq

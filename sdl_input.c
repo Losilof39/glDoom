@@ -214,10 +214,13 @@ void I_CheckInputs(void)
                 event.type = ev_mousemotion;
                 mouse_motion.x = ev.motion.xrel;
                 mouse_motion.y = ev.motion.yrel;
-
+#if SDL_MAJOR_VERSION == 3
+                event.data2 = (int)mouse_motion.x;
+                event.data3 = (int)mouse_motion.y;
+#else
                 event.data2 = mouse_motion.x;
                 event.data3 = mouse_motion.y;
-
+#endif
                 D_PostEvent(&event);
             }
 
@@ -226,8 +229,6 @@ void I_CheckInputs(void)
         default:
             break;
         }
-
-
     }
 
     if (mwheeluptic && mwheeluptic + 1 < gametic)
@@ -248,7 +249,31 @@ void I_CheckInputs(void)
 
     I_CheckKeyboard();
    }
+#if SDL_MAJOR_VERSION == 3
+static void SmoothMouse(float* x, float* y)
+{
+    static float x_remainder_old = 0;
+    static float y_remainder_old = 0;
 
+    fixed_t x_remainder, y_remainder;
+    fixed_t correction_factor;
+
+    const fixed_t fractic = I_TickElapsedTime();
+
+    *x += x_remainder_old;
+    *y += y_remainder_old;
+
+    correction_factor = FixedDiv(fractic, FRACUNIT + fractic);
+
+    x_remainder = FixedMul(*x, correction_factor);
+    *x -= x_remainder;
+    x_remainder_old = (float)x_remainder;
+
+    y_remainder = FixedMul(*y, correction_factor);
+    *y -= (float)y_remainder;
+    y_remainder_old = (float)y_remainder;
+}
+#else
 static void SmoothMouse(int* x, int* y)
 {
     static int x_remainder_old = 0;
@@ -272,12 +297,17 @@ static void SmoothMouse(int* x, int* y)
     *y -= y_remainder;
     y_remainder_old = y_remainder;
 }
+#endif
 
 static void I_ReadMouse()
 {
-    int x, y;
-
+#if SDL_MAJOR_VERSION == 3
+    float x, y;
     SDL_GetRelativeMouseState(&x, &y);
+#else
+    int x, y;
+    SDL_GetRelativeMouseState(&x, &y);
+#endif
     SmoothMouse(&x, &y);
 
     if (x != 0 || y != 0)
@@ -285,9 +315,13 @@ static void I_ReadMouse()
         event_t event;
         event.type = ev_mousemotion;
         event.data1 = 0;
+#if SDL_MAJOR_VERSION == 3
+        event.data2 = (int)x << 4;
+        event.data3 = (int)-y << 4;
+#else
         event.data2 = x << 4;
         event.data3 = -y << 4;
-
+#endif
         D_PostEvent(&event);
     }
 }
