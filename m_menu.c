@@ -73,6 +73,7 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 #include "sys_sdl.h"
 #include "gl_texture.h"
 #include "gldefs.h"
+#include "renderer2D.h"
 
 #include "doomcmd.h"
 

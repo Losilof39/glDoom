@@ -32,11 +32,8 @@ void InitRenderer2D()
 	glBindVertexArray(0);
 
 	s_Data.flatColorShader = Shader_Create("flatcolor", "shader_files/flatcolor.vs", "shader_files/flatcolor.ps");
+	s_Data.spriteShader = Shader_Create("sprite", "shader_files/sprite.vs", "shader_files/sprite.ps");
 
-}
-
-void R2D_StartRendition(void)
-{
 	glm_ortho(0.0f,
 		video.width,
 		video.height,
@@ -44,6 +41,13 @@ void R2D_StartRendition(void)
 		-1.0f,
 		1.0f,
 		s_Data.camOrtho);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void R2D_StartRendition(void)
+{
 }
 
 void R2D_StopRendition(void)
@@ -54,8 +58,37 @@ void R2D_RenderString(vec3* position, const char* text)
 {
 }
 
-void R2D_DrawSprite(vec3* position, GLTexData* tex)
+void R2D_DrawSprite(vec3* position, float _scale, GLTexData* tex)
 {
+	mat4 model, translate, scale;
+	vec3 size;
+
+	size[0] = tex->Width * _scale;
+	size[1] = tex->Height * _scale;
+	size[2] = 1.0f;
+
+	glm_mat4_identity(model);
+	glm_mat4_identity(translate);
+	glm_mat4_identity(scale);
+
+	glm_scale(scale, size);
+	glm_translate(translate, position);
+	glm_mat4_mul(translate, scale, model);
+
+	Shader_Use(s_Data.spriteShader);
+	Shader_SetMat4(s_Data.spriteShader, "u_Model", model);
+	Shader_SetMat4(s_Data.spriteShader, "u_Ortho", s_Data.camOrtho);
+	Shader_SetInt(s_Data.spriteShader, "image", 0);
+
+	glActiveTexture(GL_TEXTURE0);
+	glBindTexture(GL_TEXTURE_2D, tex->TexName);
+
+	glBindVertexArray(s_Data.VAO);
+	glDrawArrays(GL_TRIANGLES, 0, 6);
+
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+	Shader_Unbind();
 }
 
 void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color)

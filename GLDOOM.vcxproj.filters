@@ -542,6 +542,12 @@
     <None Include="shader_files\flatcolor.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shader_files\sprite.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\sprite.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />
