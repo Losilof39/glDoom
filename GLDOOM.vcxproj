@@ -290,6 +290,7 @@
     <ClCompile Include="f_finale.c" />
     <ClCompile Include="f_wipe.c" />
     <ClCompile Include="glsbar.c" />
+    <ClCompile Include="gl_filter.c" />
     <ClCompile Include="gl_texture.c" />
     <ClCompile Include="gl_video.c" />
     <ClCompile Include="gl_wipe.c" />
@@ -384,6 +385,7 @@
     <ClInclude Include="f_wipe.h" />
     <ClInclude Include="gldefs.h" />
     <ClInclude Include="glsbar.h" />
+    <ClInclude Include="gl_filter.h" />
     <ClInclude Include="gl_texture.h" />
     <ClInclude Include="gl_video.h" />
     <ClInclude Include="g_game.h" />

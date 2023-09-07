@@ -1,4 +1,4 @@
-/* Emacs style mode select   -*- C++ -*-
+/* Emacs style mode select   -*- C -*-
  *-----------------------------------------------------------------------------
  *
  *
@@ -33,6 +33,7 @@
 
 #include "v_video.h"
 #include "gl_video.h"
+#include "gl_filter.h"
 #include "m_random.h"
 #include <glad/glad.h>
 #include <stdlib.h>
@@ -45,20 +46,7 @@ GLuint CaptureScreenAsTexID(void)
 {
     GLuint id;
 
-    glEnable(GL_TEXTURE_2D);
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D, id);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-        video.width, video.height,
-        0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, video.width, video.height);
+    GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
 
     return id;
 }
