@@ -210,6 +210,8 @@ dboolean StartUpOpenGL()
         I_Quit();
     }
 
+    InitRenderer2D();
+
     //SetupIMGUI(pWindow, glContext);
 
     glDisable( GL_DEPTH_TEST );
