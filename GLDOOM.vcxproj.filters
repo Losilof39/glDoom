@@ -22,6 +22,12 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{957e763d-23bb-4918-bb86-dc1a0ec495d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Source Files\imgui">
+      <UniqueIdentifier>{a1bd5693-6205-45a1-98c9-5e00f27c8abc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header Files\imgui">
+      <UniqueIdentifier>{5b2af15f-0241-492c-a643-b992c30e9689}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c">
@@ -258,14 +264,17 @@
     <ClCompile Include="renderer.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="rendererFixed.c">
+    <ClCompile Include="renderer3D.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="rendererCore.c">
+    <ClCompile Include="renderer2D.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="d_bitmap.c">
       <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="imgui_layer.c">
+      <Filter>Source Files\imgui</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -500,17 +509,20 @@
     <ClInclude Include="r_shader.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="renderer.h">
+    <ClInclude Include="renderer3D.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="rendererFixed.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendererCore.h">
+    <ClInclude Include="renderer2D.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="d_bitmap.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="imgui_layer.h">
+      <Filter>Header Files\imgui</Filter>
+    </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files\renderer</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -524,10 +536,16 @@
     <None Include="resources\Playpal.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shader_files\ui_frag.glsl">
+    <None Include="shader_files\flatcolor.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader_files\ui_vert.glsl">
+    <None Include="shader_files\flatcolor.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\sprite.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\sprite.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>
