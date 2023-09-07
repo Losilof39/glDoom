@@ -67,7 +67,6 @@ DW_TexList     TexList[1024];
 
 extern int gl_alphatest;
 extern int gl_widetex;
-extern int gl_core;
 
 // A single patch from a texture definition,
 //  basically a rectangular area within

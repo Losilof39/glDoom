@@ -331,8 +331,8 @@
     <ClCompile Include="p_tick.c" />
     <ClCompile Include="p_user.c" />
     <ClCompile Include="renderer.c" />
-    <ClCompile Include="rendererCore.c" />
-    <ClCompile Include="rendererFixed.c" />
+    <ClCompile Include="renderer2D.c" />
+    <ClCompile Include="renderer3D.c" />
     <ClCompile Include="r_bsp.c" />
     <ClCompile Include="r_data.c" />
     <ClCompile Include="r_draw.c" />
@@ -414,8 +414,8 @@
     <ClInclude Include="p_spec.h" />
     <ClInclude Include="p_tick.h" />
     <ClInclude Include="renderer.h" />
-    <ClInclude Include="rendererCore.h" />
-    <ClInclude Include="rendererFixed.h" />
+    <ClInclude Include="renderer2D.h" />
+    <ClInclude Include="renderer3D.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="r_bsp.h" />
     <ClInclude Include="r_data.h" />
@@ -449,8 +449,8 @@
     <None Include="resources\gldfont.bin" />
     <None Include="resources\INTERPIC.bin" />
     <None Include="resources\Playpal.bin" />
-    <None Include="shader_files\ui_frag.glsl" />
-    <None Include="shader_files\ui_vert.glsl" />
+    <None Include="shader_files\flatcolor.ps" />
+    <None Include="shader_files\flatcolor.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />

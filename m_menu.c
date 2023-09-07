@@ -26,9 +26,6 @@ static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include <glad/glad.h>
-#include "renderer.h"
-
-extern sRenderer renderer;
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -1223,9 +1220,9 @@ void GL_DrawTitle(int y, GLTexData *tex)
 
     float vertices[] = { Left, Right, Top, Bottom };
 
-    renderer.SetTexture(tex->TexName);
+    /*renderer.SetTexture(tex->TexName);
     renderer.RenderSprite(vertices, tex);
-    renderer.SetTexture(0);
+    renderer.SetTexture(0);*/
 
    }
 
@@ -1286,10 +1283,7 @@ void GL_DrawSaveLoadBorder(int x,int y)
 
     float vertices[] = { Left, Right, Top, Bottom };
 
-    renderer.SetTexture(LSLeft.TexName);
-    renderer.RenderSprite(vertices, &LSLeft);
-
-    renderer.SetTexture(LSCenter.TexName);
+    //renderer.RenderSprite(vertices, &LSLeft);
 
     for (i = 0;i < 24;i++)
        {
@@ -1298,13 +1292,12 @@ void GL_DrawSaveLoadBorder(int x,int y)
 
         vertices[0] = Left;
         vertices[1] = Right;
-        renderer.RenderSprite(vertices, &LSCenter);
+        //renderer.RenderSprite(vertices, &LSCenter);
 
         x += 8;
         xo += (int)LSCenter.Width;
        }
 
-    renderer.SetTexture(LSRight.TexName);
 
     Left = (-160.0f+(float)xo);
     Right = (-160.0f+(float)xo+LSRight.Width);
@@ -1312,8 +1305,7 @@ void GL_DrawSaveLoadBorder(int x,int y)
     vertices[0] = Left;
     vertices[1] = Right;
 
-    renderer.RenderSprite(vertices, &LSRight);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &LSRight);
    }
 
 //
@@ -1555,9 +1547,8 @@ void GL_DrawFullScreen(GLTexData *Image)
 
     float vertices[] = { Left, Right, Top, Bottom };
 
-    renderer.SetTexture(Image[0].TexName);
-    renderer.RenderSprite(vertices, &Image[0]);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &Image[0]);
+
 
     Left =  96.0f;
     Right = 160.0f;
@@ -1565,9 +1556,7 @@ void GL_DrawFullScreen(GLTexData *Image)
     vertices[0] = 96.0f;
     vertices[1] = 160.0f;
 
-    renderer.SetTexture(Image[1].TexName);
-    renderer.RenderSprite(vertices, &Image[1]);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &Image[1]);
 
    }
 
@@ -2031,9 +2020,9 @@ void GL_DrawNewGame(void)
     vertices[2] = Top;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glSkillTitle.TexName);
-    renderer.RenderSprite(vertices, &glSkillTitle);
-    renderer.SetTexture(0);
+
+    //renderer.RenderSprite(vertices, &glSkillTitle);
+
    }
 
 void M_NewGame(int choice)
@@ -2319,9 +2308,7 @@ void GL_DrawOptions(void)
     vertices[2] = Top;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glMsgName[showMessages].TexName);
-    renderer.RenderSprite(vertices, &glMsgName[showMessages]);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &glMsgName[showMessages]);
     
    }
 
@@ -2627,10 +2614,8 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     vertices[2] = Top;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glThermL.TexName);
-    renderer.RenderSprite(vertices, &glThermL);
+    //renderer.RenderSprite(vertices, &glThermL);
 
-    renderer.SetTexture(glThermM.TexName);
     Left += glThermL.Width;
     Right = Left+9.0f;
 
@@ -2640,7 +2625,7 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     for (i = 0;i < thermWidth; i++)
        {
 
-        renderer.RenderSprite(vertices, &glThermM);
+        //renderer.RenderSprite(vertices, &glThermM);
 
         Left  += 8.0f;
         Right += 8.0f;
@@ -2652,8 +2637,7 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     Right = Left+glThermR.Width;
     vertices[1] = Right;
 
-    renderer.SetTexture(glThermR.TexName);
-    renderer.RenderSprite(vertices, &glThermR);
+    //renderer.RenderSprite(vertices, &glThermR);
 
     Left   = (-160.0f+(x+glThermL.Width)+(thermDot*8));
     Right  = Left+glThermO.Width;
@@ -2663,9 +2647,8 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     vertices[1] = Right;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glThermO.TexName);
-    renderer.RenderSprite(vertices, &glThermO);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &glThermO);
+
    }
 
 
@@ -2815,7 +2798,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
     cx = x;
     cy = y;
 
-    renderer.SetColor(tc[color].red, tc[color].green, tc[color].blue);
+    //renderer.SetColor(tc[color].red, tc[color].green, tc[color].blue);
 
     while(1)
        {
@@ -2850,13 +2833,12 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         vertices[2] = Top;
         vertices[3] = Bottom;
 
-        renderer.SetTexture(GLGreyFont[c].TexName);
-        renderer.RenderSprite(vertices, &GLGreyFont[c]);
+        //renderer.RenderSprite(vertices, &GLGreyFont[c]);
 
         cx += (int)(GLGreyFont[c].Width-1);
        }
 
-    renderer.SetColor(1.0f, 1.0f, 1.0f);
+    //renderer.SetColor(1.0f, 1.0f, 1.0f);
    }
 
 //
@@ -2910,8 +2892,7 @@ void GL_WriteText( int x, int y, char *string)
         vertices[2] = Top;
         vertices[3] = Bottom;
 
-        renderer.SetTexture(GLHudFont[c].TexName);
-        renderer.RenderSprite(vertices, &GLHudFont[c]);
+        //renderer.RenderSprite(vertices, &GLHudFont[c]);
 
         cx += (int)GLHudFont[c].Width;
        }
@@ -4390,10 +4371,7 @@ void GL_DrawKeybnd(void)
   v[2] = Top;
   v[3] = Bottom;
 
-  renderer.SetTexture(glSetupMenu[0].TexName);
-  renderer.RenderSprite(v, &glSetupMenu[0]);
-
-  renderer.SetTexture(0);
+  //renderer.RenderSprite(v, &glSetupMenu[0]);
 
   GL_DrawInstructions();
   GL_DrawScreenItems(current_setup_menu);
@@ -5976,7 +5954,7 @@ void GL_DrawMenu()
        }
 
     float v[4] = { 0 };
-    renderer.SetColor(1.0f, 1.0f, 1.0f);
+    //renderer.SetColor(1.0f, 1.0f, 1.0f);
 
 
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
@@ -5993,8 +5971,7 @@ void GL_DrawMenu()
 
         max = currentMenu->numitems;
 
-        renderer.SetTexture(MenuSkull[whichSkull].TexName);
-        renderer.RenderSprite(v, &MenuSkull[whichSkull]);
+        //renderer.RenderSprite(v, &MenuSkull[whichSkull]);
 
        }
 
@@ -6016,8 +5993,8 @@ void GL_DrawMenu()
            {
             Right = Left + GLTex[i].Width;
             v[1] = Right;
-            renderer.SetTexture(GLTex[i].TexName);
-            renderer.RenderSprite(v, &GLTex[i]);
+
+            //renderer.RenderSprite(v, &GLTex[i]);
 
            }
         Top    -= lh;
@@ -6026,7 +6003,6 @@ void GL_DrawMenu()
         v[3] = Bottom;
        }
     
-    renderer.SetTexture(0);
 
    }
 

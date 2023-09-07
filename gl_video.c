@@ -31,9 +31,8 @@
 #include "gl_video.h"
 #include "sdl_input.h"
 #include "sdl_video.h"
-#include "renderer.h"
-#include "rendererCore.h"
-#include "rendererFixed.h"
+#include "renderer2D.h"
+#include "renderer3D.h"
 #include "imgui_layer.h"
 
 #include "doomstat.h"
@@ -68,8 +67,6 @@ SDL_GLContext glContext;
 extern video_t     video;
 
 extern int         starttime;
-extern sRenderer renderer;
-extern int gl_core;
 extern int         vsync;
 
 // OpenGL renderer stuff
@@ -213,14 +210,8 @@ dboolean StartUpOpenGL()
         I_Quit();
     }
 
-    InitRendererCore(&renderer);
-    gl_core = 1;
-
-    renderer.Setup();
-
     //SetupIMGUI(pWindow, glContext);
 
-    glClearColor( 0.0f, 0.0f, 0.0f, 1.0f );
     glDisable( GL_DEPTH_TEST );
 
     glmode = gl_2d;
