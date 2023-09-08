@@ -1,4 +1,4 @@
-// d_console.h
+// co_console.h
 // This is the header file for the glDoom console
 
 #include "doomtype.h"
