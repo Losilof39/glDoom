@@ -277,12 +277,13 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c" />
+    <ClCompile Include="co_utils.c" />
     <ClCompile Include="doomdef.c" />
     <ClCompile Include="doomlib.c" />
     <ClCompile Include="doomstat.c" />
     <ClCompile Include="dstrings.c" />
     <ClCompile Include="d_bitmap.c" />
-    <ClCompile Include="d_console.c" />
+    <ClCompile Include="co_console.c" />
     <ClCompile Include="d_items.c" />
     <ClCompile Include="d_main.c" />
     <ClCompile Include="d_net.c" />
@@ -360,6 +361,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h" />
+    <ClInclude Include="co_utils.h" />
     <ClInclude Include="doomcmd.h" />
     <ClInclude Include="doomdata.h" />
     <ClInclude Include="doomdef.h" />
@@ -368,7 +370,7 @@
     <ClInclude Include="doomtype.h" />
     <ClInclude Include="dstrings.h" />
     <ClInclude Include="d_bitmap.h" />
-    <ClInclude Include="d_console.h" />
+    <ClInclude Include="co_console.h" />
     <ClInclude Include="d_englsh.h" />
     <ClInclude Include="d_event.h" />
     <ClInclude Include="d_french.h" />

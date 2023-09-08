@@ -93,7 +93,7 @@ extern sRenderer renderer;
 
 #include "d_main.h"
 
-#include "d_console.h"
+#include "co_console.h"
 #include "gldefs.h"
 #include "gl_video.h"
 #include "doomlib.h"
