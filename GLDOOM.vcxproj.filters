@@ -33,7 +33,7 @@
     <ClCompile Include="am_map.c">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="d_console.c">
+    <ClCompile Include="co_console.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="d_items.c">
@@ -275,13 +275,16 @@
     </ClCompile>
     <ClCompile Include="imgui_layer.c">
       <Filter>Source Files\imgui</Filter>
+    </ClInclude> 
+    <ClCompile Include="co_utils.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="d_console.h">
+    <ClInclude Include="co_console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="d_englsh.h">
@@ -523,6 +526,9 @@
     </ClInclude>
     <ClInclude Include="renderer.h">
       <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="co_utils.h">
+      <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

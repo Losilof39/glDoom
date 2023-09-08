@@ -15,7 +15,6 @@
 #include "doomstat.h"
 #include "d_event.h"
 #include "d_englsh.h"
-#include "doomlib.h"
 #include "g_game.h"
 #include "hu_stuff.h"
 #include "i_system.h"
@@ -28,6 +27,7 @@
 #include "w_wad.h"
 #include "z_zone.h"
 #include "gldefs.h"
+#include "co_utils.h"
 
 #define ST_MSGWIDTH        256
 #define CMDLENGTH         1024
@@ -109,13 +109,10 @@ dboolean bConsoleActive = false;
 
 dboolean ResizeMainWindow(char *resolution);
 
-int CO_StringWidth(char *s);
-int CO_StringPrintable(char *s);
 int CO_WriteConsoleLine(int i, char *s, dboolean wrap);
 int CO_GLWriteConsoleLine(int l, char *s, dboolean wrap);
 void CO_AddConsoleMessage(char *s);
 int CO_HandleCommand(char *cmd);
-dboolean isdigits(char *s);
 
 void R_DrawViewBorder(void);
 
@@ -474,26 +471,7 @@ char *scanname[] = {    "NULL", // no key
                   "DELETE",
                        "-" };
 
-/*
-   This function cleans up sloppy command lines.
-   It removes leading and trailing spaces from
-   commands or parts of them
-*/
 
-char *CleanUpCommand(char *command)
-   {
-    char *tchar;
-    size_t   i;
-
-    tchar = command;
-
-    for (i = (strlen(command)-1); command[i] == ' '; i--)
-       command[i] = '\0';
-    for (i = 0; command[i] == ' '; i++)
-       tchar = &command[i+1];
-
-    return tchar;
-   }
 
 /*
   This is the data structure and supporting data for the console commands.
@@ -1518,7 +1496,7 @@ dboolean CO_Responder(event_t* ev)
                      szCmd = strtok(szCommand, ";");
                      while (szCmd != NULL)
                         {
-                         szCmd = CleanUpCommand(szCmd);
+                         szCmd = CO_CleanUpCommand(szCmd);
                          CO_AddConsoleMessage(szCmd);
                          CO_HandleCommand(szCmd);
                          szCmd = strtok(NULL, ";");
@@ -1694,52 +1672,52 @@ void GL_DrawConsole()
     cursor++;
     cursor %= 18;
 
-    //glEnable(GL_TEXTURE_2D);
+    glEnable(GL_TEXTURE_2D);
 
     GLConsoleHeight = 118.0f-(120.0f*((float)iConsoleHeight/(float)iConsoleMax));
 
-    /*glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);*/
+    glEnable(GL_BLEND);
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     talpha = (float)iConsoleHeight/(float)iConsoleMax;
     //glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
-    //glColor4f( talpha, talpha, talpha, talpha );
-    //glBindTexture(GL_TEXTURE_2D, iConsBack);
-    //glBegin( GL_QUADS );
-    //  glNormal3f( 0.0f, 0.0f, 1.0f);
-    //  glTexCoord2f(  0.0f, 3.75f );
-    //  glVertex3f( -160.00f, 120.0f, SetBack+2);
-    //  glTexCoord2f(  0.0f, 0.0f );
-    //  glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
-    //  glTexCoord2f( 10.0f, 0.0f );
-    //  glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
-    //  glTexCoord2f( 10.0f, 3.75f );
-    //  glVertex3f(  160.00f, 120.0f, SetBack+2);
-    //glEnd();
+    glColor4f( talpha, talpha, talpha, talpha );
+    glBindTexture(GL_TEXTURE_2D, iConsBack);
+    glBegin( GL_QUADS );
+      glNormal3f( 0.0f, 0.0f, 1.0f);
+      glTexCoord2f(  0.0f, 3.75f );
+      glVertex3f( -160.00f, 120.0f, SetBack+2);
+      glTexCoord2f(  0.0f, 0.0f );
+      glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
+      glTexCoord2f( 10.0f, 0.0f );
+      glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
+      glTexCoord2f( 10.0f, 3.75f );
+      glVertex3f(  160.00f, 120.0f, SetBack+2);
+    glEnd();
 
-    ////glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
-    //glBindTexture(GL_TEXTURE_2D, iConsBord);
-    //glBegin( GL_QUADS );
-    //  glNormal3f( 0.0f, 0.0f, 1.0f);
-    //  glTexCoord2f( 0.0f, 0.55f );
-    //  glVertex3f( -160.00f, GLConsoleHeight+2.0f, SetBack+2);
-    //  glTexCoord2f( 0.0f, 0.45f );
-    //  glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
-    //  glTexCoord2f( 10.0f, 0.45f );
-    //  glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
-    //  glTexCoord2f( 10.0f, 0.55f );
-    // glVertex3f(  160.00f, GLConsoleHeight+2.0f, SetBack+2);
-    //glEnd();
+    //glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
+    glBindTexture(GL_TEXTURE_2D, iConsBord);
+    glBegin( GL_QUADS );
+      glNormal3f( 0.0f, 0.0f, 1.0f);
+      glTexCoord2f( 0.0f, 0.55f );
+      glVertex3f( -160.00f, GLConsoleHeight+2.0f, SetBack+2);
+      glTexCoord2f( 0.0f, 0.45f );
+      glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
+      glTexCoord2f( 10.0f, 0.45f );
+      glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
+      glTexCoord2f( 10.0f, 0.55f );
+     glVertex3f(  160.00f, GLConsoleHeight+2.0f, SetBack+2);
+    glEnd();
 
-    //glDisable(GL_BLEND);
+    glDisable(GL_BLEND);
 
-    //glEnable(GL_ALPHA_TEST);
-    //glAlphaFunc(GL_GREATER, 0.0f);
+    glEnable(GL_ALPHA_TEST);
+    glAlphaFunc(GL_GREATER, 0.0f);
 
     if (iConsoleHeight >= (consname->height+CONSBORD+2))
        {
         // Draw the Game logo (Doom, Doom II, TNT, Plutonia, whatever)
-        /*glBindTexture(GL_TEXTURE_2D, iConsLogo);
+        glBindTexture(GL_TEXTURE_2D, iConsLogo);
         glBegin( GL_QUADS );
           glNormal3f( 0.0f, 0.0f, 1.0f);
           glTexCoord2f( 0.0f, 1.0f );
@@ -1750,7 +1728,7 @@ void GL_DrawConsole()
           glVertex3f(  0.0f+(ConsLogo.Width/2.0f), 118.0f-ConsLogo.Height, SetBack);
           glTexCoord2f( ConsLogo.XDisp, 1.0f );
           glVertex3f(  0.0f+(ConsLogo.Width/2.0f), 118.0f, SetBack);
-        glEnd();*/
+        glEnd();
        }
 
     if (iConsoleHeight > 10)
@@ -1772,48 +1750,8 @@ void GL_DrawConsole()
            }
        }
 
-    /*glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);*/
-   }
-
-// This function should return the width of the string in pixels.
-int CO_StringWidth(char *s)
-   {
-    int           i, j;
-    unsigned char c;
-
-    j = i = 0;
-    while (s[i])
-       {
-        c = toupper(s[i]-HU_FONTSTART);
-        if ((c < 0) || (c >= HU_FONTSIZE))
-           j += 4;
-        else
-           j += hu_font[c]->width;
-        i++;
-       }
-    return j;
-   }
-
-// This function should return the first character in the string that will
-// allow the string to be printed from there to the end.
-int CO_StringPrintable(char *s)
-   {
-    int           i, j;
-    unsigned char c;
-
-    j = SCREENWIDTH-(CO_StringWidth(s)+5);
-    i = 0;
-    while (j < 0)
-       {
-        c = toupper(s[i]-HU_FONTSTART);
-        if ((c < 0) || (c >= HU_FONTSIZE))
-           j += 4;
-        else
-           j += hu_font[c]->width;
-        i++;
-       }
-    return i;
+    glDisable(GL_ALPHA_TEST);
+    glDisable(GL_TEXTURE_2D);
    }
 
 int CO_WriteConsoleLine(int l, char *s, dboolean wrap)
@@ -1891,7 +1829,7 @@ int CO_HandleCommand(char *cmd)
            {
             if (strncasecmp(con_commands[i].keyword, cmd, con_commands[i].keylength) == 0)
                {
-                cmd = CleanUpCommand(&cmd[con_commands[i].keylength]);
+                cmd = CO_CleanUpCommand(&cmd[con_commands[i].keylength]);
                 return(con_commands[i].command(cmd));
                }
            }
@@ -2012,14 +1950,4 @@ int CO_HandleCommand(char *cmd)
         CO_AddConsoleMessage("ERROR: INVALID CVAR");
 
     return false;
-   }
-
-dboolean isdigits(char *s)
-   {
-    int i;
-
-    for (i = 0; s[i]; i++)
-       if (!isdigit(s[i]) && s[i] != '.')
-           return false;
-    return true;
    }
