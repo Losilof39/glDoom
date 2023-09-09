@@ -1540,9 +1540,14 @@ void M_DrawReadThis1(void)
 
 void GL_DrawFullScreen(GLTexData *Image)
    {
-    vec3 pos;
-    vec2 size = { video.width, video.height};//Image->glWidth , Image->glHeight};
-    glm_vec3_zero(pos);
+    float aspect = Image->glWidth / Image->glHeight;
+    float width = video.height * aspect;
+
+    if (width > video.width)
+        width = video.width;
+
+    vec3 pos = { (float)video.width / 2.0f - width / 2.0f, 0.0f};
+    vec2 size = { width, video.height };
 
     R2D_DrawSprite(pos, size, Image);
    }
