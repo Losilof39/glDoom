@@ -1541,7 +1541,7 @@ void M_DrawReadThis1(void)
 void GL_DrawFullScreen(GLTexData *Image)
    {
     vec3 pos;
-    vec2 size = { Image->glWidth * 2.0f, Image->glHeight * 2.5f};
+    vec2 size = { video.width, video.height};//Image->glWidth , Image->glHeight};
     glm_vec3_zero(pos);
 
     R2D_DrawSprite(pos, size, Image);
@@ -6114,6 +6114,7 @@ void M_Init (void)
        }
 */  
     GL_MakeSpriteTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic, false);
+    //GL_CreatePatchTexure(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
     //GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
     GL_MakeScreenTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit);
     if (W_CheckNumForName("HELP") != -1)

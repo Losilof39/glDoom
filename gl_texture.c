@@ -507,7 +507,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
 
     TexWide = ixsize;
     TexHigh = iysize;
-    for (x = 0, iPower = 2; ((x < 8) && (TexWide > iPower)); x++)
+    /*for (x = 0, iPower = 2; ((x < 8) && (TexWide > iPower)); x++)
          iPower = iPower * 2;
     if ((iPower >= TexWide) && (iPower <= 512))
         iGLWide = iPower;
@@ -519,9 +519,9 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     while ((iGLWide / iGLHigh) > 8)
        iGLHigh *= 2;
     while ((iGLHigh / iGLWide) > 8)
-       iGLWide *= 2;
-    TexWide = iGLWide;
-    TexHigh = iGLHigh;
+       iGLWide *= 2;*/
+    /*TexWide = iGLWide;
+    TexHigh = iGLHigh;*/
 
     for (n = 0; n < ixsize*iysize; n++)
        {
@@ -1127,4 +1127,3 @@ unsigned int MakeRGBTexture(int dw, int dh)
     free(TexRGB);
     return(TempTexName);
    }
-
