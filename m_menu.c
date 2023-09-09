@@ -6119,20 +6119,18 @@ void M_Init (void)
        }
 */  
     GL_MakeSpriteTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic, false);
-    //GL_CreatePatchTexure(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
-    //GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
-    GL_MakeScreenTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit);
+    GL_MakeSpriteTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit, false);
     if (W_CheckNumForName("HELP") != -1)
        {
-        GL_MakeScreenTexture(W_CacheLumpName("HELP", PU_CACHE), glHelp);
+        GL_MakeSpriteTexture(W_CacheLumpName("HELP", PU_CACHE), glHelp, false);
        }
     if (W_CheckNumForName("HELP1") != -1)
        {
-        GL_MakeScreenTexture(W_CacheLumpName("HELP1", PU_CACHE), glHelp1);
+        GL_MakeSpriteTexture(W_CacheLumpName("HELP1", PU_CACHE), glHelp1, false);
        }
     if (W_CheckNumForName("HELP2") != -1)
        {
-        GL_MakeScreenTexture(W_CacheLumpName("HELP2", PU_CACHE), glHelp2);
+        GL_MakeSpriteTexture(W_CacheLumpName("HELP2", PU_CACHE), glHelp2, false);
        }
     GL_MakeSpriteTexture(W_CacheLumpName("M_DOOM",PU_CACHE), &GameLogo, false);
     GL_MakeSpriteTexture(W_CacheLumpName("M_PSETUP",PU_CACHE), &glPlayerSetupTitle, false);
