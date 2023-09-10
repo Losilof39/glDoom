@@ -438,13 +438,16 @@ void Z_CheckHeap(void)
 // Z_ChangeTag
 //
 void
-Z_ChangeTag2
+Z_ChangeTag
 (void* ptr,
 	int		tag)
 {
 	memblock_t* block;
 
 	block = (memblock_t*)((dbyte*)ptr - sizeof(memblock_t));
+
+	if (((memblock_t*)((dbyte*)(ptr)-sizeof(memblock_t)))->id != 0x1d4a11) \
+		I_Error("Z_CT at "__FILE__":%i", __LINE__); \
 
 	if (block->id != ZONEID)
 		I_Error("Z_ChangeTag: freed a pointer without ZONEID");
