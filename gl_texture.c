@@ -916,7 +916,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
            }
        }
 
-    GL_GenTextures(TempTexName, 1, gl_texture_2d);
+    GL_GenTextures(&TempTexName, 1, gl_texture_2d);
     if ((smooth == true) && (TexTransparent == true))
        {
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
@@ -1085,7 +1085,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
            }
        }
 
-    GL_GenTextures(TempTexName, 1, gl_texture_2d);
+    GL_GenTextures(&TempTexName, 1, gl_texture_2d);
 
     if ((smooth == true) && (TexTransparent == true))
        {

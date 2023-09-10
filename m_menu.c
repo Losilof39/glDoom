@@ -1219,14 +1219,10 @@ void GL_DrawTitle(int y, GLTexData *tex)
     Top = 120.0f - (y * 1.2f);
     Bottom = Top - (tex->Height * 1.2f);
 
-    //vec3 pos = { video.width/2.0f - tex->Width / 2.0f, y, 0.0f };
+    vec2 pos = { video.width/2.0f - tex->Width / 2.0f, y };
+    vec2 size = { Right - Left, Top - Bottom };
 
-    //R2D_DrawSprite(pos, 1.0f, tex);
-
-    /*renderer.SetTexture(tex->TexName);
-    renderer.RenderSprite(vertices, tex);
-    renderer.SetTexture(0);*/
-
+    R2D_DrawSprite(pos, size, tex);
    }
 
 //
@@ -5801,6 +5797,12 @@ void GL_DrawMenu()
     char		string[40];
     int			start;
 
+    vec3 menuItemPos = { 0 };
+    vec2 menuItemSize = { 0 };
+
+    vec3 skullPos = { 0 };
+    vec2 skullSize = { 0 };
+
     inhelpscreens = false;
 
     // Horiz. & Vertically center string and print it.
@@ -5945,54 +5947,42 @@ void GL_DrawMenu()
         GLTex = glNewGame;
        }
 
-    float v[4] = { 0 };
-    //renderer.SetColor(1.0f, 1.0f, 1.0f);
-
 
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
-        Left   = -160.0f + (currentMenu->x+SKULLXOFF);
-        Right  = Left + (MenuSkull[whichSkull].Width);
-        Top    = (120.0f - (float)(((currentMenu->y-5) + (itemOn*LINEHEIGHT)) * 1.2f));
-        Bottom = Top - (MenuSkull[whichSkull].Height * 1.2f);
 
-        v[0] = Left;
-        v[1] = Right;
-        v[2] = Top;
-        v[3] = Bottom;
+        skullPos[0] = currentMenu->x;
+        skullPos[1] = (float)(currentMenu->y - 5 + itemOn * LINEHEIGHT) * 1.2f;
+        
+        skullSize[0] = MenuSkull[whichSkull].glWidth;
+        skullSize[1] = MenuSkull[whichSkull].glHeight * 1.2f;
+
+        R2D_DrawSprite(skullPos, skullSize, &MenuSkull[whichSkull]);
 
         max = currentMenu->numitems;
-
-        //renderer.RenderSprite(v, &MenuSkull[whichSkull]);
-
        }
 
     if (GLTex == 0)
        return;
 
-    Top    = 120.0f - ((float)currentMenu->y * 1.2f);
-    Left   = -160+(float)currentMenu->x;
-    Bottom = Top - (GLTex[0].Height*1.2f);
     lh = ((float)LINEHEIGHT*1.2f);
 
-    v[2] = Top;
-    v[0] = Left;
-    v[3] = Bottom;
+    menuItemPos[0] = currentMenu->x;
+    menuItemPos[1] = currentMenu->y * 1.2f;
 
     for (i = 0; i < currentMenu->numitems; i++)
        {
         if (currentMenu->menuitems[i].name[0])
            {
-            Right = Left + GLTex[i].Width;
-            v[1] = Right;
+            menuItemSize[0] = GLTex[i].glWidth;
+            menuItemSize[1] = GLTex[i].glHeight * 1.2f;
 
-            //renderer.RenderSprite(v, &GLTex[i]);
+            menuItemPos[0] = (float)video.width / 2.0f - GLTex[i].glWidth / 2.0f;
+
+            R2D_DrawSprite(menuItemPos, menuItemSize, &GLTex[i]);
 
            }
-        Top    -= lh;
-        Bottom -= lh;
-        v[2] = Top;
-        v[3] = Bottom;
+        menuItemPos[1] += lh;
        }
     
 

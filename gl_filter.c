@@ -11,25 +11,25 @@
 
 #include "gl_filter.h"
 
-void GL_GenTextures(unsigned int texture, int texture_size, gltexture_t texture_target)
+void GL_GenTextures(unsigned int* texture, int texture_size, gltexture_t texture_target)
 {
-	glGenTextures(texture_size, &texture);
+	glGenTextures(texture_size, texture);
 	switch (texture_target)
 	{
 		case gl_texture_1d:
-			glBindTexture(GL_TEXTURE_1D, texture);
+			glBindTexture(GL_TEXTURE_1D, *texture);
 			break;
 		case gl_texture_2d:
-			glBindTexture(GL_TEXTURE_2D, texture);
+			glBindTexture(GL_TEXTURE_2D, *texture);
 			break;
 		case gl_texture_width:
-			glBindTexture(GL_TEXTURE_WIDTH, texture);
+			glBindTexture(GL_TEXTURE_WIDTH, *texture);
 			break;
 		case gl_texture_height:
-			glBindTexture(GL_TEXTURE_HEIGHT, texture);
+			glBindTexture(GL_TEXTURE_HEIGHT, *texture);
 			break;
 		case gl_texture_border_color:
-			glBindTexture(GL_TEXTURE_BORDER_COLOR, texture);
+			glBindTexture(GL_TEXTURE_BORDER_COLOR, *texture);
 			break;
 		default:
 			printf("Unknown texture choosen, Please select the available texture!");

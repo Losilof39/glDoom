@@ -38,7 +38,7 @@ typedef enum
 	gl_unpack_alignment = 0x0CF5, 
 } gltexture_packs_t;
 #endif
-void GL_GenTextures(unsigned int texture, int texture_size, gltexture_t texture_target);
+void GL_GenTextures(unsigned int* texture, int texture_size, gltexture_t texture_target);
 #ifdef NOT_YET
 void GL_PixelStorePacks(gltexture_packs_t pack, unsigned int parameter);
 #endif
