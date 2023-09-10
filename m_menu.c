@@ -72,7 +72,7 @@ extern sRenderer renderer;
 
 #include "m_menu.h"
 
-#include "d_console.h"
+#include "co_console.h"
 #include "sys_sdl.h"
 #include "gl_texture.h"
 #include "gldefs.h"
