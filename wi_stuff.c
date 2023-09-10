@@ -26,6 +26,7 @@
 //#include <gl/gl.h>
 //#include <gl/glu.h>
 #include <glad/glad.h>
+#include "renderer2D.h"
 
 static const char
 rcsid[] = "$Id: wi_stuff.c,v 1.7 1997/02/03 22:45:13 b1 Exp $";
@@ -452,25 +453,16 @@ extern float SetBack;
 
 void GL_DrawPatch(GLTexData *Tex, float x, float y)
    {
-    float       Left, Bottom, Right, Top;
+    //float       Left, Bottom, Right, Top;
+    vec3 pos = { x, y * 1.2f, 0.0f };
+    vec2 size = { Tex->Width * Scale,  (Tex->Height * Scale) * 1.2f };
 
-    /*glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
+    //Left = -160.0f+x;
+    //Right = Left+(Tex->Width*Scale);
+    //Top = 120.0f-(y*1.2f);
+    //Bottom = Top-((Tex->Height*Scale)*1.2f);
 
-    Left = -160.0f+x;
-    Right = Left+(Tex->Width*Scale);
-    Top = 120.0f-(y*1.2f);
-    Bottom = Top-((Tex->Height*Scale)*1.2f);
+    R2D_DrawSprite(pos, size, Tex);
 
     // draw animation frame
     /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);

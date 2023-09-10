@@ -2776,15 +2776,15 @@ void M_WriteText( int x, int y, char *string)
 
 void GL_WriteTextN( int x, int y, char *string, int color)
    {
-    float   Left, Bottom, Top, Right;
     char*	ch;
     int		c;
     int		cx;
     int		cy;
-    float vertices[4] = { 0 };
     ch = string;
     cx = x;
     cy = y;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     //renderer.SetColor(tc[color].red, tc[color].green, tc[color].blue);
 
@@ -2811,17 +2811,12 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (cx+GLGreyFont[c].Width > SCREENWIDTH)
             break;
 
-        Top    = (120.0f-(((cy-GLGreyFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLGreyFont[c].Height*1.2f);
-        Left   = (-160.0f+cx);
-        Right  = Left + GLGreyFont[c].Width;
+        pos[0] = cx;
+        pos[1] = cy;
+        size[0] = GLGreyFont[c].Width;
+        size[1] = GLGreyFont[c].Height;
 
-        vertices[0] = Left;
-        vertices[1] = Right;
-        vertices[2] = Top;
-        vertices[3] = Bottom;
-
-        //renderer.RenderSprite(vertices, &GLGreyFont[c]);
+        R2D_DrawSprite(pos, size, &GLGreyFont[c]);
 
         cx += (int)(GLGreyFont[c].Width-1);
        }
@@ -2835,12 +2830,12 @@ void GL_WriteTextN( int x, int y, char *string, int color)
 
 void GL_WriteText( int x, int y, char *string)
    {
-    float   Left, Bottom, Top, Right;
     char*	ch;
     int		c;
     int		cx;
     int		cy;
-    float vertices[4] = { 0 };
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     ch = string;
     cx = x;
@@ -2869,18 +2864,12 @@ void GL_WriteText( int x, int y, char *string)
         if (cx+GLHudFont[c].Width > SCREENWIDTH)
             break;
 
-        Top    = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLHudFont[c].Height*1.2f);
+        pos[0] = cx;
+        pos[1] = cy;
+        size[0] = GLHudFont[c].Width;
+        size[1] = GLHudFont[c].Height;
 
-        Left = (-160.0f+cx);
-        Right = Left + GLHudFont[c].Width;
-
-        vertices[0] = Left;
-        vertices[1] = Right;
-        vertices[2] = Top;
-        vertices[3] = Bottom;
-
-        //renderer.RenderSprite(vertices, &GLHudFont[c]);
+        R2D_DrawSprite(pos, size, &GLHudFont[c]);
 
         cx += (int)GLHudFont[c].Width;
        }
@@ -5951,7 +5940,7 @@ void GL_DrawMenu()
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
 
-        skullPos[0] = currentMenu->x;
+        skullPos[0] = currentMenu->x + 100;
         skullPos[1] = (float)(currentMenu->y - 5 + itemOn * LINEHEIGHT) * 1.2f;
         
         skullSize[0] = MenuSkull[whichSkull].glWidth;
