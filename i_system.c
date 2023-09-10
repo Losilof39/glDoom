@@ -153,7 +153,7 @@ void I_WaitVBL(int count)
     SDL_Delay(count * 10 );                                
 }
 
-byte*	I_AllocLow(size_t length)
+dbyte*	I_AllocLow(size_t length)
 {
     dbyte*	mem;
    

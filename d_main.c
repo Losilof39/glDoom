@@ -1675,16 +1675,13 @@ void D_DoomMain (void)
 
     
     // init subsystems
-    //printf ("V_Init: allocate screens.\n");
     printf("V_Init: allocate screens.\n");
     V_Init ();
     R_InitMeltRes();
 
-    //printf ("Z_Init: Init zone memory allocation daemon. \n");
     printf("Z_init: Init zone memory allocation daemon. \n");
     Z_Init ();
 
-    //printf ("W_Init: Init WADfiles.\n");
     printf("W_Init: Init WADfiles.\n");
     W_Init(wadfiles);
     
@@ -1750,7 +1747,7 @@ void D_DoomMain (void)
        {
        // These are the lumps that will be checked in IWAD,
        // if any one is not present, execution will be aborted.
-       char name[23][8]= { "e2m1","e2m2","e2m3","e2m4","e2m5","e2m6","e2m7","e2m8","e2m9",
+       char name[25][8]= { "e2m1","e2m2","e2m3","e2m4","e2m5","e2m6","e2m7","e2m8","e2m9",
           "e3m1","e3m3","e3m3","e3m4","e3m5","e3m6","e3m7","e3m8","e3m9",
           "dphoof","bfgga0","heada1","cybra1","spida1d1" };
        int i;
@@ -1836,20 +1833,14 @@ void D_DoomMain (void)
         (W_CheckNumForName("e5m1") != -1) &&
         (W_CheckNumForName("wilv40") != -1);
 
-    //printf ("M_Init: Init miscellaneous info.\n");
     printf("M_Init: Init miscellaneous info.\n");
     M_Init();
 
-    //printf ("R_Init: Init DOOM refresh daemon - ");
     printf("R_Init: Init DOOM refresh daemon - ");
     R_Init();
 
-    //printf ("\nP_Init: Init Playloop state.\n");
     printf("\nP_Init: Init Playloop state.\n");
     P_Init();
-
-    //con_printf("WS_Init: Init weapon sprites.\n");
-    //WS_Init();
 
     printf("WS_Init: Init sprites - ");
     LoadAllSprites();
