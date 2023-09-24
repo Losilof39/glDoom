@@ -44,7 +44,7 @@ static GLuint wipe_scr_end_tex = 0;
 
 GLuint CaptureScreenAsTexID(void)
 {
-    GLuint id;
+    GLuint id = 1;
 
     GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
 

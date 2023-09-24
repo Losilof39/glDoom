@@ -1,5 +1,6 @@
 #include <glad/glad.h>
 #include "r_shader.h"
+#include <string.h>
 
 char* Shader_GetSource(const char* fileName)
 {
