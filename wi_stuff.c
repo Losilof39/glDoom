@@ -455,7 +455,7 @@ void GL_DrawPatch(GLTexData *Tex, float x, float y)
    {
     //float       Left, Bottom, Right, Top;
     vec3 pos = { x, y, 0.0f };
-    vec2 size = { Tex->glWidth, Tex->glHeight  };
+    vec2 size = { Tex->Width, Tex->Height  };
 
     //Left = -160.0f+x;
     //Right = Left+(Tex->Width*Scale);

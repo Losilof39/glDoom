@@ -1235,7 +1235,6 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
    {
     char numstr[4];
     int  digit;
-    float Left, Right, Top, Bottom;
     vec3 pos = { 0 };
     vec2 size = { 0 };
 
@@ -1248,17 +1247,11 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
     if ((numstr[1] == 0) && (numstr[0] == ' '))
        numstr[1] = ' ';
 
-    Top = 120.0f+(y * 1.2f);
-    Bottom = Top - 16.0f;
-
-    Left = 160.0f + x;
-    Right = Left + 14.0f;
-
     pos[0] = x;
-    pos[1] = y * 1.2f;
+    pos[1] = y;
 
-    size[0] = Right - Left;
-    size[1] = Top - Bottom;
+    size[0] = 14;
+    size[1] = 16;
 
     //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < 3; digit++)
@@ -1309,7 +1302,6 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
    {
     char numstr[4];
     int  digit, c;
-    float Left, Right, Top, Bottom;
 
     vec3 pos = { 0 };
     vec2 size = { 0 };
@@ -1334,17 +1326,11 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
     if ((numstr[1] == 0) && (numstr[0] == ' ') && (digits > 2))
        numstr[1] = ' ';
 
-    Top = 120.0f+(y * 1.2f);
-    Bottom = Top - 7.2f;
-
-    Left = 160.0f + x;
-    Right = Left + 4.0f;
-
     pos[0] = x;
-    pos[1] = y * 1.2f;
+    pos[1] = y;
 
-    size[0] = Right - Left;
-    size[1] = Top - Bottom;
+    size[0] = 4;
+    size[1] = 6;
 
     //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < digits; digit++)

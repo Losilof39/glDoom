@@ -1271,8 +1271,8 @@ void GL_DrawSaveLoadBorder(int x,int y)
 
     Left = (-160.0f+(float)(xo-LSLeft.Width));
     Right = (-160.0f+(float)xo);
-    Top = 120.0f-((y+8)*1.2f);
-    Bottom = Top+(LSLeft.Height*1.2f);
+    Top = 120.0f-((y+8));
+    Bottom = Top+(LSLeft.Height);
 
     float vertices[] = { Left, Right, Top, Bottom };
 
@@ -2584,8 +2584,8 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
 
     Left  = (-160.0f+xx);
     Right = Left+glThermL.Width;
-    Top    = 120.0f-(y*1.2f);
-    Bottom = Top-(glThermL.Height*1.2f);
+    Top    = 120.0f-(y);
+    Bottom = Top-(glThermL.Height);
 
     vertices[0] = Left;
     vertices[1] = Right;
@@ -2787,7 +2787,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (c == '\n')
            {
             cx = x;
-            cy += (int)(GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight);
             continue;
            }
 		
@@ -2840,7 +2840,7 @@ void GL_WriteText( int x, int y, char *string)
         if (c == '\n')
            {
             cx = x;
-            cy += (int)(GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight);
             continue;
            }
 		
@@ -5930,11 +5930,11 @@ void GL_DrawMenu()
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
 
-        skullPos[0] = currentMenu->x + 100;
-        skullPos[1] = (float)(currentMenu->y - 5 + itemOn * LINEHEIGHT) * 1.2f;
+        skullPos[0] = currentMenu->x + SKULLXOFF;
+        skullPos[1] = currentMenu->y - 3 + itemOn * LINEHEIGHT;
         
         skullSize[0] = MenuSkull[whichSkull].glWidth;
-        skullSize[1] = MenuSkull[whichSkull].glHeight * 1.2f;
+        skullSize[1] = MenuSkull[whichSkull].glHeight;
 
         R2D_DrawSprite(&skullPos, skullSize, &MenuSkull[whichSkull]);
 
@@ -5944,19 +5944,17 @@ void GL_DrawMenu()
     if (GLTex == 0)
        return;
 
-    lh = ((float)LINEHEIGHT*1.2f);
+    lh = LINEHEIGHT;
 
     menuItemPos[0] = currentMenu->x;
-    menuItemPos[1] = currentMenu->y * 1.2f;
+    menuItemPos[1] = currentMenu->y;
 
     for (i = 0; i < currentMenu->numitems; i++)
        {
         if (currentMenu->menuitems[i].name[0])
            {
             menuItemSize[0] = GLTex[i].glWidth;
-            menuItemSize[1] = GLTex[i].glHeight * 1.2f;
-
-            menuItemPos[0] = (float)video.width / 2.0f - GLTex[i].glWidth / 2.0f;
+            menuItemSize[1] = GLTex[i].glHeight;
 
             R2D_DrawSprite(&menuItemPos, menuItemSize, &GLTex[i]);
 
