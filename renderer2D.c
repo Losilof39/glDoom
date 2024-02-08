@@ -106,25 +106,44 @@ void InitRenderer2D()
 	glVertexAttribPointer(0, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
 	glEnableVertexAttribArray(1);
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
-	glBindVertexArray(0); 
+	glBindVertexArray(0);
+
+
+	// figure out the largest area that fits in this resolution at the desired aspect ratio
+	int width = video.width;
+	int height = (int)(width / s_renderinfo.virtualRatio + 0.5f);
+
+	if (height > video.height)
+	{
+		//It doesn't fit our height, we must switch to pillarbox then
+		height = video.height;
+		width = (int)(height * s_renderinfo.virtualRatio + 0.5f);
+	}
+
+	// set up the new viewport centered in the backbuffer
+	int vp_x = (video.width / 2) - (width / 2);
+	int vp_y = (video.height / 2) - (height / 2);
+
+	glViewport(vp_x, vp_y, width, height);
 }
 
 void R2D_StartRendition(void)
 {
 	// bind to framebuffer and draw scene as we normally would to color texture 
 	glBindFramebuffer(GL_FRAMEBUFFER, s_framebuffer.fb);
-	glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+	//glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
 
 	// make sure we clear the framebuffer's content
 	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+
 }
 
 void R2D_StopRendition(void)
 {
 	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	glDisable(GL_DEPTH_TEST); // disable depth test so screen-space quad isn't discarded due to depth test.
 	// clear all relevant buffers
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
 	glClear(GL_COLOR_BUFFER_BIT);

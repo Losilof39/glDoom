@@ -455,6 +455,8 @@
     <None Include="resources\Playpal.bin" />
     <None Include="shader_files\flatcolor.ps" />
     <None Include="shader_files\flatcolor.vs" />
+    <None Include="shader_files\framebuffer.ps" />
+    <None Include="shader_files\framebuffer.vs" />
     <None Include="shader_files\sprite.ps" />
     <None Include="shader_files\sprite.vs" />
   </ItemGroup>

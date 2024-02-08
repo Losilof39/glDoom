@@ -291,6 +291,8 @@ void D_Display (void)
         return;                    // for comparative timing / profiling
 		
     redrawsbar = false;
+
+    R_StartRendition();
     
     // change the view size if needed
     if (setsizeneeded)
@@ -583,7 +585,6 @@ void MY_DoomLoop (void)
    {
     // frame syncronous IO operations
     //I_StartFrame();
-    R_StartRendition();
 	
     // process one or more tics
 

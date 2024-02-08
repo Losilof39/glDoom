@@ -1248,10 +1248,10 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
     if ((numstr[1] == 0) && (numstr[0] == ' '))
        numstr[1] = ' ';
 
-    Top = 120.0f-(y * 1.2f);
+    Top = 120.0f+(y * 1.2f);
     Bottom = Top - 16.0f;
 
-    Left = -160.0f + x;
+    Left = 160.0f + x;
     Right = Left + 14.0f;
 
     pos[0] = x;
@@ -1334,10 +1334,10 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
     if ((numstr[1] == 0) && (numstr[0] == ' ') && (digits > 2))
        numstr[1] = ' ';
 
-    Top = 120.0f-(y * 1.2f);
+    Top = 120.0f+(y * 1.2f);
     Bottom = Top - 7.2f;
 
-    Left = -160.0f + x;
+    Left = 160.0f + x;
     Right = Left + 4.0f;
 
     pos[0] = x;
@@ -1388,13 +1388,29 @@ void GL_DrawStatusBar0()
     int          *num;
     float         st_aspect;
 
+    /*glVertex3f(-160.50f, -81.6f, SetBack);
+    glTexCoord2f(0.0f, 0.0f);
+    glVertex3f(-160.50f, -120.5f, SetBack);
+    glTexCoord2f(1.0f, 0.0f);
+    glVertex3f(96.0f, -120.5f, SetBack);
+    glTexCoord2f(1.0f, 1.0f);
+    glVertex3f(96.0f, -81.6f, SetBack);*/
+
+    /*glVertex3f( Left,  Top, SetBack);
+            glTexCoord2f( 0.0f, 0.0f );
+            glVertex3f( Left,  Bottom, SetBack);
+            glTexCoord2f( 0.875f, 0.0f );
+            glVertex3f( Right, Bottom, SetBack);
+            glTexCoord2f( 0.875f, 1.0f );
+            glVertex3f( Right, Top, SetBack);*/
+
     st_aspect = SBarTexture.glHeight / SBarTexture.glWidth;
 
     vec3 pos_face = { video.width / 2 - 12.0f, video.height - FaceTex[st_faceindex].glHeight, 0.0f };
     vec2 size_face = { FaceTex[st_faceindex].glWidth, FaceTex[st_faceindex].glHeight };
 
-    vec3 pos_st = { 0.0f, (float)video.height - (float)video.width * st_aspect, 0.0f };
-    vec2 size_st = { video.width, (float)video.width * st_aspect };
+    vec3 pos_st = { 0.0f, 200.0f, 0.0f };
+    vec2 size_st = { SBarTexture.glWidth, SBarTexture.glHeight };
 
     R2D_DrawSprite(pos_st, size_st, &SBarTexture);
 
