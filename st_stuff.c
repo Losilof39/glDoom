@@ -29,6 +29,8 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 //#include <windows.h>
 //#include <gl/gl.h>
 #include <glad/glad.h>
+#include "renderer2D.h"
+#include "v_video.h"
 
 #include <stdio.h>
 
@@ -124,7 +126,7 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 #define ST_DEADFACE			(ST_GODFACE+1)
 
 //#define ST_FACESX			143
-#define ST_FACESX			((SCREENWIDTH/2)-17)
+#define ST_FACESX			((SCREENWIDTH/2)-12)
 //#define ST_FACESY			168
 #define ST_FACESY			(SCREENHEIGHT-32)
 
@@ -563,6 +565,8 @@ extern int gl_premalpha;
 
 // 
 extern char*	mapnames[];
+
+extern video_t video;
 
 //extern int face_tex[45], tallnums[10], shortnums[2][10], tallperc;
 
@@ -1211,7 +1215,7 @@ GLTexData   glAutoMapI[4], glInvul[4],      glInviso[4];
 GLTexData SBarTex;
 GLTexData FaceTex[45], TallNums[10], TallPerc, ShortNums[2][10], KeyTex[6];
 
-int       SBarTexture[2];
+GLTexData       SBarTexture;
 
 typedef struct
    {
@@ -1232,6 +1236,8 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
     char numstr[4];
     int  digit;
     float Left, Right, Top, Bottom;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     numstr[0] = (value / 100) % 10;
     numstr[1] = (value % 100)/10;
@@ -1247,6 +1253,12 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
 
     Left = -160.0f + x;
     Right = Left + 14.0f;
+
+    pos[0] = x;
+    pos[1] = y * 1.2f;
+
+    size[0] = Right - Left;
+    size[1] = Top - Bottom;
 
     //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < 3; digit++)
@@ -1264,9 +1276,12 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
                glTexCoord2f( 0.875f, 1.0f );
                glVertex3f( Right, Top, SetBack);
             glEnd();*/
+
+            R2D_DrawSprite(pos, size, &TallNums[numstr[digit]]);
            }
-        Left += 14.0f;
-        Right += 14.0f;
+        //Left += 14.0f;
+        //Right += 14.0f;
+        pos[0] += 14.0f;
        }
 
     if (percent == true)
@@ -1282,6 +1297,8 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
             glTexCoord2f( 0.875f, 1.0f );
             glVertex3f( Right, Top, SetBack);
         glEnd();*/
+
+        R2D_DrawSprite(pos, size, &TallPerc);
        }
    }
 
@@ -1293,6 +1310,9 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
     char numstr[4];
     int  digit, c;
     float Left, Right, Top, Bottom;
+
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     c = 0;
 
@@ -1320,6 +1340,12 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
     Left = -160.0f + x;
     Right = Left + 4.0f;
 
+    pos[0] = x;
+    pos[1] = y * 1.2f;
+
+    size[0] = Right - Left;
+    size[1] = Top - Bottom;
+
     //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < digits; digit++)
        {
@@ -1343,9 +1369,12 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
                glTexCoord2f( 0.875f, 1.0f );
                glVertex3f( Right, Top, SetBack);
             glEnd();*/
+
+            R2D_DrawSprite(pos, size, &ShortNums[yellow][numstr[digit]]);
            }
-        Left += 4.0f;
-        Right += 4.0f;
+        pos[0] += 4.0f;
+        //Left += 4.0f;
+        //Right += 4.0f;
        }
    }
 
@@ -1357,49 +1386,17 @@ void GL_DrawStatusBar0()
    {
     int           atype, weapon, card;
     int          *num;
+    float         st_aspect;
 
-    /*glDisable(GL_ALPHA_TEST);
-    glEnable(GL_TEXTURE_2D);
+    st_aspect = SBarTexture.glHeight / SBarTexture.glWidth;
 
-    glColor3f( 1.0f, 1.0f, 1.0f );
-    glBindTexture(GL_TEXTURE_2D, SBarTexture[0]);
-    glBegin( GL_QUADS );
-      glNormal3f( 0.0f, 0.0f, 1.0f);
-      glTexCoord2f( 0.0f, 1.0f );
-      glVertex3f( -160.50f, -81.6f, SetBack);
-      glTexCoord2f( 0.0f, 0.0f );
-      glVertex3f( -160.50f, -120.5f, SetBack);
-      glTexCoord2f( 1.0f, 0.0f );
-      glVertex3f(   96.0f, -120.5f, SetBack);
-      glTexCoord2f( 1.0f, 1.0f );
-      glVertex3f(   96.0f, -81.6f, SetBack);
-    glEnd();
+    vec3 pos_face = { video.width / 2 - 12.0f, video.height - FaceTex[st_faceindex].glHeight, 0.0f };
+    vec2 size_face = { FaceTex[st_faceindex].glWidth, FaceTex[st_faceindex].glHeight };
 
-    glColor3f( 1.0f, 1.0f, 1.0f );
-    glBindTexture(GL_TEXTURE_2D, SBarTexture[1]);
-    glBegin( GL_QUADS );
-      glNormal3f( 0.0f, 0.0f, 1.0f);
-      glTexCoord2f( 0.0f, 1.0f );
-      glVertex3f(  96.0f, -81.6f, SetBack);
-      glTexCoord2f( 0.0f, 0.0f );
-      glVertex3f(  96.0f, -120.5f, SetBack);
-      glTexCoord2f( 1.0f, 0.0f );
-      glVertex3f(  160.50f, -120.5f, SetBack);
-      glTexCoord2f( 1.0f, 1.0f );
-      glVertex3f(  160.50f, -81.6f, SetBack);
-    glEnd();
+    vec3 pos_st = { 0.0f, (float)video.height - (float)video.width * st_aspect, 0.0f };
+    vec2 size_st = { video.width, (float)video.width * st_aspect };
 
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
+    R2D_DrawSprite(pos_st, size_st, &SBarTexture);
 
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
@@ -1448,18 +1445,6 @@ void GL_DrawStatusBar0()
            }
        }
 
-    /*glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
-
     if (deathmatch == 0)
        {
         // Draw grey numbers for weapons we have not got.
@@ -1485,49 +1470,20 @@ void GL_DrawStatusBar0()
            }
        }
 
-    // Draw the "Doom Guy's" face at the bottom
-    /*glBindTexture(GL_TEXTURE_2D, FaceTex[st_faceindex].TexName);
-    glBegin( GL_QUADS );
-      glNormal3f( 0.0f, 0.0f, 1.0f);
-      glTexCoord2f( 0.0f, 0.97f );
-      glVertex3f( -12.0f, -84.0f, SetBack);
-      glTexCoord2f( 0.0f, 0.0f );
-      glVertex3f( -12.0f, -119.0f, SetBack);
-      glTexCoord2f( 0.8f, 0.0f );
-      glVertex3f(  14.0f, -119.0f, SetBack);
-      glTexCoord2f( 0.8f, 0.97f );
-      glVertex3f(  14.0f, -84.0f, SetBack);
-    glEnd();
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);*/
+    R2D_DrawSprite(pos_face, size_face, &FaceTex[st_faceindex]);
+    
    }
 
 void GL_DrawStatusBar1()
    {
     int card;
 
-    //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-
-    GL_DrawPatch( &glStimPak, 3.0f, 180.0f );
-
-    /*glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
+    GL_DrawPatch( &glStimPak, 3.0f, ((float)video.height - glStimPak.glHeight)/1.2f - 5);
 
     // Draw current health percentage (up to 200)
     if (w_health.n.num != NULL)
        {
-        GL_DrawLargeNum( 20, 182, *w_health.n.num, true);
+        GL_DrawLargeNum( 20, ((float)video.height - glStimPak.glHeight) / 1.2f - 3, *w_health.n.num, true);
        }
     
     if ((w_frags.num != NULL) && (deathmatch))
@@ -1538,18 +1494,6 @@ void GL_DrawStatusBar1()
         Scale = 1.0 / 2.5;
         GL_DrawPatch( &glPlayFrag, 116.0f, 3.0f );
         Scale = scaleh;
-
-        /*glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, 0.0f);
-        glEnable(GL_BLEND);
-        if (gl_premalpha)
-           {
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-           }
-        else
-           {
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-           }*/
 
         GL_DrawLargeNum(146, 6, *w_frags.num, false);
        }
@@ -1573,18 +1517,6 @@ void GL_DrawStatusBar1()
              break;
        }
 
-    /*glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
-
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
        {
@@ -1607,18 +1539,6 @@ void GL_DrawStatusBar1()
                {
                 GL_DrawPatch( &glBArmor[0], 262.0f-glBArmor[0].Width, 11.0f-(glBArmor[0].Height/2.0f));
                }
-
-            /*glEnable(GL_ALPHA_TEST);
-            glAlphaFunc(GL_GREATER, 0.0f);
-            glEnable(GL_BLEND);
-            if (gl_premalpha)
-               {
-                glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-               }
-            else
-               {
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-               }*/
 
             GL_DrawLargeNum( 262, 4, *w_armor.n.num, true);
            }
@@ -1657,21 +1577,9 @@ void GL_DrawStatusBar2()
    {
     int card;
 
-    //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    float height = video.height - glStimPak.glHeight;
 
-    GL_DrawPatch( &glStimPak, 3.0f, 180.0f );
-
-    /*glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
+    GL_DrawPatch( &glStimPak, 3.0f, height);
 
     // Draw current health percentage (up to 200)
     if (w_health.n.num != NULL)
@@ -1687,18 +1595,6 @@ void GL_DrawStatusBar2()
         Scale = 1.0 / 2.5;
         GL_DrawPatch( &glPlayFrag, 116.0f, 3.0f );
         Scale = scaleh;
-
-        /*glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, 0.0f);
-        glEnable(GL_BLEND);
-        if (gl_premalpha)
-           {
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-           }
-        else
-           {
-            glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-           }*/
 
         GL_DrawLargeNum(146, 6, *w_frags.num, false);
        }
@@ -1722,18 +1618,6 @@ void GL_DrawStatusBar2()
              break;
        }
 
-    /*glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
-
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
        {
@@ -1756,18 +1640,6 @@ void GL_DrawStatusBar2()
                {
                 GL_DrawPatch( &glBArmor[0], 262.0f-glBArmor[0].Width, 189.0f-(glBArmor[0].Height/2.0f));
                }
-
-            /*glEnable(GL_ALPHA_TEST);
-            glAlphaFunc(GL_GREATER, 0.0f);
-            glEnable(GL_BLEND);
-            if (gl_premalpha)
-               {
-                glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-               }
-            else
-               {
-                glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-               }*/
 
             GL_DrawLargeNum( 262, 182, *w_armor.n.num, true);
            }
@@ -1797,9 +1669,6 @@ void GL_DrawStatusBar2()
       glVertex3f(  14.0f, -84.0f, SetBack);
     glEnd();
 */
-    /*glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
-    glDisable(GL_TEXTURE_2D);*/
    }
 
 int hudmode;

@@ -9,10 +9,23 @@
 typedef struct s_R2DStorage
 {
 	GLuint VAO;
+	GLuint screenVAO;
 	Shader flatColorShader;
 	Shader spriteShader;
+	Shader fbShader;
 	mat4 camOrtho;
 }R2DStorage;
+
+typedef struct s_RenderInfo
+{
+	unsigned int virtualWidth, virtualHeight;
+	float virtualRatio;							// i.e. aspect ratio of virtual screen size
+}RenderInfo;
+
+typedef struct s_FrameBuffer
+{
+	GLuint fb, rbo, texColorBuffer;
+}FrameBuffer;
 
 void InitRenderer2D();
 
@@ -20,6 +33,7 @@ void R2D_StartRendition(void);
 void R2D_StopRendition(void);
 void R2D_RenderString(vec3* position, const char* text);
 void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex);
+void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name);
 void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color);
 #endif
 

@@ -38,7 +38,7 @@ extern int deathmatch;
 static unsigned char         Transparent[512*512];
 static unsigned char         TexAlpha[512*512];
 extern int            TexWide, TexHigh;
-extern int            SBarTexture[2];
+extern GLTexData            SBarTexture;
 extern GLTexData      SBarTex[2];
 extern unsigned char  TexRaw[512*512];
 static GLubyte* TexRGB;
@@ -74,7 +74,7 @@ void InsertArmsPlate()
 
 void GL_CreateStatusBar(patch_t *sbar)
    {
-    int yoff, y, d, x;
+    /*int yoff, y, d, x;
 
     for (x = 0; x < 256; x++)
        {
@@ -117,7 +117,9 @@ void GL_CreateStatusBar(patch_t *sbar)
        }
     TexWide = 64;
     TexHigh = 32;
-    SBarTexture[1] = MakeRGBATexture(true, false, 64, 32);
+    SBarTexture[1] = MakeRGBATexture(true, false, 64, 32);*/
+
+    GL_MakeSpriteTexture(sbar, &SBarTexture, false);
 
     if (deathmatch == 0)
        {
