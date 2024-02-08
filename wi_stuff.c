@@ -454,8 +454,8 @@ extern float SetBack;
 void GL_DrawPatch(GLTexData *Tex, float x, float y)
    {
     //float       Left, Bottom, Right, Top;
-    vec3 pos = { x, y * 1.2f, 0.0f };
-    vec2 size = { Tex->Width * Scale,  (Tex->Height * Scale) * 1.2f };
+    vec3 pos = { x, y, 0.0f };
+    vec2 size = { Tex->glWidth, Tex->glHeight  };
 
     //Left = -160.0f+x;
     //Right = Left+(Tex->Width*Scale);

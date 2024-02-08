@@ -1386,31 +1386,12 @@ void GL_DrawStatusBar0()
    {
     int           atype, weapon, card;
     int          *num;
-    float         st_aspect;
 
-    /*glVertex3f(-160.50f, -81.6f, SetBack);
-    glTexCoord2f(0.0f, 0.0f);
-    glVertex3f(-160.50f, -120.5f, SetBack);
-    glTexCoord2f(1.0f, 0.0f);
-    glVertex3f(96.0f, -120.5f, SetBack);
-    glTexCoord2f(1.0f, 1.0f);
-    glVertex3f(96.0f, -81.6f, SetBack);*/
-
-    /*glVertex3f( Left,  Top, SetBack);
-            glTexCoord2f( 0.0f, 0.0f );
-            glVertex3f( Left,  Bottom, SetBack);
-            glTexCoord2f( 0.875f, 0.0f );
-            glVertex3f( Right, Bottom, SetBack);
-            glTexCoord2f( 0.875f, 1.0f );
-            glVertex3f( Right, Top, SetBack);*/
-
-    st_aspect = SBarTexture.glHeight / SBarTexture.glWidth;
-
-    vec3 pos_face = { video.width / 2 - 12.0f, video.height - FaceTex[st_faceindex].glHeight, 0.0f };
+    vec3 pos_face = { ST_FX + 5, 200 - FaceTex[st_faceindex].glHeight, 0.0f };
     vec2 size_face = { FaceTex[st_faceindex].glWidth, FaceTex[st_faceindex].glHeight };
 
-    vec3 pos_st = { 0.0f, 200.0f, 0.0f };
-    vec2 size_st = { SBarTexture.glWidth, SBarTexture.glHeight };
+    vec3 pos_st = { 0.0f, 200.0f - SBarTexture.glHeight, 0.0f };
+    vec2 size_st = { SBarTexture.Width, SBarTexture.Height };
 
     R2D_DrawSprite(pos_st, size_st, &SBarTexture);
 

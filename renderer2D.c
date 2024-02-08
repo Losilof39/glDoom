@@ -35,8 +35,8 @@ void InitRenderer2D()
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	s_renderinfo.virtualWidth = 640;
-	s_renderinfo.virtualHeight = 480;
+	s_renderinfo.virtualWidth = 320;
+	s_renderinfo.virtualHeight = 200;
 	s_renderinfo.virtualRatio = (float)s_renderinfo.virtualWidth / (float)s_renderinfo.virtualHeight;
 
 	glGenVertexArrays(1, &s_Data.VAO);
@@ -61,8 +61,8 @@ void InitRenderer2D()
 	Shader_Unbind();
 
 	glm_ortho(0.0f,
-		(float)video.width,
-		(float)video.height,
+		(float)s_renderinfo.virtualWidth,
+		(float)s_renderinfo.virtualHeight,
 		0.0f,
 		-1.0f,
 		1.0f,
@@ -81,8 +81,8 @@ void InitRenderer2D()
 	glGenTextures(1, &s_framebuffer.texColorBuffer);
 	glBindTexture(GL_TEXTURE_2D, s_framebuffer.texColorBuffer);
 	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, s_renderinfo.virtualWidth, s_renderinfo.virtualHeight, 0, GL_RGB, GL_UNSIGNED_BYTE, NULL);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, s_framebuffer.texColorBuffer, 0);
 
 
@@ -108,8 +108,27 @@ void InitRenderer2D()
 	glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)(2 * sizeof(float)));
 	glBindVertexArray(0);
 
+}
 
-	// figure out the largest area that fits in this resolution at the desired aspect ratio
+void R2D_StartRendition(void)
+{
+	// bind to framebuffer and draw scene as we normally would to color texture 
+	glBindFramebuffer(GL_FRAMEBUFFER, s_framebuffer.fb);
+	glViewport(0, 0, s_renderinfo.virtualWidth, s_renderinfo.virtualHeight);
+	//glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
+
+	// make sure we clear the framebuffer's content
+	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+
+}
+
+void R2D_StopRendition(void)
+{
+	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);
+
 	int width = video.width;
 	int height = (int)(width / s_renderinfo.virtualRatio + 0.5f);
 
@@ -125,25 +144,8 @@ void InitRenderer2D()
 	int vp_y = (video.height / 2) - (height / 2);
 
 	glViewport(vp_x, vp_y, width, height);
-}
-
-void R2D_StartRendition(void)
-{
-	// bind to framebuffer and draw scene as we normally would to color texture 
-	glBindFramebuffer(GL_FRAMEBUFFER, s_framebuffer.fb);
-	//glEnable(GL_DEPTH_TEST); // enable depth testing (is disabled for rendering screen-space quad)
-
-	// make sure we clear the framebuffer's content
-	glClearColor(0.1f, 0.1f, 0.1f, 1.0f);
-	glClear(GL_COLOR_BUFFER_BIT);
 
 
-}
-
-void R2D_StopRendition(void)
-{
-	// now bind back to default framebuffer and draw a quad plane with the attached framebuffer color texture
-	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	// clear all relevant buffers
 	glClearColor(1.0f, 1.0f, 1.0f, 1.0f); // set clear color to white (not really necessary actually, since we won't be able to see behind the quad anyways)
 	glClear(GL_COLOR_BUFFER_BIT);

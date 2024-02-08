@@ -1212,15 +1212,9 @@ void M_DrawLoad(void)
 
 void GL_DrawTitle(int y, GLTexData *tex)
    {
-    float   Left, Bottom, Right, Top;
 
-    Left = (0.0f - (tex->Width / 2.0f));
-    Right = Left + tex->Width;
-    Top = 120.0f - (y * 1.2f);
-    Bottom = Top - (tex->Height * 1.2f);
-
-    vec3 pos = { video.width/2.0f - tex->Width / 2.0f, y };
-    vec2 size = { Right - Left, Top - Bottom };
+    vec3 pos = { 94, y };
+    vec2 size = { tex->glWidth, tex->glHeight };
 
     R2D_DrawSprite(&pos, size, tex);
    }
@@ -1536,14 +1530,10 @@ void M_DrawReadThis1(void)
 
 void GL_DrawFullScreen(GLTexData *Image)
    {
-    float aspect = Image->glWidth / Image->glHeight;
-    float width = video.height * aspect;
 
-    if (width > video.width)
-        width = video.width;
 
-    vec3 pos = { (float)video.width / 2.0f - width / 2.0f, 0.0f};
-    vec2 size = { width, video.height };
+    vec3 pos = { 0.0f, 0.0f};
+    vec2 size = { Image->glWidth, Image->glHeight };
 
     R2D_DrawSprite(&pos, size, Image);
    }
