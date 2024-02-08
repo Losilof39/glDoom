@@ -113,7 +113,7 @@ void InitGLPalette(int red, int green, int blue)
 
 int CreateColorMap(int red, int green, int blue)
    {
-    int             TempTexName;
+    unsigned int             TempTexName = 1;
     unsigned char   TexData[4];
 
     TexWide = 1;
@@ -132,7 +132,7 @@ int CreateColorMap(int red, int green, int blue)
 
 int CreatePointLightMap(int red, int green, int blue, dboolean alphaonly)
    {
-    int             r, d, t, TempTexName;
+    int             r, d, t, TempTexName = 1;
 
     TexWide = 16;
     TexHigh = 16;
@@ -202,7 +202,7 @@ extern texture_t**	textures;
 
 int GL_LoadSkyTop( char *filename )
    {
-    unsigned int TempTexName;
+    unsigned int TempTexName = 1;
 
     D_LoadBmp(TexRGB, filename, TexWide, TexHigh);
 
@@ -1104,7 +1104,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
 unsigned int MakeRGBTexture(int dw, int dh)
    {
     int             r, c, d, h, t, m, n;
-    unsigned int TempTexName;
+    unsigned int TempTexName = 1;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
 
     TexTransparent = false;

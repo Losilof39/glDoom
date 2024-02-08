@@ -1219,10 +1219,10 @@ void GL_DrawTitle(int y, GLTexData *tex)
     Top = 120.0f - (y * 1.2f);
     Bottom = Top - (tex->Height * 1.2f);
 
-    vec2 pos = { video.width/2.0f - tex->Width / 2.0f, y };
+    vec3 pos = { video.width/2.0f - tex->Width / 2.0f, y };
     vec2 size = { Right - Left, Top - Bottom };
 
-    R2D_DrawSprite(pos, size, tex);
+    R2D_DrawSprite(&pos, size, tex);
    }
 
 //
@@ -1545,7 +1545,7 @@ void GL_DrawFullScreen(GLTexData *Image)
     vec3 pos = { (float)video.width / 2.0f - width / 2.0f, 0.0f};
     vec2 size = { width, video.height };
 
-    R2D_DrawSprite(pos, size, Image);
+    R2D_DrawSprite(&pos, size, Image);
    }
 
 void GL_DrawReadThis1(void)
@@ -2816,7 +2816,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         size[0] = GLGreyFont[c].Width;
         size[1] = GLGreyFont[c].Height;
 
-        R2D_DrawSprite(pos, size, &GLGreyFont[c]);
+        R2D_DrawSprite(&pos, size, &GLGreyFont[c]);
 
         cx += (int)(GLGreyFont[c].Width-1);
        }
@@ -2869,7 +2869,7 @@ void GL_WriteText( int x, int y, char *string)
         size[0] = GLHudFont[c].Width;
         size[1] = GLHudFont[c].Height;
 
-        R2D_DrawSprite(pos, size, &GLHudFont[c]);
+        R2D_DrawSprite(&pos, size, &GLHudFont[c]);
 
         cx += (int)GLHudFont[c].Width;
        }
@@ -5779,10 +5779,10 @@ void M_Drawer (void)
 
 void GL_DrawMenu()
    {
-    static int  x, y, i, max, w, h;
+    static int  x, y, max, w, h;
     float       Left, Bottom, Right, Top, lh;
     GLTexData  *GLTex;
-
+    size_t i;
     char		string[40];
     int			start;
 
@@ -5801,20 +5801,20 @@ void GL_DrawMenu()
         y = 100-(M_StringHeight(messageString)/2);
         while(*(messageString+start))
            {
-            for (i = 0;(unsigned)i < strlen(messageString+start);i++)
+            for (i = 0;i < strlen(messageString+start);i++)
                {
                 if (*(messageString+start+i) == '\n')
                    {
                     memset(string,0,40);
                     strncpy(string,messageString+start,i);
-                    start += i+1;
+                    start += (int)i+1;
                     break;
                    }
                }
-            if ((unsigned)i == strlen(messageString+start))
+            if (i == strlen(messageString+start))
                {
                 strcpy(string,messageString+start);
-                start += i;
+                start += (int)i;
                }
             x = 160 - M_StringWidth(string)/2;
             GL_WriteText(x,y,string);
@@ -5946,7 +5946,7 @@ void GL_DrawMenu()
         skullSize[0] = MenuSkull[whichSkull].glWidth;
         skullSize[1] = MenuSkull[whichSkull].glHeight * 1.2f;
 
-        R2D_DrawSprite(skullPos, skullSize, &MenuSkull[whichSkull]);
+        R2D_DrawSprite(&skullPos, skullSize, &MenuSkull[whichSkull]);
 
         max = currentMenu->numitems;
        }
@@ -5968,7 +5968,7 @@ void GL_DrawMenu()
 
             menuItemPos[0] = (float)video.width / 2.0f - GLTex[i].glWidth / 2.0f;
 
-            R2D_DrawSprite(menuItemPos, menuItemSize, &GLTex[i]);
+            R2D_DrawSprite(&menuItemPos, menuItemSize, &GLTex[i]);
 
            }
         menuItemPos[1] += lh;
