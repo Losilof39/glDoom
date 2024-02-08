@@ -46,7 +46,7 @@ GLuint CaptureScreenAsTexID(void)
 {
     GLuint id = 1;
 
-    GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
+    //GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
 
     return id;
 }
@@ -119,7 +119,7 @@ int gld_wipe_exitMelt(int ticks)
 
 int gld_wipe_StartScreen(void)
 {
-    wipe_scr_start_tex = CaptureScreenAsTexID();
+    wipe_scr_start_tex;//= CaptureScreenAsTexID();
 
     return 0;
 }
@@ -127,7 +127,7 @@ int gld_wipe_StartScreen(void)
 int gld_wipe_EndScreen(void)
 {
     //glFlush();
-    wipe_scr_end_tex = CaptureScreenAsTexID();
+    wipe_scr_end_tex; //= CaptureScreenAsTexID();
 
     return 0;
 }
