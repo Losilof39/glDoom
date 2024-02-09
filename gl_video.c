@@ -33,7 +33,6 @@
 #include "sdl_video.h"
 #include "renderer2D.h"
 #include "renderer3D.h"
-#include "imgui_layer.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -97,7 +96,6 @@ void ShutdownOpenGL(void)
 
 void I_ShutdownGraphics(void)
 {
-    ShutdownIMGUI();
     ShutdownOpenGL();
 }
 
@@ -211,8 +209,6 @@ dboolean StartUpOpenGL()
     }
 
     InitRenderer2D();
-
-    SetupIMGUI(pWindow, glContext);
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glDisable(GL_DEPTH_TEST);
