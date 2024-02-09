@@ -74,8 +74,8 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>false</LinkIncremental>
     <OutDir>$(SolutionDir)\Debug\</OutDir>
-    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);$(SolutionDir)\thirdparty\cglm\include;$(SolutionDir)\thirdparty\cimgui\include</IncludePath>
-    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64;$(SolutionDir)\thirdparty\cimgui\lib\x64</LibraryPath>
+    <IncludePath>$(SolutionDir)\thirdparty\SDL2\include;$(SolutionDir)\thirdparty\glad\include;$(IncludePath);$(SolutionDir)\thirdparty\cglm\include</IncludePath>
+    <LibraryPath>$(SolutionDir)\thirdparty\SDL2\lib\x64\;$(LibraryPath);$(SolutionDir)\thirdparty\cglm\lib\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>.\Release\</OutDir>
@@ -164,7 +164,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>cimgui.lib;cimgui_sdl.lib;cglm.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>cglm.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;opengl32.lib;glu32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Debug\GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -438,6 +438,8 @@
     <ClInclude Include="sys_sdl.h" />
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
+    <ClInclude Include="thirdparty\Nuklear\Nuklear-master\demo\sdl_opengl3\nuklear_sdl_gl3.h" />
+    <ClInclude Include="thirdparty\Nuklear\Nuklear-master\nuklear.h" />
     <ClInclude Include="v_video.h" />
     <ClInclude Include="sdl_input.h" />
     <ClInclude Include="sdl_kbrd.h" />

@@ -222,6 +222,7 @@ dboolean StartUpOpenGL()
 
 void I_InitGraphics(void)
 {
+
 }
 
 void GetGLInfo()

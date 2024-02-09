@@ -22,6 +22,9 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{957e763d-23bb-4918-bb86-dc1a0ec495d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ui">
+      <UniqueIdentifier>{1b3d05e4-07f6-4251-be07-3d0ac71cac70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c">
@@ -523,6 +526,12 @@
     </ClInclude>
     <ClInclude Include="co_utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\Nuklear\Nuklear-master\nuklear.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\Nuklear\Nuklear-master\demo\sdl_opengl3\nuklear_sdl_gl3.h">
+      <Filter>Header Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
