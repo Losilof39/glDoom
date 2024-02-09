@@ -3,6 +3,7 @@
 #include "z_zone.h"
 #include "w_wad.h"
 #include "gl_texture.h"
+#include "i_system.h"
 
 R2DStorage s_Data;
 FrameBuffer s_framebuffer;
@@ -93,7 +94,7 @@ void InitRenderer2D()
 	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, s_framebuffer.rbo); // now actually attach it
 	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
-		printf("ERROR::FRAMEBUFFER:: Framebuffer is not complete!");
+		I_Error("Framebuffer is not complete!");
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 	// screen quad VAO
@@ -155,9 +156,9 @@ void R2D_StopRendition(void)
 
 	Shader_Use(s_Data.fbShader);
 
-	glBindVertexArray(s_Data.screenVAO);
 	glBindTexture(GL_TEXTURE_2D, s_framebuffer.texColorBuffer);	// use the color attachment texture as the texture of the quad plane
 	glDrawArrays(GL_TRIANGLES, 0, 6);
+	glBindVertexArray(0);
 }
 
 void R2D_RenderString(vec3* position, const char* text)
