@@ -1672,52 +1672,52 @@ void GL_DrawConsole()
     cursor++;
     cursor %= 18;
 
-    glEnable(GL_TEXTURE_2D);
+    //glEnable(GL_TEXTURE_2D);
 
     GLConsoleHeight = 118.0f-(120.0f*((float)iConsoleHeight/(float)iConsoleMax));
 
-    glEnable(GL_BLEND);
-    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    //glEnable(GL_BLEND);
+    //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    talpha = (float)iConsoleHeight/(float)iConsoleMax;
-    //glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
-    glColor4f( talpha, talpha, talpha, talpha );
-    glBindTexture(GL_TEXTURE_2D, iConsBack);
-    glBegin( GL_QUADS );
-      glNormal3f( 0.0f, 0.0f, 1.0f);
-      glTexCoord2f(  0.0f, 3.75f );
-      glVertex3f( -160.00f, 120.0f, SetBack+2);
-      glTexCoord2f(  0.0f, 0.0f );
-      glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
-      glTexCoord2f( 10.0f, 0.0f );
-      glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
-      glTexCoord2f( 10.0f, 3.75f );
-      glVertex3f(  160.00f, 120.0f, SetBack+2);
-    glEnd();
+    //talpha = (float)iConsoleHeight/(float)iConsoleMax;
+    ////glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
+    //glColor4f( talpha, talpha, talpha, talpha );
+    //glBindTexture(GL_TEXTURE_2D, iConsBack);
+    //glBegin( GL_QUADS );
+    //  glNormal3f( 0.0f, 0.0f, 1.0f);
+    //  glTexCoord2f(  0.0f, 3.75f );
+    //  glVertex3f( -160.00f, 120.0f, SetBack+2);
+    //  glTexCoord2f(  0.0f, 0.0f );
+    //  glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
+    //  glTexCoord2f( 10.0f, 0.0f );
+    //  glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
+    //  glTexCoord2f( 10.0f, 3.75f );
+    //  glVertex3f(  160.00f, 120.0f, SetBack+2);
+    //glEnd();
 
-    //glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
-    glBindTexture(GL_TEXTURE_2D, iConsBord);
-    glBegin( GL_QUADS );
-      glNormal3f( 0.0f, 0.0f, 1.0f);
-      glTexCoord2f( 0.0f, 0.55f );
-      glVertex3f( -160.00f, GLConsoleHeight+2.0f, SetBack+2);
-      glTexCoord2f( 0.0f, 0.45f );
-      glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
-      glTexCoord2f( 10.0f, 0.45f );
-      glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
-      glTexCoord2f( 10.0f, 0.55f );
-     glVertex3f(  160.00f, GLConsoleHeight+2.0f, SetBack+2);
-    glEnd();
+    ////glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
+    //glBindTexture(GL_TEXTURE_2D, iConsBord);
+    //glBegin( GL_QUADS );
+    //  glNormal3f( 0.0f, 0.0f, 1.0f);
+    //  glTexCoord2f( 0.0f, 0.55f );
+    //  glVertex3f( -160.00f, GLConsoleHeight+2.0f, SetBack+2);
+    //  glTexCoord2f( 0.0f, 0.45f );
+    //  glVertex3f( -160.00f, GLConsoleHeight, SetBack+2);
+    //  glTexCoord2f( 10.0f, 0.45f );
+    //  glVertex3f(  160.00f, GLConsoleHeight, SetBack+2);
+    //  glTexCoord2f( 10.0f, 0.55f );
+    // glVertex3f(  160.00f, GLConsoleHeight+2.0f, SetBack+2);
+    //glEnd();
 
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
 
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
+    //glEnable(GL_ALPHA_TEST);
+    //glAlphaFunc(GL_GREATER, 0.0f);
 
     if (iConsoleHeight >= (consname->height+CONSBORD+2))
        {
         // Draw the Game logo (Doom, Doom II, TNT, Plutonia, whatever)
-        glBindTexture(GL_TEXTURE_2D, iConsLogo);
+        /*glBindTexture(GL_TEXTURE_2D, iConsLogo);
         glBegin( GL_QUADS );
           glNormal3f( 0.0f, 0.0f, 1.0f);
           glTexCoord2f( 0.0f, 1.0f );
@@ -1728,7 +1728,7 @@ void GL_DrawConsole()
           glVertex3f(  0.0f+(ConsLogo.Width/2.0f), 118.0f-ConsLogo.Height, SetBack);
           glTexCoord2f( ConsLogo.XDisp, 1.0f );
           glVertex3f(  0.0f+(ConsLogo.Width/2.0f), 118.0f, SetBack);
-        glEnd();
+        glEnd();*/
        }
 
     if (iConsoleHeight > 10)
@@ -1750,8 +1750,8 @@ void GL_DrawConsole()
            }
        }
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 int CO_WriteConsoleLine(int l, char *s, dboolean wrap)
