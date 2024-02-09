@@ -1253,44 +1253,17 @@ void GL_DrawLargeNum(int x, int y, int value, dboolean percent)
     size[0] = 14;
     size[1] = 16;
 
-    //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < 3; digit++)
        {
         if (numstr[digit] != ' ')
            {
-            /*glBindTexture(GL_TEXTURE_2D, TallNums[numstr[digit]].TexName);
-            glBegin( GL_QUADS );
-               glTexCoord2f( 0.0f, 1.0f );
-               glVertex3f( Left,  Top, SetBack);
-               glTexCoord2f( 0.0f, 0.0f );
-               glVertex3f( Left,  Bottom, SetBack);
-               glTexCoord2f( 0.875f, 0.0f );
-               glVertex3f( Right, Bottom, SetBack);
-               glTexCoord2f( 0.875f, 1.0f );
-               glVertex3f( Right, Top, SetBack);
-            glEnd();*/
-
             R2D_DrawSprite(pos, size, &TallNums[numstr[digit]]);
            }
-        //Left += 14.0f;
-        //Right += 14.0f;
         pos[0] += 14.0f;
        }
 
     if (percent == true)
        {
-        /*glBindTexture(GL_TEXTURE_2D, TallPerc.TexName);
-        glBegin( GL_QUADS );
-            glTexCoord2f( 0.0f, 1.0f );
-            glVertex3f( Left,  Top, SetBack);
-            glTexCoord2f( 0.0f, 0.0f );
-            glVertex3f( Left,  Bottom, SetBack);
-            glTexCoord2f( 0.875f, 0.0f );
-            glVertex3f( Right, Bottom, SetBack);
-            glTexCoord2f( 0.875f, 1.0f );
-            glVertex3f( Right, Top, SetBack);
-        glEnd();*/
-
         R2D_DrawSprite(pos, size, &TallPerc);
        }
    }
@@ -1332,7 +1305,6 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
     size[0] = 4;
     size[1] = 6;
 
-    //glNormal3f( 0.0f, 0.0f, 1.0f);
     for (digit = 0; digit < digits; digit++)
        {
         if (numstr[digit] != ' ')
@@ -1345,22 +1317,11 @@ void GL_DrawSmallNum(int x, int y, int value, int digits, dboolean yellow)
                {
                 glBindTexture(GL_TEXTURE_2D, ShortNums[0][numstr[digit]].TexName);
                }
-            glBegin( GL_QUADS );
-               glTexCoord2f( 0.0f, 1.0f );
-               glVertex3f( Left,  Top, SetBack);
-               glTexCoord2f( 0.0f, 0.25f );
-               glVertex3f( Left,  Bottom, SetBack);
-               glTexCoord2f( 0.875f, 0.25f );
-               glVertex3f( Right, Bottom, SetBack);
-               glTexCoord2f( 0.875f, 1.0f );
-               glVertex3f( Right, Top, SetBack);
-            glEnd();*/
+               */
 
             R2D_DrawSprite(pos, size, &ShortNums[yellow][numstr[digit]]);
            }
         pos[0] += 4.0f;
-        //Left += 4.0f;
-        //Right += 4.0f;
        }
    }
 
@@ -1377,7 +1338,7 @@ void GL_DrawStatusBar0()
     vec2 size_face = { FaceTex[st_faceindex].glWidth, FaceTex[st_faceindex].glHeight };
 
     vec3 pos_st = { 0.0f, 200.0f - SBarTexture.glHeight, 0.0f };
-    vec2 size_st = { SBarTexture.Width, SBarTexture.Height };
+    vec2 size_st = { SBarTexture.glWidth, SBarTexture.glHeight };
 
     R2D_DrawSprite(pos_st, size_st, &SBarTexture);
 
