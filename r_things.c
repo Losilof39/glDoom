@@ -41,6 +41,7 @@ rcsid[] = "$Id: r_things.c,v 1.5 1997/02/03 16:47:56 b1 Exp $";
 #include "doomstat.h"
 #include <glad/glad.h>
 #include "gldefs.h"
+#include "renderer2D.h"
 
 #define MINZ				(FRACUNIT*4)
 //#define BASEYCENTER			(SCREENHEIGHT/2)
@@ -1048,8 +1049,8 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
        }
        }
 
-    sx = (-160.0f+(SprData[lump].LeftOff*-1.0f))+(psp->sx >> FRACBITS);
-    sy = (120.0f+(SprData[lump].TopOff-(psp->sy >> FRACBITS)))*1.2f;
+    sx = (psp->sx >> FRACBITS) - SprData[lump].LeftOff;
+    sy = (psp->sy >> FRACBITS) - SprData[lump].TopOff - 22.0f;
 
 /*
     if ((csprite != psp->state->sprite) || (tsy != sy))
@@ -1061,18 +1062,6 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
 */
     if (SprData[lump].TexName != 0)
        {
-        /*glEnable(GL_TEXTURE_2D);
-        glEnable(GL_ALPHA_TEST);
-        glAlphaFunc(GL_GREATER, 0.0f);
-        glEnable(GL_BLEND);
-        if (gl_premalpha)
-           {
-            glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-           }
-        else
-           {
-            glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
-           }*/
         if (invisible == true)
            {// FIXME - not coming out transparent...
             //glBlendFunc( GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA );
@@ -1103,20 +1092,14 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
            }
         if (hudmode != 1)
            {
-            sy -= 30.0f;
+            sy += 22.0f;
            }
-//        glBegin(GL_QUADS);
-//           glTexCoord2f( 0.0f,  1.0f );
-//           glVertex3f( sx,  sy, SetBack );
-//           glTexCoord2f( 0.0f,  SprData[lump].YDisp );
-//           glVertex3f( sx, sy-(SprData[lump].Height*1.2f), SetBack );
-//           glTexCoord2f( SprData[lump].XDisp,  SprData[lump].YDisp );
-//           glVertex3f(  SprData[lump].Width+sx, sy-(SprData[lump].Height*1.2f), SetBack );
-//           glTexCoord2f( SprData[lump].XDisp,  1.0f );
-//           glVertex3f(  SprData[lump].Width+sx,  sy, SetBack );
-//        glEnd();
-//        glBindTexture(GL_TEXTURE_2D, 0);
-//        glDisable(GL_ALPHA_TEST);
+
+        vec3 pos = { sx, sy, 0 };
+        vec2 size = { SprData[lump].Width, SprData[lump].Height };
+
+        R2D_DrawSprite(pos, size, &SprData[lump].TexName);
+
 ////        if (((SprData[lump].Translucent != 255) && (sptype == 1)) || (invisible == true))
 ////           {
 //            glDisable(GL_BLEND);
