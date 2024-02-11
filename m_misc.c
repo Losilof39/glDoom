@@ -144,7 +144,7 @@ int M_GLDrawText( int x, int y, char *string )
         vec3 pos = { fx, y - GLHudFont[c].TopOff, 0.0f };
         vec2 size = { GLHudFont[c].glWidth, GLHudFont[c].glHeight };
 
-        R2D_DrawSprite(pos, size, &GLHudFont[c].TexName);
+        R2D_DrawSprite(pos, size, &GLHudFont[c]);
 
         /*glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
         glBegin( GL_QUADS );

@@ -42,6 +42,7 @@ rcsid[] = "$Id: r_things.c,v 1.5 1997/02/03 16:47:56 b1 Exp $";
 #include <glad/glad.h>
 #include "gldefs.h"
 #include "renderer2D.h"
+#include "renderer3D.h"
 
 #define MINZ				(FRACUNIT*4)
 //#define BASEYCENTER			(SCREENHEIGHT/2)

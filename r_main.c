@@ -44,6 +44,7 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "gldefs.h"
 
 #include "v_video.h"
+#include "renderer3D.h"
 
 // Fineangles in the SCREENWIDTH wide window.
 #define FIELDOFVIEW		2048
@@ -1795,6 +1796,10 @@ void GL_RenderPlayerView(player_t* player)
                         glAlphaFunc(GL_GREATER, 0.0f);*/
                     }
 
+                    R3D_SetMaterial(&TexList[translate[texturetranslation[texnumb]]].glTexture);
+                    
+                    R3D_RenderWall(TempPoly);
+
                     /*glBegin(GL_QUADS);
                     glTexCoord2f(TempPoly->Point[0].tu, TempPoly->Point[0].tv);
                     glVertex3fv(TempPoly->Point[0].v);
@@ -1878,6 +1883,8 @@ void GL_RenderPlayerView(player_t* player)
                     glColor4f( lightv, lightv, lightv, 1.0f );*/
        
                 //glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
+                //R3D_SetMaterial(&TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
+
                 for (subsector = 0; subsector < pplane->ss_count; subsector++)
                 {
                     psubsector = pplane->subsectors[subsector];
@@ -1962,6 +1969,9 @@ void GL_RenderPlayerView(player_t* player)
                             psubsector->Point[i].v[1] = flathigh;
                             //glVertex3fv(psubsector->Point[i].v);
                         }
+
+
+
                         /*glEnd();
                         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
                     }
