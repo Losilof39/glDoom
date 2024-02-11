@@ -1698,6 +1698,8 @@ void GL_RenderPlayerView(player_t* player)
     //DW_Vertex3D   PlayerPosition;
     static ml_vert3_t    ViewPosition;
     static ml_vec3_t     ViewOrient;
+    static vec3                 pos;
+    static vec3                 dir;
     DW_Polygon   *TempPoly;
     static dboolean   FirstTime = true;
 
@@ -1727,7 +1729,15 @@ void GL_RenderPlayerView(player_t* player)
 
     R_AlignFrustum(ViewPosition, ViewOrient);
 
-    R3D_UpdateCamera(ViewPosition, ViewOrient);
+    dir[0] = vpn[0];
+    dir[1] = vpn[1];
+    dir[2] = -vpn[2];
+
+    pos[0] = FIXED_TO_FLOAT(player->mo->x);
+    pos[1] = FIXED_TO_FLOAT(player->viewz);
+    pos[2] = -FIXED_TO_FLOAT(player->mo->y);
+
+    R3D_UpdateCamera(pos, dir);
 
     R_BuildRenderQueue();
 
@@ -1739,9 +1749,9 @@ void GL_RenderPlayerView(player_t* player)
 
     //glRotatef(yangle, 0.0f, 1.0f, 0.0f );
 
-    //glEnable(GL_CULL_FACE);
-    //glFrontFace(GL_CCW);
-    //glCullFace(GL_BACK);
+    /*glEnable(GL_CULL_FACE);
+    glFrontFace(GL_CCW);
+    glCullFace(GL_BACK);*/
 
     //glEnable(GL_DEPTH_TEST);
     //glDepthFunc( GL_LEQUAL );

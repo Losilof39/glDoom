@@ -2806,6 +2806,7 @@ void CalcTexCoords()
                 TempPoly->Point[3].tu = TempPoly->Point[2].tu;
                 TempPoly->Point[3].tv = TempPoly->Point[0].tv;
             }
+            TempPoly->VAO = -1;
             TempPoly = TempPoly->Next;
         }
     }

@@ -459,6 +459,8 @@
     <None Include="shader_files\framebuffer.vs" />
     <None Include="shader_files\sprite.ps" />
     <None Include="shader_files\sprite.vs" />
+    <None Include="shader_files\wall.ps" />
+    <None Include="shader_files\wall.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />

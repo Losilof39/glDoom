@@ -104,29 +104,47 @@ void Shader_Unbind()
 void Shader_SetInt(Shader shader, const char* uniform, int value)
 {
     glUniform1i(glGetUniformLocation(shader.programID, uniform), value);
+
+    if(glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetBoolean(Shader shader, const char* uniform, dboolean value)
 {
     glUniform1i(glGetUniformLocation(shader.programID, uniform), (GLint)value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetFloat(Shader shader, const char* uniform, float value)
 {
     glUniform1f(glGetUniformLocation(shader.programID, uniform), value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetMat4(Shader shader, const char* uniform, mat4 value)
 {
     glUniformMatrix4fv(glGetUniformLocation(shader.programID, uniform), 1, GL_FALSE, value[0]);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetVec3(Shader shader, const char* uniform, vec3 value)
 {
     glUniform3fv(glGetUniformLocation(shader.programID, uniform), 1, value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetVec4(Shader shader, const char* uniform, vec4 value)
 {
     glUniform4fv(glGetUniformLocation(shader.programID, uniform), 1, value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
