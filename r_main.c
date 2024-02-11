@@ -1727,6 +1727,8 @@ void GL_RenderPlayerView(player_t* player)
 
     R_AlignFrustum(ViewPosition, ViewOrient);
 
+    R3D_UpdateCamera(ViewPosition, ViewOrient);
+
     R_BuildRenderQueue();
 
     //glEnable(GL_TEXTURE_2D);
@@ -1796,9 +1798,9 @@ void GL_RenderPlayerView(player_t* player)
                         glAlphaFunc(GL_GREATER, 0.0f);*/
                     }
 
-                    R3D_SetMaterial(&TexList[translate[texturetranslation[texnumb]]].glTexture);
+                    //R3D_SetMaterial(&TexList[translate[texturetranslation[texnumb]]].glTexture);
                     
-                    R3D_RenderWall(TempPoly);
+                    R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture);
 
                     /*glBegin(GL_QUADS);
                     glTexCoord2f(TempPoly->Point[0].tu, TempPoly->Point[0].tv);

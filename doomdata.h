@@ -243,6 +243,7 @@ typedef struct
 typedef struct DW_Polygon
    {
     DW_Vertex3Dv       Point[4];
+    unsigned int       VAO;
     int                Position;
     int                LineDef;
     int                SideDef;

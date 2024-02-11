@@ -11,10 +11,12 @@ Renderer renderer;
 void R_StartRendition()
 {
 	R2D_StartRendition();
+	R3D_StartRendition();
 }
 
 void R_StopRendition()
 {
+	R3D_StopRendition();
 	R2D_StopRendition();
 	SDL_GL_SwapWindow(pWindow);
 }
