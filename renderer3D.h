@@ -21,15 +21,12 @@ typedef struct s_R3DStorage
 }R3DStorage;
 
 void InitRenderer3D();
-void R3D_Set3D(void);
-void R3D_SetColor(float r, float g, float b);
 void R3D_StartRendition(void);
 void R3D_StopRendition(void);
 void R3D_UpdateCamera(vec3* position, vec3 viewangle);
-void R3D_RenderEntities(void);
-void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex);
-void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex);
-void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex);
-void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex);
+void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light);
+void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light);
+void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light);
+void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light);
 
 #endif

@@ -1808,7 +1808,7 @@ void GL_RenderPlayerView(player_t* player)
 
                     //R3D_SetMaterial(&TexList[translate[texturetranslation[texnumb]]].glTexture);
                     
-                    R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture);
+                    R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture, lightv);
 
                     /*glBegin(GL_QUADS);
                     glTexCoord2f(TempPoly->Point[0].tu, TempPoly->Point[0].tv);
@@ -1914,7 +1914,7 @@ void GL_RenderPlayerView(player_t* player)
                         //glVertex3fv(psubsector->Point[i].v);
                     }
 
-                    R3D_RenderFloor(psubsector, &TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
+                    R3D_RenderFloor(psubsector, &TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture, lightv);
 
                     //glEnd();
 
@@ -1979,7 +1979,7 @@ void GL_RenderPlayerView(player_t* player)
                         //glVertex3fv(psubsector->Point[i].v);
                     }
 
-                    R3D_RenderCeil(psubsector, &TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture);
+                    R3D_RenderCeil(psubsector, &TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture, lightv);
 
                     //glEnd();
 

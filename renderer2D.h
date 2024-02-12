@@ -22,6 +22,7 @@ typedef struct s_twodcommand
 	unsigned int glTexture;
 	vec3 position;
 	vec2 size;
+	float light;
 	struct twodcommand* next;
 }twodcommand;
 
@@ -32,5 +33,6 @@ void R2D_StopRendition(void);
 void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex);
 void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name);
 void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color);
+void R2D_DrawLightSprite(vec3* position, vec2 size, GLTexData* tex, float light);		// sprite influenced by sector lighting
 #endif
 

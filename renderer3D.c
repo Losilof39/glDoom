@@ -46,7 +46,7 @@ void R3D_UpdateCamera(vec3* position, vec3 viewangle)
     Shader_Unbind();
 }
 
-void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex)
+void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 {
 	unsigned int indices[6] = {0, 1, 2, 2, 3, 0};
 
@@ -74,6 +74,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex)
 
     Shader_Use(s_threeData.shader);
     Shader_SetInt(s_threeData.shader, "tex", 0);
+    Shader_SetFloat(s_threeData.shader, "light", light);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *tex);
@@ -87,7 +88,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex)
     Shader_Unbind();
 }
 
-void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex)
+void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 {
     if (ceil->ceilVAO < 0)
     {
@@ -113,6 +114,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex)
 
     Shader_Use(s_threeData.shader);
     Shader_SetInt(s_threeData.shader, "tex", 0);
+    Shader_SetFloat(s_threeData.shader, "light", light);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *tex);
@@ -126,7 +128,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex)
     Shader_Unbind();
 }
 
-void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex)
+void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 {
     if (floor->floorVAO < 0)
     {
@@ -152,6 +154,7 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex)
 
     Shader_Use(s_threeData.shader);
     Shader_SetInt(s_threeData.shader, "tex", 0);
+    Shader_SetFloat(s_threeData.shader, "light", light);
 
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *tex);
@@ -163,4 +166,9 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex)
     glBindVertexArray(0);
     glBindTexture(GL_TEXTURE_2D, 0);
     Shader_Unbind();
+}
+
+void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light)
+{
+
 }

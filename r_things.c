@@ -1099,7 +1099,7 @@ void GL_DrawPSprite (pspdef_t* psp, int sptype, int iLight)
         vec3 pos = { sx, sy, 0 };
         vec2 size = { SprData[lump].Width, SprData[lump].Height };
 
-        R2D_DrawSprite(pos, size, &SprData[lump].TexName);
+        R2D_DrawLightSprite(pos, size, &SprData[lump].TexName, fLight);
 
 ////        if (((SprData[lump].Translucent != 255) && (sptype == 1)) || (invisible == true))
 ////           {

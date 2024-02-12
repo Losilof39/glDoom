@@ -84,6 +84,7 @@ void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 	glm_vec3_copy(size, &newNode->size);
 
 	newNode->glTexture = tex->TexName;
+	newNode->light = -1;
 
 	newNode->next = NULL;
 }
@@ -112,6 +113,7 @@ void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name)
 	glm_vec3_copy(size, &newNode->size);
 
 	newNode->glTexture = tex.TexName;
+	newNode->light = -1;
 
 	newNode->next = NULL;
 }
@@ -140,6 +142,32 @@ void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color)
 	Shader_Unbind();*/
 }
 
+void R2D_DrawLightSprite(vec3* position, vec2 size, GLTexData* tex, float light)
+{
+	twodcommand* newNode = (twodcommand*)malloc(sizeof(twodcommand));
+
+	if (head_command == NULL) {
+		// If the list is empty, set the new node as the head
+		head_command = newNode;
+	}
+	else {
+		// Traverse to the end of the list and append the new node
+		twodcommand* current = head_command;
+		while (current->next != NULL) {
+			current = current->next;
+		}
+		current->next = newNode;
+	}
+
+	glm_vec3_copy(position, &newNode->position);
+	glm_vec3_copy(size, &newNode->size);
+
+	newNode->glTexture = tex->TexName;
+	newNode->light = light;
+
+	newNode->next = NULL;
+}
+
 void R2D_StartRendition(void)
 {
 }
@@ -165,6 +193,7 @@ void R2D_StopRendition(void)
 
 		Shader_Use(s_Data.spriteShader);
 		Shader_SetMat4(s_Data.spriteShader, "u_Model", model);
+		Shader_SetFloat(s_Data.spriteShader, "light", cur->light);
 
 		glActiveTexture(GL_TEXTURE0);
 		glBindTexture(GL_TEXTURE_2D, cur->glTexture);
