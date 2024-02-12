@@ -210,7 +210,6 @@ dboolean StartUpOpenGL()
     R_InitRenderer();
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
-    glDisable(GL_DEPTH_TEST);
 
     glmode = gl_2d;
 
