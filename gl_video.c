@@ -31,8 +31,7 @@
 #include "gl_video.h"
 #include "sdl_input.h"
 #include "sdl_video.h"
-#include "renderer2D.h"
-#include "renderer3D.h"
+#include "renderer.h"
 
 #include "doomstat.h"
 #include "i_system.h"
@@ -208,8 +207,7 @@ dboolean StartUpOpenGL()
         I_Quit();
     }
 
-    InitRenderer2D();
-    InitRenderer3D();
+    R_InitRenderer();
 
     glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
     glDisable(GL_DEPTH_TEST);

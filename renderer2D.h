@@ -25,17 +25,6 @@ typedef struct s_twodcommand
 	struct s_twodcommand* next;
 }twodcommand;
 
-typedef struct s_RenderInfo
-{
-	unsigned int virtualWidth, virtualHeight;
-	float virtualRatio;							// i.e. aspect ratio of virtual screen size
-}RenderInfo;
-
-typedef struct s_FrameBuffer
-{
-	GLuint fb, rbo, texColorBuffer;
-}FrameBuffer;
-
 void InitRenderer2D();
 
 void R2D_StartRendition(void);
