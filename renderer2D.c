@@ -69,6 +69,11 @@ void InitRenderer2D()
 		1.0f,
 		s_Data.camOrtho);
 
+	Shader_Use(s_Data.spriteShader);
+	Shader_SetMat4(s_Data.spriteShader, "u_Ortho", s_Data.camOrtho);
+	Shader_SetInt(s_Data.spriteShader, "image", 0);
+	Shader_Unbind();
+
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
@@ -179,8 +184,6 @@ void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 
 	Shader_Use(s_Data.spriteShader);
 	Shader_SetMat4(s_Data.spriteShader, "u_Model", model);
-	Shader_SetMat4(s_Data.spriteShader, "u_Ortho", s_Data.camOrtho);
-	Shader_SetInt(s_Data.spriteShader, "image", 0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, tex->TexName);

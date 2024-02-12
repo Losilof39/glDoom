@@ -16,6 +16,13 @@ typedef struct s_R2DStorage
 	mat4 camOrtho;
 }R2DStorage;
 
+// 2D draw command
+typedef struct s_twodcommand
+{
+	int glTexture;
+	int VAO;
+}twodcommand;
+
 typedef struct s_RenderInfo
 {
 	unsigned int virtualWidth, virtualHeight;
