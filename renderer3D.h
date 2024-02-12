@@ -25,7 +25,7 @@ void R3D_Set3D(void);
 void R3D_SetColor(float r, float g, float b);
 void R3D_StartRendition(void);
 void R3D_StopRendition(void);
-void R3D_UpdateCamera(vec3* position, vec3* dir);
+void R3D_UpdateCamera(vec3* position, float angle);
 void R3D_RenderEntities(void);
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex);
 void R3D_RenderFlat(DW_FloorCeil* flat);

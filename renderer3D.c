@@ -24,10 +24,14 @@ void R3D_StopRendition(void)
 {
 }
 
-void R3D_UpdateCamera(vec3* position, vec3* dir)
+void R3D_UpdateCamera(vec3* position, float angle)
 {
     vec3 up = { 0.0f, 1.0f, 0.0f };
     vec3 center;
+    vec3 dir = { 0.0f, 0.0f, -1.0f };
+    vec3 y_axis = { 0.0f, 1.0f, 0.0f };
+
+    glm_vec3_rotate(dir, glm_rad(angle), y_axis);
 
     glm_vec3_add(position, dir, center);
     glm_lookat(position, center, up, s_threeData.cam.view);

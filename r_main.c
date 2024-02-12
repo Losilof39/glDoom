@@ -1709,9 +1709,7 @@ void GL_RenderPlayerView(player_t* player)
 
     //glPushMatrix();
 
-    fview = (float)(viewangle*pfactor);
-
-    yangle = 90.0f + ((fview / -16384.0f) * 90.0f);
+    yangle = (float)(viewangle >> ANGLETOFINESHIFT) * 360.0f / FINEANGLES - 90.0f;
     if (yangle >= 180.0f)
         yangle -=360.0f;
     else
@@ -1723,21 +1721,17 @@ void GL_RenderPlayerView(player_t* player)
     ViewOrient[1] = fYAngle;
     ViewOrient[2] = 0.0f;
 
-    ViewPosition[0] = player->mo->x * nfactor;
-    ViewPosition[1] = player->viewz * nfactor;
-    ViewPosition[2] = player->mo->y * pfactor;
+    ViewPosition[0] = FIXED_TO_FLOAT(player->mo->x);
+    ViewPosition[1] = FIXED_TO_FLOAT(player->viewz);
+    ViewPosition[2] = -FIXED_TO_FLOAT(player->mo->y);
 
     R_AlignFrustum(ViewPosition, ViewOrient);
-
-    dir[0] = vpn[0];
-    dir[1] = vpn[1];
-    dir[2] = -vpn[2];
 
     pos[0] = FIXED_TO_FLOAT(player->mo->x);
     pos[1] = FIXED_TO_FLOAT(player->viewz);
     pos[2] = -FIXED_TO_FLOAT(player->mo->y);
 
-    R3D_UpdateCamera(pos, dir);
+    R3D_UpdateCamera(pos, yangle);
 
     R_BuildRenderQueue();
 
