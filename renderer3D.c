@@ -10,7 +10,7 @@ R3DStorage s_threeData;
 void InitRenderer3D()
 {
 	s_threeData.shader = Shader_Create("wall", "shader_files/wall.vs", "shader_files/wall.ps");
-	glm_perspective(glm_rad(video.fovy), (float)s_renderinfo.virtualWidth / (float)s_renderinfo.virtualHeight, 0.1f, 1000.0f, s_threeData.cam.projection);
+	glm_perspective(glm_rad(video.fovy), (float)video.width / (float)video.height, 0.1f, 5000.0f, s_threeData.cam.projection);
     Shader_Use(s_threeData.shader);
     Shader_SetMat4(s_threeData.shader, "proj", s_threeData.cam.projection);
     Shader_Unbind();
