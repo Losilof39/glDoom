@@ -1731,7 +1731,11 @@ void GL_RenderPlayerView(player_t* player)
     pos[1] = FIXED_TO_FLOAT(player->viewz);
     pos[2] = -FIXED_TO_FLOAT(player->mo->y);
 
-    R3D_UpdateCamera(pos, yangle);
+    dir[0] = ViewOrient[0];
+    dir[1] = ViewOrient[1];
+    dir[2] = ViewOrient[2];
+
+    R3D_UpdateCamera(pos, dir);
 
     R_BuildRenderQueue();
 
