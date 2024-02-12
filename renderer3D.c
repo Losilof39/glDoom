@@ -71,8 +71,6 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex)
 
     Shader_Use(s_threeData.shader);
     Shader_SetInt(s_threeData.shader, "tex", 0);
-    Shader_SetMat4(s_threeData.shader, "proj", s_threeData.cam.projection);
-    Shader_SetMat4(s_threeData.shader, "view", s_threeData.cam.view);
     
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, *tex);
