@@ -2831,6 +2831,8 @@ void CalcTexCoords()
                 psubsector->Point[p].tu = ((float)(psubsector->Point[p].v[0] - SectorBBox[sector].left)/xGrid)+SectorX;
                 psubsector->Point[p].tv = ((float)(psubsector->Point[p].v[2] - SectorBBox[sector].bottom)/yGrid)+SectorY;
             }
+            psubsector->ceilVAO = -1;
+            psubsector->floorVAO = -1;
         }
 
        }

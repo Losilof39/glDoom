@@ -86,3 +86,81 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex)
     glBindTexture(GL_TEXTURE_2D, 0);
     Shader_Unbind();
 }
+
+void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex)
+{
+    if (ceil->ceilVAO < 0)
+    {
+        unsigned int VBO;
+
+        glGenVertexArrays(1, &ceil->ceilVAO);
+        glGenBuffers(1, &VBO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(DW_Vertex3Dv) * ceil->PCount, ceil->Point, GL_DYNAMIC_DRAW);
+
+        glBindVertexArray(ceil->ceilVAO);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(DW_Vertex3Dv), (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(DW_Vertex3Dv), (void*)(3 * sizeof(float)));
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    Shader_Use(s_threeData.shader);
+    Shader_SetInt(s_threeData.shader, "tex", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, *tex);
+
+    glBindVertexArray(ceil->ceilVAO);
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, ceil->PCount);
+
+    glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    Shader_Unbind();
+}
+
+void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex)
+{
+    if (floor->floorVAO < 0)
+    {
+        unsigned int VBO;
+
+        glGenVertexArrays(1, &floor->floorVAO);
+        glGenBuffers(1, &VBO);
+
+        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(DW_Vertex3Dv) * floor->PCount, floor->Point, GL_DYNAMIC_DRAW);
+
+        glBindVertexArray(floor->floorVAO);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, sizeof(DW_Vertex3Dv), (void*)0);
+
+        glEnableVertexAttribArray(1);
+        glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, sizeof(DW_Vertex3Dv), (void*)(3 * sizeof(float)));
+
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+        glBindVertexArray(0);
+    }
+
+    Shader_Use(s_threeData.shader);
+    Shader_SetInt(s_threeData.shader, "tex", 0);
+
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, *tex);
+
+    glBindVertexArray(floor->floorVAO);
+
+    glDrawArrays(GL_TRIANGLE_FAN, 0, floor->PCount);
+
+    glBindVertexArray(0);
+    glBindTexture(GL_TEXTURE_2D, 0);
+    Shader_Unbind();
+}

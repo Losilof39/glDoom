@@ -260,6 +260,7 @@ typedef struct DW_Polygon
 typedef struct DW_FloorCeil
    {
     int                  PCount;
+    int                  ceilVAO, floorVAO;
     DW_Vertex3Dv        *Point;
     //int                  Texture[6];
     //float                Lighting[4];

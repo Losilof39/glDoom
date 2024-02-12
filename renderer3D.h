@@ -28,7 +28,8 @@ void R3D_StopRendition(void);
 void R3D_UpdateCamera(vec3* position, vec3 viewangle);
 void R3D_RenderEntities(void);
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex);
-void R3D_RenderFlat(DW_FloorCeil* flat);
+void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex);
+void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex);
 void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex);
 
 #endif
