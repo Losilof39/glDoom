@@ -8,6 +8,7 @@
 R2DStorage s_Data;
 FrameBuffer s_framebuffer;
 RenderInfo s_renderinfo;
+twodcommand* draw_command;
 extern video_t video;
 
 void InitRenderer2D()
@@ -52,6 +53,7 @@ void InitRenderer2D()
 	glBindBuffer(GL_ARRAY_BUFFER, 0);
 	glBindVertexArray(0);
 
+	draw_command = (twodcommand*)malloc(sizeof(twodcommand));
 
 	s_Data.flatColorShader = Shader_Create("flatcolor", "shader_files/flatcolor.vs", "shader_files/flatcolor.ps");
 	s_Data.spriteShader = Shader_Create("sprite", "shader_files/sprite.vs", "shader_files/sprite.ps");
@@ -72,6 +74,10 @@ void InitRenderer2D()
 	Shader_Use(s_Data.spriteShader);
 	Shader_SetMat4(s_Data.spriteShader, "u_Ortho", s_Data.camOrtho);
 	Shader_SetInt(s_Data.spriteShader, "image", 0);
+	Shader_Unbind();
+
+	Shader_Use(s_Data.flatColorShader);
+	Shader_SetMat4(s_Data.flatColorShader, "u_Ortho", s_Data.camOrtho);
 	Shader_Unbind();
 
 	glEnable(GL_BLEND);
@@ -213,8 +219,6 @@ void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name)
 
 	Shader_Use(s_Data.spriteShader);
 	Shader_SetMat4(s_Data.spriteShader, "u_Model", model);
-	Shader_SetMat4(s_Data.spriteShader, "u_Ortho", s_Data.camOrtho);
-	Shader_SetInt(s_Data.spriteShader, "image", 0);
 
 	glActiveTexture(GL_TEXTURE0);
 	glBindTexture(GL_TEXTURE_2D, tex.TexName);
@@ -242,7 +246,6 @@ void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color)
 	Shader_Use(s_Data.flatColorShader);
 	Shader_SetVec3(s_Data.flatColorShader, "u_Color", color);
 	Shader_SetMat4(s_Data.flatColorShader, "u_Model", model);
-	Shader_SetMat4(s_Data.flatColorShader, "u_Ortho", s_Data.camOrtho);
 
 	glBindVertexArray(s_Data.VAO);
 	glDrawArrays(GL_TRIANGLES, 0, 6);

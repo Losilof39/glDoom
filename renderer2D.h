@@ -19,8 +19,10 @@ typedef struct s_R2DStorage
 // 2D draw command
 typedef struct s_twodcommand
 {
-	int glTexture;
-	int VAO;
+	unsigned int glTexture;
+	vec3 pos;
+	vec2 size;
+	struct s_twodcommand* next;
 }twodcommand;
 
 typedef struct s_RenderInfo
