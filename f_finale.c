@@ -52,6 +52,8 @@ rcsid[] = "$Id: f_finale.c,v 1.5 1997/02/03 21:26:34 b1 Exp $";
 #include "gl_texture.h"
 #include "sys_sdl.h"
 
+#include "renderer2D.h"
+
 void GL_DrawFullScreen(GLTexData *Image);
 void GL_DrawPatch(GLTexData *Tex, float x, float y);
 
@@ -358,10 +360,12 @@ extern	patch_t *hu_font[HU_FONTSIZE];
 // This will take a flat ONLY
 void GL_TileBackground(DW_TexList *tex)
    {
-    float   rtc, ttc;
+    /*float   rtc, ttc;
     
     rtc = 320.0f/64.0f;
-    ttc = 240.0f/64.0f;
+    ttc = 240.0f/64.0f;*/
+    vec3 pos = { 0.0f };
+    vec2 size = { SCREENWIDTH,  SCREENHEIGHT };
 
     /*glEnable(GL_TEXTURE_2D);
 
@@ -378,6 +382,9 @@ void GL_TileBackground(DW_TexList *tex)
     glEnd();
 
     glDisable(GL_TEXTURE_2D);*/
+
+    //R2D_DrawSprite(pos, size, &tex->glTexture);
+
    }
 
 void GL_F_TextWrite (void)
@@ -388,7 +395,9 @@ void GL_F_TextWrite (void)
     char*	ch;
     int		c;
     float		cx, cy;
-    float   Left, Bottom, Top, Right;
+    //float   Left, Bottom, Top, Right;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     GL_TileBackground( glFinaleFlat );
 
@@ -434,11 +443,14 @@ void GL_F_TextWrite (void)
         if (cx+GLHudFont[c].Width > SCREENWIDTH)
             break;
 
-        Top = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLHudFont[c].Height*1.2f);
+        pos[0] = cx;
+        pos[1] = (cy - GLHudFont[c].TopOff) - 3;
 
-        Left = (-160.0f+cx);
-        Right = Left + GLHudFont[c].Width;
+        //Top = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
+        //Bottom = Top-(GLHudFont[c].Height*1.2f);
+
+        //Left = (-160.0f+cx);
+        //Right = Left + GLHudFont[c].Width;
 
         /*glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
         glBegin(GL_QUADS);
@@ -451,6 +463,8 @@ void GL_F_TextWrite (void)
           glTexCoord2f( GLHudFont[c].XDisp, 1.0f);
           glVertex3f( Right, Top, SetBack);
         glEnd();*/
+
+        R2D_DrawSprite(pos, size, &GLHudFont[c]);
 
         cx += GLHudFont[c].Width;
        }

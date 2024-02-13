@@ -55,6 +55,7 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
 #include "doomlib.h"
 #include "mathlib.h"
+#include "renderer3D.h"
 
 #include <malloc.h>
 
@@ -615,6 +616,7 @@ P_SetupLevel
     // Make sure all sounds are stopped before Z_FreeTags.
     S_Start();			
 
+    R3D_DestroyRenderObjects();
     
 #if 0 // UNUSED
     if (debugfile)

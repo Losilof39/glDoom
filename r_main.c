@@ -87,6 +87,7 @@ fixed_t			viewy;
 fixed_t			viewz;
 
 angle_t			viewangle;
+angle_t         viewpitch;
 
 camera_t        camera;
 float           langle, rangle;
@@ -1682,8 +1683,6 @@ void R_BuildRenderQueue()
             if (!inside)
                 DrawSide[TempPoly->SideDef] = ds_nodraw;
 
-            R3D_RecalcWall(TempPoly);
-
             TempPoly = TempPoly->Next;
         }
     }
@@ -1810,7 +1809,6 @@ void GL_RenderPlayerView(player_t* player)
 
                     //R3D_SetMaterial(&TexList[translate[texturetranslation[texnumb]]].glTexture);
                     
-                    R3D_RecalcWall(TempPoly);
                     R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture, lightv);
 
                     /*glBegin(GL_QUADS);
@@ -1917,7 +1915,7 @@ void GL_RenderPlayerView(player_t* player)
                         //glVertex3fv(psubsector->Point[i].v);
                     }
 
-                    R3D_RecalcFloor(psubsector);
+                    
                     R3D_RenderFloor(psubsector, &TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture, lightv);
 
                     //glEnd();
@@ -1983,7 +1981,6 @@ void GL_RenderPlayerView(player_t* player)
                         //glVertex3fv(psubsector->Point[i].v);
                     }
 
-                    R3D_RecalcCeil(psubsector);
                     R3D_RenderCeil(psubsector, &TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture, lightv);
 
                     //glEnd();

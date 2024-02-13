@@ -20,6 +20,15 @@ typedef struct s_R3DStorage
 	Camera cam;
 }R3DStorage;
 
+// 3D draw command
+typedef struct s_threedcommand
+{
+	DW_Polygon* wall;
+	DW_FloorCeil* flat;
+	float light;
+	struct threedcommand* next;
+}threedcommand;
+
 void InitRenderer3D();
 void R3D_StartRendition(void);
 void R3D_StopRendition(void);
@@ -31,5 +40,6 @@ void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light);
 void R3D_RecalcWall(DW_Polygon* wall);
 void R3D_RecalcCeil(DW_FloorCeil* ceil);
 void R3D_RecalcFloor(DW_FloorCeil* floor);
+void R3D_DestroyRenderObjects(void);
 
 #endif
