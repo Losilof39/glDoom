@@ -1408,10 +1408,7 @@ void GL_DrawThings(void)
     float           sx, sy, sz, Orient, x1, x2, tLight;
     float           fLight, fTop, fBottom, fOffset;
 	
-    Orient =  360.0f - (camera.oy);
-    Orient +=  180.0f;
-    if (Orient > 360.0f)
-       Orient -= 360.0f;
+    Orient = (float)(viewangle >> ANGLETOFINESHIFT) * 360.0f / FINEANGLES - 90.0f;
 
     if (vissprite_p > vissprites)
        {
