@@ -28,5 +28,8 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light);
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light);
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light);
 void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light);
+void R3D_RecalcWall(DW_Polygon* wall);
+void R3D_RecalcCeil(DW_FloorCeil* ceil);
+void R3D_RecalcFloor(DW_FloorCeil* floor);
 
 #endif

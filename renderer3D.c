@@ -52,13 +52,11 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 
     if (wall->VAO < 0)
     {
-        unsigned int VBO;
-
         glGenVertexArrays(1, &wall->VAO);
-        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &wall->VBO);
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(wall->Point), wall->Point, GL_STATIC_DRAW);
+        glBindBuffer(GL_ARRAY_BUFFER, wall->VBO);
+        glBufferData(GL_ARRAY_BUFFER, sizeof(wall->Point), wall->Point, GL_DYNAMIC_DRAW);
 
         glBindVertexArray(wall->VAO);
 
@@ -92,12 +90,10 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 {
     if (ceil->ceilVAO < 0)
     {
-        unsigned int VBO;
-
         glGenVertexArrays(1, &ceil->ceilVAO);
-        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &ceil->ceilVBO);
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, ceil->ceilVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(DW_Vertex3Dv) * ceil->PCount, ceil->Point, GL_DYNAMIC_DRAW);
 
         glBindVertexArray(ceil->ceilVAO);
@@ -132,12 +128,10 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 {
     if (floor->floorVAO < 0)
     {
-        unsigned int VBO;
-
         glGenVertexArrays(1, &floor->floorVAO);
-        glGenBuffers(1, &VBO);
+        glGenBuffers(1, &floor->floorVBO);
 
-        glBindBuffer(GL_ARRAY_BUFFER, VBO);
+        glBindBuffer(GL_ARRAY_BUFFER, floor->floorVBO);
         glBufferData(GL_ARRAY_BUFFER, sizeof(DW_Vertex3Dv) * floor->PCount, floor->Point, GL_DYNAMIC_DRAW);
 
         glBindVertexArray(floor->floorVAO);
@@ -171,4 +165,34 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light)
 {
 
+}
+
+void R3D_RecalcWall(DW_Polygon* wall)
+{
+    if (wall->VAO >= 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, wall->VBO);
+        glBufferSubData(GL_ARRAY_BUFFER, (void*)0, sizeof(wall->Point), wall->Point);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+}
+
+void R3D_RecalcCeil(DW_FloorCeil* ceil)
+{
+    if (ceil->ceilVAO >= 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, ceil->ceilVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, (void*)0, sizeof(DW_Vertex3Dv) * ceil->PCount, ceil->Point);
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
+    }
+}
+
+void R3D_RecalcFloor(DW_FloorCeil* floor)
+{
+    if (floor->floorVAO >= 0)
+    {
+        glBindBuffer(GL_ARRAY_BUFFER, floor->floorVBO);
+        glBufferSubData(GL_ARRAY_BUFFER, (void*)0, sizeof(DW_Vertex3Dv) * floor->PCount, floor->Point);
+        glBindBuffer(GL_ARRAY_BUFFER, floor->floorVBO);
+    }
 }

@@ -243,7 +243,7 @@ typedef struct
 typedef struct DW_Polygon
    {
     DW_Vertex3Dv       Point[4];
-    int       VAO;
+    int                VAO, VBO;        // vertex and array buffers
     int                Position;
     int                LineDef;
     int                SideDef;
@@ -261,6 +261,7 @@ typedef struct DW_FloorCeil
    {
     int                  PCount;
     int                  ceilVAO, floorVAO;
+    int                  ceilVBO, floorVBO;
     DW_Vertex3Dv        *Point;
     //int                  Texture[6];
     //float                Lighting[4];
