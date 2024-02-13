@@ -1708,8 +1708,6 @@ void GL_RenderPlayerView(player_t* player)
     sector_t*       psector;
     sector_plane_t* pplane;
 
-    //glPushMatrix();
-
     yangle = (float)(viewangle >> ANGLETOFINESHIFT) * 360.0f / FINEANGLES - 90.0f;
     if (yangle >= 180.0f)
         yangle -=360.0f;
@@ -1740,13 +1738,7 @@ void GL_RenderPlayerView(player_t* player)
 
     R_BuildRenderQueue();
 
-    //glEnable(GL_TEXTURE_2D);
-
-    //glRotatef(fXAngle, 1.0f, 0.0f, 0.0f );
-
     GL_DrawSky(yangle);
-
-    //glRotatef(yangle, 0.0f, 1.0f, 0.0f );
 
     /*glEnable(GL_CULL_FACE);
     glFrontFace(GL_CCW);
@@ -1764,8 +1756,6 @@ void GL_RenderPlayerView(player_t* player)
         glFogfv(GL_FOG_COLOR, fogcolor);*/
        }
 
-    //glTranslatef((GLfloat)ViewPosition[0], (GLfloat)ViewPosition[1], (GLfloat)ViewPosition[2]);
-
     for (wall = 0; wall < sorted_walls_count; wall++)
     {
         TempPoly = sorted_walls[wall];
@@ -1781,10 +1771,6 @@ void GL_RenderPlayerView(player_t* player)
                     if (WhiteBias == true)
                         lightv = 1.0f;
 
-                    //glColor4f(lightv, lightv, lightv, 1.0f);
-                    //if ((lightv >= foglight) && (gl_fog == 1))
-                        //glDisable(GL_FOG);
-
                     switch (TempPoly->Position)
                     {
                     case DW_LOWER:
@@ -1798,36 +1784,13 @@ void GL_RenderPlayerView(player_t* player)
                         break;
                     }
 
-
-                    //glBindTexture(GL_TEXTURE_2D, TexList[translate[texturetranslation[texnumb]]].glTexture);
-
                     if (TexList[TempPoly->Texture[0]].Transparent == true)
                     {
                         /*glEnable(GL_ALPHA_TEST);
                         glAlphaFunc(GL_GREATER, 0.0f);*/
                     }
-
-                    //R3D_SetMaterial(&TexList[translate[texturetranslation[texnumb]]].glTexture);
                     
                     R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture, lightv);
-
-                    /*glBegin(GL_QUADS);
-                    glTexCoord2f(TempPoly->Point[0].tu, TempPoly->Point[0].tv);
-                    glVertex3fv(TempPoly->Point[0].v);
-                    glTexCoord2f(TempPoly->Point[1].tu, TempPoly->Point[1].tv);
-                    glVertex3fv(TempPoly->Point[1].v);
-                    glTexCoord2f(TempPoly->Point[2].tu, TempPoly->Point[2].tv);
-                    glVertex3fv(TempPoly->Point[2].v);
-                    glTexCoord2f(TempPoly->Point[3].tu, TempPoly->Point[3].tv);
-                    glVertex3fv(TempPoly->Point[3].v);
-                    glEnd();*/
-
-                    //if (TexList[TempPoly->Texture[0]].Transparent == true)
-                        //glDisable(GL_ALPHA_TEST);
-
-
-                    //if ((lightv >= foglight) && (gl_fog == 1))
-                        //glEnable(GL_FOG);
 
                 }
                 else
@@ -1861,16 +1824,6 @@ void GL_RenderPlayerView(player_t* player)
         }
     }
 
-    /*glDisable(GL_CULL_FACE);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
-    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );*/
-
-    //glDisable(GL_CULL_FACE);
-
-    offsetf = (double)gl_poffsetf * div255;
-    offsetu = (double)gl_poffsetu * div255;
-
     for(flat = 0; flat < sorted_flats_count; flat++)
     {
         pplane  = sorted_flats[flat];
@@ -1879,23 +1832,12 @@ void GL_RenderPlayerView(player_t* player)
 
         if (psector->floorheight != psector->ceilingheight)
         {
-            //glPolygonOffset((float)offsetf,(float)offsetu);
 
             if (player->viewz > psector->floorheight)
             {
                 flathigh  = FIXED_TO_FLOAT(psector->floorheight);
                 lightv    = psector->lightlevel;
                 lightv   /= 255.0f;
-
-                /*if ((lightv >= foglight)  && (gl_fog == 1))
-                    glDisable(GL_FOG);*/
-
-                /*if (WhiteBias == true)
-                    glColor4f( 1.0f, 1.0f, 1.0f, 1.0f );
-                else
-                    glColor4f( lightv, lightv, lightv, 1.0f );*/
-       
-                //glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
 
                 for (subsector = 0; subsector < pplane->ss_count; subsector++)
                 {
@@ -1904,48 +1846,14 @@ void GL_RenderPlayerView(player_t* player)
                     if (psector->floorpic == skyflatnum)
                         continue;
 
-                    if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
-                        //glEnable(GL_POLYGON_OFFSET_FILL);
-        
-                    //glBegin(GL_POLYGON);
                     for (i = 0; i < psubsector->PCount; i++)
                     {
-                        //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
                         psubsector->Point[i].v[1] = flathigh;
-                        //glVertex3fv(psubsector->Point[i].v);
                     }
 
                     
                     R3D_RenderFloor(psubsector, &TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture, lightv);
-
-                    //glEnd();
-
-                    //if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
-                    //{
-                    //    /*glDisable(GL_POLYGON_OFFSET_FILL);
-                    //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                    //    glBegin(GL_POLYGON);*/
-
-                    //    /*glDisable(GL_POLYGON_OFFSET_FILL);
-                    //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
-
-                    //    for (i = 0; i < psubsector->PCount; i++)
-                    //    {
-                    //        //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
-                    //        psubsector->Point[i].v[1] = flathigh;
-                    //        //glVertex3fv(psubsector->Point[i].v);
-                    //    }
-
-                    //    R3D_RenderFlat(psubsector, &TexList[ftranslate[flattranslation[psector->floorpic]]].glTexture);
-
-                    //    /*glEnd();
-                    //    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
-                    //    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                    //}
                 }
-
-                /*if ((lightv >= foglight) && (gl_fog == 1))
-                    glEnable(GL_FOG);*/
             }
 
             if (player->viewz < psector->ceilingheight)
@@ -1954,15 +1862,6 @@ void GL_RenderPlayerView(player_t* player)
                 lightv    = psector->lightlevel;
                 lightv   /= 255.0f;
 
-                /*if ((lightv >= foglight) && (gl_fog == 1))
-                    glDisable(GL_FOG);
-
-                if (WhiteBias == true)
-                    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-                else
-                    glColor4f(lightv, lightv, lightv, 1.0f);
-           
-                glBindTexture(GL_TEXTURE_2D, TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture);*/
                 for (subsector = 0; subsector < pplane->ss_count; subsector++)
                 {
                     psubsector = pplane->subsectors[subsector];
@@ -1970,45 +1869,13 @@ void GL_RenderPlayerView(player_t* player)
                     if (psector->ceilingpic == skyflatnum)
                         continue;
 
-                    if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
-                        //glEnable(GL_POLYGON_OFFSET_FILL);
-
-                    //glBegin(GL_POLYGON);
                     for (i = 0; i < psubsector->PCount; i++)
                     {
-                        //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
                         psubsector->Point[i].v[1] = flathigh;
-                        //glVertex3fv(psubsector->Point[i].v);
                     }
 
                     R3D_RenderCeil(psubsector, &TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture, lightv);
-
-                    //glEnd();
-
-                    //if ((gl_poffsetf != 0) && (gl_poffsetu != 0))
-                    //{
-                    //    /*glDisable(GL_POLYGON_OFFSET_FILL);
-                    //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-                    //    glBegin(GL_POLYGON);*/
-                    //    /*glDisable(GL_POLYGON_OFFSET_FILL);
-                    //    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);*/
-                    //    for (i = 0; i < psubsector->PCount; i++)
-                    //    {
-                    //        //glTexCoord2f(psubsector->Point[i].tu, psubsector->Point[i].tv);
-                    //        psubsector->Point[i].v[1] = flathigh;
-                    //        //glVertex3fv(psubsector->Point[i].v);
-                    //    }
-
-                    //    R3D_RenderFlat(psubsector, &TexList[ftranslate[flattranslation[psector->ceilingpic]]].glTexture);
-
-                    //    /*glEnd();
-                    //    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
-                    //    //glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-                    //}
                 }
-
-                /*if ((lightv >= foglight) && (gl_fog == 1))
-                    glEnable(GL_FOG);*/
  
             }
         }
@@ -2021,20 +1888,6 @@ void GL_RenderPlayerView(player_t* player)
        }
 
     GL_DrawThings();
-
-    /*glDisable(GL_TEXTURE_2D);
-    glBindTexture(GL_TEXTURE_2D, 0);
-
-    glDisable(GL_DEPTH_TEST);
-
-    if (gl_fog == 1)
-       {
-        glDisable(GL_FOG);
-       }
-
-    glPopMatrix();
-
-    glPushMatrix();*/
 
     GL_DrawPlayerSprites();
 
@@ -2062,7 +1915,7 @@ void GL_RenderPlayerView(player_t* player)
         glDisable(GL_BLEND);
     }
 
-    glPopMatrix();*/
+    */
 }
 
 /*

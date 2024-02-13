@@ -5,6 +5,14 @@
 
 extern video_t video;
 extern RenderInfo s_renderinfo;
+
+extern sector_plane_t**    sorted_flats;
+extern int                 sorted_flats_count;
+extern DW_Polygon          **sorted_walls;
+extern int                 sorted_walls_count;
+extern sector_plane_t*     planes;
+extern sector_t*           sectors;
+
 threedcommand* head = NULL;
 
 // indices used only for wall rendering
@@ -224,10 +232,6 @@ void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light)
 
 }
 
-void R3D_DestroyRenderObjects(void)
-{
-}
-
 void R3D_StartRendition(void)
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -311,4 +315,68 @@ void R3D_StopRendition(void)
 
     // Set the head to NULL to indicate an empty list
     head = NULL;
+}
+
+void R3D_DestroyRenderObjects(void)
+{
+    DW_Polygon* curWall;
+    DW_FloorCeil* curFlat;
+    sector_t* psector;
+    sector_plane_t* pplane;
+    int sector;
+
+    for (unsigned int wall = 0; wall < sorted_walls_count; wall++)
+    {
+        curWall = sorted_walls[wall];
+
+
+        while(curWall != NULL)
+        {
+            if (curWall->VAO >= 0)
+            {
+                glDeleteVertexArrays(1, &curWall->VAO);
+                glDeleteBuffers(1, &curWall->VBO);
+
+                curWall->VAO = -1;
+                curWall->VBO = -1;
+            }
+
+            curWall = curWall->Next;
+        }
+        
+    }
+
+    for (unsigned int flat = 0; flat < sorted_flats_count; flat++)
+    {
+        pplane = sorted_flats[flat];
+        sector = pplane - planes;
+        psector = sectors + sector;
+
+        for (unsigned int subsector = 0; subsector < pplane->ss_count; subsector++)
+        {
+            curFlat = pplane->subsectors[subsector];
+
+            if (curFlat != NULL)
+            {
+                if (curFlat->ceilVAO >= 0)
+                {
+                    glDeleteVertexArrays(1, &curFlat->ceilVAO);
+                    glDeleteBuffers(1, &curFlat->ceilVBO);
+
+                    curFlat->ceilVAO = -1;
+                    curFlat->ceilVBO = -1;
+                }
+
+                if (curFlat->floorVAO >= 0)
+                {
+                    glDeleteVertexArrays(1, &curFlat->floorVAO);
+                    glDeleteBuffers(1, &curFlat->floorVBO);
+
+                    curFlat->floorVAO = -1;
+                    curFlat->floorVBO = -1;
+                }
+            }
+            
+        }
+    }
 }

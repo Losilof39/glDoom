@@ -181,6 +181,8 @@ void R2D_StopRendition(void)
 
 	cur = head_command;
 
+	Shader_Use(s_Data.spriteShader);
+
 	while (cur != NULL)
 	{
 		glm_mat4_identity(model);
@@ -191,7 +193,6 @@ void R2D_StopRendition(void)
 		glm_translate(translate, cur->position);
 		glm_mat4_mul(translate, scale, model);
 
-		Shader_Use(s_Data.spriteShader);
 		Shader_SetMat4(s_Data.spriteShader, "u_Model", model);
 		Shader_SetFloat(s_Data.spriteShader, "light", cur->light);
 
@@ -203,10 +204,11 @@ void R2D_StopRendition(void)
 
 		glBindVertexArray(0);
 		glBindTexture(GL_TEXTURE_2D, 0);
-		Shader_Unbind();
 
 		cur = cur->next;
 	}
+
+	Shader_Unbind();
 
 	cur = head_command;
 
