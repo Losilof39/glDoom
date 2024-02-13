@@ -1,5 +1,5 @@
 # glDoom Resurrected (again!)
-This repository contains improvements for the glDoom port by Bruce Lewis and by other authors, Including: REDPOWAR, Adam Bilbrough(aka: Gibbon) and André Guilherme(aka: Wolf3s)
+This repository contains improvements for the glDoom port by Bruce Lewis and by other authors, including: REDPOWAR, Adam Bilbrough (Gibbon), André Guilherme (Wolf3s) and Losilof39.
 
 ### Fixes (original from REDPOWAR)
 * new floor/ceiling generation code (similar to code from Doom Legacy port)
@@ -15,8 +15,8 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Cleaned up all Win32 code and added a SDL2 backend
 * Ported to Linux but it's not stable yet
 * Mouse support
-* Audio is rewritten using SDL2 and taken from chocolate doom
-* Now the melting screen works!
+* Audio rewritten using SDL2 from chocolate doom
+* Brand new 2D and 3D renderer using modern OpenGL!
 
 ### Fixes from Wolf3s
 * Added a wrapper for encapsulate underscore newlib functions
@@ -36,22 +36,20 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Clipping issue due to changing fov
 * Fullscreen option not working
 * Resolution option not working
-* Only the legacy renderer works (for now!)
-* Multiple errors when switching to OpenGL core profile
+* New renderer still in prototype
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
 
 1. Remove all unused code and make code more readable
    
-2. Write new OpenGL renderer
-   - Wrap all unsupported OpenGL functions
-   - Add shaders
-   - Precache all vertex data in a pool
-   - Add dynamic lights
-   - Add post-processing effects
+2. OpenGL renderer:
+   -   Render Things
+   -   Draw FX
+   -   Draw intermission
+   -   Add dynamic point lights
      
-3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+4. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
