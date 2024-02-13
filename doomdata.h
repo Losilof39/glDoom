@@ -244,7 +244,7 @@ typedef struct DW_Polygon
    {
     DW_Vertex3Dv       Point[4];
     int                VAO, VBO;        // vertex and array buffers
-    int*               texWall;
+    int*               tex;
     int                Position;
     int                LineDef;
     int                SideDef;

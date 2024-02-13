@@ -459,8 +459,10 @@
     <None Include="shader_files\framebuffer.vs" />
     <None Include="shader_files\sprite.ps" />
     <None Include="shader_files\sprite.vs" />
-    <None Include="shader_files\wall.ps" />
-    <None Include="shader_files\wall.vs" />
+    <None Include="shader_files\polygon.ps" />
+    <None Include="shader_files\polygon.vs" />
+    <None Include="shader_files\thing.ps" />
+    <None Include="shader_files\thing.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />

@@ -563,10 +563,16 @@
     <None Include="shader_files\framebuffer.vs">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader_files\wall.ps">
+    <None Include="shader_files\polygon.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader_files\wall.vs">
+    <None Include="shader_files\polygon.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\thing.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\thing.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

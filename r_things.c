@@ -1408,7 +1408,7 @@ void GL_DrawThings(void)
     float           sx, sy, sz, Orient, x1, x2, tLight;
     float           fLight, fTop, fBottom, fOffset;
 	
-    Orient =  360.0f+(camera.oy*-1.0f);
+    Orient =  360.0f - (camera.oy);
     Orient +=  180.0f;
     if (Orient > 360.0f)
        Orient -= 360.0f;
@@ -1428,10 +1428,10 @@ void GL_DrawThings(void)
             lump = spr->patch;
             if (SprData[lump].TexName != 0)
                {
-                sx = (float)spr->gx * (float)pfactor;
-                sy = (float)spr->gz * (float)pfactor;
+                sx = FIXED_TO_FLOAT(spr->gx);
+                sy = FIXED_TO_FLOAT(spr->gz);
 //    vis->gzt = thing->z + spritetopoffset[lump];
-                sz = 0.0f - ((float)spr->gy * (float)pfactor);
+                sz = -FIXED_TO_FLOAT(spr->gy);
 
                 //glPushMatrix();
                 ////glLoadIdentity();
@@ -1449,6 +1449,7 @@ void GL_DrawThings(void)
                     x1 = SprData[lump].XDisp;
                     x2 = 0.0f;
                    }
+
 
                 /*glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
@@ -1526,6 +1527,9 @@ void GL_DrawThings(void)
                    fOffset = 0.0f;
                 fTop = SprData[lump].Height - fOffset;
                 fBottom = fTop - SprData[lump].Height;
+
+                R3D_RenderThing((vec3){ sx, sy, sz }, &SprData[lump], fLight, Orient);
+
                 //glColor3f( 1.0f, 1.0f, 1.0f );
                 //glBegin(GL_QUADS);
 /*

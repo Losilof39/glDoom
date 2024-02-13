@@ -12,6 +12,8 @@ extern DW_Polygon          **sorted_walls;
 extern int                 sorted_walls_count;
 extern sector_plane_t*     planes;
 extern sector_t*           sectors;
+extern player_t            players[MAXPLAYERS];
+extern int                 displayplayer;
 
 threedcommand* head = NULL;
 
@@ -22,33 +24,65 @@ R3DStorage s_threeData;
 
 void InitRenderer3D()
 {
-	s_threeData.shader = Shader_Create("wall", "shader_files/wall.vs", "shader_files/wall.ps");
+    unsigned int VBO;
+    float vertices[] = {
+        // pos      // tex
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f,
+
+        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f
+    };
+
+    glGenVertexArrays(1, &s_threeData.thingVAO);
+    glGenBuffers(1, &VBO);
+
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glBindVertexArray(s_threeData.thingVAO);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    glBindVertexArray(0);
+
+	s_threeData.shader = Shader_Create("polygon", "shader_files/polygon.vs", "shader_files/polygon.ps");
+    s_threeData.thingShader = Shader_Create("thing", "shader_files/thing.vs", "shader_files/thing.ps");
 	glm_perspective(glm_rad(video.fovy), (float)video.width / (float)video.height, 0.1f, 5000.0f, s_threeData.cam.projection);
+
     Shader_Use(s_threeData.shader);
     Shader_SetMat4(s_threeData.shader, "proj", s_threeData.cam.projection);
+
+    Shader_Use(s_threeData.thingShader);
+    Shader_SetMat4(s_threeData.thingShader, "proj", s_threeData.cam.projection);
+    Shader_SetInt(s_threeData.thingShader, "tex", 0);
+
     Shader_Unbind();
 }
 
 void R3D_UpdateCamera(vec3* position, vec3 viewangle)
 {
-    vec3 up = { 0.0f, 1.0f, 0.0f };
     vec3 center;
     vec3 dir = { 0.0f, 0.0f, -1.0f };
-    vec3 y_axis = { 0.0f, 1.0f, 0.0f };
-    vec3 x_axis = { 1.0f, 0.0f, 0.0f };
 
-    glm_vec3_rotate(dir, glm_rad(viewangle[1]), y_axis);
-    glm_vec3_rotate(dir, glm_rad(viewangle[0]), x_axis);
+    glm_vec3_rotate(dir, glm_rad(viewangle[1]), (vec3) { 0.0f, 1.0f, 0.0f });
+    glm_vec3_rotate(dir, glm_rad(viewangle[0]), (vec3) { 1.0f, 0.0f, 0.0f });
 
     glm_vec3_add(position, dir, center);
-    glm_lookat(position, center, up, s_threeData.cam.view);
+    glm_lookat(position, center, (vec3) { 0.0f, 1.0f, 0.0f }, s_threeData.cam.view);
 
     Shader_Use(s_threeData.shader);
     Shader_SetMat4(s_threeData.shader, "view", s_threeData.cam.view);
+
+    Shader_Use(s_threeData.thingShader);
+    Shader_SetMat4(s_threeData.thingShader, "view", s_threeData.cam.view);
+
     Shader_Unbind();
 }
 
-void R3D_RecalcWall(DW_Polygon* wall)
+void R3D_RecalcPoly(DW_Polygon* wall)
 {
     if (wall->VAO >= 0)
     {
@@ -87,6 +121,9 @@ void R3D_RecalcFloor(DW_FloorCeil* floor)
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 {
     threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
+    mat4 model;
+
+    glm_mat4_identity(model);
 
     if (head == NULL) {
         // If the list is empty, set the new node as the head
@@ -122,11 +159,11 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
         glBindVertexArray(0);
     }
 
-    R3D_RecalcWall(wall);
+    R3D_RecalcPoly(wall);
 
-    wall->texWall = tex;
+    wall->tex = tex;
 
-    newNode->wall = wall;
+    newNode->polygon = wall;
     newNode->light = light;
     newNode->flat = NULL;
 
@@ -174,7 +211,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 
     R3D_RecalcCeil(ceil);
 
-    newNode->wall = NULL;
+    newNode->polygon = NULL;
     newNode->flat = ceil;
     newNode->light = light;
     newNode->next = NULL;
@@ -221,15 +258,50 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 
     floor->texFloor = tex;
 
-    newNode->wall = NULL;
+    newNode->polygon = NULL;
     newNode->flat = floor;
     newNode->light = light;
     newNode->next = NULL;
 }
 
-void R3D_RenderThing(vec3* position, vec2 size, GLTexData* tex, float light)
+void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle)
 {
+    threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
+    mat4 model;
+    vec2 size = { tex->glWidth,  tex->glHeight };
 
+    glm_mat4_identity(model);
+
+    if (head == NULL) {
+        // If the list is empty, set the new node as the head
+        head = newNode;
+    }
+    else {
+        // Traverse to the end of the list and append the new node
+        threedcommand* current = head;
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+
+    // build vao and vbo if not already
+
+    glm_translate(model, pos);
+
+    glm_translate(model, (vec3){ 0.0f, size[1], 0.0f });
+    glm_rotate(model, glm_rad(angle), (vec3) { 0.0f, 1.0f, 0.0f });
+    glm_translate(model, (vec3) { -0.5f * size[0], -size[1], 0.0f });
+
+    glm_scale(model, size);
+
+    newNode->tex = tex->TexName;
+    newNode->light = light;
+    glm_mat4_copy(model, newNode->model);
+    newNode->flat = NULL;
+    newNode->polygon = NULL;
+
+    newNode->next = NULL;
 }
 
 void R3D_StartRendition(void)
@@ -241,6 +313,9 @@ void R3D_StartRendition(void)
 void R3D_StopRendition(void)
 {
     threedcommand* cur, * nextNode;
+    mat4 model;
+
+    glm_mat4_identity(model);
 
     cur = head;
 
@@ -251,15 +326,16 @@ void R3D_StopRendition(void)
     // iterate through all 3D draw commands
     while (cur != NULL)
     {
-        Shader_SetFloat(s_threeData.shader, "light", cur->light);
-
         // it's wall
-        if (cur->wall)
+        if (cur->polygon)
         {
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, *cur->wall->texWall);
+            Shader_Use(s_threeData.shader);
+            Shader_SetFloat(s_threeData.shader, "light", cur->light);
 
-            glBindVertexArray(cur->wall->VAO);
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
+
+            glBindVertexArray(cur->polygon->VAO);
 
             glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
 
@@ -268,8 +344,11 @@ void R3D_StopRendition(void)
         }
 
         // it's a flat, which could contain a floor, a ceiling or both
-        if (cur->flat)
+        else if (cur->flat)
         {
+            Shader_Use(s_threeData.shader);
+            Shader_SetFloat(s_threeData.shader, "light", cur->light);
+
             // it's ceiling
             if (cur->flat->ceilVAO > 0)
             {
@@ -297,6 +376,23 @@ void R3D_StopRendition(void)
                 glBindVertexArray(0);
                 glBindTexture(GL_TEXTURE_2D, 0);
             }
+        }
+        // draw thing / masked
+        else
+        {
+            Shader_Use(s_threeData.thingShader);
+            Shader_SetMat4(s_threeData.thingShader, "model", cur->model);
+            Shader_SetFloat(s_threeData.thingShader, "light", cur->light);
+
+            glActiveTexture(GL_TEXTURE0);
+            glBindTexture(GL_TEXTURE_2D, cur->tex);
+
+            glBindVertexArray(s_threeData.thingVAO);
+
+            glDrawArrays(GL_TRIANGLES, 0, 6);
+
+            glBindVertexArray(0);
+            glBindTexture(GL_TEXTURE_2D, 0);
         }
 
         cur = cur->next;

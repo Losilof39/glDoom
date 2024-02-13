@@ -177,7 +177,7 @@ void R2D_StopRendition(void)
 	glDisable(GL_DEPTH_TEST);
 
 	twodcommand* cur, *nextNode;
-	mat4 model, translate, scale;
+	mat4 model;
 
 	cur = head_command;
 
@@ -186,12 +186,9 @@ void R2D_StopRendition(void)
 	while (cur != NULL)
 	{
 		glm_mat4_identity(model);
-		glm_mat4_identity(translate);
-		glm_mat4_identity(scale);
 
-		glm_scale(scale, cur->size);
-		glm_translate(translate, cur->position);
-		glm_mat4_mul(translate, scale, model);
+		glm_translate(model, cur->position);
+		glm_scale(model, cur->size);
 
 		Shader_SetMat4(s_Data.spriteShader, "u_Model", model);
 		Shader_SetFloat(s_Data.spriteShader, "light", cur->light);

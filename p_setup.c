@@ -3068,7 +3068,7 @@ void BuildThingList()
 //            else
 //                patched = l;
             //lfprintf( "GL Sprite Lump %d\n", firstspritelump+lump);
-            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], true);
+            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], false);
 //            lfprintf( "World Sprite lump %d used - texture %d - height %f, top %f\n", lump, SprData[lump].TexName, SprData[lump].Height, SprData[lump].TopOff);
            }
        }
@@ -3179,7 +3179,7 @@ void WS_Init(void) // Setup Weapon Sprites...
            {
             if (SprData[lump].Translucent != 153)
                 SprData[lump].Translucent = 64;
-            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], true);
+            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], false);
             //lfprintf( "Weapon Sprite lump %d used - texture %d\n", lump, SprData[lump].TexName);
             SprData[lump].Permanent = true;
            }
