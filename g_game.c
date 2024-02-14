@@ -93,7 +93,7 @@ void	G_DoVictory (void);
 void	G_DoWorldDone (void); 
 void	G_DoSaveGame (void); 
  
- 
+extern dboolean advancedemo;
 gameaction_t    gameaction; 
 gamestate_t     gamestate; 
 skill_t         gameskill; 
@@ -2266,7 +2266,8 @@ dboolean G_CheckDemoStatus (void)
 	fastparm = false;
 	nomonsters = false;
 	consoleplayer = 0;
-	D_AdvanceDemo (); 
+    advancedemo = true;
+
 	return true; 
     } 
  
