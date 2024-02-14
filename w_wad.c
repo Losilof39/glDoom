@@ -25,16 +25,9 @@
 static const char
 rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 
-#ifdef NORMALUNIX
 #include <ctype.h>
 #include <sys/types.h>
 #include <string.h>
-#include <unistd.h>
-#include <malloc.h>
-#include <fcntl.h>
-#include <sys/stat.h>
-#include <alloca.h>
-#else
 #include <stdio.h>
 #include <stdlib.h>
 #ifdef _MSC_VER
@@ -42,12 +35,12 @@ rcsid[] = "$Id: w_wad.c,v 1.5 1997/02/03 16:47:57 b1 Exp $";
 #else
 #include <unistd.h>
 #endif
-#include <inttypes.h>
 #include <malloc.h>
-#include <string.h>
-#include <sys/types.h>
-#include <sys/stat.h>
 #include <fcntl.h>
+#include <sys/stat.h>
+#include <inttypes.h>
+#ifdef NORMALUNIX
+#include <alloca.h>
 #endif
 
 #include "doomtype.h"
