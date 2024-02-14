@@ -864,7 +864,7 @@ static dboolean I_SDL_InitSound(dboolean _use_sfx_prefix)
     }
 */
 #if SDL_MAJOR_VERSION == 3
-    if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16SYS, 2, GetSliceSize(), NULL, 0x00000001) < 0)
+    if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16, 2, GetSliceSize(), NULL, 0x00000001) < 0)
 #else
     if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(), NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
 #endif

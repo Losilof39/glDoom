@@ -94,7 +94,7 @@ static dboolean I_SDL_InitMusic(void)
             fprintf(stderr, "Unable to set up sound.\n");
         }
 #if SDL_MAJOR_VERSION == 3
-        else if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16SYS, 2, 1024, NULL, 0x00000001) < 0) /* todo: figure out a replacement of the frequency change */
+        else if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16, 2, 1024, NULL, 0x00000001) < 0) /* todo: figure out a replacement of the frequency change */
 #else
         else if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
 #endif
