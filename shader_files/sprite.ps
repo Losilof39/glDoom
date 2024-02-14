@@ -7,13 +7,18 @@ uniform float light;
 
 void main()
 {   
+    vec4 tex_color = texture(image, TexCoords);
+
+    if(tex_color.a < 0.1)
+        discard;
+
     if(light >= 0)
     {
         vec4 v_light = { light, light, light, 1.0 };
-        color = v_light * texture(image, TexCoords);
+        color = v_light * tex_color;
     }
     else
     {
-        color = texture(image, TexCoords);
+        color = tex_color;
     }
 }  

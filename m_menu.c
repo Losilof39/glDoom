@@ -1531,11 +1531,10 @@ void M_DrawReadThis1(void)
 void GL_DrawFullScreen(GLTexData *Image)
    {
 
-
-    vec3 pos = { 0.0f, 0.0f};
+    vec3 pos = { 0 };
     vec2 size = { Image->glWidth, Image->glHeight };
 
-    R2D_DrawSprite(&pos, size, Image);
+    R2D_DrawSprite(pos, size, Image);
    }
 
 void GL_DrawReadThis1(void)

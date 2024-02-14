@@ -118,8 +118,7 @@ rcsid[] = "$Id: wi_stuff.c,v 1.7 1997/02/03 22:45:13 b1 Exp $";
 #define DM_VICTIMSX    		5
 #define DM_VICTIMSY		50
 
-
-
+void GL_DrawFullScreen(GLTexData* Image);
 
 typedef enum
 {
@@ -420,7 +419,7 @@ GLTexData  YouAreHere[2], Splat, **AnimTex[3];
 GLTexData  gl_p[MAXPLAYERS], gl_bp[MAXPLAYERS];
 
 // These are full screen images : treat differently (two part textures [256 & 64])
-GLTexData  Interpic[2], GameMap[3][2];
+GLTexData  Interpic[2], GameMap[3];
 
 void GL_MakeScreenTexture(patch_t *, GLTexData *);
 
@@ -453,96 +452,38 @@ extern float SetBack;
 
 void GL_DrawPatch(GLTexData *Tex, float x, float y)
    {
-    //float       Left, Bottom, Right, Top;
     vec3 pos = { x, y, 0.0f };
     vec2 size = { Tex->Width, Tex->Height  };
 
-    //Left = -160.0f+x;
-    //Right = Left+(Tex->Width*Scale);
-    //Top = 120.0f-(y*1.2f);
-    //Bottom = Top-((Tex->Height*Scale)*1.2f);
-
     R2D_DrawSprite(pos, size, Tex);
-
-    // draw animation frame
-    /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f( 0.0f, 1.0f);
-       glVertex3f( Left, Top, SetBack);
-       glTexCoord2f( 0.0f, Tex->YDisp);
-       glVertex3f( Left, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, Tex->YDisp);
-       glVertex3f( Right, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, 1.0f);
-       glVertex3f( Right, Top, SetBack);
-    glEnd();
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);*/
    }
 
 // Draws "<Levelname> Finished!"
 void GL_WI_drawLF(void)
    {
-    float   Left, Bottom, Right, Top;
-    GLTexData *Tex;
+    GLTexData Tex;
 
-    Tex = &LevelNames[wbs->epsd][wbs->last];
-    
-    Left = 0.0f-(Tex->Width/2.0f);
-    Right = Left+Tex->Width;
-    Top = 120.0f-(2.0f*1.2f);
-    Bottom = Top-(Tex->Height*1.2f);
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
-    //glEnable(GL_TEXTURE_2D);
-    //glEnable(GL_ALPHA_TEST);
-    //glAlphaFunc(GL_GREATER, 0.0f);
-    //glEnable(GL_BLEND);
-    //if (gl_premalpha)
-    //   {
-    //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    //   }
-    //else
-    //   {
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //   }
+    Tex = LevelNames[wbs->epsd][wbs->last];
 
-    //// draw <LevelName> 
-    //glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    //glBegin(GL_QUADS);
-    //   glTexCoord2f( 0.0f, 1.0f);
-    //   glVertex3f( Left, Top, SetBack);
-    //   glTexCoord2f( 0.0f, Tex->YDisp);
-    //   glVertex3f( Left, Bottom, SetBack);
-    //   glTexCoord2f( Tex->XDisp, Tex->YDisp);
-    //   glVertex3f( Right, Bottom, SetBack);
-    //   glTexCoord2f( Tex->XDisp, 1.0f);
-    //   glVertex3f( Right, Top, SetBack);
-    //glEnd();
+    pos[0] = (float)SCREENWIDTH / 2.0f - Tex.glWidth / 2.0f;
+    pos[1] = 2.0f;
 
-    Top -= (5*(Tex->Height*1.2f))/4;
+    size[0] = Tex.glWidth;
+    size[1] = Tex.glHeight;
 
-    Tex = &Finished;
-    
-    Left = 0.0f-(Tex->Width/2.0f);
-    Right = Left+Tex->Width;
-    Bottom = Top-(Tex->Height*1.2f);
+    // draw <LevelName> 
+    R2D_DrawSprite(pos, size, &Tex);
+
+    Tex = Finished;
+
+    pos[1] += 5 * (Tex.glHeight) / 4;
 
     // draw "Finished!"
-    /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f( 0.0f, 1.0f);
-       glVertex3f( Left, Top, SetBack);
-       glTexCoord2f( 0.0f, Tex->YDisp);
-       glVertex3f( Left, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, Tex->YDisp);
-       glVertex3f( Right, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, 1.0f);
-       glVertex3f( Right, Top, SetBack);
-    glEnd();
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);*/
+    R2D_DrawSprite(pos, size, &Tex);
+  
    }
 
 // Draws "<Levelname> Finished!"
@@ -566,65 +507,29 @@ void WI_drawLF(void)
 // Draws "Entering <LevelName>"
 void GL_WI_drawEL(void)
    {
-    float   Left, Bottom, Right, Top;
-    GLTexData *Tex;
+    //float   Left, Bottom, Right, Top;
+    GLTexData Tex;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
-    Tex = &Entering;
+    Tex = Entering;
 
-    Left = 0.0f-(Tex->Width/2.0f);
-    Right = Left+Tex->Width;
-    Top = 120.0f-(2.0f*1.2f);
-    Bottom = Top-(Tex->Height*1.2f);
+    pos[0] = (float)SCREENWIDTH / 2.0f - Tex.glWidth / 2.0f;
+    pos[1] = 2.0f;
 
-    //glEnable(GL_TEXTURE_2D);
-    //glEnable(GL_ALPHA_TEST);
-    //glAlphaFunc(GL_GREATER, 0.0f);
-    //glEnable(GL_BLEND);
-    //if (gl_premalpha)
-    //   {
-    //    glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-    //   }
-    //else
-    //   {
-    //    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    //   }
+    size[0] = Tex.glWidth;
+    size[1] = Tex.glHeight;
 
-    //// draw "Entering"
-    //glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    //glBegin(GL_QUADS);
-    //   glTexCoord2f( 0.0f, 1.0f);
-    //   glVertex3f( Left, Top, SetBack);
-    //   glTexCoord2f( 0.0f, Tex->YDisp);
-    //   glVertex3f( Left, Bottom, SetBack);
-    //   glTexCoord2f( Tex->XDisp, Tex->YDisp);
-    //   glVertex3f( Right, Bottom, SetBack);
-    //   glTexCoord2f( Tex->XDisp, 1.0f);
-    //   glVertex3f( Right, Top, SetBack);
-    //glEnd();
+    // draw "Entering"
+    R2D_DrawSprite(pos, size, &Tex);
 
-    Top -= (5*(Tex->Height*1.2f))/4;
+    Tex = LevelNames[wbs->epsd][wbs->next];
 
-    Tex = &LevelNames[wbs->epsd][wbs->next];
-    
-    Left = 0.0f-(Tex->Width/2.0f);
-    Right = Left+Tex->Width;
-    Bottom = Top-(Tex->Height*1.2f);
+    pos[1] += 5 * (Tex.glHeight) / 4;
 
     // draw <LevelName>
-    /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-    glBegin(GL_QUADS);
-       glTexCoord2f( 0.0f, 1.0f);
-       glVertex3f( Left, Top, SetBack);
-       glTexCoord2f( 0.0f, Tex->YDisp);
-       glVertex3f( Left, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, Tex->YDisp);
-       glVertex3f( Right, Bottom, SetBack);
-       glTexCoord2f( Tex->XDisp, 1.0f);
-       glVertex3f( Right, Top, SetBack);
-    glEnd();
-
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);*/
+    R2D_DrawSprite(pos, size, &Tex);
+    
    }
 
 // Draws "Entering <LevelName>"
@@ -651,6 +556,7 @@ void GL_WI_drawOnLnode( int n, GLTexData *Tex)
     float		right;
     float		bottom;
     dboolean	fits = false;
+    vec3 pos = { 0 };
     float   Left, Bottom, Right, Top;
 
     i = 0;
@@ -678,24 +584,12 @@ void GL_WI_drawOnLnode( int n, GLTexData *Tex)
         Top = 120.0f-((lnodes[wbs->epsd][n].y-Tex[i].TopOff)*1.2f);
         Bottom = Top-(Tex[i].Height*1.2f);
 
-        //glEnable(GL_TEXTURE_2D);
-        //glEnable(GL_ALPHA_TEST);
-        //glAlphaFunc(GL_GREATER, 0.0f);
-        //glEnable(GL_BLEND);
-        //glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+        pos[0] = left;
+        pos[1] = top;
 
-        //// draw "You Are Here"
-        //glBindTexture(GL_TEXTURE_2D, Tex[i].TexName);
-        //glBegin(GL_QUADS);
-        //   glTexCoord2f( 0.0f, 1.0f);
-        //   glVertex3f( Left, Top, SetBack);
-        //   glTexCoord2f( 0.0f, Tex[i].YDisp);
-        //   glVertex3f( Left, Bottom, SetBack);
-        //   glTexCoord2f( Tex[i].XDisp, Tex[i].YDisp);
-        //   glVertex3f( Right, Bottom, SetBack);
-        //   glTexCoord2f( Tex[i].XDisp, 1.0f);
-        //   glVertex3f( Right, Top, SetBack);
-        //glEnd();
+        // draw "You Are Here"
+        R2D_DrawSprite(pos, (vec2) { Tex[i].glWidth, Tex[i].glHeight}, &Tex[i]);
+
        }
     else
        {
@@ -838,7 +732,7 @@ void GL_WI_drawAnimatedBack(void)
     int			i;
     anim_t*		a;
     float       Left, Bottom, Right, Top;
-    GLTexData  *Tex;
+    GLTexData  Tex;
 
     if (gamemode == commercial)
         return;
@@ -846,51 +740,20 @@ void GL_WI_drawAnimatedBack(void)
     if (wbs->epsd > 2)
         return;
 
-    /*glEnable(GL_TEXTURE_2D);
-    glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
-    glEnable(GL_BLEND);
-    if (gl_premalpha)
-       {
-        glBlendFunc(GL_ONE, GL_ONE_MINUS_SRC_ALPHA);
-       }
-    else
-       {
-        glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-       }*/
-
     for (i = 0; i < NUMANIMS[wbs->epsd]; i++)
        {
         a = &anims[wbs->epsd][i];
 
         if (a->ctr >= 0)
            {
-            //V_DrawPatch(((SCREENWIDTH-320)/2)+a->loc.x, ((SCREENHEIGHT-200)/2)+a->loc.y, FB, a->p[a->ctr]);
 
-            Tex = &AnimTex[wbs->epsd][i][a->ctr];
+            Tex = AnimTex[wbs->epsd][i][a->ctr];
 
-            Left = -160.0f+a->loc.x;
-            Right = Left+Tex->Width;
-            Top = 120.0f-(a->loc.y*1.2f);
-            Bottom = Top-(Tex->Height*1.2f);
-
-            // draw animation frame
-            /*glBindTexture(GL_TEXTURE_2D, Tex->TexName);
-            glBegin(GL_QUADS);
-               glTexCoord2f( 0.0f, 1.0f);
-               glVertex3f( Left, Top, SetBack);
-               glTexCoord2f( 0.0f, Tex->YDisp);
-               glVertex3f( Left, Bottom, SetBack);
-               glTexCoord2f( Tex->XDisp, Tex->YDisp);
-               glVertex3f( Right, Bottom, SetBack);
-               glTexCoord2f( Tex->XDisp, 1.0f);
-               glVertex3f( Right, Top, SetBack);
-            glEnd();*/
+            // draw animation frames
+            R2D_DrawSprite((vec3) { a->loc.x, a->loc.y, 0.0f }, (vec2) { Tex.glWidth, Tex.glHeight }, &Tex);
 
            }
        }
-    /*glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);*/
    }
 
 void WI_drawAnimatedBack(void)
@@ -1164,7 +1027,7 @@ void WI_updateShowNextLoc(void)
 void GL_WI_drawShowNextLoc(void)
    {
     int i, last;
-
+    
     // draw animated background
     GL_WI_drawAnimatedBack();
     
@@ -2166,7 +2029,7 @@ extern int WhiteLightMap, WhiteColorMap;
 void WI_Init(void)
    {
     int     episode, episodes, i, j, frame;
-    char	name[10];
+    char*	name[10];
     anim_t*	a;
 
     GeneratePointPattern();
@@ -2206,7 +2069,7 @@ void WI_Init(void)
                {
                 strcpy(name, "INTERPIC");
                }
-            GL_MakeScreenTexture(W_CacheLumpName(name, PU_CACHE), GameMap[episode]);
+            GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &GameMap[episode], true);
             LevelNames[episode] = (GLTexData *)malloc(sizeof(GLTexData)*NUMMAPS);
             memset(LevelNames[episode], 0, sizeof(GLTexData)*NUMMAPS);
             for (i = 0; i < NUMMAPS; i++)
@@ -2362,7 +2225,7 @@ void WI_loadData(void)
     else 
        {
 	    sprintf(name, "WIMAP%d", wbs->epsd);
-        glBackGround = GameMap[wbs->epsd];
+        glBackGround = &GameMap[wbs->epsd];
        }
     
     if ( gamemode == retail )
@@ -2590,11 +2453,10 @@ void WI_unloadData(void)
 	Z_ChangeTag(bp[i], PU_CACHE);
 }
 
-void GL_DrawFullScreen(GLTexData *Image);
-
 void GL_WI_Drawer (void)
    {
     GL_DrawFullScreen(glBackGround);
+
     switch (state)
        {
         case StatCount:
