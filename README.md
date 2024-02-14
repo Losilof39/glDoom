@@ -54,7 +54,7 @@ Plus more!
 ## Compiling
 
 ### Windows
-Use the Visual Studio project and build for your desired architecture.
+Use the Visual Studio 2022 project and build for your desired architecture.
 
 ### Linux
 Run ``` sh build.sh ``` in the commandline to build.
