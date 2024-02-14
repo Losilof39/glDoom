@@ -44,11 +44,10 @@ I am planning for this port, the following (in order of priority)
 1. Remove all unused code and make code more readable
    
 2. OpenGL renderer:
-   -   Draw intermission
-   -   Fix masked walls occluding walls behind it
+   -   Unload all VAO, VBO and texture data before loading new level
    -   Add dynamic point lights
      
-4. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+4. Increasing the vanilla limits, adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
