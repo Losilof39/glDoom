@@ -447,7 +447,7 @@ Z_ChangeTag
 	block = (memblock_t*)((dbyte*)ptr - sizeof(memblock_t));
 
 	if (((memblock_t*)((dbyte*)(ptr)-sizeof(memblock_t)))->id != 0x1d4a11) 
-		I_Error(tag, ptr, "Z_CT at :%i %s"); 
+		I_Error("Z_CT at "__FILE__":%i", __LINE__);
 
 	if (block->id != ZONEID)
 		I_Error("Z_ChangeTag: freed a pointer without ZONEID");
