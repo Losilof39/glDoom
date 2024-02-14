@@ -29,6 +29,7 @@
 #endif
 
 #include "p_mobj.h"
+#include "sounds.h"
 
 //
 // Initializes sound stuff, including volume
@@ -58,7 +59,7 @@ void S_Start(void);
 void
 S_StartSound
 ( void*		origin,
-  int		sound_id );
+  sfxenum_t		sound_id );
 
 
 
@@ -75,14 +76,14 @@ void S_StopSound(mobj_t* origin);
 
 
 // Start music using <music_id> from sounds.h
-void S_StartMusic(int music_id);
+void S_StartMusic(musicenum_t music_id);
 
 // Start music using <music_id> from sounds.h,
 //  and set whether looping
 void
 S_ChangeMusic
-( int		music_id,
-  int		looping );
+(musicenum_t		music_id,
+  dboolean		looping );
 
 // Stops the music fer sure.
 void S_StopMusic(void);

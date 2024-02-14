@@ -134,7 +134,7 @@ ExtractFileBase
 int	    reloadlump;
 char*	reloadname;
 
-void W_AddFile (char *filename)
+int W_AddFile (char *filename)
 {
     wadinfo_t		header;
     lumpinfo_t*     lump_p;
@@ -159,7 +159,7 @@ void W_AddFile (char *filename)
     if ( (handle = Open (filename,O_RDONLY | O_BINARY)) == -1)
        {
 	        printf(" couldn't open %s\n",filename);
-	        return;
+	        return 0;
        }
 
     printf(" adding %s\n", filename);
@@ -224,6 +224,8 @@ void W_AddFile (char *filename)
     }
     if (reloadname)
 	    Close (handle);
+
+    return handle;
 }
 
 //
@@ -284,9 +286,9 @@ void W_Reload(void)
 // The name searcher looks backwards, so a later file
 //  does override all earlier ones.
 //
-void W_InitMultipleFiles(char** filenames)
+void W_Init(char** filenames)
 {	
-    int	size;
+    size_t	size;
     
     // open all the files, load headers, and count lumps
     numlumps = 0;
@@ -320,7 +322,7 @@ void W_InitFile(char* filename)
 
     names[0] = filename;
     names[1] = NULL;
-    W_InitMultipleFiles(names);
+    W_Init(names);
 }
 
 //

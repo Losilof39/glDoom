@@ -407,7 +407,7 @@ static int Clamp(int x)
     return x;
 }
 
-void S_StartSound(void* origin_p, int sfx_id)
+void S_StartSound(void* origin_p, sfxenum_t sfx_id)
 {
     sfxinfo_t* sfx;
     mobj_t* origin;
@@ -627,12 +627,12 @@ void S_SetSfxVolume(int volume)
 // Starts some music with the music id found in sounds.h.
 //
 
-void S_StartMusic(int m_id)
+void S_StartMusic(musicenum_t m_id)
 {
     S_ChangeMusic(m_id, false);
 }
 
-void S_ChangeMusic(int musicnum, int looping)
+void S_ChangeMusic(musicenum_t musicnum, dboolean looping)
 {
     musicinfo_t* music = NULL;
     char namebuf[9];
