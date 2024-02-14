@@ -27,20 +27,8 @@ typedef enum
 	gl_texture_height = 0x1001,
 	gl_texture_border_color = 0x1004
 } gltexture_t;
-#ifdef NOT_YET
-typedef enum
-{
-	gl_unpack_swap_bytes = 0x0CF0,
-	gl_unpack_lsb_first = 0x0CF1,
-	gl_unpack_row_length = 0x0CF2,
-	gl_unpack_skip_rows = 0x0CF3,
-	gl_unpack_skip_pixels = 0x0CF4,
-	gl_unpack_alignment = 0x0CF5, 
-} gltexture_packs_t;
-#endif
+
 void GL_GenTextures(unsigned int* texture, int texture_size, gltexture_t texture_target);
-#ifdef NOT_YET
-void GL_PixelStorePacks(gltexture_packs_t pack, unsigned int parameter);
-#endif
+
 dboolean GL_CreateDefaultTexture(unsigned int texture, gltexture_t texture_target, int width, int height, const void *pixels, dboolean enable_tex, dboolean copy, dboolean use_rgba, dboolean activated);
-dboolean GL_CreateClampTexture(gltexture_t texture_target, int width, int height, const void* pixels, dboolean activated);
+void GL_CreateClampTexture(gltexture_t texture_target, int width, int height, const void* pixels, dboolean activated);

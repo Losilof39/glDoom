@@ -5,6 +5,7 @@
 #include <glad/glad.h>
 #include <SDL.h>
 #include "v_video.h"
+#include "i_system.h"
 
 extern SDL_Window* pWindow;
 extern video_t video;
