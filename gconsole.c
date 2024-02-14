@@ -372,10 +372,8 @@ void con_printf( char *message, ... )
     char    tstr[1024];
 
     va_start(argptr,message);
-    vsprintf (tstr,message,argptr);
+    lfprintf(message);
     va_end(argptr);
-
-    lfprintf(tstr);
 
     if (!con_surface)
        {

@@ -25,6 +25,9 @@ I am planning for this port, the following (in order of priority)
 5. Cleaning up the OpenGL code and moving some things to shaders (MAYBE IN THE FUTURE)
 6. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL (MAYBE IN THE FUTURE)
 
+### Note - 16.05.2022
+Current I am adding SDL2 Mixer support to stream audio (ported from various SDL2-based source ports).
+
 Plus more!
 
 ### Why
