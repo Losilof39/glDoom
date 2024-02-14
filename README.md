@@ -23,10 +23,10 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Removal of unused declarations
 * Code cleanup
 * Remove type defintions 
-* Add ANSI C Implementation in some parts
+* Add ANSI C Implementations in some parts
 * Fixed win32 build
 * Add GetTicks macro
-* Cleanup msvc level 3 and a little of level 4 warnings
+* Remove msvc level 3 and a little of level 4 warnings
 * Replaced `_filelength` function to `fstat`  
 * Created a bitmap loader based on windows api
 * Ported Win32 api to posix
