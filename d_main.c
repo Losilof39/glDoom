@@ -628,7 +628,7 @@ char                    *pagename;
 void D_PageTicker (void)
 {
     if (--pagetic < 0)
-	D_AdvanceDemo ();
+        advancedemo = true;
 }
 
 
@@ -758,7 +758,7 @@ void D_StartTitle (void)
 {
     gameaction = ga_nothing;
     demosequence = -1;
-    D_AdvanceDemo ();
+    advancedemo = true;
 }
 
 //      print title for every printed line
@@ -1684,7 +1684,7 @@ void D_DoomMain (void)
 
     //printf ("W_Init: Init WADfiles.\n");
     printf("W_Init: Init WADfiles.\n");
-    W_InitMultipleFiles(wadfiles);
+    W_Init(wadfiles);
     
     if (CheckGameMode() == false)
        {

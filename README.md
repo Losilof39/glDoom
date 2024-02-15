@@ -23,10 +23,10 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Removal of unused declarations
 * Code cleanup
 * Remove type defintions 
-* Add ANSI C Implementation in some parts
+* Add ANSI C Implementations in some parts
 * Fixed win32 build
 * Add GetTicks macro
-* Cleanup msvc level 3 and a little of level 4 warnings
+* Remove msvc level 3 and a little of level 4 warnings
 * Replaced `_filelength` function to `fstat`  
 * Created a bitmap loader based on windows api
 * Ported Win32 api to posix
@@ -44,18 +44,17 @@ I am planning for this port, the following (in order of priority)
 1. Remove all unused code and make code more readable
    
 2. OpenGL renderer:
-   -   Draw intermission
-   -   Fix masked walls occluding walls behind it
+   -   Unload all VAO, VBO and texture data before loading new level
    -   Add dynamic point lights
      
-4. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+4. Increasing the vanilla limits, adding support for No Rest For The Living and SIGIL
 
 Plus more!
 
 ## Compiling
 
 ### Windows
-Use the Visual Studio project and build for your desired architecture.
+Use the Visual Studio 2022 project and build for your desired architecture.
 
 ### Linux
 Run ``` sh build.sh ``` in the commandline to build.

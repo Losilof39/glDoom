@@ -36,35 +36,6 @@ void GL_GenTextures(unsigned int* texture, int texture_size, gltexture_t texture
 			break;
 	}
 }
-#ifdef NOT_YET
-void GL_PixelStorePacks(gltexture_packs_t pack, unsigned int parameter)
-{
-	switch(pack)
-	{
-		case gl_unpack_swap_bytes:
-			glPixelStorei(GL_UNPACK_SWAP_BYTES, parameter);
-			break;
-		case gl_unpack_lsb_first:
-			glPixelStorei(GL_UNPACK_LSB_FIRST, parameter);
-			break;
-		case gl_unpack_row_length:
-			glPixelStorei(GL_UNPACK_ROW_LENGTH, parameter);
-			break;
-		case gl_unpack_skip_rows:
-			glPixelStorei(GL_UNPACK_SKIP_ROWS, parameter);
-			break;
-		case gl_unpack_skip_pixels:
-			glPixelStorei(GL_UNPACK_SKIP_PIXELS, parameter);
-			break;
-		case gl_unpack_alignment:
-			glPixelStorei(GL_UNPACK_ALIGNMENT, parameter);
-			break;
-		default:
-			printf("Failed to store/unpack");
-			break;
-	}
-}
-#endif
 
 dboolean GL_CreateDefaultTexture(unsigned int texture, gltexture_t texture_target, int width, int height, const void* pixels, dboolean enable_tex, dboolean copy, dboolean use_rgba, dboolean activated)
 {
@@ -110,9 +81,9 @@ dboolean GL_CreateDefaultTexture(unsigned int texture, gltexture_t texture_targe
 	return activated;
 }
 
-dboolean GL_CreateClampTexture(gltexture_t texture_target, int width, int height, const void* pixels, dboolean activated)
+void GL_CreateClampTexture(gltexture_t texture_target, int width, int height, const void* pixels, dboolean activate_edge_clamp)
 {
-	if(activated == true)
+	if(activate_edge_clamp == true)
 	{
 		glTexParameteri(texture_target, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
 		glTexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
