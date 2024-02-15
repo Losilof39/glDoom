@@ -1405,10 +1405,14 @@ void GL_DrawThings(void)
    {
     vissprite_t*	spr;
     int             lump;
+    int             mirror;
     float           sx, sy, sz, Orient, x1, x2, tLight;
-    float           fLight, fTop, fBottom, fOffset;
+    float           fLight, fOffset;
 	
-    Orient = (float)(viewangle >> ANGLETOFINESHIFT) * 360.0f / FINEANGLES - 90.0f;
+    Orient = 360.0f + (camera.oy * -1.0f);
+    Orient += 180.0f;
+    if (Orient > 360.0f)
+        Orient -= 360.0f;
 
     if (vissprite_p > vissprites)
        {
@@ -1436,17 +1440,15 @@ void GL_DrawThings(void)
                 //glTranslatef( sx, sy, sz );
                 //glRotatef(Orient, 0.0f, 1.0f, 0.0f );
 
+                // accounts for orientation of Things
                 if ((spr->xiscale >> FRACBITS) < 0)
                    {
-                    x1 = 0.0f;
-                    x2 = SprData[lump].XDisp;
+                    mirror = false;
                    }
                 else
                    {
-                    x1 = SprData[lump].XDisp;
-                    x2 = 0.0f;
+                    mirror = true;
                    }
-
 
                 /*glEnable(GL_ALPHA_TEST);
                 glAlphaFunc(GL_GREATER, 0.0f);
@@ -1522,10 +1524,8 @@ void GL_DrawThings(void)
                    }
                 else
                    fOffset = 0.0f;
-                fTop = SprData[lump].Height - fOffset;
-                fBottom = fTop - SprData[lump].Height;
 
-                R3D_RenderThing((vec3){ sx, sy, sz }, &SprData[lump], fLight, Orient);
+                R3D_RenderThing((vec3){ sx, sy, sz }, &SprData[lump], fLight, Orient, mirror);
 
                 //glColor3f( 1.0f, 1.0f, 1.0f );
                 //glBegin(GL_QUADS);

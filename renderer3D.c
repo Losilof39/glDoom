@@ -17,29 +17,25 @@ extern int                 displayplayer;
 
 threedcommand* head = NULL;
 
-// indices used only for wall rendering
+// indices used only for things rendering
 unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
 
 R3DStorage s_threeData;
 
 void InitRenderer3D()
 {
-    unsigned int VBO;
     float vertices[] = {
         // pos      // tex
-        0.0f, 1.0f, 0.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f,
         0.0f, 0.0f, 0.0f, 0.0f,
-
-        0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f,
         1.0f, 1.0f, 1.0f, 1.0f,
-        1.0f, 0.0f, 1.0f, 0.0f
+        0.0f, 1.0f, 0.0f, 1.0f,
     };
 
     glGenVertexArrays(1, &s_threeData.thingVAO);
-    glGenBuffers(1, &VBO);
+    glGenBuffers(1, &s_threeData.thingVBO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, s_threeData.thingVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glBindVertexArray(s_threeData.thingVAO);
@@ -264,7 +260,7 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
     newNode->next = NULL;
 }
 
-void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle)
+void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror)
 {
     threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
     mat4 model;
@@ -285,8 +281,6 @@ void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle)
         current->next = newNode;
     }
 
-    // build vao and vbo if not already
-
     glm_translate(model, pos);
 
     glm_translate(model, (vec3){ 0.0f, size[1], 0.0f });
@@ -295,11 +289,12 @@ void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle)
 
     glm_scale(model, size);
 
-    newNode->tex = tex->TexName;
+    newNode->tex = tex;
     newNode->light = light;
     glm_mat4_copy(model, newNode->model);
     newNode->flat = NULL;
     newNode->polygon = NULL;
+    newNode->mirror = mirror;
 
     newNode->next = NULL;
 }
@@ -322,7 +317,9 @@ void R3D_StopRendition(void)
     // setup shader used for wall, ceil and floor rendering
     Shader_Use(s_threeData.shader);
     Shader_SetInt(s_threeData.shader, "tex", 0);
-    
+   
+    glEnable(GL_DEPTH_TEST);
+
     // iterate through all 3D draw commands
     while (cur != NULL)
     {
@@ -383,13 +380,14 @@ void R3D_StopRendition(void)
             Shader_Use(s_threeData.thingShader);
             Shader_SetMat4(s_threeData.thingShader, "model", cur->model);
             Shader_SetFloat(s_threeData.thingShader, "light", cur->light);
+            Shader_SetInt(s_threeData.thingShader, "mirror", cur->mirror);
 
             glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, cur->tex);
+            glBindTexture(GL_TEXTURE_2D, cur->tex->TexName);
 
             glBindVertexArray(s_threeData.thingVAO);
 
-            glDrawArrays(GL_TRIANGLES, 0, 6);
+            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
 
             glBindVertexArray(0);
             glBindTexture(GL_TEXTURE_2D, 0);

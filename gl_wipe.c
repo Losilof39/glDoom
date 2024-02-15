@@ -37,6 +37,8 @@
 #include "m_random.h"
 #include <glad/glad.h>
 #include <stdlib.h>
+#include "renderer.h"
+
 extern video_t  video;
 
 static GLuint wipe_scr_start_tex = 0;
@@ -46,7 +48,7 @@ GLuint CaptureScreenAsTexID(void)
 {
     GLuint id = 1;
 
-    //GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
+    GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
 
     return id;
 }
@@ -105,12 +107,12 @@ int gld_wipe_exitMelt(int ticks)
 {
     if (wipe_scr_start_tex != 0)
     {
-        glDeleteTextures(1, &wipe_scr_start_tex);
+        //glDeleteTextures(1, &wipe_scr_start_tex);
         wipe_scr_start_tex = 0;
     }
     if (wipe_scr_end_tex != 0)
     {
-        glDeleteTextures(1, &wipe_scr_end_tex);
+        //glDeleteTextures(1, &wipe_scr_end_tex);
         wipe_scr_end_tex = 0;
     }
 
@@ -119,7 +121,7 @@ int gld_wipe_exitMelt(int ticks)
 
 int gld_wipe_StartScreen(void)
 {
-    wipe_scr_start_tex;//= CaptureScreenAsTexID();
+    wipe_scr_start_tex = CaptureScreenAsTexID();
 
     return 0;
 }
@@ -127,7 +129,7 @@ int gld_wipe_StartScreen(void)
 int gld_wipe_EndScreen(void)
 {
     //glFlush();
-    wipe_scr_end_tex; //= CaptureScreenAsTexID();
+    wipe_scr_end_tex = CaptureScreenAsTexID();
 
     return 0;
 }

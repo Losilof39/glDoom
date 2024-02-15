@@ -58,9 +58,6 @@ void InitRenderer2D()
 	Shader_SetMat4(s_Data.flatColorShader, "u_Ortho", s_Data.camOrtho);
 	Shader_Unbind();
 
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-
 }
 
 void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)

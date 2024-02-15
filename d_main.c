@@ -255,8 +255,6 @@ static void D_Wipe(void)
     dboolean done;
     int wipestart = I_GetTime() - 1;
 
-    //glClear(GL_COLOR_BUFFER_BIT);
-
     do
     {
         int nowtime, tics;
