@@ -419,7 +419,7 @@ GLTexData  YouAreHere[2], Splat, **AnimTex[3];
 GLTexData  gl_p[MAXPLAYERS], gl_bp[MAXPLAYERS];
 
 // These are full screen images : treat differently (two part textures [256 & 64])
-GLTexData  Interpic[2], GameMap[3];
+GLTexData  Interpic, GameMap[3];
 
 void GL_MakeScreenTexture(patch_t *, GLTexData *);
 
@@ -2041,7 +2041,7 @@ void WI_Init(void)
        {
         // Both Doom2 and Ultimate Doom use the "INTERPIC" image.
 	    strcpy(name, "INTERPIC");
-        GL_MakeScreenTexture(W_CacheLumpName(name, PU_CACHE), Interpic);
+        GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &Interpic, true);
        }
 
     if (gamemode != commercial)
@@ -2220,7 +2220,7 @@ void WI_loadData(void)
     if (gamemode == commercial)
        {
 	strcpy(name, "INTERPIC");
-        glBackGround = Interpic;
+        glBackGround = &Interpic;
        }
     else 
        {
@@ -2233,7 +2233,7 @@ void WI_loadData(void)
         if (wbs->epsd == 3)
            {
             strcpy(name,"INTERPIC");
-            glBackGround = Interpic;
+            glBackGround = &Interpic;
            }
        }
 

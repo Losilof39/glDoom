@@ -30,7 +30,7 @@ typedef struct s_threedcommand
 	DW_FloorCeil* flat;
 	GLTexData*     tex;		// used only for rendering Things
 	mat4 model;			    // used only for rendering Things, default is matrix identity
-	int mirror;				// mirror object vertically, used only for Thing
+	int mirror;				// mirror object vertically, used only for Things
 	float light;
 	struct threedcommand* next;
 }threedcommand;

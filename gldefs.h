@@ -22,8 +22,6 @@ typedef struct
     float Height;   // Actual texture height
     float XDisp;    // Texture coordinate displacement from right side
     float YDisp;    // Texture coordinate displacement from bottom
-    float XInit;
-    float YInit;
     float LeftOff;
     float TopOff;
     float glWidth;
