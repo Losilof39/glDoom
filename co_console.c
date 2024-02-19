@@ -28,6 +28,8 @@
 #include "z_zone.h"
 #include "gldefs.h"
 #include "co_utils.h"
+#define NK_IMPLEMENTATION
+#include "thirdparty/Nuklear/nuklear.h"
 
 #define ST_MSGWIDTH        256
 #define CMDLENGTH         1024

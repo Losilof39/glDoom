@@ -435,6 +435,7 @@
     <ClInclude Include="sys_sdl.h" />
     <ClInclude Include="s_sound.h" />
     <ClInclude Include="tables.h" />
+    <ClCompile Include="thirdparty\Nuklear\nuklear.h" />
     <ClInclude Include="v_video.h" />
     <ClInclude Include="sdl_input.h" />
     <ClInclude Include="sdl_kbrd.h" />
