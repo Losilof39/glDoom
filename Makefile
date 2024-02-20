@@ -16,7 +16,7 @@ CFLAGS+= -I./thirdparty/glad/include
 #LIBS+= `pkg-config --libs sdl2` `pkg-config --libs libpng` `pkg-config --libs gl` `pkg-config --libs glu` `pkg-config --libs SDL2_net` `pkg-config --libs fluidsynth` -lm
 LIBS+=-lOpenGL -lSDL2_mixer -lSDL2 -lm -lGL -lGLU -lglut -lcglm
 OBJDIR=.
-OUTPUT=glDoom Re
+OUTPUT=glDoom-Re
 WADBUILD=wadbuild/wadbuild
 SRC_GLDOOM = /thirdparty/glad/src/glad.c am_map.c co_console.c co_utils.c d_bitmap.c d_items.c d_main.c d_net.c doomdef.c doomlib.c doomstat.c dstrings.c f_finale.c f_wipe.c g_game.c gl_texture.c gl_video.c \
 gl_wipe.c glsbar.c hu_lib.c hu_stuff.c i_net.c i_sdlmusic.c i_sdlsound.c i_sound.c i_system.c info.c m_argv.c m_bbox.c m_cheat.c m_fixed.c m_menu.c m_misc.c m_random.c m_swap.c mathlib.c \
