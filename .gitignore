@@ -6,6 +6,7 @@
 *.user
 *.ncb
 *.wad
+*.dll
 .svn/
 *.suo
 *.dbg

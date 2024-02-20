@@ -1,4 +1,4 @@
-/* Emacs style mode select   -*- C++ -*-
+/* Emacs style mode select   -*- C -*-
  *-----------------------------------------------------------------------------
  *
  *
@@ -33,9 +33,12 @@
 
 #include "v_video.h"
 #include "gl_video.h"
+#include "gl_filter.h"
 #include "m_random.h"
 #include <glad/glad.h>
 #include <stdlib.h>
+#include "renderer.h"
+
 extern video_t  video;
 
 static GLuint wipe_scr_start_tex = 0;
@@ -43,22 +46,9 @@ static GLuint wipe_scr_end_tex = 0;
 
 GLuint CaptureScreenAsTexID(void)
 {
-    GLuint id;
+    GLuint id = 1;
 
-    glEnable(GL_TEXTURE_2D);
-    glGenTextures(1, &id);
-    glBindTexture(GL_TEXTURE_2D, id);
-
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB,
-        video.width, video.height,
-        0, GL_RGB, GL_UNSIGNED_BYTE, 0);
-
-    glCopyTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, 0, 0, video.width, video.height);
+    GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
 
     return id;
 }
@@ -77,7 +67,7 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
     fU2 = (float)video.width / (float)total_w;
     fV2 = 0.0f;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
 
     glBindTexture(GL_TEXTURE_2D, wipe_scr_end_tex);
     glColor3f(1.0f, 1.0f, 1.0f);
@@ -94,7 +84,7 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
     glBindTexture(GL_TEXTURE_2D, wipe_scr_start_tex);
     glColor3f(1.0f, 1.0f, 1.0f);
 
-    glBegin(GL_QUAD_STRIP);
+    glBegin(GL_QUAD_STRIP);*/
 
     for (i = 0; i <= video.width; i++)
     {
@@ -104,11 +94,11 @@ int gld_wipe_doMelt(int ticks, int* y_lookup)
         float sx = (float)i;
         float sy = (float)yoffs;
 
-        glTexCoord2f(tx, fV1); glVertex2f(sx, sy);
-        glTexCoord2f(tx, fV2); glVertex2f(sx, sy + (float)video.height);
+        /*glTexCoord2f(tx, fV1); glVertex2f(sx, sy);
+        glTexCoord2f(tx, fV2); glVertex2f(sx, sy + (float)video.height);*/
     }
 
-    glEnd();
+    //glEnd();
 
     return 0;
 }
@@ -117,12 +107,12 @@ int gld_wipe_exitMelt(int ticks)
 {
     if (wipe_scr_start_tex != 0)
     {
-        glDeleteTextures(1, &wipe_scr_start_tex);
+        //glDeleteTextures(1, &wipe_scr_start_tex);
         wipe_scr_start_tex = 0;
     }
     if (wipe_scr_end_tex != 0)
     {
-        glDeleteTextures(1, &wipe_scr_end_tex);
+        //glDeleteTextures(1, &wipe_scr_end_tex);
         wipe_scr_end_tex = 0;
     }
 
@@ -138,7 +128,7 @@ int gld_wipe_StartScreen(void)
 
 int gld_wipe_EndScreen(void)
 {
-    glFlush();
+    //glFlush();
     wipe_scr_end_tex = CaptureScreenAsTexID();
 
     return 0;

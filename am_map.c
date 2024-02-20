@@ -1033,11 +1033,11 @@ void GL_AM_drawFline( fline_t *fl, int color )
     y1 = 120.0f - (fl->a.y * 1.2f);
     x2 = fl->b.x - 160.0f;
     y2 = 120.0f - (fl->b.y * 1.2f);
-    glBegin(GL_LINES);
+    /*glBegin(GL_LINES);
       glColor4f(cr, cg, cb, 1.0f);
       glVertex3f(x1, y1, SetBack);
       glVertex3f(x2, y2, SetBack);
-    glEnd();
+    glEnd();*/
    }
 
 //

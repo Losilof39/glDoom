@@ -22,12 +22,12 @@
     <Filter Include="Shaders">
       <UniqueIdentifier>{957e763d-23bb-4918-bb86-dc1a0ec495d4}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\ui">
+      <UniqueIdentifier>{1b3d05e4-07f6-4251-be07-3d0ac71cac70}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="am_map.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="co_console.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="d_items.c">
@@ -258,13 +258,19 @@
     <ClCompile Include="renderer.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="rendererFixed.c">
+    <ClCompile Include="renderer3D.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
-    <ClCompile Include="rendererCore.c">
+    <ClCompile Include="renderer2D.c">
       <Filter>Source Files\renderer</Filter>
     </ClCompile>
     <ClCompile Include="d_bitmap.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="co_console.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="gl_filter.c">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="co_utils.c">
@@ -273,9 +279,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="am_map.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="co_console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="d_englsh.h">
@@ -503,20 +506,32 @@
     <ClInclude Include="r_shader.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="renderer.h">
+    <ClInclude Include="renderer3D.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
-    <ClInclude Include="rendererFixed.h">
-      <Filter>Header Files\renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="rendererCore.h">
+    <ClInclude Include="renderer2D.h">
       <Filter>Header Files\renderer</Filter>
     </ClInclude>
     <ClInclude Include="d_bitmap.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="renderer.h">
+      <Filter>Header Files\renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="co_console.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="gl_filter.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
     <ClInclude Include="co_utils.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\Nuklear\Nuklear-master\nuklear.h">
+      <Filter>Header Files\ui</Filter>
+    </ClInclude>
+    <ClInclude Include="thirdparty\Nuklear\Nuklear-master\demo\sdl_opengl3\nuklear_sdl_gl3.h">
+      <Filter>Header Files\ui</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -530,10 +545,34 @@
     <None Include="resources\Playpal.bin">
       <Filter>Resource Files</Filter>
     </None>
-    <None Include="shader_files\ui_frag.glsl">
+    <None Include="shader_files\flatcolor.ps">
       <Filter>Shaders</Filter>
     </None>
-    <None Include="shader_files\ui_vert.glsl">
+    <None Include="shader_files\flatcolor.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\sprite.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\sprite.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\framebuffer.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\framebuffer.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\polygon.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\polygon.vs">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\thing.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\thing.vs">
       <Filter>Shaders</Filter>
     </None>
   </ItemGroup>

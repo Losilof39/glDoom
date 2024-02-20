@@ -71,6 +71,7 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include "sys_sdl.h"
 
 #include "doomcmd.h"
+#include "renderer2D.h"
 
 unsigned short kbd_game_txt[256];
 unsigned short kbd_game_cmd[256];
@@ -127,7 +128,6 @@ int M_GLDrawText( int x, int y, char *string )
    {
     int 	c;
     float   fx;
-    float   Left, Right, Top, Bottom;
 
     fx = (float)x;
     while (*string)
@@ -139,13 +139,14 @@ int M_GLDrawText( int x, int y, char *string )
             fx += 4.0f;
             continue;
            }
-		
-        Left = -160.0f+(fx);
-        Right = Left+GLHudFont[c].Width;
-        Top = 120.0f-(y-GLHudFont[c].TopOff);
-        Bottom = Top - GLHudFont[c].Height;
+	
 
-        glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
+        vec3 pos = { fx, y - GLHudFont[c].TopOff, 0.0f };
+        vec2 size = { GLHudFont[c].glWidth, GLHudFont[c].glHeight };
+
+        R2D_DrawSprite(pos, size, &GLHudFont[c]);
+
+        /*glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
         glBegin( GL_QUADS );
            glNormal3f(  0.0f, 0.0f, 1.0f);
            glTexCoord2f( 0.0f, 1.0f );
@@ -156,7 +157,7 @@ int M_GLDrawText( int x, int y, char *string )
            glVertex3f( Right, Bottom, SetBack);
            glTexCoord2f( GLHudFont[c].XDisp, 1.0f );
            glVertex3f( Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
 
         if (fx + GLHudFont[c].Width > 320.0f)
             break;

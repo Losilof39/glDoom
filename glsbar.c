@@ -38,7 +38,7 @@ extern int deathmatch;
 static unsigned char         Transparent[512*512];
 static unsigned char         TexAlpha[512*512];
 extern int            TexWide, TexHigh;
-extern int            SBarTexture[2];
+extern GLTexData            SBarTexture;
 extern GLTexData      SBarTex[2];
 extern unsigned char  TexRaw[512*512];
 static GLubyte* TexRGB;
@@ -74,7 +74,7 @@ void InsertArmsPlate()
 
 void GL_CreateStatusBar(patch_t *sbar)
    {
-    int yoff, y, d, x;
+    /*int yoff, y, d, x;
 
     for (x = 0; x < 256; x++)
        {
@@ -83,7 +83,7 @@ void GL_CreateStatusBar(patch_t *sbar)
         patchbuff[x] = 0;
        }
 
-    V_DrawPatchBuff( 0, 0, patchbuff, sbar);
+    ConvertToRawTexture( 0, 0, patchbuff, sbar);
     for (y = 0, d = 0; y < 32; y++)
        {
         yoff = y * 320;
@@ -117,7 +117,9 @@ void GL_CreateStatusBar(patch_t *sbar)
        }
     TexWide = 64;
     TexHigh = 32;
-    SBarTexture[1] = MakeRGBATexture(true, false, 64, 32);
+    SBarTexture[1] = MakeRGBATexture(true, false, 64, 32);*/
+
+    GL_MakeSpriteTexture(sbar, &SBarTexture, false);
 
     if (deathmatch == 0)
        {
@@ -129,7 +131,7 @@ void GL_RGBStatFrag(patch_t *sbar)
    {
     int            x, y, z, i, yoff;
 
-    V_DrawPatchBuff( 0, 0, platebuff, sbar);
+    ConvertToRawTexture( 0, 0, platebuff, sbar);
     for (y = 0, i = 0; y < 32; y++)
        {
         yoff = (31-y) * 104;
@@ -147,7 +149,7 @@ void GL_RGBStatArms(patch_t *armsbg)
    {
     int            x, y, i, yoff;
 
-    V_DrawPatchBuff( 0, 0, platebuff, armsbg);
+    ConvertToRawTexture( 0, 0, platebuff, armsbg);
 
     yoff = 31*40;
     for (y = 0, i = 0; y < 32; y++)
@@ -165,17 +167,17 @@ void GL_RGBStatArms(patch_t *armsbg)
 
 void GL_StatArmsOvl(MY_RGBA *RGBData)
    {
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, SBarTexture[0]);
     glTexSubImage2D(GL_TEXTURE_2D, 0, 104, 0, 40, 32, GL_RGBA, GL_UNSIGNED_BYTE, RGBData );
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 void GL_RGBStatBack(patch_t *statback, int player)
    {
     int            x, y, z, i, yoff;
 
-    V_DrawPatchBuff( 0, 0, patchbuff, statback);
+    ConvertToRawTexture( 0, 0, patchbuff, statback);
     
     for (y = 0, i = 0; y < statback->height; y++)
        {

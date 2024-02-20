@@ -1,31 +1,31 @@
 #ifndef RENDERER_H
 #define RENDERER_H
 
-#include <glad/glad.h>
 #include <cglm/cglm.h>
-#include "gldefs.h"
+#include <glad/glad.h>
+#include "r_shader.h"
 
-typedef struct sRenderer
+typedef struct s_Renderer
 {
-	int bBlending;
-	int gl_mode;
-	GLuint vao;
-	GLuint ebo;
-	mat4 matOrtho;
-	mat4 matProj;
+	unsigned int screenVAO;
+	Shader fbShader;
+}Renderer;
 
-	void (*Setup)(void);
-	void (*Set3D)(void);
-	void (*SetColor)(float r,float g,float b);
-	void (*StartRendition)(void);
-	void (*StopRendition)(void);
-	void (*SetTexture)(unsigned int);
-	void (*SetShader)(unsigned int);
-	void (*RenderEntities)(void);
-	void (*Set2D)(void);
-	void (*RenderString)(vec3* vertices, GLuint* indices, GLuint numIndices);
-	void (*GetColorBuffer)(GLubyte* data);
-	void (*RenderSprite)(float* v, GLTexData* tex);
-}sRenderer;
+typedef struct s_RenderInfo
+{
+	unsigned int virtualWidth, virtualHeight;
+	float virtualRatio;							// i.e. aspect ratio of virtual screen size
+}RenderInfo;
+
+typedef struct s_FrameBuffer
+{
+	GLuint fb, rbo, texColorBuffer;
+}FrameBuffer;
+
+void R_InitRenderer();
+void R_StartRendition();
+void R_StopRendition();
+void R_BindFramebuffer();
+void R_BlitFramebuffer();
 
 #endif
