@@ -247,7 +247,6 @@ unsigned char nuklearshaders_nuklear_frag_spv[] = {
 };
 unsigned int nuklearshaders_nuklear_frag_spv_len = 860;
 
-#include <assert.h>
 #include <stddef.h>
 #include <string.h>
 #define GLFW_INCLUDE_VULKAN
@@ -295,7 +294,6 @@ NK_API void nk_glfw3_mouse_button_callback(GLFWwindow *win, int button,
  */
 #ifdef NK_GLFW_VULKAN_IMPLEMENTATION
 #undef NK_GLFW_VULKAN_IMPLEMENTATION
-#include <stdlib.h>
 
 #ifndef NK_GLFW_TEXT_MAX
 #define NK_GLFW_TEXT_MAX 256

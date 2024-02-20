@@ -38,8 +38,7 @@ NK_API void                 nk_sfml_device_destroy(void);
  * ===============================================================
  */
  #ifdef NK_SFML_GL3_IMPLEMENTATION
-#include <cstring>
-#include <assert.h>
+
 #include <string>
 
 struct nk_sfml_device {

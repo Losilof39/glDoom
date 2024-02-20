@@ -41,7 +41,6 @@ NK_API void nk_d3d9_shutdown(void);
 #define COBJMACROS
 #include <d3d9.h>
 
-#include <stdlib.h>
 #include <stddef.h>
 #include <string.h>
 

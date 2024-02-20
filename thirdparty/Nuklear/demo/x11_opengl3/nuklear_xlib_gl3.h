@@ -32,7 +32,6 @@ NK_API void                 nk_x11_device_destroy(void);
  * ===============================================================
  */
 #ifdef NK_XLIB_GL3_IMPLEMENTATION
-#include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
