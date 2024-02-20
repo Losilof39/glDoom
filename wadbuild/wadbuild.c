@@ -12,6 +12,7 @@
 #endif
 #include <fcntl.h>
 #include <string.h>
+#include <sys/stat.h>
 
 #ifdef _MSC_VER
 #pragma warning(disable:6031)
@@ -31,7 +32,6 @@
 #define LSeek _lseek
 #define Write _write
 #define Strupr _strupr
-#define Filelength _filelength
 #else
 #define Open open
 #define Close close
@@ -39,7 +39,6 @@
 #define LSeek lseek
 #define Write write
 #define Strupr strupr
-#define Filelength filelength
 #endif
 
 typedef struct
@@ -69,7 +68,7 @@ int   wadfile, resource, flength, pad;
 
 unsigned char *databuff = NULL;
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
    {
     int i;
 
@@ -157,7 +156,12 @@ void main(int argc, char *argv[])
            }
         else
            {
-            flength = Filelength(resource);
+            struct stat resource_st;
+            if(fstat(resource, &resource_st))
+            {
+                return -1;
+            }
+            flength = resource_st.st_size;
             databuff = (unsigned char *)realloc(databuff, flength+4);
             Read(resource, databuff, flength);
             Close(resource);
@@ -180,4 +184,6 @@ void main(int argc, char *argv[])
     Write(wadfile, &wadhead, sizeof(wadhead_t));
     Close(wadfile);
     fclose(namelist);
+
+    return 0;
    }
