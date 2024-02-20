@@ -69,7 +69,7 @@ int			numlumps;
 
 void**			lumpcache;
 
-#ifndef _WIN32
+#if defined(_WIN32) && defined(__linux__)
 static void strupr(char* s)
 {
     while (*s) { *s = toupper(*s); s++; }
@@ -103,7 +103,7 @@ ExtractFileBase
 	if (++length == 9)
 	    I_Error ("Filename base of %s >8 chars",path);
 
-	*dest++ = strupr((int)*src++);
+	*dest++ = (char*)strupr((int)*src++);
     }
 }
 

@@ -26,9 +26,6 @@ static const char
 rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include <glad/glad.h>
-#include "renderer.h"
-
-extern sRenderer renderer;
 
 #include <sys/types.h>
 #include <sys/stat.h>
@@ -76,6 +73,7 @@ extern sRenderer renderer;
 #include "sys_sdl.h"
 #include "gl_texture.h"
 #include "gldefs.h"
+#include "renderer2D.h"
 
 #include "doomcmd.h"
 
@@ -1214,19 +1212,11 @@ void M_DrawLoad(void)
 
 void GL_DrawTitle(int y, GLTexData *tex)
    {
-    float   Left, Bottom, Right, Top;
 
-    Left = (0.0f - (tex->Width / 2.0f));
-    Right = Left + tex->Width;
-    Top = 120.0f - (y * 1.2f);
-    Bottom = Top - (tex->Height * 1.2f);
+    vec3 pos = { 94, y };
+    vec2 size = { tex->glWidth, tex->glHeight };
 
-    float vertices[] = { Left, Right, Top, Bottom };
-
-    renderer.SetTexture(tex->TexName);
-    renderer.RenderSprite(vertices, tex);
-    renderer.SetTexture(0);
-
+    R2D_DrawSprite(&pos, size, tex);
    }
 
 //
@@ -1245,7 +1235,7 @@ void GL_DrawLoad(void)
         GL_WriteText(LoadDef.x,LoadDef.y+(LINEHEIGHT*i),savegamestrings[i]);
        }
 
-    glDisable(GL_BLEND);
+    //glDisable(GL_BLEND);
    }
 
 
@@ -1281,15 +1271,12 @@ void GL_DrawSaveLoadBorder(int x,int y)
 
     Left = (-160.0f+(float)(xo-LSLeft.Width));
     Right = (-160.0f+(float)xo);
-    Top = 120.0f-((y+8)*1.2f);
-    Bottom = Top+(LSLeft.Height*1.2f);
+    Top = 120.0f-((y+8));
+    Bottom = Top+(LSLeft.Height);
 
     float vertices[] = { Left, Right, Top, Bottom };
 
-    renderer.SetTexture(LSLeft.TexName);
-    renderer.RenderSprite(vertices, &LSLeft);
-
-    renderer.SetTexture(LSCenter.TexName);
+    //renderer.RenderSprite(vertices, &LSLeft);
 
     for (i = 0;i < 24;i++)
        {
@@ -1298,13 +1285,12 @@ void GL_DrawSaveLoadBorder(int x,int y)
 
         vertices[0] = Left;
         vertices[1] = Right;
-        renderer.RenderSprite(vertices, &LSCenter);
+        //renderer.RenderSprite(vertices, &LSCenter);
 
         x += 8;
         xo += (int)LSCenter.Width;
        }
 
-    renderer.SetTexture(LSRight.TexName);
 
     Left = (-160.0f+(float)xo);
     Right = (-160.0f+(float)xo+LSRight.Width);
@@ -1312,8 +1298,7 @@ void GL_DrawSaveLoadBorder(int x,int y)
     vertices[0] = Left;
     vertices[1] = Right;
 
-    renderer.RenderSprite(vertices, &LSRight);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &LSRight);
    }
 
 //
@@ -1396,8 +1381,8 @@ void GL_DrawSave(void)
         GL_WriteText(LoadDef.x+i,LoadDef.y+LINEHEIGHT*saveSlot,"_");
        }
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
 }
 
 //
@@ -1545,30 +1530,11 @@ void M_DrawReadThis1(void)
 
 void GL_DrawFullScreen(GLTexData *Image)
    {
-    float      Top, Left, Right, Bottom;
 
-    Top = 120.0f;
-    Bottom = -120.0f;
+    vec3 pos = { 0 };
+    vec2 size = { Image->glWidth, Image->glHeight };
 
-    Left = -160.0f;
-    Right = 96.0f;
-
-    float vertices[] = { Left, Right, Top, Bottom };
-
-    renderer.SetTexture(Image[0].TexName);
-    renderer.RenderSprite(vertices, &Image[0]);
-    renderer.SetTexture(0);
-
-    Left =  96.0f;
-    Right = 160.0f;
-
-    vertices[0] = 96.0f;
-    vertices[1] = 160.0f;
-
-    renderer.SetTexture(Image[1].TexName);
-    renderer.RenderSprite(vertices, &Image[1]);
-    renderer.SetTexture(0);
-
+    R2D_DrawSprite(pos, size, Image);
    }
 
 void GL_DrawReadThis1(void)
@@ -1664,8 +1630,8 @@ void GL_DrawGame(void)
    {
     GL_DrawTitle(28, &glMainMenu[0]);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1720,8 +1686,8 @@ void GL_DrawJoinGame(void)
     GL_WriteTextN(245,100, "30",              tc_grey);
     GL_WriteTextN(285,100, "NONE",            tc_grey);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1799,8 +1765,8 @@ void GL_DrawStartGame(void)
        }
     GL_WriteTextN(164, StartGameDef.y+(10*5)+8, msgstr, tc_grey);
     
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1868,8 +1834,8 @@ void GL_DrawMPlayer(void)
    {
     GL_DrawTitle(28, &glMPlayerTitle);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1913,8 +1879,8 @@ void GL_DrawMusic(void)
     GL_WriteTextN(164, MusicDef.y+(10*1)+8, "ORIGINAL CODING", tc_grey);
     GL_WriteTextN(164, MusicDef.y+(10*2)+8, "LOOP SONG", tc_grey);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 //
@@ -1928,8 +1894,8 @@ void GL_DrawSound(void)
 
     GL_DrawThermo(SoundDef.x,SoundDef.y+LINEHEIGHT*(music_vol+1),16,snd_MusicVolume);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+   /* glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 void M_Setup(int choice)
@@ -1993,8 +1959,8 @@ void GL_DrawMainMenu()
    {
     GL_DrawTitle(2, &GameLogo);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 
@@ -2031,9 +1997,9 @@ void GL_DrawNewGame(void)
     vertices[2] = Top;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glSkillTitle.TexName);
-    renderer.RenderSprite(vertices, &glSkillTitle);
-    renderer.SetTexture(0);
+
+    //renderer.RenderSprite(vertices, &glSkillTitle);
+
    }
 
 void M_NewGame(int choice)
@@ -2067,8 +2033,8 @@ void GL_DrawEpisode(void)
    {
     GL_DrawTitle(38, &glEpisodeTitle);
 
-    glDisable(GL_ALPHA_TEST);
-    glDisable(GL_BLEND);
+    /*glDisable(GL_ALPHA_TEST);
+    glDisable(GL_BLEND);*/
    }
 
 void M_VerifyNightmare(int ch)
@@ -2319,9 +2285,7 @@ void GL_DrawOptions(void)
     vertices[2] = Top;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glMsgName[showMessages].TexName);
-    renderer.RenderSprite(vertices, &glMsgName[showMessages]);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &glMsgName[showMessages]);
     
    }
 
@@ -2619,18 +2583,16 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
 
     Left  = (-160.0f+xx);
     Right = Left+glThermL.Width;
-    Top    = 120.0f-(y*1.2f);
-    Bottom = Top-(glThermL.Height*1.2f);
+    Top    = 120.0f-(y);
+    Bottom = Top-(glThermL.Height);
 
     vertices[0] = Left;
     vertices[1] = Right;
     vertices[2] = Top;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glThermL.TexName);
-    renderer.RenderSprite(vertices, &glThermL);
+    //renderer.RenderSprite(vertices, &glThermL);
 
-    renderer.SetTexture(glThermM.TexName);
     Left += glThermL.Width;
     Right = Left+9.0f;
 
@@ -2640,7 +2602,7 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     for (i = 0;i < thermWidth; i++)
        {
 
-        renderer.RenderSprite(vertices, &glThermM);
+        //renderer.RenderSprite(vertices, &glThermM);
 
         Left  += 8.0f;
         Right += 8.0f;
@@ -2652,8 +2614,7 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     Right = Left+glThermR.Width;
     vertices[1] = Right;
 
-    renderer.SetTexture(glThermR.TexName);
-    renderer.RenderSprite(vertices, &glThermR);
+    //renderer.RenderSprite(vertices, &glThermR);
 
     Left   = (-160.0f+(x+glThermL.Width)+(thermDot*8));
     Right  = Left+glThermO.Width;
@@ -2663,9 +2624,8 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot )
     vertices[1] = Right;
     vertices[3] = Bottom;
 
-    renderer.SetTexture(glThermO.TexName);
-    renderer.RenderSprite(vertices, &glThermO);
-    renderer.SetTexture(0);
+    //renderer.RenderSprite(vertices, &glThermO);
+
    }
 
 
@@ -2805,17 +2765,17 @@ void M_WriteText( int x, int y, char *string)
 
 void GL_WriteTextN( int x, int y, char *string, int color)
    {
-    float   Left, Bottom, Top, Right;
     char*	ch;
     int		c;
     int		cx;
     int		cy;
-    float vertices[4] = { 0 };
     ch = string;
     cx = x;
     cy = y;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
-    renderer.SetColor(tc[color].red, tc[color].green, tc[color].blue);
+    //renderer.SetColor(tc[color].red, tc[color].green, tc[color].blue);
 
     while(1)
        {
@@ -2826,7 +2786,7 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (c == '\n')
            {
             cx = x;
-            cy += (int)(GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight);
             continue;
            }
 		
@@ -2840,23 +2800,17 @@ void GL_WriteTextN( int x, int y, char *string, int color)
         if (cx+GLGreyFont[c].Width > SCREENWIDTH)
             break;
 
-        Top    = (120.0f-(((cy-GLGreyFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLGreyFont[c].Height*1.2f);
-        Left   = (-160.0f+cx);
-        Right  = Left + GLGreyFont[c].Width;
+        pos[0] = cx;
+        pos[1] = cy;
+        size[0] = GLGreyFont[c].Width;
+        size[1] = GLGreyFont[c].Height;
 
-        vertices[0] = Left;
-        vertices[1] = Right;
-        vertices[2] = Top;
-        vertices[3] = Bottom;
-
-        renderer.SetTexture(GLGreyFont[c].TexName);
-        renderer.RenderSprite(vertices, &GLGreyFont[c]);
+        R2D_DrawSprite(&pos, size, &GLGreyFont[c]);
 
         cx += (int)(GLGreyFont[c].Width-1);
        }
 
-    renderer.SetColor(1.0f, 1.0f, 1.0f);
+    //renderer.SetColor(1.0f, 1.0f, 1.0f);
    }
 
 //
@@ -2865,12 +2819,12 @@ void GL_WriteTextN( int x, int y, char *string, int color)
 
 void GL_WriteText( int x, int y, char *string)
    {
-    float   Left, Bottom, Top, Right;
     char*	ch;
     int		c;
     int		cx;
     int		cy;
-    float vertices[4] = { 0 };
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     ch = string;
     cx = x;
@@ -2885,7 +2839,7 @@ void GL_WriteText( int x, int y, char *string)
         if (c == '\n')
            {
             cx = x;
-            cy += (int)(GLFontHeight*1.2f);
+            cy += (int)(GLFontHeight);
             continue;
            }
 		
@@ -2899,19 +2853,12 @@ void GL_WriteText( int x, int y, char *string)
         if (cx+GLHudFont[c].Width > SCREENWIDTH)
             break;
 
-        Top    = (120.0f-(((cy-GLHudFont[c].TopOff)-3)*1.2f));
-        Bottom = Top-(GLHudFont[c].Height*1.2f);
+        pos[0] = cx;
+        pos[1] = cy;
+        size[0] = GLHudFont[c].Width;
+        size[1] = GLHudFont[c].Height;
 
-        Left = (-160.0f+cx);
-        Right = Left + GLHudFont[c].Width;
-
-        vertices[0] = Left;
-        vertices[1] = Right;
-        vertices[2] = Top;
-        vertices[3] = Bottom;
-
-        renderer.SetTexture(GLHudFont[c].TexName);
-        renderer.RenderSprite(vertices, &GLHudFont[c]);
+        R2D_DrawSprite(&pos, size, &GLHudFont[c]);
 
         cx += (int)GLHudFont[c].Width;
        }
@@ -4390,10 +4337,7 @@ void GL_DrawKeybnd(void)
   v[2] = Top;
   v[3] = Bottom;
 
-  renderer.SetTexture(glSetupMenu[0].TexName);
-  renderer.RenderSprite(v, &glSetupMenu[0]);
-
-  renderer.SetTexture(0);
+  //renderer.RenderSprite(v, &glSetupMenu[0]);
 
   GL_DrawInstructions();
   GL_DrawScreenItems(current_setup_menu);
@@ -5824,12 +5768,18 @@ void M_Drawer (void)
 
 void GL_DrawMenu()
    {
-    static int  x, y, i, max, w, h;
+    static int  x, y, max, w, h;
     float       Left, Bottom, Right, Top, lh;
     GLTexData  *GLTex;
-
+    size_t i;
     char		string[40];
     int			start;
+
+    vec3 menuItemPos = { 0 };
+    vec2 menuItemSize = { 0 };
+
+    vec3 skullPos = { 0 };
+    vec2 skullSize = { 0 };
 
     inhelpscreens = false;
 
@@ -5840,20 +5790,20 @@ void GL_DrawMenu()
         y = 100-(M_StringHeight(messageString)/2);
         while(*(messageString+start))
            {
-            for (i = 0;(unsigned)i < strlen(messageString+start);i++)
+            for (i = 0;i < strlen(messageString+start);i++)
                {
                 if (*(messageString+start+i) == '\n')
                    {
                     memset(string,0,40);
                     strncpy(string,messageString+start,i);
-                    start += i+1;
+                    start += (int)i+1;
                     break;
                    }
                }
-            if ((unsigned)i == strlen(messageString+start))
+            if (i == strlen(messageString+start))
                {
                 strcpy(string,messageString+start);
-                start += i;
+                start += (int)i;
                }
             x = 160 - M_StringWidth(string)/2;
             GL_WriteText(x,y,string);
@@ -5975,58 +5925,42 @@ void GL_DrawMenu()
         GLTex = glNewGame;
        }
 
-    float v[4] = { 0 };
-    renderer.SetColor(1.0f, 1.0f, 1.0f);
-
 
     if ((currentMenu->x >= 0) && (currentMenu->x <= (320-MenuSkull[whichSkull].Width)))
        {
-        Left   = -160.0f + (currentMenu->x+SKULLXOFF);
-        Right  = Left + (MenuSkull[whichSkull].Width);
-        Top    = (120.0f - (float)(((currentMenu->y-5) + (itemOn*LINEHEIGHT)) * 1.2f));
-        Bottom = Top - (MenuSkull[whichSkull].Height * 1.2f);
 
-        v[0] = Left;
-        v[1] = Right;
-        v[2] = Top;
-        v[3] = Bottom;
+        skullPos[0] = currentMenu->x + SKULLXOFF;
+        skullPos[1] = currentMenu->y - 3 + itemOn * LINEHEIGHT;
+        
+        skullSize[0] = MenuSkull[whichSkull].glWidth;
+        skullSize[1] = MenuSkull[whichSkull].glHeight;
+
+        R2D_DrawSprite(&skullPos, skullSize, &MenuSkull[whichSkull]);
 
         max = currentMenu->numitems;
-
-        renderer.SetTexture(MenuSkull[whichSkull].TexName);
-        renderer.RenderSprite(v, &MenuSkull[whichSkull]);
-
        }
 
     if (GLTex == 0)
        return;
 
-    Top    = 120.0f - ((float)currentMenu->y * 1.2f);
-    Left   = -160+(float)currentMenu->x;
-    Bottom = Top - (GLTex[0].Height*1.2f);
-    lh = ((float)LINEHEIGHT*1.2f);
+    lh = LINEHEIGHT;
 
-    v[2] = Top;
-    v[0] = Left;
-    v[3] = Bottom;
+    menuItemPos[0] = currentMenu->x;
+    menuItemPos[1] = currentMenu->y;
 
     for (i = 0; i < currentMenu->numitems; i++)
        {
         if (currentMenu->menuitems[i].name[0])
            {
-            Right = Left + GLTex[i].Width;
-            v[1] = Right;
-            renderer.SetTexture(GLTex[i].TexName);
-            renderer.RenderSprite(v, &GLTex[i]);
+            menuItemSize[0] = GLTex[i].glWidth;
+            menuItemSize[1] = GLTex[i].glHeight;
+
+            R2D_DrawSprite(&menuItemPos, menuItemSize, &GLTex[i]);
 
            }
-        Top    -= lh;
-        Bottom -= lh;
-        v[2] = Top;
-        v[3] = Bottom;
+        menuItemPos[1] += lh;
        }
     
-    renderer.SetTexture(0);
 
    }
 
@@ -6149,20 +6083,20 @@ void M_Init (void)
            }
         glTitles[i].glData->TexName = GL_MakeSpriteTexture(W_CacheLumpName(glTitles[i].lumpname,PU_CACHE), glTitles[i].glData, false);
        }
-*/
-    GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
-    GL_MakeScreenTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit);
+*/  
+    GL_MakeSpriteTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit, false);
     if (W_CheckNumForName("HELP") != -1)
        {
-        GL_MakeScreenTexture(W_CacheLumpName("HELP", PU_CACHE), glHelp);
+        GL_MakeSpriteTexture(W_CacheLumpName("HELP", PU_CACHE), glHelp, false);
        }
     if (W_CheckNumForName("HELP1") != -1)
        {
-        GL_MakeScreenTexture(W_CacheLumpName("HELP1", PU_CACHE), glHelp1);
+        GL_MakeSpriteTexture(W_CacheLumpName("HELP1", PU_CACHE), glHelp1, false);
        }
     if (W_CheckNumForName("HELP2") != -1)
        {
-        GL_MakeScreenTexture(W_CacheLumpName("HELP2", PU_CACHE), glHelp2);
+        GL_MakeSpriteTexture(W_CacheLumpName("HELP2", PU_CACHE), glHelp2, false);
        }
     GL_MakeSpriteTexture(W_CacheLumpName("M_DOOM",PU_CACHE), &GameLogo, false);
     GL_MakeSpriteTexture(W_CacheLumpName("M_PSETUP",PU_CACHE), &glPlayerSetupTitle, false);

@@ -14,6 +14,7 @@
 #include "z_zone.h"
 #include "gl_texture.h"
 #include "d_bitmap.h" /* The bitmap loader */
+#include "gl_filter.h" 
 #define GLD_TRANSPARENT 0
 #define GLD_COLORED     1
 
@@ -67,7 +68,6 @@ DW_TexList     TexList[1024];
 
 extern int gl_alphatest;
 extern int gl_widetex;
-extern int gl_core;
 
 // A single patch from a texture definition,
 //  basically a rectangular area within
@@ -113,7 +113,7 @@ void InitGLPalette(int red, int green, int blue)
 
 int CreateColorMap(int red, int green, int blue)
    {
-    int             TempTexName;
+    unsigned int             TempTexName = 1;
     unsigned char   TexData[4];
 
     TexWide = 1;
@@ -124,28 +124,15 @@ int CreateColorMap(int red, int green, int blue)
     TexData[2] = blue;
     TexData[3] = 255;
 
-    glGenTextures(1, &TempTexName);
-    glBindTexture(GL_TEXTURE_2D, TempTexName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    //Define the 2D Texture image
+    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexData, false, true, true, true);
 
-    // Define the 2D texture image.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);	// Force 4-byte alignment
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexWide, TexHigh, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexData);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
     return(TempTexName);
    }
 
 int CreatePointLightMap(int red, int green, int blue, dboolean alphaonly)
    {
-    int             r, d, t, TempTexName;
+    int             r, d, t, TempTexName = 1;
 
     TexWide = 16;
     TexHigh = 16;
@@ -181,22 +168,8 @@ int CreatePointLightMap(int red, int green, int blue, dboolean alphaonly)
            }
        }
 
-    glGenTextures(1, &TempTexName);
-    glBindTexture(GL_TEXTURE_2D, TempTexName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, true, true);
 
-    // Define the 2D texture image.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);	// Force 4-byte alignment
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexWide, TexHigh, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexRGB);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
     free(TexRGB);
     return(TempTexName);
    }
@@ -229,27 +202,12 @@ extern texture_t**	textures;
 
 int GL_LoadSkyTop( char *filename )
    {
-    unsigned int TempTexName;
+    unsigned int TempTexName = 1;
 
     D_LoadBmp(TexRGB, filename, TexWide, TexHigh);
 
-    glGenTextures(1, &TempTexName);
-    glBindTexture(GL_TEXTURE_2D, TempTexName);
+    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, true, true);
 
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // Define the 2D texture image.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);	// Force 4-byte alignment
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TexWide, TexHigh, 0, GL_RGB, GL_UNSIGNED_BYTE, TexRGB);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
     free(TexRGB);
     return(TempTexName);
    }
@@ -293,6 +251,7 @@ int GL_LoadTexture(int TexNumb)
        {
         TexRaw[n] = 110;
         Transparent[n] = GLD_TRANSPARENT;
+        
        }
 
     fields = textures[TexList[TexNumb].Number]->patchcount;
@@ -441,8 +400,6 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     int            TempTexNumb;
     int            iGLWide, iGLHigh;
 
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
-
     tshort = (unsigned short *)Sprite;
     ixsize = *tshort;
 
@@ -512,14 +469,6 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
    }
 
 //
@@ -558,7 +507,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
 
     TexWide = ixsize;
     TexHigh = iysize;
-    for (x = 0, iPower = 2; ((x < 8) && (TexWide > iPower)); x++)
+    /*for (x = 0, iPower = 2; ((x < 8) && (TexWide > iPower)); x++)
          iPower = iPower * 2;
     if ((iPower >= TexWide) && (iPower <= 512))
         iGLWide = iPower;
@@ -570,9 +519,9 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     while ((iGLWide / iGLHigh) > 8)
        iGLHigh *= 2;
     while ((iGLHigh / iGLWide) > 8)
-       iGLWide *= 2;
-    TexWide = iGLWide;
-    TexHigh = iGLHigh;
+       iGLWide *= 2;*/
+    /*TexWide = iGLWide;
+    TexHigh = iGLHigh;*/
 
     for (n = 0; n < ixsize*iysize; n++)
        {
@@ -630,16 +579,6 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
-
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex->YDisp, Tex->XDisp, Tex->YDisp, Tex->XDisp, 1.0f };
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
    }
 
 // GL_MakeWideSpriteTexture
@@ -915,16 +854,6 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[0].glWidth = 256.0f;
     Tex[0].glHeight = 256.0f;
 
-    float coords[] = { 0.0f, 1.0f, 0.0f, Tex[0].YDisp, Tex[0].XDisp, Tex[0].YDisp, Tex[0].XDisp, 1.0f };
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
-
     memset(TexRaw, 0, 64*200);
     for (i = 0, d = 0, s = 256; i < 200; i++)
        {
@@ -946,19 +875,6 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[1].TopOff = 0.0f;
     Tex[1].glWidth = 64.0f;
     Tex[1].glHeight = 256.0f;
-    
-    coords[3] = Tex[1].YDisp;
-    coords[4] = Tex[1].XDisp;
-    coords[5] = Tex[1].YDisp;
-    coords[6] = Tex[1].XDisp;
-
-    if (gl_core)
-    {
-        glGenBuffers(1, &Tex->texVBO2);
-        glBindBuffer(GL_ARRAY_BUFFER, Tex->texVBO2);
-        glBufferData(GL_ARRAY_BUFFER, sizeof(coords), coords, GL_STATIC_DRAW);
-        glBindBuffer(GL_ARRAY_BUFFER, 0);
-    }
 
    }
 
@@ -1000,8 +916,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
            }
        }
 
-    glGenTextures(1, &TempTexName);
-    glBindTexture(GL_TEXTURE_2D, TempTexName);
+    GL_GenTextures(&TempTexName, 1, gl_texture_2d);
     if ((smooth == true) && (TexTransparent == true))
        {
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
@@ -1010,28 +925,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
         AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
-    if (clamp == true)
-       {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-       }
-    else
-       {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-       }
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // Define the 2D texture image.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);	// Force 4-byte alignment
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexWide, TexHigh, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexRGB);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CreateClampTexture(gl_texture_2d, TexWide, TexHigh, TexRGB, clamp);
     free(TexRGB);
     return(TempTexName);
    }
@@ -1191,8 +1085,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
            }
        }
 
-    glGenTextures(1, &TempTexName);
-    glBindTexture(GL_TEXTURE_2D, TempTexName);
+    GL_GenTextures(&TempTexName, 1, gl_texture_2d);
 
     if ((smooth == true) && (TexTransparent == true))
        {
@@ -1202,28 +1095,8 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
         AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
-    if (clamp == true)
-       {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-       }
-    else
-       {
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-        glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-       }
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 
-    // Define the 2D texture image.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);	// Force 4-byte alignment
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, TexWide, TexHigh, 0, GL_RGBA, GL_UNSIGNED_BYTE, TexRGB);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CreateClampTexture(gl_texture_2d, TexWide, TexHigh, TexRGB, clamp);
     free(TexRGB);
     return(TempTexName);
    }
@@ -1231,7 +1104,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
 unsigned int MakeRGBTexture(int dw, int dh)
    {
     int             r, c, d, h, t, m, n;
-    unsigned int TempTexName;
+    unsigned int TempTexName = 1;
     TexRGB =  (GLubyte *)malloc(TexWide*(TexHigh*3));
 
     TexTransparent = false;
@@ -1250,23 +1123,7 @@ unsigned int MakeRGBTexture(int dw, int dh)
            }
        }
 
-    glGenTextures(1, &TempTexName);
-    glBindTexture(GL_TEXTURE_2D, TempTexName);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-
-    // Define the 2D texture image.
-    glPixelStorei(GL_UNPACK_ALIGNMENT, 4);	// Force 4-byte alignment
-    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
-    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
-    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, TexWide, TexHigh, 0, GL_RGB, GL_UNSIGNED_BYTE, TexRGB);
-
-    glBindTexture(GL_TEXTURE_2D, 0);
+    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, false, true);
     free(TexRGB);
     return(TempTexName);
    }
-

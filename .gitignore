@@ -6,10 +6,12 @@
 *.user
 *.ncb
 *.wad
+*.dll
 .svn/
 *.suo
 *.dbg
 .vs/
 *.dll
+.vscode
 /DOOMSONG.MID
 /default.cfg

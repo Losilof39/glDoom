@@ -84,8 +84,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm</LibraryPath>
-    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm</IncludePath>
+    <LibraryPath>$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);C:\Users\Dragica\Documents\GitHub\glDoom\thirdparty\cglm;$(SolutionDir)\thirdparty\cimgui\bin</LibraryPath>
+    <IncludePath>$(VC_IncludePath);$(WindowsSDK_IncludePath);;C:\Users\Dragica\Documents\GitHub\cglm-0.9.1\include\cglm;$(SolutionDir)\thirdparty\cimgui\include</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -144,7 +144,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>INITGUID;_DEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INITGUID;_DEBUG;WIN32;_WINDOWS;MAX;_CRT_SECURE_NO_WARNINGS;CIMGUI_DEFINE_ENUMS_AND_STRUCTS;CIMGUI_USE_OPENGL3;CIMGUI_USE_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
@@ -175,6 +175,7 @@
       </DataExecutionPrevention>
       <AdditionalLibraryDirectories>
       </AdditionalLibraryDirectories>
+      <AdditionalOptions>/NODEFAULTLIB:MSVCRT %(AdditionalOptions)</AdditionalOptions>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -195,7 +196,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;CIMGUI_DEFINE_ENUMS_AND_STRUCTS;CIMGUI_USE_OPENGL3;CIMGUI_USE_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -207,7 +208,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include;$(SolutionDir)thirdparty\cglm\include;$(SolutionDir)thirdparty\cimgui\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -215,7 +216,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;cimgui.lib;cimgui_sdl.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>.\Release/GLDOOM.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>.\Release/GLDOOM.pdb</ProgramDatabaseFile>
@@ -223,7 +224,7 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
-      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x86;$(SolutionDir)\thirdparty\cglm\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x86;$(SolutionDir)\thirdparty\cglm\lib\x86;$(SolutionDir)\thirdparty\cimgui\lib\x86;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -241,7 +242,7 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;CIMGUI_DEFINE_ENUMS_AND_STRUCTS;CIMGUI_USE_OPENGL3;CIMGUI_USE_SDL2;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <EnableEnhancedInstructionSet>NotSet</EnableEnhancedInstructionSet>
       <FloatingPointModel>Fast</FloatingPointModel>
@@ -253,7 +254,7 @@
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <CompileAs>CompileAsC</CompileAs>
-      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL2\include;$(SolutionDir)thirdparty\cglm\include;$(SolutionDir)thirdparty\cimgui\include</AdditionalIncludeDirectories>
       <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
     </ClCompile>
     <ResourceCompile>
@@ -261,14 +262,14 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;%(AdditionalDependencies);cglm.lib</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL2.lib;SDL2main.lib;SDL2_mixer.lib;cglm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <ProgramDatabaseFile>$(SolutionDir)$(Platform)\$(Configuration)\GLDOOM.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
-      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x64;$(SolutionDir)\thirdparty\cglm\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL2\lib\x64;$(SolutionDir)\thirdparty\cglm\lib\x64;$(SolutionDir)\thirdparty\cimgui\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -290,6 +291,7 @@
     <ClCompile Include="f_finale.c" />
     <ClCompile Include="f_wipe.c" />
     <ClCompile Include="glsbar.c" />
+    <ClCompile Include="gl_filter.c" />
     <ClCompile Include="gl_texture.c" />
     <ClCompile Include="gl_video.c" />
     <ClCompile Include="gl_wipe.c" />
@@ -330,8 +332,8 @@
     <ClCompile Include="p_tick.c" />
     <ClCompile Include="p_user.c" />
     <ClCompile Include="renderer.c" />
-    <ClCompile Include="rendererCore.c" />
-    <ClCompile Include="rendererFixed.c" />
+    <ClCompile Include="renderer2D.c" />
+    <ClCompile Include="renderer3D.c" />
     <ClCompile Include="r_bsp.c" />
     <ClCompile Include="r_data.c" />
     <ClCompile Include="r_draw.c" />
@@ -384,6 +386,7 @@
     <ClInclude Include="f_wipe.h" />
     <ClInclude Include="gldefs.h" />
     <ClInclude Include="glsbar.h" />
+    <ClInclude Include="gl_filter.h" />
     <ClInclude Include="gl_texture.h" />
     <ClInclude Include="gl_video.h" />
     <ClInclude Include="g_game.h" />
@@ -413,8 +416,8 @@
     <ClInclude Include="p_spec.h" />
     <ClInclude Include="p_tick.h" />
     <ClInclude Include="renderer.h" />
-    <ClInclude Include="rendererCore.h" />
-    <ClInclude Include="rendererFixed.h" />
+    <ClInclude Include="renderer2D.h" />
+    <ClInclude Include="renderer3D.h" />
     <ClInclude Include="resources\resource.h" />
     <ClInclude Include="r_bsp.h" />
     <ClInclude Include="r_data.h" />
@@ -449,8 +452,16 @@
     <None Include="resources\gldfont.bin" />
     <None Include="resources\INTERPIC.bin" />
     <None Include="resources\Playpal.bin" />
-    <None Include="shader_files\ui_frag.glsl" />
-    <None Include="shader_files\ui_vert.glsl" />
+    <None Include="shader_files\flatcolor.ps" />
+    <None Include="shader_files\flatcolor.vs" />
+    <None Include="shader_files\framebuffer.ps" />
+    <None Include="shader_files\framebuffer.vs" />
+    <None Include="shader_files\sprite.ps" />
+    <None Include="shader_files\sprite.vs" />
+    <None Include="shader_files\polygon.ps" />
+    <None Include="shader_files\polygon.vs" />
+    <None Include="shader_files\thing.ps" />
+    <None Include="shader_files\thing.vs" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />
