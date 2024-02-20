@@ -11,5 +11,7 @@
 *.suo
 *.dbg
 .vs/
+*.dll
+.vscode
 /DOOMSONG.MID
 /default.cfg

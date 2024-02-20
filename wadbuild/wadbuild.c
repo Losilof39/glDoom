@@ -14,6 +14,11 @@
 #include <string.h>
 #include <sys/stat.h>
 
+#ifndef O_BINARY
+#define O_BINARY		0
+#endif
+
+
 #ifdef _MSC_VER
 #pragma warning(disable:6031)
 #pragma warning(disable:6053)
@@ -38,7 +43,26 @@
 #define Read read
 #define LSeek lseek
 #define Write write
+#ifndef __linux__
 #define Strupr strupr
+#endif
+#endif
+
+#ifdef __linux__
+char * Strupr(char *str)
+   {
+    char *c, t;
+
+    t = 'a' - 'A';
+
+    c = str;
+    while (*c)
+       {
+        *c = ((*c >= 'a') && (*c <= 'z')) ? *c - t : *c;
+        c++;
+       }
+    return str;
+   }
 #endif
 
 typedef struct
