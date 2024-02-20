@@ -13,8 +13,8 @@ endif
 
 CC=gcc
 CFLAGS+= -I./thirdparty/glad/include
-#LIBS+= `pkg-config --libs sdl2` `pkg-config --libs libpng` `pkg-config --libs gl` `pkg-config --libs glu` `pkg-config --libs SDL2_net` `pkg-config --libs fluidsynth` -lm
-LIBS+=-lOpenGL -lSDL2_mixer -lSDL2 -lm -lGL -lGLU -lglut -lcglm
+#LIBS+= `pkg-config --libs sdl2` `pkg-config --libs libpng` `pkg-config --libs gl` `pkg-config --libs glu` `pkg-config --libs SDL2_net` -lm
+LIBS+=-lOpenGL -lSDL2_mixer -lSDL2 -lm -lGL -lGLU -lcglm
 OBJDIR=.
 OUTPUT=glDoom-Re
 WADBUILD=wadbuild/wadbuild
