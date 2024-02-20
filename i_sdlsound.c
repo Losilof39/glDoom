@@ -22,8 +22,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include "thirdparty/SDL2/include/SDL.h"
-#include "thirdparty/SDL2/include/SDL_mixer.h"
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#else
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
 
 #include "i_sound.h"
 #include "i_system.h"
