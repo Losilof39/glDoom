@@ -45,6 +45,10 @@ typedef int32_t fixed_t;
 
 fixed_t FixedMul	(fixed_t a, fixed_t b);
 fixed_t FixedDiv	(fixed_t a, fixed_t b);
+fixed_t
+FixedDiv2
+(fixed_t	a,
+	fixed_t	b);
 
 #define FIXED_TO_FLOAT_MULT    (1.0f / ((float)FRACUNIT))
 #define FIXED_TO_FLOAT(x)      (((float)(x)) * FIXED_TO_FLOAT_MULT)
