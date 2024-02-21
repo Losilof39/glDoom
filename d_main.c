@@ -41,10 +41,6 @@ extern sRenderer renderer;
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifdef NORMALUNIX
-#include <unistd.h>
-#endif
-
 //#include <direct.h>
 #include <malloc.h>
 #ifdef _WIN32

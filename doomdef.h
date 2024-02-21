@@ -25,8 +25,11 @@
 
 #include <stdio.h>
 #include <string.h>
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
 #include <SDL.h>
-
+#endif
 //
 // Global parameters/defines.
 //
