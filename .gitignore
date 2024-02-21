@@ -11,5 +11,8 @@
 *.dbg
 .vs/
 *.dll
+.vscode
 /DOOMSONG.MID
 /default.cfg
+glDoom-Re
+wadbuild/wadbuild

@@ -974,7 +974,7 @@ int GL_WI_drawNum( int x, int y, int n, int digits )
     // draw a minus sign if necessary
     if (neg)
        {
-        GL_DrawPatch(&WiMinus, (float)x, (float)y);
+        GL_DrawPatch(&WiMinus, x-=8, y);
        }
 
     return x;

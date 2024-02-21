@@ -65,7 +65,7 @@ Plus more!
 Use the Visual Studio project and build for your desired architecture.
 
 ### Linux
-Run ``` sh build.sh ``` in the commandline to build.
+Run ``` make all ``` in the commandline to build.
 
 ### Game data
 Before playing DOOM, you will need to also create the ```gldoom.wad ``` file by using the wadbuild tool (wadbuild.exe gldoom.lst) in the resources directory.
