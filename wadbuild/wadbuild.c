@@ -12,6 +12,12 @@
 #endif
 #include <fcntl.h>
 #include <string.h>
+#include <sys/stat.h>
+
+#ifndef O_BINARY
+#define O_BINARY		0
+#endif
+
 
 #ifdef _MSC_VER
 #pragma warning(disable:6031)
@@ -31,15 +37,32 @@
 #define LSeek _lseek
 #define Write _write
 #define Strupr _strupr
-#define Filelength _filelength
 #else
 #define Open open
 #define Close close
 #define Read read
 #define LSeek lseek
 #define Write write
+#ifndef __linux__
 #define Strupr strupr
-#define Filelength filelength
+#endif
+#endif
+
+#ifdef __linux__
+char * Strupr(char *str)
+   {
+    char *c, t;
+
+    t = 'a' - 'A';
+
+    c = str;
+    while (*c)
+       {
+        *c = ((*c >= 'a') && (*c <= 'z')) ? *c - t : *c;
+        c++;
+       }
+    return str;
+   }
 #endif
 
 typedef struct
@@ -69,7 +92,7 @@ int   wadfile, resource, flength, pad;
 
 unsigned char *databuff = NULL;
 
-void main(int argc, char *argv[])
+int main(int argc, char *argv[])
    {
     int i;
 
@@ -157,7 +180,12 @@ void main(int argc, char *argv[])
            }
         else
            {
-            flength = Filelength(resource);
+            struct stat resource_st;
+            if(fstat(resource, &resource_st))
+            {
+                return -1;
+            }
+            flength = resource_st.st_size;
             databuff = (unsigned char *)realloc(databuff, flength+4);
             Read(resource, databuff, flength);
             Close(resource);
@@ -180,4 +208,6 @@ void main(int argc, char *argv[])
     Write(wadfile, &wadhead, sizeof(wadhead_t));
     Close(wadfile);
     fclose(namelist);
+
+    return 0;
    }
