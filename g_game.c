@@ -73,7 +73,7 @@ rcsid[] = "$Id: g_game.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #else
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 
 #define SAVEGAMESIZE	0x2c0000

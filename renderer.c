@@ -3,7 +3,7 @@
 #include "renderer3D.h"
 
 #include <glad/glad.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "v_video.h"
 #include "i_system.h"
 

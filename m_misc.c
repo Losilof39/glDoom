@@ -30,7 +30,7 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #else
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 #include <glad/glad.h>
 

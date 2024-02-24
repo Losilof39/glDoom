@@ -8,7 +8,7 @@
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #else
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #endif
 
 #include "doomtype.h"
