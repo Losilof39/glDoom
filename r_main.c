@@ -44,6 +44,7 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "gldefs.h"
 
 #include "v_video.h"
+#include "renderer2D.h"
 #include "renderer3D.h"
 
 // Fineangles in the SCREENWIDTH wide window.
@@ -916,6 +917,7 @@ void GL_DrawSky(float compass)
     int   bquad, equad, tcomp;
     float lcomp, rcomp;
     float tseam, middle;
+    GLTexData skyTex;
 
     float fSkyTop, fSkyBottom, fSkyMiddle, fSkyHalfHeight;
     float fSkyHeightScale, fDefaultAspect;
@@ -953,6 +955,8 @@ void GL_DrawSky(float compass)
 
     if (bquad == equad)
     {
+        skyTex.TexName = GL_SkyTexture[bquad];
+        R2D_DrawSprite((vec3){0}, (vec2){SCREENWIDTH, SCREENHEIGHT}, &skyTex);
         /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
         glBegin( GL_QUADS );
            glTexCoord2f(1.0f, fSkyTop);
