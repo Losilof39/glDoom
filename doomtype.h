@@ -38,7 +38,7 @@
 #include <fcntl.h>
 #include <limits.h>
 
-#ifndef MAX
+#ifndef max
 #define max(a,b) ((a)>(b)?(a):(b))
 #endif
 
@@ -93,16 +93,38 @@ typedef int dboolean;
 #define arrlen(array) (sizeof(array) / sizeof(*array))
 
 // Predefined with some OS.
-#ifdef IMPL
-#define DMINCHAR    128
-#define DMAXCHAR    127
-#define DMINSHORT    (-32768)
-#define DMAXSHORT      32767
-#define DMININT     (-2147483647 - 1)
-#define DMAXINT       2147483647
-#define DMINLONG    (-2147483647L - 1)
-#define DMAXLONG      2147483647L
-#else
+#ifndef CHAR_MIN
+#define CHAR_MIN 128
+#endif
+
+#ifndef CHAR_MAX
+#define CHAR_MAX 128
+#endif
+
+#ifndef SHRT_MIN
+#define SHRT_MIN (-32768)
+#endif
+
+#ifndef SHRT_MAX
+#define SHRT_MAX      32767
+#endif
+
+#ifndef INT_MIN
+#define INT_MIN (-2147483647 - 1)
+#endif
+
+#ifndef INT_MAX
+#define INT_MAX 2147483647
+#endif
+
+#ifndef LONG_MIN
+#define LONG_MIN (-2147483647L - 1)
+#endif
+
+#ifndef LONG_MAX
+#define LONG_MAX 2147483647L
+#endif
+
 #define DMAXCHAR CHAR_MAX
 #define DMAXSHORT SHRT_MAX
 #define DMAXINT INT_MAX
@@ -111,7 +133,6 @@ typedef int dboolean;
 #define DMINSHORT SHRT_MIN
 #define DMININT INT_MIN
 #define DMINLONG LONG_MIN
-#endif
 
 #endif
 //-----------------------------------------------------------------------------

@@ -10,7 +10,11 @@
 #include <math.h>
 #include <time.h>
 #include <glad/glad.h>
-#include <SDL.h>
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
+#include <SDL2/SDL.h>
+#endif
 
 /////////////////////////////////////////////////////////////////////////////////////
 // Application Includes...

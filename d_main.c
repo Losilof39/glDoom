@@ -38,10 +38,6 @@ static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 #include <sys/stat.h>
 #include <fcntl.h>
 
-#ifdef NORMALUNIX
-#include <unistd.h>
-#endif
-
 //#include <direct.h>
 #include <malloc.h>
 #ifdef _WIN32

@@ -27,13 +27,16 @@
 #pragma interface
 #endif
 
-#include <SDL_endian.h> /* Header for handle the endian swapping */
-
+#ifdef __linux__
+#include <SDL2/SDL_endian.h>
+#else
+#include <SDL2/SDL_endian.h> /* Header for handle the endian swapping */
+#endif
 // Endianess handling.
 // WAD files are stored little endian.
 
 /* 
-** André:
+** Andrï¿½:
 ** Taken from Doom64EX+: 
 ** Defines for checking the endianness of the system. 
 */
@@ -44,7 +47,7 @@
 #define SYS_BIG_ENDIAN
 #endif
 
-#if 0 /* André: Unused now, Now uses the SDL_Swap api for handling the endian support. */
+#if 0 /* Andrï¿½: Unused now, Now uses the SDL_Swap api for handling the endian support. */
 #ifdef __BIG_ENDIAN__
 short	SwapSHORT(short);
 long long	SwapLONG(long long);

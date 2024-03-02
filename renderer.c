@@ -3,7 +3,7 @@
 #include "renderer3D.h"
 
 #include <glad/glad.h>
-#include <SDL.h>
+#include <SDL2/SDL.h>
 #include "v_video.h"
 #include "i_system.h"
 
@@ -28,8 +28,8 @@ void R_InitRenderer()
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
 
-	s_renderinfo.virtualWidth = 320;
-	s_renderinfo.virtualHeight = 200;
+	s_renderinfo.virtualWidth = SCREENWIDTH;
+	s_renderinfo.virtualHeight = SCREENHEIGHT;
 	s_renderinfo.virtualRatio = (float)s_renderinfo.virtualWidth / (float)s_renderinfo.virtualHeight;
 
 	renderer.fbShader = Shader_Create("framebuffer", "shader_files/framebuffer.vs", "shader_files/framebuffer.ps");

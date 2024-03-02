@@ -31,7 +31,7 @@ void D_LoadBmp(dbyte* rgb, const char* filename, int width, int height)
     Read(fn, bmpPalette, (sizeof(rgbquad_t) * 256));
 
     texels = (unsigned char*)malloc(width * height);
-    LSeek(fn, bmfh.offBits, SEEK_SET);
+    LSeek(fn, (long)bmfh.offBits, SEEK_SET);
     Read(fn, texels, (width * height));
     Close(fn);
 

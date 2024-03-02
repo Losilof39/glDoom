@@ -1,6 +1,5 @@
-#version 330 core
-layout (location = 0) in vec4 vertex; // <vec2 position, vec2 texCoords>
-
+#version 460 core
+layout (location = 0) in vec4 vertex;
 out vec2 TexCoords;
 
 uniform mat4 u_Model;

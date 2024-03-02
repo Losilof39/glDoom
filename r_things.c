@@ -1408,11 +1408,8 @@ void GL_DrawThings(void)
     int             mirror;
     float           sx, sy, sz, Orient, x1, x2, tLight;
     float           fLight, fOffset;
-	
-    Orient = 360.0f + (camera.oy * -1.0f);
-    Orient += 180.0f;
-    if (Orient > 360.0f)
-        Orient -= 360.0f;
+
+    Orient = 90.0f + (float)(viewangle >> ANGLETOFINESHIFT) * 360.0f / FINEANGLES;
 
     if (vissprite_p > vissprites)
        {
