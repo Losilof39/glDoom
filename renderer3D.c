@@ -45,12 +45,12 @@ void InitRenderer3D()
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     glBindVertexArray(0);
 
-	s_threeData.shader = Shader_Create("polygon", "shader_files/polygon.vs", "shader_files/polygon.ps");
+	s_threeData.polygonShader = Shader_Create("polygon", "shader_files/polygon.vs", "shader_files/polygon.ps");
     s_threeData.thingShader = Shader_Create("thing", "shader_files/thing.vs", "shader_files/thing.ps");
 	glm_perspective(glm_rad(video.fovy), (float)video.width / (float)video.height, 0.1f, 5000.0f, s_threeData.cam.projection);
 
-    Shader_Use(s_threeData.shader);
-    Shader_SetMat4(s_threeData.shader, "proj", s_threeData.cam.projection);
+    Shader_Use(s_threeData.polygonShader);
+    Shader_SetMat4(s_threeData.polygonShader, "proj", s_threeData.cam.projection);
 
     Shader_Use(s_threeData.thingShader);
     Shader_SetMat4(s_threeData.thingShader, "proj", s_threeData.cam.projection);
@@ -70,8 +70,8 @@ void R3D_UpdateCamera(vec3* position, vec3 viewangle)
     glm_vec3_add(position, dir, center);
     glm_lookat(position, center, (vec3) { 0.0f, 1.0f, 0.0f }, s_threeData.cam.view);
 
-    Shader_Use(s_threeData.shader);
-    Shader_SetMat4(s_threeData.shader, "view", s_threeData.cam.view);
+    Shader_Use(s_threeData.polygonShader);
+    Shader_SetMat4(s_threeData.polygonShader, "view", s_threeData.cam.view);
 
     Shader_Use(s_threeData.thingShader);
     Shader_SetMat4(s_threeData.thingShader, "view", s_threeData.cam.view);
@@ -303,8 +303,8 @@ void R3D_StopRendition(void)
     glm_mat4_identity(model);
 
     // setup shader used for wall, ceil and floor rendering
-    Shader_Use(s_threeData.shader);
-    Shader_SetInt(s_threeData.shader, "tex", 0);
+    Shader_Use(s_threeData.polygonShader);
+    Shader_SetInt(s_threeData.polygonShader, "tex", 0);
    
     glEnable(GL_DEPTH_TEST);
 
@@ -320,11 +320,11 @@ void R3D_StopRendition(void)
         {
             case R3D_RENDER_WALL:
             {
-                Shader_Use(s_threeData.shader);
+                Shader_Use(s_threeData.polygonShader);
 
                 while (cur != NULL)
                 {
-                    Shader_SetFloat(s_threeData.shader, "light", cur->light);
+                    Shader_SetFloat(s_threeData.polygonShader, "light", cur->light);
 
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
@@ -343,11 +343,11 @@ void R3D_StopRendition(void)
 
             case R3D_RENDER_CEIL:
             {
-                Shader_Use(s_threeData.shader);
+                Shader_Use(s_threeData.polygonShader);
 
                 while (cur != NULL)
                 {
-                    Shader_SetFloat(s_threeData.shader, "light", cur->light);
+                    Shader_SetFloat(s_threeData.polygonShader, "light", cur->light);
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D, *cur->flat->texCeil);
 
@@ -364,11 +364,11 @@ void R3D_StopRendition(void)
 
             case R3D_RENDER_FLOOR:
             {
-                Shader_Use(s_threeData.shader);
+                Shader_Use(s_threeData.polygonShader);
 
                 while (cur != NULL)
                 {
-                    Shader_SetFloat(s_threeData.shader, "light", cur->light);
+                    Shader_SetFloat(s_threeData.polygonShader, "light", cur->light);
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D, *cur->flat->texFloor);
 

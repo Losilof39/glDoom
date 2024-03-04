@@ -18,7 +18,7 @@ typedef struct s_R3DStorage
 	GLuint VAO;
 	GLuint thingVAO;
 	GLuint thingVBO;
-	Shader shader;
+	Shader polygonShader;
 	Shader thingShader;
 	Camera cam;
 }R3DStorage;
