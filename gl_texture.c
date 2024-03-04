@@ -348,7 +348,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
             s += w;
             d += glw;
            }
-        TempTexNumb = MakeRGBTexture(256, TexList[TexNumb].DHigh);
+        TempTexNumb = MakeRGBATexture(256, TexList[TexNumb].DHigh, TexList[TexNumb].DWide, TexList[TexNumb].DHigh);
         SkyTex[part] = TempTexNumb;
        }
     while(part < 4)
