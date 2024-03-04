@@ -62,7 +62,7 @@ void InitRenderer2D()
 
 void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 {
-	twodcommand* newNode = (twodcommand*)malloc(sizeof(twodcommand));
+	twodcommand* newNode = (twodcommand*)Z_Malloc(sizeof(twodcommand), PU_STATIC, NULL);
 
 	if (head_command == NULL) {
 		// If the list is empty, set the new node as the head
@@ -88,7 +88,7 @@ void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 
 void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name)
 {
-	twodcommand* newNode = (twodcommand*)malloc(sizeof(twodcommand));
+	twodcommand* newNode = (twodcommand*)Z_Malloc(sizeof(twodcommand), PU_STATIC, NULL);
 	GLTexData	tex;
 
 	GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &tex, false);
@@ -141,7 +141,7 @@ void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color)
 
 void R2D_DrawLightSprite(vec3* position, vec2 size, GLTexData* tex, float light)
 {
-	twodcommand* newNode = (twodcommand*)malloc(sizeof(twodcommand));
+	twodcommand* newNode = (twodcommand*)Z_Malloc(sizeof(twodcommand), PU_STATIC, NULL);
 
 	if (head_command == NULL) {
 		// If the list is empty, set the new node as the head
@@ -209,7 +209,7 @@ void R2D_StopRendition(void)
 	// Free each node in the list
 	while (cur != NULL) {
 		nextNode = cur->next;
-		free(cur);
+		Z_Free(cur);
 		cur = nextNode;
 	}
 
