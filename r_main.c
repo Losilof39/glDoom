@@ -955,8 +955,7 @@ void GL_DrawSky(float compass)
 
     if (bquad == equad)
     {
-        skyTex.TexName = GL_SkyTexture[bquad];
-        R2D_DrawSprite((vec3){0}, (vec2){SCREENWIDTH, SCREENHEIGHT}, &skyTex);
+        
         /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
         glBegin( GL_QUADS );
            glTexCoord2f(1.0f, fSkyTop);
