@@ -30,6 +30,8 @@ void InitRenderer2D();
 
 void R2D_StartRendition(void);
 void R2D_StopRendition(void);
+void R2D_FlushCommandList(twodcommand* head);
+twodcommand* R2D_AddDrawCmd(twodcommand* head);
 void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex);
 void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name);
 void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color);

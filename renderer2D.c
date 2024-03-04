@@ -60,7 +60,25 @@ void InitRenderer2D()
 
 }
 
-void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
+// every frame flush command list
+void R2D_FlushCommandList(twodcommand* head)
+{
+	twodcommand* cur, *nextNode;
+	cur = head_command;
+
+	// Free each node in the list
+	while (cur != NULL) {
+		nextNode = cur->next;
+		Z_Free(cur);
+		cur = nextNode;
+	}
+
+	// Set the head to NULL to indicate an empty list
+	head_command = NULL;
+}
+
+// push back 2D draw command and return its pointer
+twodcommand* R2D_AddDrawCmd(twodcommand* head)
 {
 	twodcommand* newNode = (twodcommand*)Z_Malloc(sizeof(twodcommand), PU_STATIC, NULL);
 
@@ -76,6 +94,13 @@ void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 		}
 		current->next = newNode;
 	}
+
+	return newNode;
+}
+
+void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
+{
+	twodcommand* newNode = R2D_AddDrawCmd(head_command);
 
 	glm_vec3_copy(position, &newNode->position);
 	glm_vec3_copy(size, &newNode->size);
@@ -88,23 +113,10 @@ void R2D_DrawSprite(vec3* position, vec2 size, GLTexData* tex)
 
 void R2D_DrawSpriteFromName(vec3* position, vec2 size, const char* name)
 {
-	twodcommand* newNode = (twodcommand*)Z_Malloc(sizeof(twodcommand), PU_STATIC, NULL);
+	twodcommand* newNode = R2D_AddDrawCmd(head_command);
 	GLTexData	tex;
 
 	GL_MakeSpriteTexture(W_CacheLumpName(name, PU_CACHE), &tex, false);
-
-	if (head_command == NULL) {
-		// If the list is empty, set the new node as the head
-		head_command = newNode;
-	}
-	else {
-		// Traverse to the end of the list and append the new node
-		twodcommand* current = head_command;
-		while (current->next != NULL) {
-			current = current->next;
-		}
-		current->next = newNode;
-	}
 
 	glm_vec3_copy(position, &newNode->position);
 	glm_vec3_copy(size, &newNode->size);
@@ -141,20 +153,7 @@ void R2D_DrawColoredQuad(vec3* position, vec3* size, vec3* color)
 
 void R2D_DrawLightSprite(vec3* position, vec2 size, GLTexData* tex, float light)
 {
-	twodcommand* newNode = (twodcommand*)Z_Malloc(sizeof(twodcommand), PU_STATIC, NULL);
-
-	if (head_command == NULL) {
-		// If the list is empty, set the new node as the head
-		head_command = newNode;
-	}
-	else {
-		// Traverse to the end of the list and append the new node
-		twodcommand* current = head_command;
-		while (current->next != NULL) {
-			current = current->next;
-		}
-		current->next = newNode;
-	}
+	twodcommand* newNode = R2D_AddDrawCmd(head_command);
 
 	glm_vec3_copy(position, &newNode->position);
 	glm_vec3_copy(size, &newNode->size);
@@ -173,7 +172,7 @@ void R2D_StopRendition(void)
 {
 	glDisable(GL_DEPTH_TEST);
 
-	twodcommand* cur, *nextNode;
+	twodcommand* cur;
 	mat4 model;
 
 	cur = head_command;
@@ -204,15 +203,5 @@ void R2D_StopRendition(void)
 
 	Shader_Unbind();
 
-	cur = head_command;
-
-	// Free each node in the list
-	while (cur != NULL) {
-		nextNode = cur->next;
-		Z_Free(cur);
-		cur = nextNode;
-	}
-
-	// Set the head to NULL to indicate an empty list
-	head_command = NULL;
+	R2D_FlushCommandList(head_command);
 }

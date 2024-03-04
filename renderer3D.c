@@ -16,7 +16,7 @@ extern sector_t*           sectors;
 extern player_t            players[MAXPLAYERS];
 extern int                 displayplayer;
 
-threedcommand* head = NULL;
+threedcommand* head[R3D_RENDER_TYPE_COUNT] = { NULL };
 
 // indices used only for things rendering
 unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -79,6 +79,47 @@ void R3D_UpdateCamera(vec3* position, vec3 viewangle)
     Shader_Unbind();
 }
 
+// push back 3D draw command and return its pointer
+threedcommand* R3D_AddDrawCmd(threedcommand** list, R3D_RENDER_TYPE type)
+{
+    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_STATIC, NULL);
+
+    if (head[type] == NULL) {
+        // If the list is empty, set the new node as the head
+        head[type] = newNode;
+    }
+    else {
+        // Traverse to the end of the list and append the new node
+        threedcommand* current = head[type];
+        while (current->next != NULL) {
+            current = current->next;
+        }
+        current->next = newNode;
+    }
+
+    return newNode;
+}
+
+void R3D_FlushCommandList(threedcommand** cmd)
+{
+    threedcommand* cur, *nextNode;
+
+    for (unsigned int type = 0; type < R3D_RENDER_TYPE_COUNT; type++)
+    {
+        cur = head[type];
+
+        // Free each node in the list
+        while (cur != NULL) {
+            nextNode = cur->next;
+            Z_Free(cur);
+            cur = nextNode;
+        }
+
+        // Set the head to NULL to indicate an empty list
+        head[type] = NULL;
+    }
+}
+
 void R3D_RecalcPoly(DW_Polygon* wall)
 {
     if (wall->VAO >= 0)
@@ -117,23 +158,10 @@ void R3D_RecalcFloor(DW_FloorCeil* floor)
 
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_STATIC, NULL);
+    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_WALL);
     mat4 model;
 
     glm_mat4_identity(model);
-
-    if (head == NULL) {
-        // If the list is empty, set the new node as the head
-        head = newNode;
-    }
-    else {
-        // Traverse to the end of the list and append the new node
-        threedcommand* current = head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
-    }
 
     // build vao and vbo if not already
     if (wall->VAO < 0)
@@ -169,20 +197,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_STATIC, NULL);
-
-    if (head == NULL) {
-        // If the list is empty, set the new node as the head
-        head = newNode;
-    }
-    else {
-        // Traverse to the end of the list and append the new node
-        threedcommand* current = head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
-    }
+    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_CEIL);
 
     if (ceil->ceilVAO < 0)
     {
@@ -216,20 +231,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_STATIC, NULL);
-
-    if (head == NULL) {
-        // If the list is empty, set the new node as the head
-        head = newNode;
-    }
-    else {
-        // Traverse to the end of the list and append the new node
-        threedcommand* current = head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
-    }
+    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_FLOOR);
 
     if (floor->floorVAO < 0)
     {
@@ -263,24 +265,11 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 
 void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_STATIC, NULL);
+    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_BILLBOARD);
     mat4 model;
     vec2 size = { tex->glWidth,  tex->glHeight };
 
     glm_mat4_identity(model);
-
-    if (head == NULL) {
-        // If the list is empty, set the new node as the head
-        head = newNode;
-    }
-    else {
-        // Traverse to the end of the list and append the new node
-        threedcommand* current = head;
-        while (current->next != NULL) {
-            current = current->next;
-        }
-        current->next = newNode;
-    }
 
     glm_translate(model, pos);
 
@@ -308,12 +297,10 @@ void R3D_StartRendition(void)
 
 void R3D_StopRendition(void)
 {
-    threedcommand* cur, * nextNode;
+    threedcommand* cur;
     mat4 model;
 
     glm_mat4_identity(model);
-
-    cur = head;
 
     // setup shader used for wall, ceil and floor rendering
     Shader_Use(s_threeData.shader);
@@ -321,95 +308,114 @@ void R3D_StopRendition(void)
    
     glEnable(GL_DEPTH_TEST);
 
-    // iterate through all 3D draw commands
-    while (cur != NULL)
+    // loop through all render types
+    for (unsigned int type = 0; type < R3D_RENDER_TYPE_COUNT; type++)
     {
-        // it's wall
-        if (cur->polygon)
+        cur = head[type];
+        
+        if (cur == NULL)
+            continue;
+
+        switch (type)
         {
-            Shader_Use(s_threeData.shader);
-            Shader_SetFloat(s_threeData.shader, "light", cur->light);
-
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
-
-            glBindVertexArray(cur->polygon->VAO);
-
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
-
-            glBindVertexArray(0);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        // it's a flat, which could contain a floor, a ceiling or both
-        else if (cur->flat)
-        {
-            Shader_Use(s_threeData.shader);
-            Shader_SetFloat(s_threeData.shader, "light", cur->light);
-
-            // it's ceiling
-            if (cur->flat->ceilVAO > 0)
+            case R3D_RENDER_WALL:
             {
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, *cur->flat->texCeil);
+                Shader_Use(s_threeData.shader);
 
-                glBindVertexArray(cur->flat->ceilVAO);
+                while (cur != NULL)
+                {
+                    Shader_SetFloat(s_threeData.shader, "light", cur->light);
 
-                glDrawArrays(GL_TRIANGLE_FAN, 0, cur->flat->PCount);
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
 
-                glBindVertexArray(0);
-                glBindTexture(GL_TEXTURE_2D, 0);
-            }
-            
-            // it's floor
-            if (cur->flat->floorVAO > 0)
+                    glBindVertexArray(cur->polygon->VAO);
+
+                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+                    glBindVertexArray(0);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+
+                    cur = cur->next;
+                }
+                
+            }break;
+
+            case R3D_RENDER_CEIL:
             {
-                glActiveTexture(GL_TEXTURE0);
-                glBindTexture(GL_TEXTURE_2D, *cur->flat->texFloor);
+                Shader_Use(s_threeData.shader);
 
-                glBindVertexArray(cur->flat->floorVAO);
+                while (cur != NULL)
+                {
+                    Shader_SetFloat(s_threeData.shader, "light", cur->light);
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, *cur->flat->texCeil);
 
-                glDrawArrays(GL_TRIANGLE_FAN, 0, cur->flat->PCount);
+                    glBindVertexArray(cur->flat->ceilVAO);
 
-                glBindVertexArray(0);
-                glBindTexture(GL_TEXTURE_2D, 0);
-            }
+                    glDrawArrays(GL_TRIANGLE_FAN, 0, cur->flat->PCount);
+
+                    glBindVertexArray(0);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+
+                    cur = cur->next;
+                }
+            }break;
+
+            case R3D_RENDER_FLOOR:
+            {
+                Shader_Use(s_threeData.shader);
+
+                while (cur != NULL)
+                {
+                    Shader_SetFloat(s_threeData.shader, "light", cur->light);
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, *cur->flat->texFloor);
+
+                    glBindVertexArray(cur->flat->floorVAO);
+
+                    glDrawArrays(GL_TRIANGLE_FAN, 0, cur->flat->PCount);
+
+                    glBindVertexArray(0);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+
+                    cur = cur->next;
+                }
+            }break;
+
+            case R3D_RENDER_BILLBOARD:
+            {
+                Shader_Use(s_threeData.thingShader);
+                
+                while (cur != NULL)
+                {
+                    Shader_SetMat4(s_threeData.thingShader, "model", cur->model);
+                    Shader_SetFloat(s_threeData.thingShader, "light", cur->light);
+                    Shader_SetInt(s_threeData.thingShader, "mirror", cur->mirror);
+
+                    glActiveTexture(GL_TEXTURE0);
+                    glBindTexture(GL_TEXTURE_2D, cur->tex->TexName);
+
+                    glBindVertexArray(s_threeData.thingVAO);
+
+                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+                    glBindVertexArray(0);
+                    glBindTexture(GL_TEXTURE_2D, 0);
+
+                    cur = cur->next;
+                }
+            }break;
+
+        default:
+            break;
         }
-        // draw thing / masked
-        else
-        {
-            Shader_Use(s_threeData.thingShader);
-            Shader_SetMat4(s_threeData.thingShader, "model", cur->model);
-            Shader_SetFloat(s_threeData.thingShader, "light", cur->light);
-            Shader_SetInt(s_threeData.thingShader, "mirror", cur->mirror);
-
-            glActiveTexture(GL_TEXTURE0);
-            glBindTexture(GL_TEXTURE_2D, cur->tex->TexName);
-
-            glBindVertexArray(s_threeData.thingVAO);
-
-            glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
-
-            glBindVertexArray(0);
-            glBindTexture(GL_TEXTURE_2D, 0);
-        }
-
-        cur = cur->next;
     }
 
     Shader_Unbind();
 
-    cur = head;
 
-    // Free each node in the list
-    while (cur != NULL) {
-        nextNode = cur->next;
-        Z_Free(cur);
-        cur = nextNode;
-    }
-
-    // Set the head to NULL to indicate an empty list
-    head = NULL;
+    R3D_FlushCommandList(head);
 }
 
 void R3D_DestroyRenderObjects(void)

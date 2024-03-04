@@ -26,7 +26,9 @@ typedef struct s_R3DStorage
 typedef enum R3D_RENDER_TYPE
 {
 	R3D_RENDER_SKY,
-	R3D_RENDER_POLYGON,
+	R3D_RENDER_WALL,
+	R3D_RENDER_FLOOR,
+	R3D_RENDER_CEIL,
 	R3D_RENDER_BILLBOARD,
 	R3D_RENDER_MODEL,
 	R3D_RENDER_TYPE_COUNT
@@ -49,6 +51,8 @@ void InitRenderer3D();
 void R3D_StartRendition(void);
 void R3D_StopRendition(void);
 void R3D_UpdateCamera(vec3* position, vec3 viewangle);
+void R3D_FlushCommandList(threedcommand** head);
+threedcommand* R3D_AddDrawCmd(threedcommand** list, R3D_RENDER_TYPE type);
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light);
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light);
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light);
