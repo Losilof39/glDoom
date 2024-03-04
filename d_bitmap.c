@@ -42,4 +42,7 @@ void D_LoadBmp(dbyte* rgb, const char* filename, int width, int height)
         rgb[d++] = bmpPalette[texels[s]].green;
         rgb[d++] = bmpPalette[texels[s]].blue;
     }
+
+    free(bmpPalette);
+    free(texels);
 }
