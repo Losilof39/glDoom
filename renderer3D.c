@@ -2,7 +2,6 @@
 #include "renderer3D.h"
 #include "renderer2D.h"
 #include "v_video.h"
-#include "z_zone.h"
 
 extern video_t video;
 extern RenderInfo s_renderinfo;
@@ -117,7 +116,7 @@ void R3D_RecalcFloor(DW_FloorCeil* floor)
 
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_LEVEL, NULL);
+    threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
     mat4 model;
 
     glm_mat4_identity(model);
@@ -169,7 +168,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_LEVEL, NULL);
+    threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
 
     if (head == NULL) {
         // If the list is empty, set the new node as the head
@@ -216,7 +215,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_LEVEL, NULL);
+    threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
 
     if (head == NULL) {
         // If the list is empty, set the new node as the head
@@ -263,7 +262,7 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 
 void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_LEVEL, NULL);
+    threedcommand* newNode = (threedcommand*)malloc(sizeof(threedcommand));
     mat4 model;
     vec2 size = { tex->glWidth,  tex->glHeight };
 
@@ -404,7 +403,7 @@ void R3D_StopRendition(void)
     // Free each node in the list
     while (cur != NULL) {
         nextNode = cur->next;
-        Z_Free(cur);
+        free(cur);
         cur = nextNode;
     }
 

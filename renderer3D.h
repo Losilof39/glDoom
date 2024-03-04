@@ -23,14 +23,6 @@ typedef struct s_R3DStorage
 	Camera cam;
 }R3DStorage;
 
-typedef enum R3D_RENDER_TYPE{
-	R3D_RENDER_SKY = 0,
-	R3D_RENDER_POLYGON,
-	R3D_RENDER_BILLBOARD, 
-	R3D_RENDER_MODEL,
-	R3D_RENDER_TYPE_COUNT
-}R3D_RENDER_TYPE;
-
 // 3D draw command
 typedef struct s_threedcommand
 {
@@ -43,12 +35,6 @@ typedef struct s_threedcommand
 	struct threedcommand* next;
 }threedcommand;
 
-typedef struct s_rendertypecmd
-{
-	struct threedcommand* head_cmd;
-	//R3D_RENDER_TYPE type;
-}rendertypecmd;
-
 void InitRenderer3D();
 void R3D_StartRendition(void);
 void R3D_StopRendition(void);
@@ -57,7 +43,6 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light);
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light);
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light);
 void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror);
-void R3D_RenderSky();
 void R3D_RecalcPoly(DW_Polygon* wall);
 void R3D_RecalcCeil(DW_FloorCeil* ceil);
 void R3D_RecalcFloor(DW_FloorCeil* floor);

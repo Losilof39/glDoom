@@ -916,9 +916,9 @@ void GL_DrawSky(float compass)
     int   bquad, equad, tcomp;
     float lcomp, rcomp;
     float tseam, middle;
+
     float fSkyTop, fSkyBottom, fSkyMiddle, fSkyHalfHeight;
     float fSkyHeightScale, fDefaultAspect;
-    DW_Polygon SkyPoly = { 0 };
 
     fDefaultAspect  = 320.0f / 240.0f;
     fSkyHalfHeight  = (2.0f - 0.5f) * 0.5f;
@@ -950,12 +950,9 @@ void GL_DrawSky(float compass)
     bquad %= 4;
     equad++;
     equad %= 4;
-    
 
     if (bquad == equad)
     {
-
-        //R3D_RenderSky();
         /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
         glBegin( GL_QUADS );
            glTexCoord2f(1.0f, fSkyTop);
@@ -1789,8 +1786,8 @@ void GL_RenderPlayerView(player_t* player)
 
                     if (TexList[TempPoly->Texture[0]].Transparent == true)
                     {
-                        glEnable(GL_ALPHA_TEST);
-                        glAlphaFunc(GL_GREATER, 0.0f);
+                        /*glEnable(GL_ALPHA_TEST);
+                        glAlphaFunc(GL_GREATER, 0.0f);*/
                     }
                     
                     R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture, lightv);
