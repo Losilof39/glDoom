@@ -23,6 +23,16 @@ typedef struct s_R3DStorage
 	Camera cam;
 }R3DStorage;
 
+typedef enum R3D_RENDER_TYPE
+{
+	R3D_RENDER_SKY,
+	R3D_RENDER_POLYGON,
+	R3D_RENDER_BILLBOARD,
+	R3D_RENDER_MODEL,
+	R3D_RENDER_TYPE_COUNT
+
+}R3D_RENDER_TYPE;
+
 // 3D draw command
 typedef struct s_threedcommand
 {
