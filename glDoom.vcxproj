@@ -328,7 +328,7 @@
       <AdditionalIncludeDirectories>$(SolutionDir)thirdparty\glad\include;$(SolutionDir)thirdparty\SDL3\include;$(SolutionDir)thirdparty\SDL3\include\SDL3;$(SolutionDir)thirdparty\cglm\include</AdditionalIncludeDirectories>
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
-      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>INITGUID;NDEBUG;WIN32;_WINDOWS;_CRT_SECURE_NO_WARNINGS;MAX;SDL_ENABLE_OLD_NAMES;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>

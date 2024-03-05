@@ -22,6 +22,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
+
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
@@ -435,12 +436,13 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
     if (samplerate <= mixer_freq
         && ConvertibleRatio(samplerate, mixer_freq)
         && SDL_CreateAudioStream(&src_spec, &dst_spec))
-    {
+    { 
           convertor = (dbyte*)malloc(sizeof(length));
           assert(convertor != NULL);
-          memcpy(convertor, data, length);          
-          SDL_ConvertAudioSamples(&src_spec, convertor, aud_len, &dst_spec, NULL, length);
-          memcpy(chunk->abuf, convertor, chunk->alen);
+          /* todo: fix convertor */
+          //memcpy(convertor, data, length);          
+          //SDL_ConvertAudioSamples(&src_spec, convertor, aud_len, &dst_spec, NULL, length);
+          //memcpy(chunk->abuf, convertor, chunk->alen);
           free(convertor);
     }
 #else
