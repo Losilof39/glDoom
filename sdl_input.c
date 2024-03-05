@@ -7,7 +7,7 @@
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #else
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #endif
 
 #include "d_main.h"

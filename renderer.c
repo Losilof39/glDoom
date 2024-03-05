@@ -3,7 +3,11 @@
 #include "renderer3D.h"
 
 #include <glad/glad.h>
+#ifdef __linux__
 #include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 #include "v_video.h"
 #include "i_system.h"
 
