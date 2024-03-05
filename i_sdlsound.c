@@ -403,7 +403,7 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
 {
 #if SDL_MAJOR_VERSION == 3
     dbyte* convertor = NULL;
-    int aud_len = length;
+    int aud_len;
     const SDL_AudioSpec src_spec = { mixer_format, mixer_channels, mixer_freq };
     const SDL_AudioSpec dst_spec = { SDL_AUDIO_U8, mixer_channels, mixer_freq };
 #else
@@ -437,12 +437,14 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
         && ConvertibleRatio(samplerate, mixer_freq)
         && SDL_CreateAudioStream(&src_spec, &dst_spec))
     { 
-          convertor = (dbyte*)malloc(sizeof(length));
+          aud_len = length;
+          convertor = (dbyte*)malloc(aud_len * sizeof(int));
           assert(convertor != NULL);
           /* todo: fix convertor */
-          //memcpy(convertor, data, length);          
-          //SDL_ConvertAudioSamples(&src_spec, convertor, aud_len, &dst_spec, NULL, length);
+          memcpy(convertor, data, length);
+          SDL_ConvertAudioSamples(&src_spec, convertor, aud_len, &dst_spec, chunk->abuf, NULL);
           //memcpy(chunk->abuf, convertor, chunk->alen);
+          memcpy(convertor, chunk->abuf, sizeof(chunk->alen));
           free(convertor);
     }
 #else
