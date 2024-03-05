@@ -465,7 +465,7 @@ int GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
+    ConvertToRawTexture(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -564,7 +564,7 @@ int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
+    ConvertToRawTexture(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -647,7 +647,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     TexWide = 256;
 
     memset(RawBuff, 0, ixsize*iysize);
-    V_DrawPatchBuff(0, 0, RawBuff, Screen);
+    ConvertToRawTexture(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*iysize);
     memset(TexRaw, GLD_TRANSPARENT, 256*iysize);
     for (i = 0, d = 0, s = 0; i < iysize; i++)
@@ -859,7 +859,7 @@ int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
        }
 
     memset(RawBuff, 0, ixsize*iysize);
-    V_DrawPatchBuff(0, 0, RawBuff, Screen);
+    ConvertToRawTexture(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*200);
     for (i = 0, d = 0, s = 0; i < 200; i++)
        {
