@@ -192,7 +192,7 @@ int W_AddFile (char *filename)
 	    header.numlumps = DLONG(header.numlumps);
 	    header.infotableofs = DLONG(header.infotableofs);
 	    length = header.numlumps*sizeof(filelump_t);
-	    fileinfo = alloca (length);
+	    fileinfo = Z_Malloc (length, PU_STATIC, 0);
 	    LSeek (handle, header.infotableofs, SEEK_SET);
 	    Read (handle, fileinfo, length);
 	    numlumps += header.numlumps;
@@ -246,7 +246,7 @@ void W_Reload(void)
     lumpcount = DLONG(header.numlumps);
     header.infotableofs = DLONG(header.infotableofs);
     length = lumpcount*sizeof(filelump_t);
-    fileinfo = alloca(length);
+    fileinfo = Z_Malloc(length, PU_STATIC, 0);
     LSeek(handle, header.infotableofs, SEEK_SET);
     Read(handle, fileinfo, length);
     
@@ -416,8 +416,7 @@ W_ReadLump
 	    I_Error ("W_ReadLump: %i >= numlumps",lump);
 
     l = lumpinfo+lump;
-	
-    // ??? I_BeginRead ();
+
 	
     if (l->handle == -1)
     {
@@ -437,8 +436,6 @@ W_ReadLump
 
     if (l->handle == -1)
 	Close (handle);
-		
-    // ??? I_EndRead ();
 }
 
 //

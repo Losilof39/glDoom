@@ -1285,6 +1285,11 @@ int cpars[32] =
     120,30					// 31-32
 };
  
+// [crispy] Episode 5 par times from Sigil v1.21
+static int e5pars[10] =
+{
+    0,90,150,360,420,780,420,780,300,660
+};
 
 //
 // G_DoCompleted 
@@ -1390,7 +1395,8 @@ void G_DoCompleted (void)
 	      case 2: 
 		wminfo.next = 5; 
 		break; 
-	      case 3: 
+	      case 3:
+             case 5: // [crispy] Sigil
 		wminfo.next = 6; 
 		break; 
 	      case 4:
@@ -1407,11 +1413,19 @@ void G_DoCompleted (void)
     wminfo.maxsecret = totalsecret; 
     wminfo.maxfrags = 0; 
     if ( gamemode == commercial )
-	wminfo.partime = 35*cpars[gamemap-1]; 
+        wminfo.partime = TICRATE * cpars[gamemap - 1];
     else
-	wminfo.partime = 35*pars[gameepisode][gamemap]; 
-    wminfo.pnum = consoleplayer; 
- 
+        wminfo.partime = TICRATE * pars[gameepisode][gamemap];
+
+    // [crispy] use episode 3 par times for Sigil's episode 5
+    if (gameepisode == 5)
+    {
+        wminfo.partime = TICRATE * e5pars[gamemap];
+    }
+    else
+    {
+        wminfo.partime = TICRATE * cpars[gamemap];
+    }
     for (i=0 ; i<MAXPLAYERS ; i++) 
     { 
 	wminfo.plyr[i].in = playeringame[i]; 
@@ -1799,6 +1813,9 @@ G_InitNew
 	  case 4:	// Special Edition sky
 	    skytexture = R_TextureNumForName ("SKY4");
 	    break;
+      case 5:        // [crispy] Sigil
+          skytexture = R_TextureNumForName("SKY5_ZD");
+          break;
 	} 
  
     setsizeneeded = true;

@@ -23,6 +23,7 @@ void lfprintf(char *message, ... );
 unsigned int MakeRGBTexture(int dw, int dh);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh);
+void V_DrawPatchBuff(int, int, unsigned char *, patch_t *);
 
 unsigned char  PointPattern[16*16] = {   0,  0,  0,  0,  0,  0,  0, 31, 31,  0,  0,  0,  0,  0,  0,  0,
                                          0,  0,  0,  0,  0,  0, 31, 63, 63, 31,  0,  0,  0,  0,  0,  0,
@@ -54,12 +55,6 @@ GLubyte              *TexRGB, *MipMaps[16][32768];
 dboolean              TexTransparent = false;
 extern dboolean       GL_3Dlabs;
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
 
 extern MY_PAL  gamepal[256];
 MY_PAL         statpal[256];
@@ -259,7 +254,7 @@ int GL_LoadTexture(int TexNumb)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        ConvertToRawTextureOffset( px,py, TexRaw,
+        V_DrawPatchOffsetBuff( px,py, TexRaw,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
        }
@@ -328,7 +323,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        ConvertToRawTextureOffset( px,py, SkyRaw,
+        V_DrawPatchOffsetBuff( px,py, SkyRaw,
                                //TexList[TexNumb].DWide, TexList[TexNumb].DHigh,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
@@ -389,7 +384,7 @@ int Translucent = false;
 // GL_MakeGreyFontTexture
 // Masks a column based masked pic into an OpenGL texture
 //
-void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
+int GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
    {
     static int      x, ixsize, iysize;
     unsigned short *tshort;
@@ -430,7 +425,7 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    ConvertToRawTexture(0, 0, RawBuff, Sprite);
+    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -469,13 +464,14 @@ void GL_MakeGreyFontTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
+    return TempTexNumb;
    }
 
 //
 // GL_MakeSpriteTexture
 // Masks a column based masked pic into an OpenGL texture
 //
-void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
+int GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
    {
     static int      x, ixsize, iysize, cwidth;
     unsigned short *tshort;
@@ -528,7 +524,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
         RawBuff[n] = 0;
         Transparent[n] = GLD_TRANSPARENT;
        }
-    ConvertToRawTexture(0, 0, RawBuff, Sprite);
+    V_DrawPatchBuff(0, 0, RawBuff, Sprite);
     for (n = 0; n < (TexWide*TexHigh); n++)
        {
         TexRaw[n] = 0;
@@ -579,6 +575,7 @@ void GL_MakeSpriteTexture(patch_t *Sprite, GLTexData *Tex, dboolean smooth)
     Tex->glWidth = (float)TexWide;
     Tex->glHeight = (float)TexHigh;
     Translucent = false;
+    return TempTexNumb;
    }
 
 // GL_MakeWideSpriteTexture
@@ -610,7 +607,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     TexWide = 256;
 
     memset(RawBuff, 0, ixsize*iysize);
-    ConvertToRawTexture(0, 0, RawBuff, Screen);
+    V_DrawPatchBuff(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*iysize);
     memset(TexRaw, GLD_TRANSPARENT, 256*iysize);
     for (i = 0, d = 0, s = 0; i < iysize; i++)
@@ -679,16 +676,7 @@ int GL_MakeWideSpriteTexture(patch_t *Screen, GLTexData *Tex)
     return TempTexNumb;
    }
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
-   }rgba_t;
-
-
-void AntiAlias(rgba_t *inbuff, rgba_t *outbuff, int w, int h)
+void AntiAlias(GLPixelRGBA *inbuff, GLPixelRGBA *outbuff, int w, int h)
    {
     int     x, y, s, d, n;
     short   mr, mg, mb;
@@ -812,7 +800,7 @@ void AntiAlias(rgba_t *inbuff, rgba_t *outbuff, int w, int h)
 // GL_MakeScreenTexture
 // Draws a column based full-screen pic into OpenGL textures
 //
-void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
+int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
    {
     static int     x, ixsize, iysize;
     unsigned short *tshort;
@@ -831,7 +819,7 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
        }
 
     memset(RawBuff, 0, ixsize*iysize);
-    ConvertToRawTexture(0, 0, RawBuff, Screen);
+    V_DrawPatchBuff(0, 0, RawBuff, Screen);
     memset(TexRaw, 0, 256*200);
     for (i = 0, d = 0, s = 0; i < 200; i++)
        {
@@ -876,6 +864,7 @@ void GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     Tex[1].glWidth = 64.0f;
     Tex[1].glHeight = 256.0f;
 
+    return TempTexNumb;
    }
 
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
@@ -922,7 +911,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
         for (r = 0; r < (TexWide*TexHigh*4); r++)
            TexAa[r] = TexRGB[r];
-        AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
+        AntiAlias( (GLPixelRGBA*)TexAa, (GLPixelRGBA*)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
     GL_CreateClampTexture(gl_texture_2d, TexWide, TexHigh, TexRGB, clamp);
@@ -1092,7 +1081,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
         for (r = 0; r < (TexWide*TexHigh*4); r++)
            TexAa[r] = TexRGB[r];
-        AntiAlias( (rgba_t *)TexAa, (rgba_t *)TexRGB, TexWide, TexHigh );
+        AntiAlias( (GLPixelRGBA *)TexAa, (GLPixelRGBA *)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
 
@@ -1124,6 +1113,7 @@ unsigned int MakeRGBTexture(int dw, int dh)
        }
 
     GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, false, true);
+    
     free(TexRGB);
     return(TempTexName);
    }

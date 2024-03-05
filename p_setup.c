@@ -2882,7 +2882,7 @@ void LoadAllSprites()
         tstr[i] = '\b';
        }
     tstr[i] = '\0';
-    printf(tstr);
+    printf("%s", tstr);
     for (lump = 0, dotchk = 0; lump < numspritelumps; lump++)
        {
         dotchk++;

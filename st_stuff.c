@@ -814,28 +814,44 @@ ST_Responder (event_t* ev)
          }
 
       // Catch invalid maps.
-      if (epsd < 1)
-	return false;
+          // Catch invalid maps.
+      if (gamemode != commercial)
+      {
+          if (epsd < 1)
+          {
+              return false;
+          }
+          if (epsd > 4)
+          {
+              // [crispy] Sigil
+              if (!(haved1e5 && epsd == 5))
+                  return false;
+          }
+          if (epsd == 4 && gamemode < retail)
+          {
+              return false;
+          }
+          if (map < 1)
+          {
+              return false;
+          }
+          if (map > 9)
+          {
+              return false;
+          }
+      }
+      else
+      {
+          if (map < 1)
+          {
+              return false;
+          }
+          if (map > 40)
+          {
+              return false;
+          }
+      }
 
-      if (map < 1)
-	return false;
-      
-      // Ohmygod - this is not going to work.
-      if ((gamemode == retail)
-	  && ((epsd > 4) || (map > 9)))
-	return false;
-
-      if ((gamemode == registered)
-	  && ((epsd > 3) || (map > 9)))
-	return false;
-
-      if ((gamemode == shareware)
-	  && ((epsd > 1) || (map > 9)))
-	return false;
-
-      if ((gamemode == commercial)
-	&& (( epsd > 1) || (map > 32)))
-	return false;
 
       // So be it.
       plyr->message = STSTR_CLEV;

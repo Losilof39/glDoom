@@ -279,6 +279,8 @@ static void I_ReadMouse()
 
 void I_GetEvent(void)
 {
+    SDL_GL_SetSwapInterval(true);
+    
     I_CheckInputs();
 
     I_ReadMouse();
