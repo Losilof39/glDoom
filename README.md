@@ -55,7 +55,8 @@ I am planning for this port, the following (in order of priority)
    - Add dynamic lights
    - Add post-processing effects
      
-3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL(60% Done)
+3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+   - The Sigil compat version works fine however the 5th episode never gets loaded and always goes to the 4th episode(gibbon)
 
 Plus more!
 
