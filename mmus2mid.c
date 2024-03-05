@@ -778,7 +778,6 @@ void mus2mid(unsigned char* data)
     {
       //jff 8/3/98 use logical output routine
       lprintf(LO_FATAL,"Error converting MUS file to MIDI: %d\n",err);
-      exit(1);
     }
     free(mus);
     MIDIToMidi(&mididata,&mid,&midlen);

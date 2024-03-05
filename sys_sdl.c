@@ -1,5 +1,5 @@
 /////////////////////////////////////////////////////////////////////////////////////
-// Windows and Linux Includes...
+// Standard Includes...
 /////////////////////////////////////////////////////////////////////////////////////
 #include <stdio.h>
 #include <stdlib.h>
@@ -17,7 +17,7 @@
 #endif
 
 /////////////////////////////////////////////////////////////////////////////////////
-// Application Includes...
+// SDL2 Includes...
 /////////////////////////////////////////////////////////////////////////////////////
 #include "sys_sdl.h"
 
@@ -125,7 +125,7 @@ void  MY_DoomSetup(void);
 void  MY_DoomLoop(void);
 void  glDoomExit(void);
 
-unsigned char szBadWadMessage[] = { "glDoom Re is unable to determine the game type\n"
+const char *szBadWadMessage[] = { "glDoom Re is unable to determine the game type\n"
                                     "of the game WAD file. Please make sure that:\n"
                                     "1. You have your game wad in the current directory,\n"
                                     "2. You have it named one of the standard wad names OR\n"
@@ -189,7 +189,7 @@ int main(int argc, char** szCmdLine)
         I_ShutdownGraphics();
         if (gamemode == undetermined)
            {
-            printf(szBadWadMessage);
+            printf("%s", szBadWadMessage);
            }
         return 0;
        }

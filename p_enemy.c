@@ -1669,7 +1669,11 @@ void A_BossDeath (mobj_t* mo)
 		break;
 	    }
 	    break;
-	    
+
+       // [crispy] Sigil
+      case 5:
+          break;
+
 	  default:
 	    if (gamemap != 8)
 		return;

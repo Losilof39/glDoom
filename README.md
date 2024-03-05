@@ -10,6 +10,9 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 ### Fixes from Gibbon
 * 64bit cleanups to allow it to build and run on 64bit systems
 * Cleanups for modern types (``` uintptr_t ```, ``` intptr_t ``` and MSVC specific functions like ``` _access ``` etc..)
+* Add SIGIL support.
+* Add vsync
+* Add NRTL support
 
 ### Fixes from Losilof39
 * Cleaned up all Win32 code and added a SDL2 backend
@@ -40,6 +43,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Only the legacy renderer works (for now!)
 * Multiple errors when switching to OpenGL core profile
 * When compiling SDL3 on MSVC the dll linkage doesn't work
+* SIGIL and NRFTL support works, but the levels doesn't show up
 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
@@ -54,6 +58,7 @@ I am planning for this port, the following (in order of priority)
    - Add post-processing effects
      
 3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+   - The Sigil compat version works fine however the 5th episode never gets loaded and always goes to the 4th episode(gibbon)
 
 Plus more!
 

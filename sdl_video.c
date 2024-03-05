@@ -51,7 +51,7 @@ void GetModeList(char *dbgname)
     display_mode_count = SDL_GetNumDisplayModes(display_in_use);
 #endif
     if (display_mode_count < 1) {
-        I_Error("SDL_GetNumDisplayModes failed: %s", SDL_GetError());
+        /* I_Error("SDL_GetNumDisplayModes failed: %s", SDL_GetError()); */
     }
     fprintf(fn, "Mode count : %d\n", display_mode_count);
     fprintf(fn, "General Video Mode List\n");

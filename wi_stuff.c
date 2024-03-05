@@ -421,7 +421,7 @@ GLTexData  gl_p[MAXPLAYERS], gl_bp[MAXPLAYERS];
 // These are full screen images : treat differently (two part textures [256 & 64])
 GLTexData  Interpic[2], GameMap[3][2];
 
-void GL_MakeScreenTexture(patch_t *, GLTexData *);
+int GL_MakeScreenTexture(patch_t *, GLTexData *);
 
 extern int gl_premalpha;
 
@@ -2367,6 +2367,10 @@ void WI_loadData(void)
 	strcpy(name, "INTERPIC");
         glBackGround = Interpic;
        }
+    else if (haved1e5 && wbs->epsd == 4 && W_CheckNumForName("SIGILINT") != -1) // [crispy] Sigil
+    {
+        glBackGround = Interpic;
+    }
     else 
        {
 	    sprintf(name, "WIMAP%d", wbs->epsd);
