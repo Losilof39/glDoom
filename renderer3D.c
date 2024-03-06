@@ -16,7 +16,7 @@ extern sector_t*           sectors;
 extern player_t            players[MAXPLAYERS];
 extern int                 displayplayer;
 
-threedcommand* head[R3D_RENDER_TYPE_COUNT] = { NULL };
+threedcommand* render_types[R3D_RENDER_TYPE_COUNT] = { NULL };
 
 // indices used only for things rendering
 unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
@@ -82,15 +82,15 @@ void R3D_UpdateCamera(vec3* position, vec3 viewangle)
 // push back 3D draw command and return its pointer
 threedcommand* R3D_AddDrawCmd(threedcommand** list, R3D_RENDER_TYPE type)
 {
-    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_STATIC, NULL);
+    threedcommand* newNode = (threedcommand*)Z_Malloc(sizeof(threedcommand), PU_LEVEL, NULL);
 
-    if (head[type] == NULL) {
+    if (render_types[type] == NULL) {
         // If the list is empty, set the new node as the head
-        head[type] = newNode;
+        render_types[type] = newNode;
     }
     else {
         // Traverse to the end of the list and append the new node
-        threedcommand* current = head[type];
+        threedcommand* current = render_types[type];
         while (current->next != NULL) {
             current = current->next;
         }
@@ -106,7 +106,7 @@ void R3D_FlushCommandList(threedcommand** cmd)
 
     for (unsigned int type = 0; type < R3D_RENDER_TYPE_COUNT; type++)
     {
-        cur = head[type];
+        cur = render_types[type];
 
         // Free each node in the list
         while (cur != NULL) {
@@ -116,7 +116,7 @@ void R3D_FlushCommandList(threedcommand** cmd)
         }
 
         // Set the head to NULL to indicate an empty list
-        head[type] = NULL;
+        render_types[type] = NULL;
     }
 }
 
@@ -158,7 +158,7 @@ void R3D_RecalcFloor(DW_FloorCeil* floor)
 
 void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 {
-    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_WALL);
+    threedcommand* newNode = R3D_AddDrawCmd(render_types, R3D_RENDER_WALL);
     mat4 model;
 
     glm_mat4_identity(model);
@@ -197,7 +197,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
 
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 {
-    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_CEIL);
+    threedcommand* newNode = R3D_AddDrawCmd(render_types, R3D_RENDER_CEIL);
 
     if (ceil->ceilVAO < 0)
     {
@@ -231,7 +231,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
 
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 {
-    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_FLOOR);
+    threedcommand* newNode = R3D_AddDrawCmd(render_types, R3D_RENDER_FLOOR);
 
     if (floor->floorVAO < 0)
     {
@@ -265,7 +265,7 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
 
 void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror)
 {
-    threedcommand* newNode = R3D_AddDrawCmd(head, R3D_RENDER_BILLBOARD);
+    threedcommand* newNode = R3D_AddDrawCmd(render_types, R3D_RENDER_BILLBOARD);
     mat4 model;
     vec2 size = { tex->glWidth,  tex->glHeight };
 
@@ -311,7 +311,7 @@ void R3D_StopRendition(void)
     // loop through all render types
     for (unsigned int type = 0; type < R3D_RENDER_TYPE_COUNT; type++)
     {
-        cur = head[type];
+        cur = render_types[type];
         
         if (cur == NULL)
             continue;
@@ -415,7 +415,7 @@ void R3D_StopRendition(void)
     Shader_Unbind();
 
 
-    R3D_FlushCommandList(head);
+    R3D_FlushCommandList(render_types);
 }
 
 void R3D_DestroyRenderObjects(void)
