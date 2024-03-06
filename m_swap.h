@@ -30,7 +30,7 @@
 #ifdef __linux__
 #include <SDL2/SDL_endian.h>
 #else
-#include <SDL2/SDL_endian.h> /* Header for handle the endian swapping */
+#include <SDL_endian.h> /* Header for handle the endian swapping */
 #endif
 // Endianess handling.
 // WAD files are stored little endian.

@@ -393,7 +393,7 @@ void GL_DrawThermo(int x, int y, int thermWidth, int thermDot );
 
 GLTexData  AmmoBoxSkin;
 
-GLTexData  glMainMenu[7], glEpisode[4], glNewGame[5], glOptions[9], glSound[4], glSetupMenu[7], glMultiPlayer[3];
+GLTexData  glMainMenu[7], glEpisode[5], glNewGame[5], glOptions[9], glSound[4], glSetupMenu[7], glMultiPlayer[3];
 GLTexData  GameLogo, glOptionTitle, glEpisodeTitle, glNewGameTitle, glSkillTitle, glMPlayerTitle, glDisplayTitle;
 GLTexData  glSoundVolTitle, glLoadGameTitle, glSaveGameTitle, glMouseTitle, glGame[3], glMouse[5], glDisplay[6];
 GLTexData  glPlayerSetupTitle;
@@ -616,6 +616,7 @@ enum
     ep2,
     ep3,
     ep4,
+    ep5,
     ep_end
 } episodes_e;
 
@@ -624,7 +625,8 @@ menuitem_t EpisodeMenu[]=
     {1,"M_EPI1", M_Episode,'k'},
     {1,"M_EPI2", M_Episode,'t'},
     {1,"M_EPI3", M_Episode,'i'},
-    {1,"M_EPI4", M_Episode,'t'}
+    {1,"M_EPI4", M_Episode,'t'},
+    {1,"M_EPI5", M_Episode,'s'} // [crispy] Sigil
 };
 
 menu_t  EpiDef =
@@ -2010,7 +2012,7 @@ void M_NewGame(int choice)
 	return;
     }
 	
-    if ( gamemode == commercial )
+    if ( gamemode == commercial || havenerve > 0)
 	M_SetupNextMenu(&NewDef);
     else
 	M_SetupNextMenu(&EpiDef);
@@ -2069,17 +2071,7 @@ void M_Episode(int choice)
 	M_StartMessage(SWSTRING,NULL,false);
 	M_SetupNextMenu(&ReadDef1);
 	return;
-    }
-
-    // Yet another hack...
-    if ( (gamemode == registered)
-	 && (choice > 2))
-    {
-      fprintf( stderr,
-	       "M_Episode: 4th episode requires UltimateDOOM\n");
-      choice = 0;
-    }
-	 
+    }	 
     epi = choice;
     M_SetupNextMenu(&NewDef);
 }
@@ -6043,49 +6035,41 @@ void M_Init (void)
 
     // Here we could catch other version dependencies,
     //  like HELP1/2, and four episodes.
+    if (gamemode == retail)
+    {
+        MainMenu[readthis].routine = M_ReadThis2;
+        ReadDef2.prevMenu = NULL;
+    }
+    if (gamemode == commercial)
+    {
+        MainMenu[readthis] = MainMenu[quitdoom];
+        MainDef.numitems--;
+        MainDef.y += 8;
+        NewDef.prevMenu = &MainDef;
+        ReadDef1.routine = GL_DrawReadThis1;
+        ReadDef1.x = 330;
+        ReadDef1.y = 165;
+        ReadMenu1[0].routine = M_FinishReadThis;
+    }
 
-  
-    switch ( gamemode )
-       {
-        case commercial:
-             // This is used because DOOM 2 had only one HELP
-             //  page. I use CREDIT as second page now, but
-             //  kept this hack for educational purposes.
-             MainMenu[readthis] = MainMenu[quitdoom];
-             MainDef.numitems--;
-             MainDef.y += 8;
-             NewDef.prevMenu = &MainDef;
-             //ReadDef1.routine = M_DrawReadThis1;
-             ReadDef1.routine = GL_DrawReadThis1;
-             ReadDef1.x = 330;
-             ReadDef1.y = 165;
-             ReadMenu1[0].routine = M_FinishReadThis;
-             break;
-        case shareware:
-             // Episode 2 and 3 are handled,
-             //  branching to an ad screen.
-        case registered:
-             // We need to remove the fourth episode.
-             EpiDef.numitems--;
-             break;
-        case retail:
-             // We are fine.
-        default:
-             break;
-       }
 
-/*
-    for (i = 0; i < episodetitle, i++)
-       {
-        if (gamemode == commercial) && (i == (episodetitle-1))
-           {
-            break;
-           }
-        glTitles[i].glData->TexName = GL_MakeSpriteTexture(W_CacheLumpName(glTitles[i].lumpname,PU_CACHE), glTitles[i].glData, false);
-       }
-*/  
-    GL_MakeSpriteTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic, false);
-    GL_MakeSpriteTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit, false);
+    // [crispy] Sigil
+    if (!haved1e5)
+    {
+        EpiDef.numitems = 4;
+    }
+
+    /*
+    ** Versions of doom.exe before the Ultimate Doom release only had
+    ** three episodes
+    */
+    if (gamemode < retail)
+    {
+        EpiDef.numitems--;
+    }
+
+    GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
+    GL_MakeScreenTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit);
     if (W_CheckNumForName("HELP") != -1)
        {
         GL_MakeSpriteTexture(W_CacheLumpName("HELP", PU_CACHE), glHelp, false);

@@ -234,12 +234,6 @@ typedef struct
     float  z;
    }DW_Vertex3D;
 
-typedef struct
-   {
-    DW_Vertex3D Position;
-    DW_Vertex3D Orient;
-   }DW_Camera;
-
 typedef struct DW_Polygon
    {
     DW_Vertex3Dv       Point[4];
@@ -277,14 +271,6 @@ typedef struct
     int             ss_count;
 }sector_plane_t;
 
-
-typedef struct
-   {
-    unsigned char  red;
-    unsigned char  green;
-    unsigned char  blue;
-   }DW_PaletteEntry;
-
 typedef struct
    {
     char  szName[10];
@@ -299,20 +285,6 @@ typedef struct
     int   glTexture;
    }DW_TexList;
 
-typedef struct
-   {
-    dboolean Used;
-    int    Next;
-    int    Chain;
-   }DW_SortList;
-
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char x;
-   }DW_TexData;
 
 typedef enum
    {

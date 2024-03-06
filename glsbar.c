@@ -1,5 +1,5 @@
 #include <fcntl.h>
-#ifdef _WIN32
+#ifdef _MSC_VER
 #include <io.h>
 #else
 #include <unistd.h>
@@ -15,23 +15,8 @@
 #include "gldefs.h"
 #include "gl_texture.h"
 
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-   }MY_PAL;
-
 extern MY_PAL  gamepal[256];
 extern MY_PAL  statpal[256];
-
-typedef struct
-   {
-    unsigned char r;
-    unsigned char g;
-    unsigned char b;
-    unsigned char a;
-   }MY_RGBA;
 
 extern int deathmatch;
 
@@ -44,15 +29,15 @@ extern unsigned char  TexRaw[512*512];
 static GLubyte* TexRGB;
 static GLubyte *MipMaps[16][32768];
 
-MY_RGBA StatFrag[40*32], StatArms[40*32], StatBack[4][35*31], *TempTex;
+GLPixelRGBA StatFrag[40*32], StatArms[40*32], StatBack[4][35*31], *TempTex;
 
 unsigned char patchbuff[320*200];
 unsigned char platebuff[320*200];
 static unsigned char MsgText[2048];
 void lfprintf(char *message, ... );
 
-void GL_StatArmsOvl(MY_RGBA *RGBData);
-void  GL_MakeSpriteTexture(patch_t *, GLTexData *Tex, dboolean smooth);
+void GL_StatArmsOvl(GLPixelRGBA *RGBData);
+int  GL_MakeSpriteTexture(patch_t *, GLTexData *Tex, dboolean smooth);
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh);
 
 void InsertArmsPlate()
@@ -165,7 +150,7 @@ void GL_RGBStatArms(patch_t *armsbg)
        }
    }
 
-void GL_StatArmsOvl(MY_RGBA *RGBData)
+void GL_StatArmsOvl(GLPixelRGBA*RGBData)
    {
     /*glEnable(GL_TEXTURE_2D);
     glBindTexture(GL_TEXTURE_2D, SBarTexture[0]);

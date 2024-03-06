@@ -49,9 +49,6 @@ void I_WaitVBL(int count);
 
 void I_ReadScreen (dbyte* scr);
 
-void I_BeginRead (void);
-void I_EndRead (void);
-
 
 
 #endif

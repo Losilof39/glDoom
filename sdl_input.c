@@ -7,7 +7,7 @@
 #ifdef __linux__
 #include <SDL2/SDL.h>
 #else
-#include <SDL2/SDL.h>
+#include <SDL.h>
 #endif
 
 #include "d_main.h"
@@ -279,6 +279,8 @@ static void I_ReadMouse()
 
 void I_GetEvent(void)
 {
+    SDL_GL_SetSwapInterval(true);
+    
     I_CheckInputs();
 
     I_ReadMouse();
