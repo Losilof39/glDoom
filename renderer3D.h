@@ -16,10 +16,11 @@ typedef struct s_Camera
 typedef struct s_R3DStorage
 {
 	GLuint VAO;
-	GLuint thingVAO;
-	GLuint thingVBO;
+	GLuint quadVAO;
+	GLuint quadVBO;
 	Shader polygonShader;
 	Shader thingShader;
+	Shader skyShader;
 	Camera cam;
 }R3DStorage;
 

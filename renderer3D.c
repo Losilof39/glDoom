@@ -33,13 +33,13 @@ void InitRenderer3D()
         0.0f, 1.0f, 0.0f, 1.0f,
     };
 
-    glGenVertexArrays(1, &s_threeData.thingVAO);
-    glGenBuffers(1, &s_threeData.thingVBO);
+    glGenVertexArrays(1, &s_threeData.quadVAO);
+    glGenBuffers(1, &s_threeData.quadVBO);
 
-    glBindBuffer(GL_ARRAY_BUFFER, s_threeData.thingVBO);
+    glBindBuffer(GL_ARRAY_BUFFER, s_threeData.quadVBO);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
-    glBindVertexArray(s_threeData.thingVAO);
+    glBindVertexArray(s_threeData.quadVAO);
     glEnableVertexAttribArray(0);
     glVertexAttribPointer(0, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(float), (void*)0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
@@ -47,6 +47,8 @@ void InitRenderer3D()
 
 	s_threeData.polygonShader = Shader_Create("polygon", "shader_files/polygon.vs", "shader_files/polygon.ps");
     s_threeData.thingShader = Shader_Create("thing", "shader_files/thing.vs", "shader_files/thing.ps");
+    s_threeData.skyShader = Shader_Create("sky", "shader_files/sky.vs", "shader_files/sky.ps");
+
 	glm_perspective(glm_rad(video.fovy), (float)video.width / (float)video.height, 0.1f, 5000.0f, s_threeData.cam.projection);
 
     Shader_Use(s_threeData.polygonShader);
@@ -396,7 +398,7 @@ void R3D_StopRendition(void)
                     glActiveTexture(GL_TEXTURE0);
                     glBindTexture(GL_TEXTURE_2D, cur->tex->TexName);
 
-                    glBindVertexArray(s_threeData.thingVAO);
+                    glBindVertexArray(s_threeData.quadVAO);
 
                     glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
 
