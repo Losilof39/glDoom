@@ -6068,8 +6068,8 @@ void M_Init (void)
         EpiDef.numitems--;
     }
 
-    GL_MakeScreenTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic);
-    GL_MakeScreenTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit);
+    GL_MakeSpriteTexture(W_CacheLumpName("TITLEPIC", PU_CACHE), glTitlePic, false);
+    GL_MakeSpriteTexture(W_CacheLumpName("CREDIT", PU_CACHE), glCredit, false);
     if (W_CheckNumForName("HELP") != -1)
        {
         GL_MakeSpriteTexture(W_CacheLumpName("HELP", PU_CACHE), glHelp, false);
