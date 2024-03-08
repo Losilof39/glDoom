@@ -28,6 +28,7 @@
 #include "z_zone.h"
 #include "gldefs.h"
 #include "co_utils.h"
+#include "renderer2D.h"
 
 #define ST_MSGWIDTH        256
 #define CMDLENGTH         1024
@@ -1695,6 +1696,8 @@ void GL_DrawConsole()
     //  glVertex3f(  160.00f, 120.0f, SetBack+2);
     //glEnd();
 
+    R2D_DrawSprite((vec3) { 0 }, (vec2) { SCREENWIDTH, 100 }, &ConsBack);
+
     ////glColor4f( 1.0f, 1.0f, 1.0f, (float)iConsoleHeight/(float)iConsoleMax );
     //glBindTexture(GL_TEXTURE_2D, iConsBord);
     //glBegin( GL_QUADS );
@@ -1714,8 +1717,8 @@ void GL_DrawConsole()
     //glEnable(GL_ALPHA_TEST);
     //glAlphaFunc(GL_GREATER, 0.0f);
 
-    if (iConsoleHeight >= (consname->height+CONSBORD+2))
-       {
+    //if (iConsoleHeight >= (consname->height+CONSBORD+2))
+    //   {
         // Draw the Game logo (Doom, Doom II, TNT, Plutonia, whatever)
         /*glBindTexture(GL_TEXTURE_2D, iConsLogo);
         glBegin( GL_QUADS );
@@ -1729,16 +1732,18 @@ void GL_DrawConsole()
           glTexCoord2f( ConsLogo.XDisp, 1.0f );
           glVertex3f(  0.0f+(ConsLogo.Width/2.0f), 118.0f, SetBack);
         glEnd();*/
-       }
+
+    R2D_DrawSprite((vec3) { SCREENWIDTH / 2 - ConsLogo.glWidth / 2, 0.0f }, (vec2) { ConsLogo.glWidth, ConsLogo.glHeight}, &ConsLogo);
+       //}
 
     if (iConsoleHeight > 10)
        {
         M_GLDrawText(iNamePosX,1,szProgName);
-        M_GLDrawText(iVerPosX,(iConsoleHeight-(CONSBORD+iFontHigh+1))/825,szVersion);
+        M_GLDrawText(iVerPosX - 15 - CONSBORD, 10,szVersion);
         clines = ((iConsoleHeight-(CONSBORD+iFontHigh+3))/(iFontHigh+1));
         curpos = CO_GLWriteConsoleLine(clines, szCommand, true);
         if (cursor/9)
-            M_GLDrawText(curpos,(clines*(iFontHigh+1))/825,"_");
+            M_GLDrawText(curpos,(clines*(iFontHigh+1)),"_");
         mline = iConsHead - clines;
         if (mline < 0)
            mline += CONSMSGS;
@@ -1796,12 +1801,12 @@ int CO_GLWriteConsoleLine(int l, char *s, dboolean wrap)
 
     if (lwrap == false)
        {
-        M_GLDrawText(1,((iFontHigh+1)*l)/825,s);
+        M_GLDrawText(1,((iFontHigh+1)*l),s);
         return CO_StringWidth(s);
        }
     else
        {
-        M_GLDrawText(SCREENWIDTH-(CO_StringWidth(&s[b])+5),((iFontHigh+1)*l)/825,&s[b]);
+        M_GLDrawText(SCREENWIDTH-(CO_StringWidth(&s[b])+5),((iFontHigh+1)*l),&s[b]);
         return CO_StringWidth(&s[b]);
        }
    }

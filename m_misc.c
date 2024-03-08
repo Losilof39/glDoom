@@ -132,21 +132,25 @@ int M_GLDrawText( int x, int y, char *string )
    {
     int 	c;
     float   fx;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     fx = (float)x;
+    pos[0] = fx;
+
     while (*string)
        {
         c = toupper(*string) - HU_FONTSTART;
         string++;
         if (c < 0 || c > HU_FONTSIZE)
            {
-            fx += 4.0f;
+            pos[0] += 4.0f;
             continue;
            }
-	
+        pos[1] = y - GLHudFont[c].TopOff;
 
-        vec3 pos = { fx, y - GLHudFont[c].TopOff, 0.0f };
-        vec2 size = { GLHudFont[c].glWidth, GLHudFont[c].glHeight };
+        size[0] = GLHudFont[c].glWidth;
+        size[1] = GLHudFont[c].glHeight;
 
         R2D_DrawSprite(pos, size, &GLHudFont[c]);
 
@@ -163,9 +167,9 @@ int M_GLDrawText( int x, int y, char *string )
            glVertex3f( Right, Top, SetBack);
         glEnd();*/
 
-        if (fx + GLHudFont[c].Width > 320.0f)
+        if (pos[0] + GLHudFont[c].glWidth > 320.0f)
             break;
-        fx += GLHudFont[c].Width;
+        pos[0] += GLHudFont[c].glWidth;
        }
 
     return x;

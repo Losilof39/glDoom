@@ -911,13 +911,15 @@ extern float SetBack, glTop, glLeft, glRight, glBottom, glAspect;
 extern int  GL_SkyTexture[4], GL_SkyParts, GL_SkyTop;
 extern dboolean RedBias, GreenBias, WhiteBias;
 
+GLTexData skyTex;
+
 
 void GL_DrawSky(float compass)
 {
     int   bquad, equad, tcomp;
     float lcomp, rcomp;
     float tseam, middle;
-    GLTexData skyTex;
+
 
     float fSkyTop, fSkyBottom, fSkyMiddle, fSkyHalfHeight;
     float fSkyHeightScale, fDefaultAspect;
@@ -953,50 +955,72 @@ void GL_DrawSky(float compass)
     equad++;
     equad %= 4;
 
+    skyTex.glWidth = SCREENWIDTH;
+    skyTex.glHeight = SCREENHEIGHT;
+
+    skyTex.TexName = GL_SkyTexture[bquad];
+
+    R3D_RenderSky(compass, &skyTex);
+
     if (bquad == equad)
     {
-        
-        /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
-        glBegin( GL_QUADS );
-           glTexCoord2f(1.0f, fSkyTop);
-           glVertex3f(glLeft, glTop, SetBack);
-           glTexCoord2f(1.0f, fSkyBottom);
-           glVertex3f(glLeft, glBottom, SetBack);
-           glTexCoord2f(0.0f, fSkyBottom);
-           glVertex3f(glRight, glBottom, SetBack);
-           glTexCoord2f(0.0f, fSkyTop);
-           glVertex3f(glRight, glTop, SetBack);
-        glEnd();*/
+    //    
+        /*skyTex.TexName = GL_SkyTexture[bquad];
+
+        R3D_RenderSky(compass, &skyTex);*/
+    //    /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
+    //    glBegin( GL_QUADS );
+    //       glTexCoord2f(1.0f, fSkyTop);
+    //       glVertex3f(glLeft, glTop, SetBack);
+    //       glTexCoord2f(1.0f, fSkyBottom);
+    //       glVertex3f(glLeft, glBottom, SetBack);
+    //       glTexCoord2f(0.0f, fSkyBottom);
+    //       glVertex3f(glRight, glBottom, SetBack);
+    //       glTexCoord2f(0.0f, fSkyTop);
+    //       glVertex3f(glRight, glTop, SetBack);
+    //    glEnd();*/
+
+    //    /*skyTex.TexName = GL_SkyTexture[bquad];
+
+    //    R3D_RenderSky(compass, &skyTex);*/
     }
     else
     {
-        tcomp = (((int)lcomp / 90) * 90);
-        tseam =  (lcomp - (float)tcomp) / 90.0f;
-        middle =  glRight - ((glRight - glLeft) * tseam);
-        tseam = 1.0f - tseam;
+    //    tcomp = (((int)lcomp / 90) * 90);
+    //    tseam =  (lcomp - (float)tcomp) / 90.0f;
+    //    middle =  glRight - ((glRight - glLeft) * tseam);
+    //    tseam = 1.0f - tseam;
 
-        /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
-        glBegin( GL_QUADS );
-           glTexCoord2f(tseam, fSkyTop);
-           glVertex3f(glLeft, glTop, SetBack);
-           glTexCoord2f(tseam, fSkyBottom);
-           glVertex3f(glLeft, glBottom, SetBack);
-           glTexCoord2f(0.0f, fSkyBottom);
-           glVertex3f(middle, glBottom, SetBack);
-           glTexCoord2f(0.0f, fSkyTop);
-           glVertex3f(middle, glTop, SetBack);
-        glEnd();
-        glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[equad]);
-        glBegin( GL_QUADS );
-           glTexCoord2f(1.0f, fSkyTop);
-           glVertex3f(middle, glTop, SetBack);
-           glTexCoord2f(1.0f, fSkyBottom);
-           glVertex3f(middle, glBottom, SetBack);
-           glTexCoord2f(tseam, fSkyBottom);
-           glVertex3f(glRight, glBottom, SetBack);
-           glTexCoord2f( tseam, fSkyTop);
-           glVertex3f(glRight, glTop ,SetBack);
-        glEnd();*/
+    //    skyTex.TexName = GL_SkyTexture[bquad];
+
+    //    R3D_RenderSky(compass, &skyTex);
+
+    //    /*glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[bquad]);
+    //    glBegin( GL_QUADS );
+    //       glTexCoord2f(tseam, fSkyTop);
+    //       glVertex3f(glLeft, glTop, SetBack);
+    //       glTexCoord2f(tseam, fSkyBottom);
+    //       glVertex3f(glLeft, glBottom, SetBack);
+    //       glTexCoord2f(0.0f, fSkyBottom);
+    //       glVertex3f(middle, glBottom, SetBack);
+    //       glTexCoord2f(0.0f, fSkyTop);
+    //       glVertex3f(middle, glTop, SetBack);
+    //    glEnd();
+    //    glBindTexture(GL_TEXTURE_2D, GL_SkyTexture[equad]);
+    //    glBegin( GL_QUADS );
+    //       glTexCoord2f(1.0f, fSkyTop);
+    //       glVertex3f(middle, glTop, SetBack);
+    //       glTexCoord2f(1.0f, fSkyBottom);
+    //       glVertex3f(middle, glBottom, SetBack);
+    //       glTexCoord2f(tseam, fSkyBottom);
+    //       glVertex3f(glRight, glBottom, SetBack);
+    //       glTexCoord2f( tseam, fSkyTop);
+    //       glVertex3f(glRight, glTop ,SetBack);
+    //    glEnd();*/
+
+        /*skyTex.TexName = GL_SkyTexture[equad];
+
+        R3D_RenderSky(compass, &skyTex);*/
     }
 
     //glPopMatrix();

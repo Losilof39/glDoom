@@ -22,6 +22,7 @@ typedef struct s_R3DStorage
 	Shader thingShader;
 	Shader skyShader;
 	Camera cam;
+	mat4 ortho;
 }R3DStorage;
 
 typedef enum R3D_RENDER_TYPE
@@ -45,6 +46,7 @@ typedef struct s_threedcommand
 	mat4 model;			    // used only for rendering Things, default is matrix identity
 	int mirror;				// mirror object vertically, used only for Things
 	float light;
+	float angle;
 	struct threedcommand* next;
 }threedcommand;
 
@@ -58,6 +60,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light);
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light);
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light);
 void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror);
+void R3D_RenderSky(float angle, GLTexData* tex);
 void R3D_RecalcPoly(DW_Polygon* wall);
 void R3D_RecalcCeil(DW_FloorCeil* ceil);
 void R3D_RecalcFloor(DW_FloorCeil* floor);

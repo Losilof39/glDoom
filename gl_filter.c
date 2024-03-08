@@ -94,7 +94,7 @@ void GL_CreateClampTexture(gltexture_t texture_target, int width, int height, co
 		glTexParameteri(texture_target, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	}
 	glTexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
-	glTexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
 
 	/* Define the 2D texture image. */
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 4); /* Force 4 bytes aligment */

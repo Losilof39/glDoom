@@ -458,6 +458,8 @@
     <None Include="shader_files\flatcolor.vs" />
     <None Include="shader_files\framebuffer.ps" />
     <None Include="shader_files\framebuffer.vs" />
+    <None Include="shader_files\sky.ps" />
+    <None Include="shader_files\sky.vs" />
     <None Include="shader_files\sprite.ps" />
     <None Include="shader_files\sprite.vs" />
     <None Include="shader_files\polygon.ps" />

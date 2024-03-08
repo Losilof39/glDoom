@@ -254,7 +254,7 @@ int GL_LoadTexture(int TexNumb)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        V_DrawPatchOffsetBuff( px,py, TexRaw,
+        ConvertToRawTextureOffset( px,py, TexRaw,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
        }
@@ -323,7 +323,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
        {
         px = textures[TexList[TexNumb].Number]->patches[n].originx;
         py = textures[TexList[TexNumb].Number]->patches[n].originy;
-        V_DrawPatchOffsetBuff( px,py, SkyRaw,
+        ConvertToRawTextureOffset( px,py, SkyRaw,
                                //TexList[TexNumb].DWide, TexList[TexNumb].DHigh,
                                TexWide, TexHigh,
                                textures[TexList[TexNumb].Number]->patches[n].patch);
@@ -343,7 +343,7 @@ int GL_LoadSkyTexture(int TexNumb, int *SkyTex)
             s += w;
             d += glw;
            }
-        TempTexNumb = MakeRGBATexture(256, TexList[TexNumb].DHigh, TexList[TexNumb].DWide, TexList[TexNumb].DHigh);
+        TempTexNumb = MakeRGBATexture(false, false, TexList[TexNumb].DWide, TexList[TexNumb].DHigh);
         SkyTex[part] = TempTexNumb;
        }
     while(part < 4)

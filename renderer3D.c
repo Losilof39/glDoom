@@ -18,7 +18,7 @@ extern int                 displayplayer;
 
 threedcommand* render_types[R3D_RENDER_TYPE_COUNT] = { NULL };
 
-// indices used only for things rendering
+// indices used only for quad rendering
 unsigned int indices[6] = { 0, 1, 2, 2, 3, 0 };
 
 R3DStorage s_threeData;
@@ -32,6 +32,8 @@ void InitRenderer3D()
         1.0f, 1.0f, 1.0f, 1.0f,
         0.0f, 1.0f, 0.0f, 1.0f,
     };
+
+    glm_mat4_identity(s_threeData.ortho);
 
     glGenVertexArrays(1, &s_threeData.quadVAO);
     glGenBuffers(1, &s_threeData.quadVBO);
@@ -51,12 +53,26 @@ void InitRenderer3D()
 
 	glm_perspective(glm_rad(video.fovy), (float)video.width / (float)video.height, 0.1f, 5000.0f, s_threeData.cam.projection);
 
+    glm_ortho(0.0f,
+        (float)s_renderinfo.virtualWidth,
+        (float)s_renderinfo.virtualHeight,
+        0.0f,
+        -1.0f,
+        1.0f,
+        s_threeData.ortho);
+
+
     Shader_Use(s_threeData.polygonShader);
     Shader_SetMat4(s_threeData.polygonShader, "proj", s_threeData.cam.projection);
 
     Shader_Use(s_threeData.thingShader);
     Shader_SetMat4(s_threeData.thingShader, "proj", s_threeData.cam.projection);
     Shader_SetInt(s_threeData.thingShader, "tex", 0);
+
+    Shader_Use(s_threeData.skyShader);
+    Shader_SetInt(s_threeData.skyShader, "image", 0);
+    Shader_SetMat4(s_threeData.skyShader, "ortho", s_threeData.ortho);
+
 
     Shader_Unbind();
 }
@@ -98,6 +114,8 @@ threedcommand* R3D_AddDrawCmd(threedcommand** list, R3D_RENDER_TYPE type)
         }
         current->next = newNode;
     }
+
+    newNode->next = NULL;
 
     return newNode;
 }
@@ -194,7 +212,7 @@ void R3D_RenderWall(DW_Polygon* wall, unsigned int* tex, float light)
     newNode->light = light;
     newNode->flat = NULL;
 
-    newNode->next = NULL;
+    /*newNode->next = NULL;*/
 }
 
 void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
@@ -228,7 +246,7 @@ void R3D_RenderCeil(DW_FloorCeil* ceil, unsigned int* tex, float light)
     newNode->polygon = NULL;
     newNode->flat = ceil;
     newNode->light = light;
-    newNode->next = NULL;
+    /*newNode->next = NULL;*/
 }
 
 void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
@@ -262,7 +280,7 @@ void R3D_RenderFloor(DW_FloorCeil* floor, unsigned int* tex, float light)
     newNode->polygon = NULL;
     newNode->flat = floor;
     newNode->light = light;
-    newNode->next = NULL;
+    /*newNode->next = NULL;*/
 }
 
 void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mirror)
@@ -288,7 +306,22 @@ void R3D_RenderThing(vec3 pos, GLTexData* tex, float light, float angle, int mir
     newNode->polygon = NULL;
     newNode->mirror = mirror;
 
-    newNode->next = NULL;
+    /*newNode->next = NULL;*/
+}
+
+void R3D_RenderSky(float angle, GLTexData* tex)
+{
+    threedcommand* newNode = R3D_AddDrawCmd(render_types, R3D_RENDER_SKY);
+    mat4 model;
+    vec2 size = { tex->glWidth, tex->glHeight };
+
+    glm_mat4_identity(model);
+
+    glm_scale(model, size);
+
+    newNode->tex = tex;
+    newNode->angle = glm_rad(angle) / (2*M_PI);
+    glm_mat4_copy(model, newNode->model);
 }
 
 void R3D_StartRendition(void)
@@ -320,6 +353,29 @@ void R3D_StopRendition(void)
 
         switch (type)
         {
+            case R3D_RENDER_SKY:
+            {
+                glDisable(GL_DEPTH_TEST);
+
+                Shader_Use(s_threeData.skyShader);
+                Shader_SetMat4(s_threeData.skyShader, "model", cur->model);
+                Shader_SetFloat(s_threeData.skyShader, "angle", cur->angle);
+
+                glActiveTexture(GL_TEXTURE0);
+                glBindTexture(GL_TEXTURE_2D, cur->tex->TexName);
+
+                glBindVertexArray(s_threeData.quadVAO);
+
+                glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+                glBindVertexArray(0);
+                glBindTexture(GL_TEXTURE_2D, 0);
+
+                glEnable(GL_DEPTH_TEST);
+
+            }break;
+
+
             case R3D_RENDER_WALL:
             {
                 Shader_Use(s_threeData.polygonShader);
