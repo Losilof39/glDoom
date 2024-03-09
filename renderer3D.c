@@ -320,7 +320,7 @@ void R3D_RenderSky(float angle, GLTexData* tex)
     glm_scale(model, size);
 
     newNode->tex = tex;
-    newNode->angle = glm_rad(angle) / (2*M_PI);
+    newNode->angle = glm_rad(angle) / (M_PI) * 2;
     glm_mat4_copy(model, newNode->model);
 }
 

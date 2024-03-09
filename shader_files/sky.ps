@@ -7,7 +7,8 @@ uniform float angle;
 
 void main()
 {   
-    vec4 tex_color = texture(image, vec2(TexCoords.x - angle, TexCoords.y));
+    float offset = 0.4;
+    vec4 tex_color = texture(image, vec2(TexCoords.x - angle + offset, TexCoords.y));
 
     color = tex_color;
 }  
