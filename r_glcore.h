@@ -2,7 +2,7 @@
 #define R_GLCORE_H
 
 #include <glad/glad.h>
-#include <cglm.h>
+#include <cglm/cglm.h>
 #include "r_shader.h"
 
 typedef struct DrawableQuad
