@@ -44,6 +44,8 @@
 
 typedef unsigned char dbyte;
 
+//#define ENABLE_GLCONSOLE 
+
 #ifndef O_BINARY 
 #define O_BINARY 0
 #endif

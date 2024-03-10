@@ -19,10 +19,13 @@ extern dboolean bConsoleActive;
 
 void CO_Ticker(void);
 dboolean CO_Responder(event_t* ev);
+#if 0 //Unused.
 void CO_Drawer(void);
+#endif
 void CO_Init(void);
 void CO_AddConsoleMessage(char *s);
+#if 0 //Unused.
 void CO_WriteConsoleLine(int i, char *s, dboolean wrap);
-
+#endif
 #endif
 

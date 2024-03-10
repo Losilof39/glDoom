@@ -108,8 +108,9 @@ int                   iCCursor = 0;
 dboolean bConsoleActive = false;
 
 dboolean ResizeMainWindow(char *resolution);
-
+#if 0
 int CO_WriteConsoleLine(int i, char *s, dboolean wrap);
+#endif
 int CO_GLWriteConsoleLine(int l, char *s, dboolean wrap);
 void CO_AddConsoleMessage(char *s);
 int CO_HandleCommand(char *cmd);
@@ -1586,7 +1587,7 @@ void CO_Init()
     plyr = &players[consoleplayer];
     aliases[0].command = testcmd;
    }
-
+#if 0
 void CO_Drawer()
    {
     int h, v, yoff, d, s, i, j, clines, mline;
@@ -1654,7 +1655,7 @@ void CO_Drawer()
            }
        }
    }
-
+#endif
 int M_GLDrawText( int x, int y, char *string );
 extern float SetBack;
 
@@ -1754,6 +1755,7 @@ void GL_DrawConsole()
     glDisable(GL_TEXTURE_2D);
    }
 
+#if 0
 int CO_WriteConsoleLine(int l, char *s, dboolean wrap)
    {
     int  b;
@@ -1779,6 +1781,7 @@ int CO_WriteConsoleLine(int l, char *s, dboolean wrap)
         return CO_StringWidth(&s[b]);
        }
    }
+#endif
 
 int CO_GLWriteConsoleLine(int l, char *s, dboolean wrap)
    {

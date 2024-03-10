@@ -153,7 +153,7 @@ FILE*		debugfile;
 dboolean		advancedemo;
 
 
-extern      int nosound, nosound_t;
+extern      int nosound;
 
 char		wadfile[1024];		// primary wad file
 char		mapdir[1024];           // directory of development maps
@@ -195,10 +195,12 @@ void D_ProcessEvents(void)
     for (; eventtail != eventhead; eventtail = (++eventtail)&(MAXEVENTS-1))
        {
         ev = &events[eventtail];
+#ifdef ENABLE_GLCONSOLE
         if (CO_Responder(ev))
            {
             continue;               // console ate the event
            }
+#endif
         if (M_Responder(ev))
            {
             continue;               // menu ate the event
@@ -593,7 +595,9 @@ void MY_DoomLoop (void)
            {
             D_DoAdvanceDemo();
            }
+#ifdef ENABLE_GLCONSOLE
         CO_Ticker();
+#endif
         M_Ticker();
         G_Ticker();
         gametic++;
@@ -1602,7 +1606,6 @@ void D_DoomMain (void)
        {
 	    printf("Sound disabled.\n");
         nosound = true;
-        nosound_t = true;
        }
 
     p = M_CheckParm ("-avg");
@@ -1861,8 +1864,10 @@ void D_DoomMain (void)
     printf("ST_Init: Init status bar.\n");
     ST_Init();
 
+#ifdef ENABLE_GLCONSOLE
     printf("CO_Init: Init console.\n");
     CO_Init();
+#endif
 
     printf("WI_Init: Init game widgets.\n");
     WI_Init();
