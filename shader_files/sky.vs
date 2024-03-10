@@ -8,6 +8,6 @@ uniform mat4 model;
 
 void main()
 {
-    TexCoords = vec2(vertex.z, 1 - vertex.w);
+    TexCoords = vec2(-vertex.z, 1 - vertex.w);
     gl_Position = ortho * model * vec4(vertex.xy, 0.0, 1.0);
 }

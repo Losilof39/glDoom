@@ -960,7 +960,7 @@ void GL_DrawSky(float compass)
 
     skyTex.TexName = GL_SkyTexture[bquad];
 
-    R3D_RenderSky(compass, &skyTex);
+     R3D_RenderSky(compass, &skyTex);
 
     if (bquad == equad)
     {

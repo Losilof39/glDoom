@@ -164,6 +164,7 @@ rcsid[] = "$Id: st_stuff.c,v 1.6 1997/02/03 22:45:13 b1 Exp $";
 // Weapon pos.
 //#define ST_ARMSX			111
 #define ST_ARMSX			((SCREENWIDTH/2)-49)
+#define ST_ARMSX2			((SCREENWIDTH/2)-57)
 //#define ST_ARMSY			172
 #define ST_ARMSY			(SCREENHEIGHT-28)
 //#define ST_ARMSBGX			104
@@ -1207,8 +1208,8 @@ GLTexData   glBullet,  glRocket,   glCells,   glShot;
 // Weapons  
 GLTexData   glShot1,   glShot2,    glRLaunch, glPlasma,
 //          SHOTA0     SGN2A0      LAUNA0     PLASA0
-            glBFG,     glChainSaw, glMiniGun;
-//          BFUGA0     CSAWA0      MGUNA0
+            glBFG,     glChainSaw, glMiniGun, glSTArms;
+//          BFUGA0     CSAWA0      MGUNA0     STARMS
 // Dying Player
 GLTexData   glPlayFrag;
 // Medical Kits
@@ -1357,6 +1358,8 @@ void GL_DrawStatusBar0()
     vec2 size_st = { SBarTexture.glWidth, SBarTexture.glHeight };
 
     R2D_DrawSprite(pos_st, size_st, &SBarTexture);
+
+    R2D_DrawSprite((vec3) { ST_ARMSX2, 200 - glSTArms.glHeight }, (vec2){ glSTArms.glWidth, glSTArms.glHeight }, &glSTArms);
 
     // Draw ready weapon ammo count (up to max ammo for weapon)
     if (w_ready.num != NULL)
@@ -1833,6 +1836,8 @@ void ST_loadGraphics(void)
     GL_MakeSpriteTexture(W_CacheLumpName("SHELA0", PU_CACHE), &glShot, true);
 // Weapons  
     GL_MakeSpriteTexture(W_CacheLumpName("SHOTA0", PU_CACHE), &glShot1, true);
+    GL_MakeSpriteTexture(W_CacheLumpName("STARMS", PU_CACHE), &glSTArms, true);
+
     if (gamemode == commercial)
        {
         GL_MakeSpriteTexture(W_CacheLumpName("SGN2A0", PU_CACHE), &glShot2, true);
