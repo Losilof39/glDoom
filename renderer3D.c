@@ -382,17 +382,38 @@ void R3D_StopRendition(void)
 
                 while (cur != NULL)
                 {
+                    
                     Shader_SetFloat(s_threeData.polygonShader, "light", cur->light);
 
-                    glActiveTexture(GL_TEXTURE0);
-                    glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
+                    if (cur->polygon->Position)
+                    {
+                        glActiveTexture(GL_TEXTURE0);
+                        glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
 
-                    glBindVertexArray(cur->polygon->VAO);
+                        glBindVertexArray(cur->polygon->VAO);
 
-                    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+                        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
 
-                    glBindVertexArray(0);
-                    glBindTexture(GL_TEXTURE_2D, 0);
+                        glBindVertexArray(0);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+                    }
+                    else
+                    {
+                        glColorMask(GL_FALSE, GL_FALSE, GL_FALSE, GL_FALSE);
+
+                        glActiveTexture(GL_TEXTURE0);
+                        glBindTexture(GL_TEXTURE_2D, *cur->polygon->tex);
+
+                        glBindVertexArray(cur->polygon->VAO);
+
+                        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, indices);
+
+                        glBindVertexArray(0);
+                        glBindTexture(GL_TEXTURE_2D, 0);
+
+                        glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
+                    }
+                    
 
                     cur = cur->next;
                 }

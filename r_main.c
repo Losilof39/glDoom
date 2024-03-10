@@ -1810,40 +1810,15 @@ void GL_RenderPlayerView(player_t* player)
                         texnumb = sides[TempPoly->SideDef].toptexture;
                         break;
                     }
-
-                    if (TexList[TempPoly->Texture[0]].Transparent == true)
-                    {
-                        /*glEnable(GL_ALPHA_TEST);
-                        glAlphaFunc(GL_GREATER, 0.0f);*/
-                    }
                     
                     R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture, lightv);
 
                 }
                 else
                 {
-                    //if (gl_fog == 1)
-                        //glDisable(GL_FOG);
-
-                    /*glDisable(GL_TEXTURE_2D);
-                    glEnable(GL_BLEND);
-                    glBlendFunc(GL_ZERO, GL_ONE);*/
-
-                    /*glColor4f(0.0f, 0.0, 0.0, 0.0f);
-
-                    glBegin(GL_QUADS);
-                    glVertex3fv(TempPoly->Point[0].v);
-                    glVertex3fv(TempPoly->Point[1].v);
-                    glVertex3fv(TempPoly->Point[2].v);
-                    glVertex3fv(TempPoly->Point[3].v);
-                    glEnd();
-
-                    glEnable(GL_TEXTURE_2D);
-                    glDisable(GL_BLEND);*/
-
-
-                    //if (gl_fog == 1)
-                        //glEnable(GL_FOG);
+                    // this will render the wall only to depth buffer so that it can
+                    // occlude polygons behind in sectors with sky
+                    R3D_RenderWall(TempPoly, &TexList[translate[texturetranslation[texnumb]]].glTexture, 1.0f);
                 }
 
             }
