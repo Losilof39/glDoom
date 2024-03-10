@@ -11,11 +11,6 @@ twodcommand* headCmd2D[R2D_RENDER_TYPE_COUNT] = { NULL };
 extern video_t video;
 extern RenderInfo s_renderinfo;
 
-#define MAXLINES 128
-
-GLint lineVBO[MAXLINES] = { 0 };
-unsigned int lineCountVBO = 0;
-
 void InitRenderer2D()
 {
 	// configure VAO/VBO
@@ -85,13 +80,13 @@ void InitRenderer2D()
 }
 
 // every frame flush command list
-void R2D_FlushCommandList(twodcommand* head)
+void R2D_FlushCommandList(twodcommand** head)
 {
 	twodcommand* cur, * nextNode;
 
 	for (unsigned int type = 0; type < R2D_RENDER_TYPE_COUNT; type++)
 	{
-		cur = headCmd2D[type];
+		cur = head[type];
 
 		// Free each node in the list
 		while (cur != NULL) {
@@ -101,7 +96,7 @@ void R2D_FlushCommandList(twodcommand* head)
 		}
 
 		// Set the head to NULL to indicate an empty list
-		headCmd2D[type] = NULL;
+		head[type] = NULL;
 	}
 }
 
@@ -194,24 +189,13 @@ void R2D_DrawLightSprite(vec3* position, vec2 size, GLTexData* tex, float light)
 	//newNode->next = NULL;
 }
 
-void R2D_DrawLine(float* points, vec3 color)
+void R2D_DrawLine(vec4 points, vec3 color)
 {
-	twodcommand* newNode = R2D_AddDrawCmd(headCmd2D, R2D_RENDER_PATCH);
-	GLint vbo = -1;
+	twodcommand* newNode = R2D_AddDrawCmd(headCmd2D, R2D_RENDER_LINE);
 
-	glm_vec3_copy(color, newNode->color);
+	glm_vec3_copy(color, &newNode->color);
 
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
-	glBufferData(GL_ARRAY_BUFFER, sizeof(points), points, GL_DYNAMIC_DRAW);
-
-	lineVBO[lineCountVBO] = vbo;
-
-	lineCountVBO = (lineCountVBO + 1) % MAXLINES;
-
-	newNode->plineVBO = &lineVBO[lineCountVBO];
-
-	glBindBuffer(GL_ARRAY_BUFFER, 0);
+	glm_vec4_copy(points, &newNode->points);
 }
 
 void R2D_StartRendition(void)
@@ -225,17 +209,21 @@ void R2D_StopRendition(void)
 	twodcommand* cur;
 	mat4 model;
 
-
-	Shader_Use(s_Data.spriteShader);
-
 	for (unsigned int type = 0; type < R2D_RENDER_TYPE_COUNT; type++)
 	{
 		cur = headCmd2D[type];
+
+		if (cur == NULL)
+			continue;
 
 		switch(type)
 		{
 			case R2D_RENDER_PATCH:
 			{
+				Shader_Use(s_Data.spriteShader);
+
+				glBindVertexArray(s_Data.VAO);
+
 				while (cur != NULL)
 				{
 					glm_mat4_identity(model);
@@ -252,26 +240,40 @@ void R2D_StopRendition(void)
 					glBindVertexArray(s_Data.VAO);
 					glDrawArrays(GL_TRIANGLES, 0, 6);
 
-					glBindVertexArray(0);
 					glBindTexture(GL_TEXTURE_2D, 0);
 
 					cur = cur->next;
 				}
-			}break;
-
-			/*case R2D_RENDER_LINE:
-			{
-				glBindVertexArray(s_Data.VAO);
-				glDrawArrays(GL_TRIANGLES, 0, 6);
 
 				glBindVertexArray(0);
-				glBindTexture(GL_TEXTURE_2D, 0);
+			}break;
 
-				cur = cur->next;
-			}*/
+			case R2D_RENDER_LINE:
+			{
+				Shader_Use(s_Data.lineShader);
+
+				glBindVertexArray(s_Data.lineVAO);
+				while (cur != NULL)
+				{
+					glBindBuffer(GL_ARRAY_BUFFER, s_Data.lineVBO);
+					glBufferSubData(GL_ARRAY_BUFFER, (void*)0, sizeof(vec4), cur->points);
+					Shader_SetVec3(s_Data.lineShader, "color", cur->color);
+
+					glDrawArrays(GL_LINES, 0, 2);
+
+					cur = cur->next;
+				}
+
+				glBindVertexArray(0);
+
+			}break;
+
+			default:
+				break;
 		}
 	}
 
+	glBindVertexArray(0);
 	Shader_Unbind();
 
 	R2D_FlushCommandList(headCmd2D);

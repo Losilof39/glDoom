@@ -51,6 +51,7 @@ static const char rcsid[] = "$Id: am_map.c,v 1.4 1997/02/03 21:24:33 b1 Exp $";
 
 #include "am_map.h"
 #include "gldefs.h"
+#include "renderer2D.h"
 
 void lfprintf(char *message, ... );
 
@@ -1016,15 +1017,24 @@ extern float SetBack;
 void GL_AM_drawFline( fline_t *fl, int color )
    {
     float cr, cg, cb;
-    float x1, y1, x2, y2;
+    //float x1, y1, x2, y2;
 
-    cr = statpal[color].r;
-    cg = statpal[color].g;
-    cb = statpal[color].b;
-    x1 = fl->a.x - 160.0f;
+    vec4 points =
+    {
+        fl->a.x, (fl->a.y),
+        fl->b.x, (fl->b.y)
+    };
+
+    cr = (float)statpal[color].r / 255.0f;
+    cg = (float)statpal[color].g / 255.0f;
+    cb = (float)statpal[color].b / 255.0f;
+    /*x1 = fl->a.x - 160.0f;
     y1 = 120.0f - (fl->a.y * 1.2f);
     x2 = fl->b.x - 160.0f;
-    y2 = 120.0f - (fl->b.y * 1.2f);
+    y2 = 120.0f - (fl->b.y * 1.2f);*/
+
+    R2D_DrawLine(points, (vec3) { cr, cg, cb });
+
     /*glBegin(GL_LINES);
       glColor4f(cr, cg, cb, 1.0f);
       glVertex3f(x1, y1, SetBack);

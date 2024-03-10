@@ -126,7 +126,7 @@ void R3D_FlushCommandList(threedcommand** cmd)
 
     for (unsigned int type = 0; type < R3D_RENDER_TYPE_COUNT; type++)
     {
-        cur = render_types[type];
+        cur = cmd[type];
 
         // Free each node in the list
         while (cur != NULL) {
@@ -136,7 +136,7 @@ void R3D_FlushCommandList(threedcommand** cmd)
         }
 
         // Set the head to NULL to indicate an empty list
-        render_types[type] = NULL;
+        cmd[type] = NULL;
     }
 }
 
