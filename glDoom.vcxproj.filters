@@ -581,6 +581,12 @@
     <None Include="shader_files\sky.vs">
       <Filter>Shaders</Filter>
     </None>
+    <None Include="shader_files\line.ps">
+      <Filter>Shaders</Filter>
+    </None>
+    <None Include="shader_files\line.vs">
+      <Filter>Shaders</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Text Include="docs\changelog.txt" />

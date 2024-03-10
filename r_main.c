@@ -44,6 +44,7 @@ static const char rcsid[] = "$Id: r_main.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 #include "gldefs.h"
 
 #include "v_video.h"
+#include "renderer.h"
 #include "renderer2D.h"
 #include "renderer3D.h"
 
@@ -57,8 +58,8 @@ extern float SetBack, glLeft, glTop, glRight, glBottom;
 extern int              sorted_flats_count, sorted_walls_count;
 extern sector_plane_t** sorted_flats;
 extern DW_Polygon**     sorted_walls;
-
 video_t  video;
+extern RenderInfo s_renderinfo;
 
 int			viewangleoffset;
 
@@ -955,8 +956,8 @@ void GL_DrawSky(float compass)
     equad++;
     equad %= 4;
 
-    skyTex.glWidth = SCREENWIDTH;
-    skyTex.glHeight = SCREENHEIGHT;
+    skyTex.glWidth = s_renderinfo.virtualWidth;
+    skyTex.glHeight = s_renderinfo.virtualHeight;
 
     skyTex.TexName = GL_SkyTexture[bquad];
 
