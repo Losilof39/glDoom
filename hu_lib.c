@@ -114,7 +114,7 @@ void GL_HUlib_drawTextLine( hu_textline_t *l, dboolean drawcursor )
         HudText[l->len+1] = '\0';
        }
 
-    GL_WriteText(l->x, l->y+3, HudText);
+    GL_WriteText(l->x, l->y, HudText);
    }
 
 void
