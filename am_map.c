@@ -1269,7 +1269,7 @@ void GL_AM_drawWalls(void)
 		}
 		else if (lines[i].backsector->floorheight
 			   != lines[i].frontsector->floorheight) {
-		    GL_AM_drawMline(&l, FDWALLCOLORS + lightlev); // floor level change
+		    GL_AM_drawMline(&l, WHITE + lightlev); // floor level change
 		}
 		else if (lines[i].backsector->ceilingheight
 			   != lines[i].frontsector->ceilingheight) {
