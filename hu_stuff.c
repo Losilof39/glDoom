@@ -646,17 +646,15 @@ void HU_Ticker(void)
            {
             HUlib_addMessageToSText(&w_message, 0, plr->message);
             message_counter = HU_MSGTIMEOUT;
+#ifdef ENABLE_GLCONSOLE            
             // more rude cracking with score
-#ifdef ENABLE_GLCONSOLE
+
             if (showscoreHUD && (plr->message == scorehud))  //11.4.98 if/else should keep scrolling score out of console
                 message_counter = message_counter / 2;  // 1/4 time flickered
-            else CO_AddConsoleMessage(plr->message);  //in console
-#else
-            CO_AddConsoleMessage(plr->message);  //in console
+            else CO_AddConsoleMessage(plr->message);  //in console       
 #endif
             plr->message = 0;
             message_on = true;
-            //message_counter = HU_MSGTIMEOUT; original code
             message_nottobefuckedwith = message_dontfuckwithme;
             message_dontfuckwithme = 0;
            }
