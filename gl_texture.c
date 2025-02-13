@@ -120,7 +120,7 @@ int CreateColorMap(int red, int green, int blue)
     TexData[3] = 255;
 
     //Define the 2D Texture image
-    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexData, false, true, true, true);
+    GL_CreateDefaultTexture(TempTexName, GL_TEXTURE_2D, TexWide, TexHigh, TexData);
 
     return(TempTexName);
    }
@@ -163,7 +163,7 @@ int CreatePointLightMap(int red, int green, int blue, dboolean alphaonly)
            }
        }
 
-    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, true, true);
+    GL_CreateDefaultTexture(TempTexName, GL_TEXTURE_2D, TexWide, TexHigh, TexRGB);
 
     free(TexRGB);
     return(TempTexName);
@@ -201,7 +201,7 @@ int GL_LoadSkyTop( char *filename )
 
     D_LoadBmp(TexRGB, filename, TexWide, TexHigh);
 
-    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, true, true);
+    GL_CreateDefaultTexture(TempTexName, GL_TEXTURE_2D, TexWide, TexHigh, TexRGB);
 
     free(TexRGB);
     return(TempTexName);
@@ -867,6 +867,25 @@ int GL_MakeScreenTexture(patch_t *Screen, GLTexData *Tex)
     return TempTexNumb;
    }
 
+static void CreateClampTexture(GLenum texture_target, int width, int height, const void* pixels, dboolean activate_edge_clamp)
+{
+    glTexParameteri(texture_target, GL_TEXTURE_WRAP_S, (activate_edge_clamp) ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+    glTexParameteri(texture_target, GL_TEXTURE_WRAP_T, (activate_edge_clamp) ? GL_CLAMP_TO_EDGE : GL_REPEAT);
+
+    glTexParameteri(texture_target, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+    glTexParameteri(texture_target, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+
+    /* Define the 2D texture image. */
+    glPixelStorei(GL_UNPACK_ALIGNMENT, 4); /* Force 4 bytes aligment */
+    glPixelStorei(GL_UNPACK_ROW_LENGTH, 0);
+    glPixelStorei(GL_UNPACK_SKIP_ROWS, 0);
+    glPixelStorei(GL_UNPACK_SKIP_PIXELS, 0);
+
+    glTexImage2D(texture_target, 0, GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, pixels);
+
+    glBindTexture(texture_target, 0);
+}
+
 unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
    {
     int             r, c, d, h, t, m, n;
@@ -905,7 +924,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
            }
        }
 
-    GL_GenTextures(&TempTexName, 1, gl_texture_2d);
+    GL_GenTextures(&TempTexName, GL_TEXTURE_2D);
     if ((smooth == true) && (TexTransparent == true))
        {
         TexAa =  (GLubyte *)malloc(TexWide*(TexHigh*4));
@@ -914,7 +933,7 @@ unsigned int MakeRGBATexture(dboolean clamp, dboolean smooth, int dw, int dh)
         AntiAlias( (GLPixelRGBA*)TexAa, (GLPixelRGBA*)TexRGB, TexWide, TexHigh );
         free(TexAa);
        }
-    GL_CreateClampTexture(gl_texture_2d, TexWide, TexHigh, TexRGB, clamp);
+    CreateClampTexture(GL_TEXTURE_2D, TexWide, TexHigh, TexRGB, clamp);
     free(TexRGB);
     return(TempTexName);
    }
@@ -1074,7 +1093,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
            }
        }
 
-    GL_GenTextures(&TempTexName, 1, gl_texture_2d);
+    GL_GenTextures(&TempTexName, GL_TEXTURE_2D);
 
     if ((smooth == true) && (TexTransparent == true))
        {
@@ -1085,7 +1104,7 @@ unsigned int MakeGreyTexture(dboolean clamp, dboolean smooth, int dw, int dh)
         free(TexAa);
        }
 
-    GL_CreateClampTexture(gl_texture_2d, TexWide, TexHigh, TexRGB, clamp);
+    CreateClampTexture(GL_TEXTURE_2D, TexWide, TexHigh, TexRGB, clamp);
     free(TexRGB);
     return(TempTexName);
    }
@@ -1112,7 +1131,7 @@ unsigned int MakeRGBTexture(int dw, int dh)
            }
        }
 
-    GL_CreateDefaultTexture(TempTexName, gl_texture_2d, TexWide, TexHigh, TexRGB, false, true, false, true);
+    GL_CreateDefaultTexture(TempTexName, GL_TEXTURE_2D, TexWide, TexHigh, TexRGB);
     
     free(TexRGB);
     return(TempTexName);

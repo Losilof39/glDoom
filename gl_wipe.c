@@ -48,7 +48,7 @@ GLuint CaptureScreenAsTexID(void)
 {
     GLuint id = 1;
 
-    GL_CreateDefaultTexture(id, gl_texture_2d, video.width, video.height, 0, true, true, false, true);
+    GL_CreateDefaultTexture(id, GL_TEXTURE_2D, video.width, video.height, 0);
 
     return id;
 }

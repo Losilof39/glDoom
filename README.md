@@ -22,7 +22,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Brand new 2D and 3D renderer using modern OpenGL!
 
 ### Fixes from Wolf3s
-* Added a wrapper for encapsulate underscore newlib functions
+* Added a wrapper for encapsulate underscore newlib/posix functions
 * Removal of unused declarations
 * Code cleanup
 * Remove type defintions 
