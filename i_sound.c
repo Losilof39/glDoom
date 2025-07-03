@@ -20,7 +20,11 @@
 #include <stdlib.h>
 
 #ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL_mixer.h>
+#else
 #include <SDL2/SDL_mixer.h>
+#endif
 #else
 #include <SDL_mixer.h>
 #endif
@@ -46,8 +50,9 @@ size_t snd_cachesize = 64 * 1024 * 1024;
 int snd_maxslicetime_ms = 28;
 
 // External command to invoke to play back music.
-
+#if !SDL_MAJOR_VERSION == 3
 char* snd_musiccmd = "";
+#endif
 
 // Whether to vary the pitch of sound effects
 // Each game will set the default differently

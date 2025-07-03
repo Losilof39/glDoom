@@ -24,8 +24,13 @@
 #include <assert.h>
 
 #ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_mixer.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#endif
 #else
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -74,7 +79,11 @@ static dboolean sound_initialized = false;
 static allocated_sound_t* channels_playing[NUM_CHANNELS];
 
 static int mixer_freq;
+#if SDL_MAJOR_VERSION == 3
+static SDL_AudioFormat mixer_format;
+#else
 static Uint16 mixer_format;
+#endif
 static int mixer_channels;
 static dboolean use_sfx_prefix;
 static dboolean(*ExpandSoundData)(sfxinfo_t* sfxinfo,
@@ -402,10 +411,9 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
     int length)
 {
 #if SDL_MAJOR_VERSION == 3
-    dbyte* convertor = NULL;
     int aud_len;
-    const SDL_AudioSpec src_spec = { mixer_format, mixer_channels, mixer_freq };
-    const SDL_AudioSpec dst_spec = { SDL_AUDIO_U8, mixer_channels, mixer_freq };
+    SDL_AudioSpec src_spec = { mixer_format, mixer_channels, mixer_freq };
+    SDL_AudioSpec dst_spec = { SDL_AUDIO_U8, mixer_channels, mixer_freq };
 #else
     SDL_AudioCVT convertor;
 #endif
@@ -433,19 +441,51 @@ static dboolean ExpandSoundData_SDL(sfxinfo_t* sfxinfo,
 
     // If we can, use the standard / optimized SDL conversion routines.
 #if SDL_MAJOR_VERSION == 3
-    if (samplerate <= mixer_freq
-        && ConvertibleRatio(samplerate, mixer_freq)
-        && SDL_CreateAudioStream(&src_spec, &dst_spec))
+    if (samplerate <= mixer_freq && ConvertibleRatio(samplerate, mixer_freq))
     { 
-          aud_len = length;
-          convertor = (dbyte*)malloc(aud_len * sizeof(int));
-          assert(convertor != NULL);
-          /* todo: fix convertor */
-          memcpy(convertor, data, length);
-          SDL_ConvertAudioSamples(&src_spec, convertor, aud_len, &dst_spec, chunk->abuf, NULL);
-          //memcpy(chunk->abuf, convertor, chunk->alen);
-          memcpy(convertor, chunk->abuf, sizeof(chunk->alen));
-          free(convertor);
+        SDL_AudioStream* stream = SDL_CreateAudioStream(&src_spec, &dst_spec);
+        if (stream == NULL) {
+            fprintf(stderr, "Failed to create audio stream: %s\n", SDL_GetError());
+            return false;
+        }
+
+        // Feed the input audio data to the stream
+        if (SDL_PutAudioStreamData(stream, data, length) < 0) {
+            fprintf(stderr, "Failed to feed audio stream: %s\n", SDL_GetError());
+            SDL_DestroyAudioStream(stream);
+            return false;
+        }
+
+        // Get the amount of converted audio data available
+        aud_len = SDL_GetAudioStreamAvailable(stream);
+        if (aud_len <= 0) {
+            fprintf(stderr, "No converted audio available.\n");
+            SDL_DestroyAudioStream(stream);
+            return false;
+        }
+
+        // Allocate memory for the converted audio buffer
+        chunk->abuf = (Uint8*)malloc((size_t)aud_len);
+        if (chunk->abuf == NULL) {
+            fprintf(stderr, "Memory allocation failed.\n");
+            SDL_DestroyAudioStream(stream);
+            return false;
+        }
+
+        SDL_ConvertAudioSamples(&src_spec, chunk->abuf, aud_len, &dst_spec, NULL, NULL);
+
+        // Retrieve the converted audio data
+        chunk->alen = SDL_GetAudioStreamData(stream, chunk->abuf, aud_len);
+        if (chunk->alen < 0) {
+            fprintf(stderr, "Failed to retrieve converted audio: %s\n", SDL_GetError());
+            free(chunk->abuf);
+            chunk->abuf = NULL;
+            SDL_DestroyAudioStream(stream);
+            return false;
+        }
+
+        // Clean up the audio stream
+        SDL_DestroyAudioStream(stream);;
     }
 #else
     if (samplerate <= mixer_freq
@@ -873,12 +913,20 @@ static dboolean I_SDL_InitSound(dboolean _use_sfx_prefix)
     }
 */
 #if SDL_MAJOR_VERSION == 3
-    if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16, 2, GetSliceSize(), NULL, 0x00000001) < 0)
+    SDL_AudioSpec spec;
+    spec.freq = snd_samplerate;
+    spec.format = SDL_AUDIO_S16;
+    spec.channels = 2;
+    if (!Mix_OpenAudio(0, &spec) < 0)
 #else
     if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, GetSliceSize(), NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
 #endif
     {
+#if SDL_MAJOR_VERSION == 3
+        fprintf(stderr, "Error initialising SDL_mixer: %s\n", SDL_GetError());
+#else
         fprintf(stderr, "Error initialising SDL_mixer: %s\n", Mix_GetError());
+#endif
         return false;
     }
 

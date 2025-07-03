@@ -88,8 +88,13 @@ void I_CheckInputs(void)
         case SDL_KEYDOWN:
 #endif
         {
+#if SDL_MAJOR_VERSION == 3
+            // catch first these 4 keys
+            switch (ev.key.scancode)
+#else
             // catch first these 4 keys
             switch (ev.key.keysym.scancode)
+#endif
             {
             case SDL_SCANCODE_PAUSE:
                 event.type = ev_keyup;
@@ -124,8 +129,13 @@ void I_CheckInputs(void)
                 break;
             }
 
+#if SDL_MAJOR_VERSION == 3
+            // catch the other keys
+            keystates[ev.key.scancode] = true;
+#else
             // catch the other keys
             keystates[ev.key.keysym.scancode] = true;
+#endif
         }break;
 #if SDL_MAJOR_VERSION == 3
         case SDL_EVENT_KEY_UP:
@@ -133,8 +143,13 @@ void I_CheckInputs(void)
         case SDL_KEYUP:
 #endif
         {
+#if SDL_MAJOR_VERSION == 3
+            // catch first these 4 keys
+            switch (ev.key.scancode)
+#else
             // catch first these 4 keys
             switch (ev.key.keysym.scancode)
+#endif
             {
             case SDL_SCANCODE_PAUSE:
                 event.type = ev_keyup;
@@ -166,9 +181,13 @@ void I_CheckInputs(void)
                 }
                 break;
             }
-
+#if SDL_MAJOR_VERSION == 3
+            // catch the other keys
+            keystates[ev.key.scancode] = false;
+#else
             // catch the other keys
             keystates[ev.key.keysym.scancode] = false;
+#endif
         }break;
 
         if ((usemouse) && (mouseavail)) {

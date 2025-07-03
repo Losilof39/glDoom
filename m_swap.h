@@ -28,9 +28,16 @@
 #endif
 
 #ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL_endian.h>
+#include <SDL3/SDL_version.h>
+#else
 #include <SDL2/SDL_endian.h>
+#include <SDL2/SDL_version.h>
+#endif
 #else
 #include <SDL_endian.h> /* Header for handle the endian swapping */
+#include <SDL_version.h>
 #endif
 // Endianess handling.
 // WAD files are stored little endian.
@@ -62,8 +69,13 @@ long long	SwapLONG(long long);
 #define DSHORT(x)	((short)SDL_SwapLE64((unsigned short) (x)))
 #define DLONG(x)         ((long long)SDL_SwapLE64((unsigned long long) (x)))
 #elif SDL_LIL_ENDIAN
+#if SDL_MAJOR_VERSION == 3
+#define DSHORT (short)SDL_Swap16LE
+#define DLONG (signed long)SDL_Swap32LE
+#else
 #define DSHORT (short)SDL_SwapLE16
 #define DLONG (signed long)SDL_SwapLE32
+#endif
 #endif
 #endif
 

@@ -232,7 +232,9 @@ extern int snd_musicdevice;
 extern int snd_samplerate;
 extern size_t snd_cachesize;
 extern int snd_maxslicetime_ms;
+#if !SDL_MAJOR_VERSION == 3
 extern char* snd_musiccmd;
+#endif
 extern int snd_pitchshift;
 extern char* snd_dmxoption;
 extern dboolean use_libsamplerate;

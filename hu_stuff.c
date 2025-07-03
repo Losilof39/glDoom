@@ -48,6 +48,18 @@ rcsid[] = "$Id: hu_stuff.c,v 1.4 1997/02/03 16:47:52 b1 Exp $";
 #include "co_console.h"
 #include "gl_texture.h"
 #include "gldefs.h"
+#ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_mixer.h>
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#endif
+#else
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
 
 //
 // Locally used constants, shortcuts.

@@ -29,6 +29,18 @@
 #include "gldefs.h"
 #include "co_utils.h"
 #include "renderer2D.h"
+#ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_mixer.h>
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#endif
+#else
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
 
 #define ST_MSGWIDTH        256
 #define CMDLENGTH         1024

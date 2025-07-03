@@ -23,8 +23,13 @@
 #include <ctype.h>
 
 #ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_mixer.h>
+#else
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#endif
 #else
 #include <SDL.h>
 #include <SDL_mixer.h>
@@ -75,17 +80,22 @@ static void I_SDL_ShutdownMusic(void)
 static dboolean SDLIsInitialized(void)
 {
     int freq, channels;
+#if SDL_MAJOR_VERSION == 3
+    SDL_AudioFormat format;
+#else
     Uint16 format;
-
+#endif
     return (dboolean)Mix_QuerySpec(&freq, &format, &channels) != 0;
 }
 
 // Initialize music subsystem
 static dboolean I_SDL_InitMusic(void)
 {
+#if !SDL_MAJOR_VERSION == 3
     // If SDL_mixer is not initialized, we have to initialize it
     // and have the responsibility to shut it down later on.
     size_t mus_cmd;
+#endif
 
     if (SDLIsInitialized())
     {
@@ -98,13 +108,22 @@ static dboolean I_SDL_InitMusic(void)
             fprintf(stderr, "Unable to set up sound.\n");
         }
 #if SDL_MAJOR_VERSION == 3
-        else if (Mix_OpenAudioDevice(snd_samplerate, SDL_AUDIO_S16, 2, 1024, NULL, 0x00000001) < 0) /* todo: figure out a replacement of the frequency change */
+        SDL_AudioSpec spec;
+        spec.freq = snd_samplerate;
+        spec.format = SDL_AUDIO_S16;
+        spec.channels = 2;
+
+        if (Mix_OpenAudio(0, &spec) < 0)
 #else
-        else if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
+        if (Mix_OpenAudioDevice(snd_samplerate, AUDIO_S16SYS, 2, 1024, NULL, SDL_AUDIO_ALLOW_FREQUENCY_CHANGE) < 0)
 #endif
         {
             fprintf(stderr, "Error initializing SDL_mixer: %s\n",
-                Mix_GetError());
+#if SDL_MAJOR_VERSION == 3
+                SDL_GetError());
+#else
+                Mix_GetError());	
+#endif
             SDL_QuitSubSystem(SDL_INIT_AUDIO);
         }
         else
@@ -125,7 +144,7 @@ static dboolean I_SDL_InitMusic(void)
     // Once initialization is complete, the temporary Timidity config
     // file can be removed.
     
-
+#if !SDL_MAJOR_VERSION == 3
     // If snd_musiccmd is set, we need to call Mix_SetMusicCMD to
     // configure an external music playback program.
     mus_cmd = strlen(snd_musiccmd);
@@ -133,6 +152,7 @@ static dboolean I_SDL_InitMusic(void)
     {
         Mix_SetMusicCMD(snd_musiccmd);
     }
+#endif
 
     return music_initialized;
 }
@@ -273,8 +293,13 @@ static void* I_SDL_RegisterSong(void* data, int len)
     music = Mix_LoadMUS("DOOMSONG.MID");
     if (music == NULL)
     {
+#if SDL_MAJOR_VERSION == 3
+        // Failed to load
+        fprintf(stderr, "Error loading midi: %s\n", SDL_GetError());
+#else
         // Failed to load
         fprintf(stderr, "Error loading midi: %s\n", Mix_GetError());
+#endif
     }
 
     return music;

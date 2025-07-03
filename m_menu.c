@@ -77,6 +77,19 @@ rcsid[] = "$Id: m_menu.c,v 1.7 1997/02/03 22:45:10 b1 Exp $";
 
 #include "doomcmd.h"
 
+#ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_mixer.h>
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#endif
+#else
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
+
 void lfprintf(char *message, ... );
 
 extern patch_t*		hu_font[HU_FONTSIZE];
@@ -3220,8 +3233,11 @@ int M_GetKeyString(int c,size_t offset)
   }
   else
     {
-
+#if SDL_MAJOR_VERSION == 3
+      keycode = SDL_GetKeyFromScancode(c, SDL_KMOD_ALT, true);
+#else
     keycode = SDL_GetKeyFromScancode(c);
+#endif
     s = SDL_GetKeyName(keycode);
 
     if (s == "")

@@ -329,30 +329,19 @@ dboolean CreateMainWindow(int width, int height, int bpp, dboolean fullscreen)
     sprintf((char* const)window_title, "GLDOOM-RE");
 #endif
 #if SDL_MAJOR_VERSION == 3
-#if 0
-    pWindow = SDL_CreateWindowWithPosition((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, width, height, SDL_WINDOW_OPENGL 
+    pWindow = SDL_CreateWindow((const char*)window_title, width, height, SDL_WINDOW_OPENGL 
     | (fullscreen ? true : false) | SDL_WINDOW_MOUSE_GRABBED | SDL_WINDOW_HIGH_PIXEL_DENSITY);
-#else
-    SDL_PropertiesID props = SDL_CreateProperties();
-    SDL_SetStringProperty(props, SDL_PROP_WINDOW_CREATE_TITLE_STRING, window_title);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_X_NUMBER, SDL_WINDOWPOS_CENTERED);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_Y_NUMBER, SDL_WINDOWPOS_CENTERED);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_WIDTH_NUMBER, width);
-    SDL_SetNumberProperty(props, SDL_PROP_WINDOW_CREATE_HEIGHT_NUMBER, height);
-    SDL_SetNumberProperty(props, "flags", 4);
-    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_OPENGL_BOOLEAN, true);
-    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_FULLSCREEN_BOOLEAN, fullscreen ? true : false);
-    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_MOUSE_GRABBED_BOOLEAN, true);
-    SDL_SetBooleanProperty(props, SDL_PROP_WINDOW_CREATE_HIGH_PIXEL_DENSITY_BOOLEAN, true);
-    pWindow = SDL_CreateWindowWithProperties(props);
-#endif
 #else
     pWindow = SDL_CreateWindow((const char*)window_title, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
         width, height, SDL_WINDOW_OPENGL | (fullscreen ? true : false) | SDL_WINDOW_INPUT_GRABBED | SDL_WINDOW_ALLOW_HIGHDPI);
 #endif  
-    SDL_SetRelativeMouseMode(SDL_TRUE);
+#if SDL_MAJOR_VERSION == 3
+    SDL_SetWindowRelativeMouseMode(pWindow, SDL_TRUE);
+    SDL_SetHintWithPriority(SDL_HINT_MOUSE_EMULATE_WARP_WITH_RELATIVE, "1", SDL_HINT_OVERRIDE);
+#else
+    SDL_SetWindowRelativeMouseMode(SDL_TRUE);
     SDL_SetHintWithPriority(SDL_HINT_MOUSE_RELATIVE_MODE_WARP, "1", SDL_HINT_OVERRIDE);
-
+#endif
     if (!pWindow)
     {
         I_Error("Failed to create a SDL window!");

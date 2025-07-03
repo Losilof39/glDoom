@@ -1,6 +1,6 @@
 /*
   Simple DirectMedia Layer
-  Copyright (C) 1997-2024 Sam Lantinga <slouken@libsdl.org>
+  Copyright (C) 1997-2025 Sam Lantinga <slouken@libsdl.org>
 
   This software is provided 'as-is', without any express or implied
   warranty.  In no event will the authors be held liable for any damages
@@ -20,8 +20,6 @@
 */
 
 /**
- *  \file SDL_test_compare.h
- *
  *  Comparison function of SDL test framework.
  *
  *  This code is a part of the SDL test library, not the main SDL library.
@@ -53,8 +51,21 @@ extern "C" {
  *
  * \returns 0 if comparison succeeded, >0 (=number of pixels for which the comparison failed) if comparison failed, -1 if any of the surfaces were NULL, -2 if the surface sizes differ.
  */
-int SDLTest_CompareSurfaces(SDL_Surface *surface, SDL_Surface *referenceSurface, int allowable_error);
+int SDLCALL SDLTest_CompareSurfaces(SDL_Surface *surface, SDL_Surface *referenceSurface, int allowable_error);
 
+/**
+ * Compares 2 memory blocks for equality
+ *
+ * \param actual Memory used in comparison, displayed on the left
+ * \param size_actual Size of actual in bytes
+ * \param reference Reference memory, displayed on the right
+ * \param size_reference Size of reference in bytes
+ *
+ * \returns 0 if the left and right memory block are equal, non-zero if they are non-equal.
+ *
+ * \since This function is available since SDL 3.2.0.
+ */
+int SDLCALL SDLTest_CompareMemory(const void *actual, size_t size_actual, const void *reference, size_t size_reference);
 
 /* Ends C function definitions when using C++ */
 #ifdef __cplusplus

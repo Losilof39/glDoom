@@ -306,7 +306,7 @@
       <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
       <FloatingPointModel>Fast</FloatingPointModel>
       <FloatingPointExceptions>false</FloatingPointExceptions>
-      <CompileAs>CompileAsC</CompileAs>
+      <CompileAs>Default</CompileAs>
       <DisableSpecificWarnings>4113;4005;4311;4244;4312</DisableSpecificWarnings>
       <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
       <ModuleDependenciesFile>.\Release/</ModuleDependenciesFile>
@@ -315,7 +315,7 @@
     </ClCompile>
     <Link>
       <AdditionalLibraryDirectories>$(SolutionDir)\thirdparty\SDL3\lib\x64;$(SolutionDir)\thirdparty\cglm\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL3.lib;SDL3_main.lib;SDL2_mixer.lib;cglm.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>opengl32.lib;glu32.lib;odbc32.lib;odbccp32.lib;winmm.lib;dinput8.lib;dsound.lib;wsock32.lib;SDL3.lib;SDL3_mixer.lib;cglm.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SubSystem>Console</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>false</DataExecutionPrevention>

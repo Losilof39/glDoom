@@ -34,6 +34,18 @@ rcsid[] = "$Id: hu_lib.c,v 1.3 1997/01/26 07:44:58 b1 Exp $";
 #include "r_local.h"
 #include "r_draw.h"
 #include "f_finale.h"
+#ifdef __linux__
+#if SDL_MAJOR_VERSION == 3
+#include <SDL3/SDL.h>
+#include <SDL3/SDL_mixer.h>
+#else
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
+#endif
+#else
+#include <SDL.h>
+#include <SDL_mixer.h>
+#endif
 
 // dboolean : whether the screen is always erased
 #define noterased viewwindowx
