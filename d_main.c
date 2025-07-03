@@ -28,9 +28,6 @@
 static const char rcsid[] = "$Id: d_main.c,v 1.8 1997/02/03 22:45:09 b1 Exp $";
 
 #include <glad/glad.h>
-#include "renderer.h"
-
-extern sRenderer renderer;
 
 #define	BGCOLOR		7
 #define	FGCOLOR		8
@@ -94,6 +91,8 @@ extern sRenderer renderer;
 #include "gl_video.h"
 #include "doomlib.h"
 
+#include "renderer.h"
+
 void WS_Init(void);
 void LoadAllSprites(void);
 
@@ -153,7 +152,7 @@ FILE*		debugfile;
 dboolean		advancedemo;
 
 
-extern      int nosound, nosound_t;
+extern      int nosound;
 
 char		wadfile[1024];		// primary wad file
 char		mapdir[1024];           // directory of development maps
@@ -195,10 +194,12 @@ void D_ProcessEvents(void)
     for (; eventtail != eventhead; eventtail = (++eventtail)&(MAXEVENTS-1))
        {
         ev = &events[eventtail];
+#ifdef ENABLE_GLCONSOLE
         if (CO_Responder(ev))
            {
             continue;               // console ate the event
            }
+#endif
         if (M_Responder(ev))
            {
             continue;               // menu ate the event
@@ -252,8 +253,6 @@ static void D_Wipe(void)
     dboolean done;
     int wipestart = I_GetTime() - 1;
 
-    //glClear(GL_COLOR_BUFFER_BIT);
-
     do
     {
         int nowtime, tics;
@@ -268,7 +267,7 @@ static void D_Wipe(void)
         I_UpdateNoBlit();
         M_Drawer();                   // menu is drawn even on top of wipes
         //I_FinishUpdate();             // page flip or blit buffer
-        renderer.StopRendition();
+        R_StopRendition();
 
     } while (!done);
 }
@@ -288,6 +287,8 @@ void D_Display (void)
         return;                    // for comparative timing / profiling
 		
     redrawsbar = false;
+
+    R_StartRendition();
     
     // change the view size if needed
     if (setsizeneeded)
@@ -360,7 +361,7 @@ void D_Display (void)
         GL_DrawStatusBar(hudmode);
        }
 
-    glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
+    //glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
 
     if (gamestate == GS_LEVEL && gametic)
        {
@@ -435,7 +436,7 @@ void D_Display (void)
     if (!wipe)
        {
         //I_FinishUpdate ();              // page flip or blit buffer
-        renderer.StopRendition();
+        R_StopRendition();
        }
     else
     {
@@ -468,15 +469,15 @@ void GL_DrawPausePic()
    {
     float PauseLeft, PauseRight, PauseBottom;
 
-    glEnable(GL_TEXTURE_2D);
+    /*glEnable(GL_TEXTURE_2D);
     glEnable(GL_ALPHA_TEST);
-    glAlphaFunc(GL_GREATER, 0.0f);
+    glAlphaFunc(GL_GREATER, 0.0f);*/
 
     PauseLeft = PauseTexData.Width / -2.0f;
     PauseRight = PauseTexData.Width / 2.0f;
     PauseBottom = 116.0f - PauseTexData.Height;
 
-    glColor3f( 1.0f, 1.0f, 1.0f );
+    /*glColor3f( 1.0f, 1.0f, 1.0f );
     glBindTexture(GL_TEXTURE_2D, PauseTexData.TexName);
     glBegin( GL_QUADS );
       glNormal3f( 0.0f, 0.0f, 1.0f);
@@ -491,7 +492,7 @@ void GL_DrawPausePic()
     glEnd();
 
     glDisable(GL_ALPHA_TEST);
-    glDisable(GL_TEXTURE_2D);
+    glDisable(GL_TEXTURE_2D);*/
    }
 
 //
@@ -580,7 +581,6 @@ void MY_DoomLoop (void)
    {
     // frame syncronous IO operations
     //I_StartFrame();
-    renderer.StartRendition();
 	
     // process one or more tics
 
@@ -593,7 +593,9 @@ void MY_DoomLoop (void)
            {
             D_DoAdvanceDemo();
            }
+#ifdef ENABLE_GLCONSOLE
         CO_Ticker();
+#endif
         M_Ticker();
         G_Ticker();
         gametic++;
@@ -1602,7 +1604,6 @@ void D_DoomMain (void)
        {
 	    printf("Sound disabled.\n");
         nosound = true;
-        nosound_t = true;
        }
 
     p = M_CheckParm ("-avg");
@@ -1861,8 +1862,10 @@ void D_DoomMain (void)
     printf("ST_Init: Init status bar.\n");
     ST_Init();
 
+#ifdef ENABLE_GLCONSOLE
     printf("CO_Init: Init console.\n");
     CO_Init();
+#endif
 
     printf("WI_Init: Init game widgets.\n");
     WI_Init();

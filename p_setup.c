@@ -55,6 +55,7 @@ rcsid[] = "$Id: p_setup.c,v 1.5 1997/02/03 22:45:12 b1 Exp $";
 
 #include "doomlib.h"
 #include "mathlib.h"
+#include "renderer3D.h"
 
 #include <malloc.h>
 
@@ -615,6 +616,7 @@ P_SetupLevel
     // Make sure all sounds are stopped before Z_FreeTags.
     S_Start();			
 
+    R3D_DestroyRenderObjects();
     
 #if 0 // UNUSED
     if (debugfile)
@@ -2806,6 +2808,7 @@ void CalcTexCoords()
                 TempPoly->Point[3].tu = TempPoly->Point[2].tu;
                 TempPoly->Point[3].tv = TempPoly->Point[0].tv;
             }
+            TempPoly->VAO = -1;
             TempPoly = TempPoly->Next;
         }
     }
@@ -2830,6 +2833,8 @@ void CalcTexCoords()
                 psubsector->Point[p].tu = ((float)(psubsector->Point[p].v[0] - SectorBBox[sector].left)/xGrid)+SectorX;
                 psubsector->Point[p].tv = ((float)(psubsector->Point[p].v[2] - SectorBBox[sector].bottom)/yGrid)+SectorY;
             }
+            psubsector->ceilVAO = -1;
+            psubsector->floorVAO = -1;
         }
 
        }
@@ -3063,7 +3068,7 @@ void BuildThingList()
 //            else
 //                patched = l;
             //lfprintf( "GL Sprite Lump %d\n", firstspritelump+lump);
-            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], true);
+            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], false);
 //            lfprintf( "World Sprite lump %d used - texture %d - height %f, top %f\n", lump, SprData[lump].TexName, SprData[lump].Height, SprData[lump].TopOff);
            }
        }
@@ -3174,7 +3179,7 @@ void WS_Init(void) // Setup Weapon Sprites...
            {
             if (SprData[lump].Translucent != 153)
                 SprData[lump].Translucent = 64;
-            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], true);
+            GL_MakeSpriteTexture(W_CacheLumpNum(firstspritelump+lump,PU_CACHE), &SprData[lump], false);
             //lfprintf( "Weapon Sprite lump %d used - texture %d\n", lump, SprData[lump].TexName);
             SprData[lump].Permanent = true;
            }

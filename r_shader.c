@@ -11,6 +11,7 @@ char* Shader_GetSource(const char* fileName)
     /* Read File to get size */
     fp = fopen(fileName, "rb");
     if (fp == NULL) {
+        printf("Failed to read shader: %s\n", fileName);
         return "";
     }
     fseek(fp, 0L, SEEK_END);
@@ -51,6 +52,24 @@ Shader Shader_Create(const char* name, const char* pVertPath, const char* pFragP
     glCompileShader(mVertShader);
     glCompileShader(mFragShader);
 
+    // Vertex Shader
+    glGetShaderiv(mVertShader, GL_COMPILE_STATUS, &success);
+
+    if (!success)
+    {
+        glGetShaderInfoLog(mVertShader, 512, NULL, InfoLog);
+        printf("[ERROR] Failed to compile vertex shader: %s", InfoLog);
+    }
+
+    // Fragment Shader
+    glGetShaderiv(mFragShader, GL_COMPILE_STATUS, &success);
+
+    if (!success)
+    {
+        glGetShaderInfoLog(mFragShader, 512, NULL, InfoLog);
+        printf("[ERROR] Failed to compile fragment shader: %s", InfoLog);
+    }
+
     shader.programID = glCreateProgram();
     glAttachShader(shader.programID, mVertShader);
     glAttachShader(shader.programID, mFragShader);
@@ -59,24 +78,6 @@ Shader Shader_Create(const char* name, const char* pVertPath, const char* pFragP
 
     glDeleteShader(mVertShader);
     glDeleteShader(mFragShader);
-
-    // check for compiler errors in vertex shader
-    glGetShaderiv(mVertShader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
-    {
-        glGetShaderInfoLog(mVertShader, 512, NULL, InfoLog);
-        printf("[ERROR] Failed to compile in vertex shader in %s: \n%s\n", pVertPath, InfoLog);
-    }
-
-    // check for compiler errors in fragment shader
-    glGetShaderiv(mFragShader, GL_COMPILE_STATUS, &success);
-
-    if (!success)
-    {
-        glGetShaderInfoLog(mFragShader, 512, NULL, InfoLog);
-        printf("[ERROR] Failed to compile fragment shader in %s: \n%s\n", pFragPath, InfoLog);
-    }
 
     // check for compiler errors in compiling shaders
     glGetShaderiv(shader.programID, GL_COMPILE_STATUS, &success);
@@ -95,27 +96,55 @@ void Shader_Use(Shader shader)
     glUseProgram(shader.programID);
 }
 
+void Shader_Unbind()
+{
+    glUseProgram(0);
+}
+
 void Shader_SetInt(Shader shader, const char* uniform, int value)
 {
     glUniform1i(glGetUniformLocation(shader.programID, uniform), value);
+
+    if(glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetBoolean(Shader shader, const char* uniform, dboolean value)
 {
     glUniform1i(glGetUniformLocation(shader.programID, uniform), (GLint)value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetFloat(Shader shader, const char* uniform, float value)
 {
     glUniform1f(glGetUniformLocation(shader.programID, uniform), value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetMat4(Shader shader, const char* uniform, mat4 value)
 {
     glUniformMatrix4fv(glGetUniformLocation(shader.programID, uniform), 1, GL_FALSE, value[0]);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }
 
 void Shader_SetVec3(Shader shader, const char* uniform, vec3 value)
 {
     glUniform3fv(glGetUniformLocation(shader.programID, uniform), 1, value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
+}
+
+void Shader_SetVec4(Shader shader, const char* uniform, vec4 value)
+{
+    glUniform4fv(glGetUniformLocation(shader.programID, uniform), 1, value);
+
+    if (glGetUniformLocation(shader.programID, uniform) == -1)
+        printf("[ERROR] %s not found in %s shader", uniform, shader.name);
 }

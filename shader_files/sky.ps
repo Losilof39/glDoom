@@ -1,0 +1,15 @@
+#version 460 core
+in vec2 TexCoords;
+out vec4 color;
+
+uniform sampler2D image;
+uniform float angle;
+
+void main()
+{   
+    float offset_x = 0.5;
+    float offset_y = 0.05;
+    vec4 tex_color = texture(image, vec2(TexCoords.x + angle + offset_x, TexCoords.y - offset_y));
+
+    color = tex_color;
+}  

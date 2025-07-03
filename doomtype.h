@@ -44,6 +44,8 @@
 
 typedef unsigned char dbyte;
 
+//#define ENABLE_GLCONSOLE 
+
 #ifndef O_BINARY 
 #define O_BINARY 0
 #endif
@@ -52,8 +54,14 @@ typedef unsigned char dbyte;
 #ifdef __cplusplus
 typedef bool dboolean;
 #else
+#ifndef false
 #define false 0
+#endif
+
+#ifndef true
 #define true 1
+#endif
+
 typedef int dboolean;
 #endif
 

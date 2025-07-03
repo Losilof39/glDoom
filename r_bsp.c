@@ -41,6 +41,8 @@ rcsid[] = "$Id: r_bsp.c,v 1.4 1997/02/03 22:45:12 b1 Exp $";
 
 #include "sys_sdl.h"
 
+#include <glad/glad.h>
+
 //#include "r_local.h"
 
 extern int              sorted_flats_count, sorted_walls_count;
@@ -269,6 +271,8 @@ void R_AddLine (seg_t*	line)
     angle_t		tspan;
     //int         subsector;
     int         side;
+    unsigned int VBO;
+    DW_Polygon temp;
     //float       fangle1, fangle2, vangle;
 
     curline = line;

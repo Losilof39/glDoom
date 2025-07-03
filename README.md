@@ -1,5 +1,5 @@
 # glDoom Resurrected (again!)
-This repository contains improvements for the glDoom port by Bruce Lewis and by other authors, Including: REDPOWAR, Adam Bilbrough(aka: Gibbon) and André Guilherme(aka: Wolf3s)
+This repository contains improvements for the glDoom port by [Bruce Lewis](bruce.a.lewis@gmail.com) and by other authors, including: [REDPOWAR](https://github.com/REDPOWAR), [Adam Bilbrough (Gibbon)](https://github.com/atsb), [André Guilherme (Wolf3s)](https://github.com/atsb) and [Losilof39](https://github.com/Losilof39).
 
 ### Fixes (original from REDPOWAR)
 * new floor/ceiling generation code (similar to code from Doom Legacy port)
@@ -18,18 +18,18 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Cleaned up all Win32 code and added a SDL2 backend
 * Ported to Linux but it's not stable yet
 * Mouse support
-* Audio is rewritten using SDL2 and taken from chocolate doom
-* Now the melting screen works!
+* Audio rewritten using SDL2 from chocolate doom
+* Brand new 2D and 3D renderer using modern OpenGL!
 
 ### Fixes from Wolf3s
-* Added a wrapper for encapsulate underscore newlib functions
+* Added a wrapper for encapsulate underscore newlib/posix functions
 * Removal of unused declarations
 * Code cleanup
 * Remove type defintions 
-* Add ANSI C Implementation in some parts
+* Add ANSI C Implementations in some parts
 * Fixed win32 build
 * Add GetTicks macro
-* Cleanup msvc level 3 and a little of level 4 warnings
+* Remove msvc level 3 and a little of level 4 warnings
 * Replaced `_filelength` function to `fstat`  
 * Created a bitmap loader based on windows api
 * Ported Win32 api to posix
@@ -40,6 +40,7 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 * Clipping issue due to changing fov
 * Fullscreen option not working
 * Resolution option not working
+* New renderer still in prototype
 * Only the legacy renderer works (for now!)
 * Multiple errors when switching to OpenGL core profile
 * When compiling SDL3 on MSVC the dll linkage doesn't work
@@ -48,16 +49,17 @@ This repository contains improvements for the glDoom port by Bruce Lewis and by 
 ### TO-DO List
 I am planning for this port, the following (in order of priority)
 
-1. Remove all unused code and make code more readable
+1. Code:
+   - Remove all unused parts and make more readable
+
+3. SDL:
+   - Migrate to SDL3
    
-2. Write new OpenGL renderer
-   - Wrap all unsupported OpenGL functions
-   - Add shaders
-   - Precache all vertex data in a pool
-   - Add dynamic lights
-   - Add post-processing effects
+4. OpenGL renderer:
+   -   Unload all VAO, VBO and texture data before loading new level
+   -   Add dynamic point lights
      
-3. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
+5. Increasing the vanilla limits and adding support for No Rest For The Living and SIGIL
    - The Sigil compat version works fine however the 5th episode never gets loaded and always goes to the 4th episode(gibbon)
 
 Plus more!
@@ -65,7 +67,7 @@ Plus more!
 ## Compiling
 
 ### Windows
-Use the Visual Studio project and build for your desired architecture.
+Use the Visual Studio 2022 project and build for your desired architecture.
 
 ### Linux
 Run ``` make all ``` in the commandline to build.
@@ -76,4 +78,4 @@ Be sure that ```gldoom.wad ``` and your IWAD of choice (DOOM, DOOM 2, Ultimate D
 In order to hear the music in-game you should download [this](https://archive.org/download/free-soundfonts-sf2-2019-04/SC-55.sf2) soundfont, rename it to ``` soundfont.sf2``` and place it in the game directory. You could use other `.sf2` files but I would recommend to use the SC-55, which is the soundcard originally used to create the DOOM music.
 
 ### Why maintain glDoom?
-The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as GZDoom, PRBoom, PRBoom+ and dsda-doom, his history and legacy it's an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39), Wolf3s and other contribuitors is a great way to learn how a large project like Doom is organized, coded and I'm honored to maintain this great work of art alive and bring new features to it!
+The answer is simple. These older source ports are special, they paved the way for what we have now, an actual piece of Doom history. While glDoom will never be as popular as [GZDoom](https://github.com/ZDoom/gzdoom), [PRBoom](https://prboom.sourceforge.net/), [PRBoom+](https://github.com/coelckers/prboom-plus) and [dsda-doom](https://github.com/kraflab/dsda-doom), his history and legacy it's an important part of the Doom Community and rather than be forgotten, they should be maintained for the next generation to use. Also for me (Losilof39), Wolf3s and other contribuitors is a great way to learn how a large project like Doom is organized, coded and we're honored to maintain this great work of art alive and bring new features to it!

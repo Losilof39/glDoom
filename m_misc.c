@@ -27,6 +27,11 @@
 static const char
 rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 
+#ifdef __linux__
+#include <SDL2/SDL.h>
+#else
+#include <SDL.h>
+#endif
 #include <glad/glad.h>
 
 #include <sys/stat.h>
@@ -70,6 +75,7 @@ rcsid[] = "$Id: m_misc.c,v 1.6 1997/02/03 22:45:10 b1 Exp $";
 #include "sys_sdl.h"
 
 #include "doomcmd.h"
+#include "renderer2D.h"
 
 unsigned short kbd_game_txt[256];
 unsigned short kbd_game_cmd[256];
@@ -126,25 +132,29 @@ int M_GLDrawText( int x, int y, char *string )
    {
     int 	c;
     float   fx;
-    float   Left, Right, Top, Bottom;
+    vec3 pos = { 0 };
+    vec2 size = { 0 };
 
     fx = (float)x;
+    pos[0] = fx;
+
     while (*string)
        {
         c = toupper(*string) - HU_FONTSTART;
         string++;
         if (c < 0 || c > HU_FONTSIZE)
            {
-            fx += 4.0f;
+            pos[0] += 4.0f;
             continue;
            }
-		
-        Left = -160.0f+(fx);
-        Right = Left+GLHudFont[c].Width;
-        Top = 120.0f-(y-GLHudFont[c].TopOff);
-        Bottom = Top - GLHudFont[c].Height;
+        pos[1] = y - GLHudFont[c].TopOff;
 
-        glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
+        size[0] = GLHudFont[c].glWidth;
+        size[1] = GLHudFont[c].glHeight;
+
+        R2D_DrawSprite(pos, size, &GLHudFont[c]);
+
+        /*glBindTexture(GL_TEXTURE_2D, GLHudFont[c].TexName);
         glBegin( GL_QUADS );
            glNormal3f(  0.0f, 0.0f, 1.0f);
            glTexCoord2f( 0.0f, 1.0f );
@@ -155,11 +165,11 @@ int M_GLDrawText( int x, int y, char *string )
            glVertex3f( Right, Bottom, SetBack);
            glTexCoord2f( GLHudFont[c].XDisp, 1.0f );
            glVertex3f( Right, Top, SetBack);
-        glEnd();
+        glEnd();*/
 
-        if (fx + GLHudFont[c].Width > 320.0f)
+        if (pos[0] + GLHudFont[c].glWidth > 320.0f)
             break;
-        fx += GLHudFont[c].Width;
+        pos[0] += GLHudFont[c].glWidth;
        }
 
     return x;
@@ -514,7 +524,7 @@ win_defaulti_t wdefaultv[] =
 
     d_value, "mouse_factor",     &mouse_factor,       1,
     d_value, "autorun",          &autorun,            0,
-    d_value, "nosound",          &nosound_t,          0,
+    d_value, "nosound",          &nosound,          0,
     d_value, "mvert",            &mvert,              1,
     d_value, "mlook",            &mlook,              1,
     d_value, "keylink",          &keylink,            1,

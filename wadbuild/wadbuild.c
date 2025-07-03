@@ -13,6 +13,7 @@
 #include <fcntl.h>
 #include <string.h>
 #include <sys/stat.h>
+#include <ctype.h>
 
 #ifndef O_BINARY
 #define O_BINARY		0
@@ -79,7 +80,7 @@ typedef struct
     int   offset;
    }wadhead_t;
 
-wadhead_t wadhead = { 'P', 'W', 'A', 'D', 0, 0 };
+wadhead_t wadhead = { {'P', 'W', 'A', 'D'}, 0, 0 };
 
 waddir_t  waddir[4096];
 
@@ -88,8 +89,8 @@ char  wadname[_MAX_PATH], resfile[_MAX_PATH], tstr[_MAX_PATH], resname[10];
 
 FILE *namelist;
 
-int   wadfile, resource, flength, pad;
-
+int   wadfile, resource, pad;
+int flength;
 unsigned char *databuff = NULL;
 
 int main(int argc, char *argv[])
@@ -179,8 +180,9 @@ int main(int argc, char *argv[])
             waddir[wadhead.entries].length = 0;
            }
         else
-           {
+           {            
             struct stat resource_st;
+
             if(fstat(resource, &resource_st))
             {
                 return -1;
@@ -196,7 +198,7 @@ int main(int argc, char *argv[])
             Write(wadfile, databuff, flength+pad);
             waddir[wadhead.entries].length = flength;
            }
-        printf("%ld bytes.", flength);
+        printf("%d bytes.", flength);
         memcpy(waddir[wadhead.entries].name, resname, 8);
         waddir[wadhead.entries].offset = wadhead.offset;
         wadhead.offset += (waddir[wadhead.entries].length + pad);
